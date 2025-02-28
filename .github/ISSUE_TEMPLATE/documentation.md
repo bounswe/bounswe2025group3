@@ -22,3 +22,9 @@ If there is a specific deadline for resolving the issue, specify it here.
 
 ## 👥 Reviewers  
 List of people who should review and approve the changes.
+
+## 📝 Additional Information  
+Provide any additional context or information that might be relevant to solving the issue. For example:
+- Any relevant references or resources.
+- Clarifications on complex parts.
+- Any dependencies that need to be considered.
