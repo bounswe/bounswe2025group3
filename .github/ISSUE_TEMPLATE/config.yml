@@ -3,6 +3,6 @@ contact_links:
   - name: documentation
     url: https://github.com/bounswe/bounswe2025group3/tree/main/.github/ISSUE_TEMPLATE/documentation.md
     about: If you want to contribute to the documentation page
-  - name: use-case-diagram
-    url: https://github.com/bounswe/bounswe2025group3/tree/main/.github/ISSUE_TEMPLATE/useCaseDiagram.md
-    about: Please use this template to create a use case diagram
+  - name: sequence-diagram
+    url: https://github.com/bounswe/bounswe2025group3/tree/main/.github/ISSUE_TEMPLATE/sequenceDiagram.yaml
+    about: Please use this template to create an issue for sequence diagram
