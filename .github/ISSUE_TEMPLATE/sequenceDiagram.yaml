@@ -2,9 +2,7 @@ name: Sequence Diagram Task
 description: Assign a sequence diagram creation task.
 title: "[Sequence Diagram]: "
 labels: ["documentation", "UML", "sequence diagram"]
-projects: ["octo-org/1", "octo-org/44"]
 assignees:
-  - octocat
 body:
   - type: markdown
     attributes:
@@ -36,6 +34,8 @@ body:
       label: Actors & Components
       description: List the key actors (e.g., User, System, Database, External API).
       placeholder: e.g., User, Authentication Service, Database
+      value: | 
+        Actually, you can edit these. They do not have to be as given
 
   - type: dropdown
     id: tools
@@ -56,6 +56,9 @@ body:
       value: |
         - **Sequence Diagram** (PNG/SVG)
         - **Source file** (e.g., .drawio, .uml)
+
+        ###Note:
+        - If you feel a bit frustrated about this task, do not hesitate to assign a friend for them to help you.
 
   - type: checkboxes
     id: confirmation
