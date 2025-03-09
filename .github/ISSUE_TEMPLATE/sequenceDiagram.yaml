@@ -1,7 +1,7 @@
 name: Sequence Diagram Task
 description: Assign a sequence diagram creation task.
 title: "[Sequence Diagram]: "
-labels: ["documentation", "UML", "sequence diagram"]
+labels: ["priority: medium", "design"]
 
 body:
   - type: markdown
