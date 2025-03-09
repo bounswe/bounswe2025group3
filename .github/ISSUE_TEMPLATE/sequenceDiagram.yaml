@@ -57,7 +57,7 @@ body:
         - **Sequence Diagram** (PNG/SVG)
         - **Source file** (e.g., .drawio, .uml)
 
-        ###Note:
+        ### Note:
         - If you feel a bit frustrated about this task, do not hesitate to assign a friend for them to help you.
 
   - type: checkboxes
