@@ -1,0 +1,428 @@
+classDiagram
+    %% Authentication & User Management 
+    class AbstractUser {
+        <<Django>>
+        +username: string
+        +email: string
+        +password: string
+        +is_active: boolean
+        +is_staff: boolean
+        +date_joined: datetime
+        +last_login: datetime
+    }
+    
+    class User {
+        +user_type: string
+        +bio: text
+        +profile_picture: image
+        +location: string
+        +notification_enabled: boolean
+        +total_score: int
+        +getProfile(): UserProfileData
+        +updateProfile(profileData): UserProfileData
+        +uploadProfilePicture(image): string
+        +setNotificationPreferences(enabled): boolean
+        +delete(): boolean
+    }
+    
+    class UserAuthToken {
+        +token: string
+        +user_id: int
+        +expiry: datetime
+        +is_valid(): boolean
+        +refresh(): UserAuthToken
+    }
+    
+    class Token {
+        +key: string
+        +user: User
+        +created: datetime
+    }
+    
+    class OAuth {
+        +user: User
+        +provider: string
+        +provider_user_id: string
+        +created: datetime
+    }
+    
+    class AuthenticationService {
+        <<Service>>
+        +signUp(username, email, password): UserAuthToken
+        +logIn(username, email, password): UserAuthToken
+        +logInViaGoogle(googleToken): UserAuthToken
+        +refreshToken(oldToken): UserAuthToken
+        +revokeToken(token): boolean
+        +generatePasswordResetToken(email): string
+        +validatePasswordResetToken(token): boolean
+        +resetPasswordWithToken(token, newPassword): boolean
+    }
+    
+    class TokenService {
+        <<Service>>
+        +create(user): Token
+        +get(key): Token
+        +delete(key): boolean
+        +validate(key): boolean
+        +get_or_create(user): Token
+        +getAllForUser(user): List~Token~
+    }
+    
+    class OAuthService {
+        <<Service>>
+        +get_or_create(user, provider, provider_id): OAuth
+        +verifyProviderToken(provider, token): UserData
+    }
+    
+    %% Waste Management
+    class WasteCategory {
+        +name: string
+        +subcategory: string
+        +score_per_unit: int
+        +unit: string
+        +is_custom: boolean
+        +is_approved: boolean
+        +created_by: User
+    }
+    
+    class WasteCategoryService {
+        <<Service>>
+        +create(name, unit, createdBy): WasteCategory
+        +requestCustomCategory(name, unit, user): int
+        +approve(categoryID): boolean
+        +getCategories(filters): List~WasteCategory~
+    }
+    
+    class WasteLog {
+        +user: User
+        +category: WasteCategory
+        +date: datetime
+        +quantity: float
+        +location: string
+        +photo: image
+        +score: int
+    }
+    
+    class WasteLogService {
+        <<Service>>
+        +create(user, categoryID, quantity, location, photo): WasteLog
+        +uploadPhoto(image): string
+        +getWasteLogs(userID, filters): List~WasteLog~
+        +calculateScore(category, quantity): int
+    }
+    
+    %% Goals and Challenges
+    class Goal {
+        +user: User
+        +category: WasteCategory
+        +goal_type: string
+        +timeframe: string
+        +target: float
+        +progress: float
+        +is_complete: boolean
+        +created_at: datetime
+    }
+    
+    class GoalService {
+        <<Service>>
+        +create(user, categoryID, target, timeframe): Goal
+        +createCustomGoal(user, parameters): Goal
+        +update(goalID, parameters): boolean
+        +trackProgress(goalID): GoalProgress
+        +getGoals(userID, filters): List~Goal~
+    }
+    
+    class Challenge {
+        +creator: User
+        +name: string
+        +description: text
+        +goal: text
+        +start_date: date
+        +end_date: date
+        +max_points: int
+        +is_team_challenge: boolean
+    }
+    
+    class ChallengeService {
+        <<Service>>
+        +create(creator, name, description, goal, startDate, endDate, maxPoints, isTeamChallenge): Challenge
+        +join(challengeID, user): boolean
+        +trackProgress(challengeID): ChallengeProgress
+        +exit(challengeID, user): boolean
+        +getChallenges(filters): List~Challenge~
+    }
+    
+    class Team {
+        +name: string
+        +creator: User
+        +challenge: Challenge
+        +score: int
+    }
+    
+    class TeamService {
+        <<Service>>
+        +create(name, creator, challengeID): Team
+        +join(teamID, user): boolean
+        +leave(teamID, user): boolean
+        +getProgress(teamID): TeamProgress
+        +getTeams(challengeID): List~Team~
+    }
+    
+    class TeamMember {
+        +user: User
+        +team: Team
+        +joined_at: datetime
+    }
+    
+    class ChallengeParticipant {
+        +user: User
+        +challenge: Challenge
+        +team: Team
+        +joined_at: datetime
+        +score: int
+    }
+    
+    %% Community and Content
+    class Tip {
+        +content: text
+        +category: WasteCategory
+        +contributor: User
+        +likes: int
+        +created_at: datetime
+    }
+    
+    class TipService {
+        <<Service>>
+        +create(content, categoryID, contributor): Tip
+        +get(tipID): Tip
+        +getTips(categoryID): List~Tip~
+        +search(query): List~Tip~
+        +share(tipID, platform): boolean
+        +like(tipID, user): boolean
+    }
+    
+    class UserSavedTip {
+        +user: User
+        +tip: Tip
+        +saved_at: datetime
+    }
+    
+    class UserSavedTipService {
+        <<Service>>
+        +save(tipID, user): UserSavedTip
+        +unsave(tipID, user): boolean
+        +getSaved(user): List~Tip~
+    }
+    
+    class EcoProduct {
+        +name: string
+        +description: text
+        +category: WasteCategory
+        +image: image
+        +link: url
+    }
+    
+    class EcoProductService {
+        <<Service>>
+        +create(name, description, categoryID, image, link): EcoProduct
+        +getProducts(categoryID): List~EcoProduct~
+        +search(query): List~EcoProduct~
+    }
+    
+    %% Rewards and Achievements
+    class SustainableActivity {
+        +user: User
+        +activity_type: string
+        +duration: int
+        +date: date
+        +score: int
+    }
+    
+    class ActivityService {
+        <<Service>>
+        +trackActivity(user, type, duration): SustainableActivity
+        +calculateScore(type, duration): int
+        +getActivities(userID, filters): List~SustainableActivity~
+    }
+    
+    class Badge {
+        +name: string
+        +description: text
+        +image: image
+        +requirement: text
+    }
+    
+    class BadgeService {
+        <<Service>>
+        +create(name, description, image, requirement): Badge
+        +award(badgeID, user): UserBadge
+        +getBadges(userID): List~Badge~
+        +checkEligibility(user): List~Badge~
+    }
+    
+    class UserBadge {
+        +user: User
+        +badge: Badge
+        +earned_at: datetime
+    }
+    
+    class Achievement {
+        +user: User
+        +name: string
+        +description: text
+        +tier_name: string
+        +date_earned: datetime
+    }
+    
+    class AchievementService {
+        <<Service>>
+        +create(name, description, tiers): Achievement
+        +earn(user, achievementType): boolean
+        +getAchievements(userID): List~Achievement~
+        +checkProgress(user): AchievementProgress
+    }
+    
+    class VirtualReward {
+        +user: User
+        +reward_type: string
+        +item_type: string
+        +quantity: int
+    }
+    
+    class VirtualRewardService {
+        <<Service>>
+        +award(user, rewardType, itemType, quantity): VirtualReward
+        +getRewards(userID): List~VirtualReward~
+        +getEcoWorldData(userID): EcoWorldData
+    }
+    
+    %% Leaderboards and Notifications
+    class Leaderboard {
+        +type: string
+        +timeframe: string
+    }
+    
+    class LeaderboardService {
+        <<Service>>
+        +generate(type, timeframe): Leaderboard
+        +getLeaderboard(type, timeframe): List~LeaderboardEntry~
+        +filter(leaderboardID, filters): List~LeaderboardEntry~
+    }
+    
+    class LeaderboardEntry {
+        +leaderboard: Leaderboard
+        +user: User
+        +rank: int
+        +score: int
+    }
+    
+    class ReportService {
+        <<Service>>
+        +generateProgressReport(userID): ProgressReport
+        +generateDataVisualization(userID, type): Visualization
+    }
+    
+    class Notification {
+        +user: User
+        +message: text
+        +notification_type: string
+        +date: datetime
+        +is_read: boolean
+    }
+    
+    class NotificationService {
+        <<Service>>
+        +send(userID, message, type): Notification
+        +getNotifications(userID): List~Notification~
+        +markAsRead(notificationID): boolean
+        +clear(userID): boolean
+    }
+    
+    %% Administration and Moderation
+    class AdminService {
+        <<Service>>
+        +manageAccount(userID, action): boolean
+        +reviewUserActivity(userID): ActivityReport
+        +sendPlatformNotification(message, userGroup): boolean
+        +getAnalytics(): AnalyticsData
+        +updatePlatformSettings(settings): boolean
+        +approveCustomCategory(categoryID): boolean
+        +manageChallenge(challengeID, action): boolean
+        +awardPoints(userID, points, reason): boolean
+    }
+    
+    class ModeratorService {
+        <<Service>>
+        +reviewContent(contentID): ModeratorDecision
+        +warnUser(userID, reason): boolean
+        +suspendUser(userID, duration, reason): boolean
+        +escalateIssue(issueID, notes): boolean
+        +sendMessage(userID, message): boolean
+    }
+    
+    %% Relationships
+    AbstractUser <|-- User
+    
+    %% Authentication relationships
+    User "1" -- "*" Token : has
+    User "1" -- "*" OAuth : has
+    TokenService -- Token : manages
+    OAuthService -- OAuth : manages
+    
+    %% User action relationships
+    User "1" -- "*" WasteLog : has
+    User "1" -- "*" Goal : has
+    User "1" -- "*" Tip : contributes
+    User "1" -- "*" UserSavedTip : saves
+    User "1" -- "*" Challenge : creates
+    User "1" -- "*" Team : creates
+    User "1" -- "*" TeamMember : joins
+    User "1" -- "*" ChallengeParticipant : participates in
+    User "1" -- "*" SustainableActivity : performs
+    User "1" -- "*" UserBadge : earns
+    User "1" -- "*" Achievement : achieves
+    User "1" -- "*" VirtualReward : receives
+    User "1" -- "*" LeaderboardEntry : ranks in
+    User "1" -- "*" Notification : receives
+    User "1" -- "*" WasteCategory : creates
+    
+    %% Content relationships
+    WasteCategory "1" -- "*" WasteLog : categorizes
+    WasteCategory "1" -- "*" Goal : targets
+    WasteCategory "1" -- "*" Tip : belongs to
+    WasteCategory "1" -- "*" EcoProduct : belongs to
+    Tip "1" -- "*" UserSavedTip : is saved as
+    
+    %% Challenge relationships
+    Challenge "1" -- "*" Team : has
+    Challenge "1" -- "*" ChallengeParticipant : includes
+    Team "1" -- "*" TeamMember : has
+    Team "1" -- "*" ChallengeParticipant : includes
+    
+    %% Award relationships
+    Badge "1" -- "*" UserBadge : is awarded as
+    Leaderboard "1" -- "*" LeaderboardEntry : contains
+    
+    %% Service relationships
+    WasteCategoryService -- WasteCategory : manages
+    WasteLogService -- WasteLog : manages
+    GoalService -- Goal : manages
+    ChallengeService -- Challenge : manages
+    TeamService -- Team : manages
+    TipService -- Tip : manages
+    UserSavedTipService -- UserSavedTip : manages
+    EcoProductService -- EcoProduct : manages
+    ActivityService -- SustainableActivity : manages
+    BadgeService -- Badge : manages
+    BadgeService -- UserBadge : manages
+    AchievementService -- Achievement : manages
+    VirtualRewardService -- VirtualReward : manages
+    LeaderboardService -- Leaderboard : manages
+    LeaderboardService -- LeaderboardEntry : manages
+    ReportService -- LeaderboardEntry : analyzes
+    NotificationService -- Notification : manages
+    AdminService -- User : administers
+    AdminService -- WasteCategory : approves
+    AdminService -- Challenge : manages
+    ModeratorService -- Tip : moderates
+    ModeratorService -- User : moderates
