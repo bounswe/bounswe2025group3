@@ -1,5 +1,5 @@
 """
-URL configuration for sample_project project.
+
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -19,7 +19,8 @@ from django.urls import path, include
 from django.http import JsonResponse
 
 urlpatterns = [
-    path('', lambda request: JsonResponse({'message': 'Welcome to the API. Endpoints: /api/accounts/signup/, /api/accounts/login/'}), name='index'),
+    #path('', lambda request: JsonResponse({'message': 'Welcome to the API. Endpoints: /api/a/signup/, /api/accounts/login/'}), name='index'),
     path('admin/', admin.site.urls),
-    path('api/accounts/', include('accounts.urls')),
+    path('api/authentication/', include('apps.authentication.api.v1.urls')),
+    
 ]
