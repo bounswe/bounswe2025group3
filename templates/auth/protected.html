@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Protected Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #c82333;
+        }
+        .welcome-message {
+            font-size: 24px;
+            color: #28a745;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .user-details {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Protected Area</h2>
+        <div id="welcomeMessage" class="welcome-message">Welcome!</div>
+        <div id="userInfo" class="user-details">Loading user information...</div>
+        <button onclick="logout()">Logout</button>
+    </div>
+    <script>
+        async function checkAuth() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/test-protected/', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Update welcome message with username
+                    document.getElementById('welcomeMessage').textContent = `Welcome ${data.username}!`;
+                    
+                    // Update user details
+                    document.getElementById('userInfo').innerHTML = `
+                        <strong>Username:</strong> ${data.username}<br>
+                        <strong>User ID:</strong> ${data.user_id}<br>
+                        <strong>Status:</strong> Successfully authenticated
+                    `;
+                } else {
+                    // Token might be expired
+                    const refresh = localStorage.getItem('refresh_token');
+                    if (refresh) {
+                        try {
+                            const refreshResponse = await fetch('/api/token/refresh/', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ refresh })
+                            });
+
+                            if (refreshResponse.ok) {
+                                const newTokens = await refreshResponse.json();
+                                localStorage.setItem('access_token', newTokens.access);
+                                // Try the protected route again
+                                checkAuth();
+                            } else {
+                                logout();
+                            }
+                        } catch (error) {
+                            logout();
+                        }
+                    } else {
+                        logout();
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                logout();
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            window.location.href = '/login';
+        }
+
+        // Check authentication when page loads
+        checkAuth();
+    </script>
+</body>
+</html> 

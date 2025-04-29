@@ -4,77 +4,77 @@ sequenceDiagram
     participant APIView
     participant AuthService
     participant UserModel
-    participant TokenModel
-    participant SessionStore
+    participant JWTAuth
     
     %% Registration Flow
-    Client->>APIView: POST /api/auth/register (username, email, password)
-    APIView->>AuthService: signUp(username, email, password)
+    Client->>APIView: POST /api/auth/register/ (username, email, password)
+    APIView->>AuthService: create_user(username, email, password)
     AuthService->>UserModel: create_user(username, email, password)
     UserModel-->>AuthService: user
-    AuthService->>TokenModel: create(user)
-    TokenModel-->>AuthService: token
-    AuthService-->>APIView: UserAuthToken (token, user_id, expiry)
-    APIView-->>Client: 201 Created (token, user_id, expiry)
+    AuthService-->>APIView: user
+    APIView->>JWTAuth: RefreshToken.for_user(user)
+    JWTAuth-->>APIView: {refresh_token, access_token}
+    APIView-->>Client: 201 Created (refresh_token, access_token, user_id, username, email)
     
     %% Login Flow
-    Client->>APIView: POST /api/auth/login (email, password)
-    APIView->>AuthService: logIn(email, password)
+    Client->>APIView: POST /api/auth/login/ (email, password)
+    APIView->>AuthService: authenticate_user(email, password)
     AuthService->>UserModel: authenticate(email, password)
     UserModel-->>AuthService: user or None
     alt Authentication Successful
-        AuthService->>TokenModel: get_or_create(user)
-        TokenModel-->>AuthService: token
-        AuthService-->>APIView: UserAuthToken (token, user_id, expiry)
-        APIView-->>Client: 200 OK (token, user_id, expiry)
+        AuthService-->>APIView: user
+        APIView->>JWTAuth: RefreshToken.for_user(user)
+        JWTAuth-->>APIView: {refresh_token, access_token}
+        APIView-->>Client: 200 OK (refresh_token, access_token, user_id, username, email)
     else Authentication Failed
         AuthService-->>APIView: None
         APIView-->>Client: 401 Unauthorized
     end
     
     %% Google OAuth Flow
-    Client->>APIView: POST /api/auth/google (googleToken)
-    APIView->>AuthService: logInViaGoogle(googleToken)
-    AuthService->>AuthService: Verify token with Google
+    Client->>APIView: POST /api/auth/google/ (googleToken)
+    APIView->>OAuthService: verify_provider_token('google', googleToken)
+    OAuthService-->>APIView: google_data or None
     alt Google Authentication Successful
-        AuthService->>UserModel: get_or_create_user_from_google(googleData)
-        UserModel-->>AuthService: user
-        AuthService->>OAuth: get_or_create(user, 'google', googleUserId)
-        OAuth-->>AuthService: oauth_record
-        AuthService->>TokenModel: create(user)
-        TokenModel-->>AuthService: token
-        AuthService-->>APIView: UserAuthToken (token, user_id, expiry)
-        APIView-->>Client: 200 OK (token, user_id, expiry)
+        APIView->>AuthService: generate_unique_username(email_prefix)
+        AuthService-->>APIView: unique_username
+        APIView->>UserModel: get_or_create(email, username=unique_username)
+        UserModel-->>APIView: user, created
+        APIView->>OAuthService: get_or_create(user, 'google', google_data.id)
+        OAuthService-->>APIView: oauth_record
+        APIView->>JWTAuth: RefreshToken.for_user(user)
+        JWTAuth-->>APIView: {refresh_token, access_token}
+        APIView-->>Client: 200 OK (refresh_token, access_token, user_id, username, email)
     else Google Authentication Failed
-        AuthService-->>APIView: None
         APIView-->>Client: 401 Unauthorized
     end
     
-    %% Token Validation
-    Client->>APIView: GET /api/protected-resource (Authorization: Token xyz)
-    APIView->>AuthService: validateToken(token)
-    AuthService->>TokenModel: get(key=token)
-    TokenModel-->>AuthService: token or None
+    %% Token Refresh Flow
+    Client->>APIView: POST /api/token/refresh/ (refresh_token)
+    APIView->>JWTAuth: validate_refresh_token(refresh_token)
     alt Token Valid
-        AuthService-->>APIView: True, user
+        JWTAuth-->>APIView: new_access_token
+        APIView-->>Client: 200 OK (access_token)
+    else Token Invalid
+        JWTAuth-->>APIView: Invalid Token
+        APIView-->>Client: 401 Unauthorized
+    end
+    
+    %% Protected Resource Access
+    Client->>APIView: GET /api/protected-resource/ (Authorization: Bearer access_token)
+    APIView->>JWTAuth: validate_token(access_token)
+    alt Token Valid
+        JWTAuth-->>APIView: user
         APIView->>APIView: Process request with user
         APIView-->>Client: 200 OK (resource data)
-    else Token Invalid
-        AuthService-->>APIView: False, None
+    else Token Invalid or Expired
+        JWTAuth-->>APIView: Invalid Token
         APIView-->>Client: 401 Unauthorized
     end
-    
-    %% Logout
-    Client->>APIView: POST /api/auth/logout (Authorization: Token xyz)
-    APIView->>AuthService: revokeToken(token)
-    AuthService->>TokenModel: delete(key=token)
-    TokenModel-->>AuthService: Success
-    AuthService-->>APIView: Success
-    APIView-->>Client: 200 OK
-    
+
     %% Password Reset Request
-    Client->>APIView: POST /api/auth/reset-password (email)
-    APIView->>AuthService: generatePasswordResetToken(email)
+    Client->>APIView: POST /api/auth/reset-password/ (email)
+    APIView->>AuthService: generate_password_reset_token(email)
     AuthService->>UserModel: get(email=email)
     UserModel-->>AuthService: user or None
     alt User Found
@@ -88,9 +88,9 @@ sequenceDiagram
     end
     
     %% Password Reset Confirmation
-    Client->>APIView: POST /api/auth/reset-password/confirm (token, new_password)
-    APIView->>AuthService: resetPasswordWithToken(token, new_password)
-    AuthService->>AuthService: validatePasswordResetToken(token)
+    Client->>APIView: POST /api/auth/reset-password/confirm/ (token, new_password)
+    APIView->>AuthService: reset_password_with_token(token, new_password)
+    AuthService->>AuthService: validate_password_reset_token(token)
     alt Token Valid
         AuthService->>UserModel: set_password(new_password)
         UserModel-->>AuthService: Success
