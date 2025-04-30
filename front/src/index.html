@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Welcome to the Auth Test App</h1>
+    <div id="auth-links">
+        <a href="login.html">Login</a> |
+        <a href="register.html">Register</a>
+    </div>
+    <div id="dashboard-link" style="display: none;">
+        <p>You are logged in.</p>
+        <a href="dashboard.html">Go to Dashboard</a>
+        <button id="logout-button-index">Logout</button>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Basic logic to show/hide links based on login status
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoginStatusAndRedirect('index');
+        });
+    </script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
+from apps.authentication.api.v1.serializers import CustomTokenObtainPairSerializer
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 

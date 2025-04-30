@@ -102,7 +102,9 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorMessage = document.getElementById('errorMessage');
-
+            
+            errorMessage.style.display = 'none'; // Hide any previous error
+            
             try {
                 const response = await fetch('/api/auth/login/', {
                     method: 'POST',
@@ -111,24 +113,33 @@
                     },
                     body: JSON.stringify({ email, password })
                 });
-
+                
                 const data = await response.json();
-
-                if (response.ok) {
-                    // Store tokens
-                    localStorage.setItem('access_token', data.access);
-                    localStorage.setItem('refresh_token', data.refresh);
-                    // Redirect to protected page
-                    window.location.href = '/protected';
-                } else {
-                    errorMessage.textContent = data.detail || 'Login failed';
-                    errorMessage.style.display = 'block';
+                
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Login failed');
                 }
+                
+                // Store JWT tokens in localStorage
+                if (data.access && data.refresh) {
+                    localStorage.setItem('accessToken', data.access);
+                    localStorage.setItem('refreshToken', data.refresh);
+                    localStorage.setItem('userRole', data.role);
+                    localStorage.setItem('userEmail', data.email);
+                    localStorage.setItem('userId', data.user_id);
+                    
+                    // Redirect to protected page
+                    window.location.href = '/protected/';
+                } else {
+                    throw new Error('Invalid response from server');
+                }
+                
             } catch (error) {
-                errorMessage.textContent = 'An error occurred. Please try again.';
+                console.error('Login error:', error);
+                errorMessage.textContent = error.message;
                 errorMessage.style.display = 'block';
             }
         });
     </script>
 </body>
-</html> 
+</html>

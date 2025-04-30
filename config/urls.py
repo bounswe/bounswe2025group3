@@ -32,9 +32,12 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    
+    path('api/user/', include('apps.user.api.v1.urls')),
     # Template views
-    path('login/', login_view, name='login'),
-    path('register/', register_view, name='register'),
-    path('protected/', protected_view, name='protected'),
+    path('login/', login_view, name='login_view'), 
+    path('register/', register_view, name='register_view'), 
+    path('protected/', protected_view, name='protected_view'), 
+    
+    # Django allauth URLs
+    path('accounts/', include('allauth.urls')),  
 ]

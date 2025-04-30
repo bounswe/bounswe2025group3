@@ -38,9 +38,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites', # Required by allauth
 
+    # Third-party apps
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
+    'rest_framework.authtoken', # Add authtoken to satisfy dj-rest-auth check
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist', # If using token blacklisting
+    'corsheaders', 
+    'allauth', # Add allauth
+    'allauth.account', # Add allauth.account
+    'allauth.socialaccount', # Add allauth.socialaccount
+    'allauth.socialaccount.providers.google', # Add google provider if used
+    'dj_rest_auth', # Add dj_rest_auth
+    'dj_rest_auth.registration', # Add dj_rest_auth.registration
+
+    # Your apps
     'apps.authentication',
     'apps.waste',
     'apps.challanges',
@@ -58,11 +71,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # Ensure CorsMiddleware is high up
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware', # Add allauth middleware
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -138,21 +153,78 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Set SITE_ID required by django.contrib.sites (used by allauth)
+SITE_ID = 1
 
+# Custom Authentication Backend (adjust if needed)
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+    # Your custom backend
+    # 'apps.authentication.backends.EmailBackend', # allauth backend handles email login
+)
+
+# django-allauth Configuration
+ACCOUNT_LOGIN_METHODS = ['email']  # Use email for login, replaces ACCOUNT_AUTHENTICATION_METHOD
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']  # Fields required at signup
+
+# Change from 'optional' to 'none' for testing purposes
+ACCOUNT_EMAIL_VERIFICATION = 'none' # Or 'mandatory' or 'optional'
+
+# Set a dummy EMAIL_BACKEND for development so we don't need an actual mail server
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+ACCOUNT_ADAPTER = 'allauth.account.adapter.DefaultAccountAdapter'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_LOGOUT_ON_GET = False # Use POST for logout for security
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_PRESERVE_USERNAME_CASING = False
+ACCOUNT_SESSION_REMEMBER = None # Or True
+ACCOUNT_USERNAME_BLACKLIST = []
+ACCOUNT_USERNAME_MIN_LENGTH = 1
+
+# Social Account Settings (Example for Google)
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each provider, you can define specific settings.
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+        # Add 'APP' dictionary with 'client_id' and 'secret' from Google Cloud Console
+        # 'APP': {
+        #     'client_id': 'YOUR_GOOGLE_CLIENT_ID',
+        #     'secret': 'YOUR_GOOGLE_CLIENT_SECRET',
+        #     'key': ''
+        # }
+    }
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'TOKEN_MODEL': None,  # Explicitly disable DRF Token Authentication
 }
 
 AUTH_USER_MODEL = 'user.CustomUser'
 
-# to override the default authentication backend using username, we will use email
-AUTHENTICATION_BACKENDS = [
-    'apps.authentication.backends.EmailBackend',     # Our custom email backend
-    'django.contrib.auth.backends.ModelBackend',  # Default username backend
-]
+# dj-rest-auth Settings
+REST_AUTH = {
+    'REGISTER_SERIALIZER': 'apps.authentication.api.v1.serializers.CustomRegisterSerializer', # Correct path
+    # Use JWT authentication
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'my-app-auth', # Name of the cookie to save the JWT
+    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token', # Name of the cookie to save the refresh token
+    'SESSION_LOGIN': False, # Disable session login as we use JWT
+}
 
 # JWT Settings
 SIMPLE_JWT = {
@@ -175,6 +247,7 @@ SIMPLE_JWT = {
     
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
+    'TOKEN_OBTAIN_SERIALIZER': 'apps.authentication.api.v1.serializers.CustomTokenObtainPairSerializer', # Use our custom serializer
     
     'JTI_CLAIM': 'jti',
     
@@ -187,3 +260,24 @@ SIMPLE_JWT = {
 
 # Custom login URL
 LOGIN_URL = '/login/'
+
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:8000', # Allow backend itself
+    'http://localhost:8000',  # Allow backend itself (alternative)
+    'null',                   # Allow requests from file:// origins (for local testing)
+    # Add your frontend domain here if deploying (e.g., 'http://localhost:3000')
+]
+
+# Allow credentials (cookies, authorization headers) to be sent with requests
+CORS_ALLOW_CREDENTIALS = True
+
+# Optional: Allow specific headers if needed beyond defaults
+# CORS_ALLOW_HEADERS = list(default_headers) + [
+#     'my-custom-header',
+# ]
+
+# Optional: Allow specific methods if needed beyond defaults (GET, POST, PUT, PATCH, DELETE, OPTIONS)
+# CORS_ALLOW_METHODS = list(default_methods) + [
+#     'CUSTOM',
+# ]
