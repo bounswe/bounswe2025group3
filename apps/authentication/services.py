@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, get_user_model
 from .models import UserAuthToken, OAuth
 from datetime import timedelta
 import uuid
+from django.utils.text import slugify
+import re
 
 User = get_user_model()
 
@@ -44,20 +46,93 @@ class TokenService:
 class OAuthService:
     @staticmethod
     def verify_provider_token(provider, token):
-        # MOCK Google verification
-        if provider == 'google' and token == "valid_google_token":
-            return {'provider_user_id': 'google123', 'email': 'googleuser@example.com'}
-        return None
+        # TODO: Implement actual Google token verification
+        # This is just a mock implementation
+        if provider == 'google' and token == 'valid_google_token':
+            try:
+                # Here you would actually verify the token with Google
+                # For now, we just mock the response
+                return {
+                    'provider_user_id': 'google123',
+                    'email': 'googleuser@example.com'
+                }
+            except Exception as e:
+                return None
+        return None  # Return None for invalid tokens
 
     @staticmethod
     def get_or_create(user, provider, provider_user_id):
         oauth, created = OAuth.objects.get_or_create(
-            user=user, provider=provider, provider_user_id=provider_user_id
+            user=user,
+            provider=provider,
+            provider_user_id=provider_user_id
         )
         return oauth
 
 
 class AuthenticationService:
+    @staticmethod
+    def authenticate_user(email, password):
+        """
+        Authenticate a user using email and password.
+        Returns the user object if authentication is successful, None otherwise.
+        """
+        return authenticate(email=email, password=password)
+
+    @staticmethod
+    def generate_unique_username(base_username):
+        """
+        Generate a unique username based on the given base username.
+        If the username exists, append a number to make it unique.
+        """
+        # Clean the username: remove special chars, convert to lowercase
+        username = slugify(base_username)
+        username = re.sub(r'[^a-z0-9]', '', username)
+        
+        if not User.objects.filter(username=username).exists():
+            return username
+
+        # If username exists, append numbers until we find a unique one
+        counter = 1
+        while User.objects.filter(username=f"{username}{counter}").exists():
+            counter += 1
+        return f"{username}{counter}"
+
+    @staticmethod
+    def create_user(username, email, password, **extra_fields):
+        """
+        Create a new user with the given username, email and password.
+        """
+        if not email or not password or not username:
+            raise ValueError('Username, email and password are required')
+            
+        # Ensure username is unique
+        username = AuthenticationService.generate_unique_username(username)
+            
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            **extra_fields
+        )
+        return user
+
+    @staticmethod
+    def validate_password(password):
+        """
+        Validate password strength.
+        Returns (is_valid, error_message)
+        """
+        if len(password) < 8:
+            return False, "Password must be at least 8 characters long"
+        if not re.search(r'[A-Z]', password):
+            return False, "Password must contain at least one uppercase letter"
+        if not re.search(r'[a-z]', password):
+            return False, "Password must contain at least one lowercase letter"
+        if not re.search(r'[0-9]', password):
+            return False, "Password must contain at least one number"
+        return True, ""
+
     @staticmethod
     def sign_up(username, email, password):
         user = User.objects.create_user(username=username, email=email, password=password)

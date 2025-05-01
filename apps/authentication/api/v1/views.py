@@ -1,54 +1,59 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import RegisterSerializer, LoginSerializer, TokenSerializer
-from apps.authentication.services import AuthenticationService
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
+from dj_rest_auth.registration.views import RegisterView as DjRestAuthRegisterView
+from django.contrib.auth import get_user_model
+from .serializers import CustomTokenObtainPairSerializer
+from apps.authentication.services import AuthenticationService, OAuthService
+from rest_framework.permissions import IsAuthenticated
 
-class RegisterView(APIView):
-    def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            token = AuthenticationService.get_or_create_token_for_user(user)
-            token_serializer = TokenSerializer(token)
-            return Response(token_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+User = get_user_model()
 
-class LoginView(APIView):
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            token = AuthenticationService.log_in(
-                email=serializer.validated_data['email'],
-                password=serializer.validated_data['password']
-            )
-            if token:
-                token_serializer = TokenSerializer(token)
-                return Response(token_serializer.data, status=status.HTTP_200_OK)
-            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class RegisterView(DjRestAuthRegisterView):
+    pass
+
+class LoginView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 class GoogleLoginView(APIView):
     def post(self, request):
         google_token = request.data.get('googleToken')
-        token = AuthenticationService.log_in_via_google(google_token)
-        if token:
-            token_serializer = TokenSerializer(token)
-            return Response(token_serializer.data, status=status.HTTP_200_OK)
-        return Response({'detail': 'Invalid Google token'}, status=status.HTTP_401_UNAUTHORIZED)
+        google_data = OAuthService.verify_provider_token('google', google_token)
+        
+        if not google_data:
+            return Response({'detail': 'Invalid Google token'}, 
+                          status=status.HTTP_401_UNAUTHORIZED)
+        
+        username = google_data['email'].split('@')[0]  
+        user, created = User.objects.get_or_create(
+            email=google_data['email'],
+            defaults={
+                'username': AuthenticationService.generate_unique_username(username)
+            }
+        )
+        
+        OAuthService.get_or_create(user, 'google', google_data['provider_user_id'])
+        
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+            'user_id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'role': user.role 
+        }, status=status.HTTP_200_OK)
 
-class RefreshTokenView(APIView):
-    def post(self, request):
-        old_token_str = request.data.get('token')
-        token = AuthenticationService.refresh_token(old_token_str)
-        if token:
-            token_serializer = TokenSerializer(token)
-            return Response(token_serializer.data, status=status.HTTP_200_OK)
-        return Response({'detail': 'Invalid or expired token'}, status=status.HTTP_400_BAD_REQUEST)
-
-class RevokeTokenView(APIView):
-    def post(self, request):
-        token_str = request.data.get('token')
-        if AuthenticationService.revoke_token(token_str):
-            return Response({'detail': 'Token revoked successfully'}, status=status.HTTP_200_OK)
-        return Response({'detail': 'Token not found'}, status=status.HTTP_404_NOT_FOUND)
+class ProtectedTestView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        return Response({
+            'message': 'You have access to this protected resource',
+            'user_id': request.user.id,
+            'username': request.user.username,
+            'email': request.user.email, 
+            'role': request.user.role   
+        })

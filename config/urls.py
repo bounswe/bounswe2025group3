@@ -17,10 +17,27 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import JsonResponse
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+from apps.authentication.views import login_view, protected_view, register_view
+from django.views.generic import RedirectView
 
 urlpatterns = [
-    #path('', lambda request: JsonResponse({'message': 'Welcome to the API. Endpoints: /api/a/signup/, /api/accounts/login/'}), name='index'),
+    path('', RedirectView.as_view(url='/login/', permanent=True)), # Redirect root to login
     path('admin/', admin.site.urls),
-    path('api/authentication/', include('apps.authentication.api.v1.urls')),
+    path('api/auth/', include(('apps.authentication.api.v1.urls', 'authentication'), namespace='authentication')),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/user/', include('apps.user.api.v1.urls')),
+    # Template views
+    path('login/', login_view, name='login_view'), 
+    path('register/', register_view, name='register_view'), 
+    path('protected/', protected_view, name='protected_view'), 
     
+    # Django allauth URLs
+    path('accounts/', include('allauth.urls')),  
 ]
