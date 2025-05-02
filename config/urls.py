@@ -22,5 +22,6 @@ urlpatterns = [
     #path('', lambda request: JsonResponse({'message': 'Welcome to the API. Endpoints: /api/a/signup/, /api/accounts/login/'}), name='index'),
     path('admin/', admin.site.urls),
     path('api/authentication/', include('apps.authentication.api.v1.urls')),
+    path('api/v1/waste/', include('apps.waste.api.v1.urls')),
     
 ]

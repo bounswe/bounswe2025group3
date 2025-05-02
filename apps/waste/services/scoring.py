@@ -1,6 +1,6 @@
 from datetime import timedelta
 from django.utils import timezone
-from .models import WasteLog
+from apps.waste.models import WasteLog
 from django.db.models import Sum
 
 
