@@ -1,0 +1,4 @@
+Django==4.2.20
+djangorestframework
+djangorestframework-simplejwt
+Pillow
