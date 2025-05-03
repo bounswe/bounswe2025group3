@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from .serializers import CustomTokenObtainPairSerializer
 from apps.authentication.services import AuthenticationService, OAuthService
 from rest_framework.permissions import IsAuthenticated
+from .serializers import ProfileSerializer
 
 User = get_user_model()
 
@@ -57,3 +58,17 @@ class ProtectedTestView(APIView):
             'email': request.user.email, 
             'role': request.user.role   
         })
+    
+class ProfileUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = ProfileSerializer(request.user)
+        return Response(serializer.data)
+
+    def patch(self, request):
+        serializer = ProfileSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

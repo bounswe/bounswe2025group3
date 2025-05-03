@@ -1,2 +1,17 @@
-venv
-__pycache__
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.sqlite3
+db.sqlite3
+
+# Node.js
+node_modules/
+build/
+dist/
+*.log
+
+# Media
+media/*
+!media/.gitkeep

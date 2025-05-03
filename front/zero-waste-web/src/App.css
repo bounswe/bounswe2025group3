@@ -1,0 +1,108 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #4caf50;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 5px;
+}
+
+nav h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+nav a, nav button {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+nav a:hover, nav button:hover {
+  text-decoration: underline;
+}
+
+section {
+  margin: 20px 0;
+}
+
+h2, h3 {
+  color: #2e7d32;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+input, select, button {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: white;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+footer {
+  margin-top: 20px;
+  text-align: center;
+  color: #666;
+}
+
+.feature-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}

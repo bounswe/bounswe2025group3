@@ -1,48 +1,40 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, username, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        if not username:
+            raise ValueError('The Username field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-class CustomUser(AbstractUser):
+    def create_superuser(self, email, username, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, username, password, **extra_fields)
 
-    class Role(models.TextChoices):
-        ADMIN = 'ADMIN', _('Admin')
-        MODERATOR = 'MODERATOR', _('Moderator')
-        USER = 'USER', _('User')
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=150, unique=True)
+    name = models.CharField(max_length=255, blank=True)  # Optional
+    surname = models.CharField(max_length=255, blank=True)  # Optional
+    bio = models.TextField(blank=True)  # Optional
+    city = models.CharField(max_length=100, blank=True)  # Optional
+    country = models.CharField(max_length=100, blank=True)  # Optional
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)  # Optional
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(auto_now_add=True)
 
-    # Override username to make it non-unique and optional
-    username = models.CharField(
-        _('username'),
-        max_length=150,
-        # unique=False, # Changed from AbstractUser's unique=True
-        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
-        validators=[AbstractUser.username_validator],
-        error_messages={
-            # 'unique': _("A user with that username already exists."), # Removed unique error message
-        },
-        # Allow blank/null username if needed, but ensure email is always the primary identifier
-        blank=True, 
-        null=True, # Allow null username
-        unique=False # Explicitly set unique to False
-    )
+    objects = CustomUserManager()
 
-    email = models.EmailField(_('email address'), unique=True) 
-    role = models.CharField(_('role'), max_length=50, choices=Role.choices, default=Role.USER) 
-
-    # Profile fields
-    bio = models.TextField(_('bio'), blank=True, null=True) 
-    profile_picture = models.ImageField(_('profile picture'), upload_to='profiles/', blank=True, null=True) 
-    city = models.CharField(_('city'), max_length=100, blank=True, null=True) 
-    country = models.CharField(_('country'), max_length=100, blank=True, null=True) 
-
-    # Settings & Stats
-    notifications_enabled = models.BooleanField(_('notifications enabled'), default=True) 
-    total_score = models.IntegerField(default=0)
-
-    # Use email as the unique identifier for authentication instead of username
     USERNAME_FIELD = 'email'
-    # Remove 'username' from required fields as it's now optional/non-unique
-    REQUIRED_FIELDS = ['first_name', 'last_name'] 
+    REQUIRED_FIELDS = ['username']  # Username required for superuser creation
 
     def __str__(self):
         return self.email
