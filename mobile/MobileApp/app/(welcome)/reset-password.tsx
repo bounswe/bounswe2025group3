@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { View, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from "react-native";
+import { View, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { sharedStyles } from '@/components/ui/styles';
 import CustomAlert from '@/components/CustomAlert';
-import { useRouter } from 'expo-router';
+import { useRouter} from 'expo-router';
 
 export default function ResetPasswordScreen() {
   const [resetEmail, setResetEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
@@ -29,12 +28,36 @@ export default function ResetPasswordScreen() {
       return;
     }
 
-    setIsLoading(true);
-    // Simulate API call to send reset code
-    setTimeout(() => {
-      setIsLoading(false);
-      router.push("/(welcome)/reset-code");
-    }, 1500);
+    // TODO: Implement API call to send reset code
+    // Example API call structure:
+    /*
+    try {
+      const response = await fetch('YOUR_API_ENDPOINT/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: resetEmail }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Handle successful reset code sent
+        navigation.reset({
+          index: 0,
+          routes: [{ name: '(welcome)/reset-code' as never }],
+        });
+      } else {
+        // Handle error
+        showAlert("Error", "Failed to send reset code. Please try again.");
+      }
+    } catch (error) {
+      showAlert("Error", "An error occurred while sending reset code");
+    }
+    */
+
+    // Temporary success for testing
+    router.push("/(welcome)/reset-code");
   };
 
   return (
@@ -67,16 +90,11 @@ export default function ResetPasswordScreen() {
             </View>
 
             <TouchableOpacity 
-              style={[sharedStyles.button, isLoading && sharedStyles.buttonDisabled]} 
+              style={sharedStyles.button} 
               onPress={handleSendResetCode}
-              disabled={isLoading}
               activeOpacity={0.8}
             >
-              {isLoading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <ThemedText style={sharedStyles.buttonText}>Submit</ThemedText>
-              )}
+              <ThemedText style={sharedStyles.buttonText}>Submit</ThemedText>
             </TouchableOpacity>
           </View>
         </View>
@@ -101,7 +119,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
-    paddingTop: 60,
+    paddingTop: 140,
   },
   innerContent: {
     flex: 1,

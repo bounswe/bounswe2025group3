@@ -1,25 +1,24 @@
 import { useState } from "react";
-import { View, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, Platform } from "react-native";
+import { View, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { sharedStyles } from '@/components/ui/styles';
 import CustomAlert from '@/components/CustomAlert';
-import { useRouter } from 'expo-router';
+import { useRouter, useNavigation } from 'expo-router';
 
 export default function ResetCodeScreen() {
-  const [resetCode, setResetCode] = useState("");
+  const [code, setCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<'success' | 'error'>('error');
-  const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
+  const navigation = useNavigation();
 
   const showAlert = (title: string, message: string, type: 'success' | 'error' = 'error') => {
     setAlertTitle(title);
@@ -28,13 +27,13 @@ export default function ResetCodeScreen() {
     setAlertVisible(true);
   };
 
-  const handleVerifyResetCode = () => {
-    if (!resetCode || !newPassword || !confirmNewPassword) {
+  const handleResetPassword = () => {
+    if (!code || !newPassword || !confirmPassword) {
       showAlert("Error", "Please fill in all fields");
       return;
     }
 
-    if (newPassword !== confirmNewPassword) {
+    if (newPassword !== confirmPassword) {
       showAlert("Error", "Passwords do not match");
       return;
     }
@@ -48,41 +47,52 @@ export default function ResetCodeScreen() {
       return;
     }
 
-    setIsLoading(true);
-    // Simulate API call to verify code and reset password
+    // TODO: Implement API call to reset password
+    // Example API call structure:
+    /*
+    try {
+      const response = await fetch('YOUR_API_ENDPOINT/reset-password/confirm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          code,
+          newPassword,
+          confirmPassword 
+        }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Handle successful password reset
+        showAlert("Success", "Password reset successfully", "success");
+        navigation.reset({
+          index: 0,
+          routes: [{ name: '(welcome)/login' as never }],
+        });
+      } else {
+        // Handle error
+        showAlert("Error", "Failed to reset password. Please try again.");
+      }
+    } catch (error) {
+      showAlert("Error", "An error occurred while resetting password");
+    }
+    */
+
+    // Temporary success for testing
+    showAlert("Success", "Password reset successfully", "success");
     setTimeout(() => {
-      setIsLoading(false);
-      setIsSuccess(true);
-      showAlert(
-        "Success", 
-        "Password has been reset successfully. You can now login with your new password.",
-        "success"
-      );
-    }, 1500);
+      setAlertVisible(false);
+      navigation.reset({
+        index: 1,
+        routes: [
+          { name: 'index' as never },
+          { name: 'login' as never },
+        ],
+      });
+      }, 900);
   };
-
-  if (isSuccess) {
-    return (
-      <ThemedView style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.innerContent}>
-            <ThemedText style={styles.title}>Password Reset Successful</ThemedText>
-            <ThemedText style={styles.subtitle}>
-              Your password has been reset successfully. You can now login with your new password.
-            </ThemedText>
-
-            <TouchableOpacity 
-              style={[sharedStyles.button, styles.backToLoginButton]} 
-              onPress={() => router.push("/(welcome)/login")}
-              activeOpacity={0.8}
-            >
-              <ThemedText style={sharedStyles.buttonText}>Back to Login</ThemedText>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ThemedView>
-    );
-  }
 
   return (
     <ThemedView style={styles.container}>
@@ -94,9 +104,9 @@ export default function ResetCodeScreen() {
           <Ionicons name="arrow-back" size={24} color="#2E7D32" />
         </TouchableOpacity>
         <View style={styles.innerContent}>
-          <ThemedText style={styles.title}>Enter Reset Code</ThemedText>
+          <ThemedText style={styles.title}>Reset Password</ThemedText>
           <ThemedText style={styles.subtitle}>
-            Please enter the reset code sent to your email and your new password.
+            Enter the code sent to your email and your new password.
           </ThemedText>
 
           <View style={sharedStyles.form}>
@@ -106,10 +116,10 @@ export default function ResetCodeScreen() {
                 style={sharedStyles.input}
                 placeholder="Reset Code"
                 placeholderTextColor="#666"
-                value={resetCode}
-                onChangeText={setResetCode}
+                value={code}
+                onChangeText={setCode}
                 keyboardType="number-pad"
-                autoCapitalize="none"
+                maxLength={6}
               />
             </View>
 
@@ -121,10 +131,10 @@ export default function ResetCodeScreen() {
                 placeholderTextColor="#666"
                 value={newPassword}
                 onChangeText={setNewPassword}
-                secureTextEntry={!showNewPassword}
+                secureTextEntry={!showPassword}
               />
-              <TouchableOpacity onPress={() => setShowNewPassword(!showNewPassword)} style={sharedStyles.eyeIcon}>
-                <Ionicons name={showNewPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#2E7D32" />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={sharedStyles.eyeIcon}>
+                <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#2E7D32" />
               </TouchableOpacity>
             </View>
 
@@ -134,26 +144,21 @@ export default function ResetCodeScreen() {
                 style={sharedStyles.input}
                 placeholder="Confirm New Password"
                 placeholderTextColor="#666"
-                value={confirmNewPassword}
-                onChangeText={setConfirmNewPassword}
-                secureTextEntry={!showConfirmNewPassword}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={!showConfirmPassword}
               />
-              <TouchableOpacity onPress={() => setShowConfirmNewPassword(!showConfirmNewPassword)} style={sharedStyles.eyeIcon}>
-                <Ionicons name={showConfirmNewPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#2E7D32" />
+              <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={sharedStyles.eyeIcon}>
+                <Ionicons name={showConfirmPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#2E7D32" />
               </TouchableOpacity>
             </View>
 
             <TouchableOpacity 
-              style={[sharedStyles.button, isLoading && sharedStyles.buttonDisabled]} 
-              onPress={handleVerifyResetCode}
-              disabled={isLoading}
+              style={sharedStyles.button} 
+              onPress={handleResetPassword}
               activeOpacity={0.8}
             >
-              {isLoading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <ThemedText style={sharedStyles.buttonText}>Reset Password</ThemedText>
-              )}
+              <ThemedText style={sharedStyles.buttonText}>Reset Password</ThemedText>
             </TouchableOpacity>
           </View>
         </View>
@@ -196,8 +201,5 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
     marginBottom: 20,
-  },
-  backToLoginButton: {
-    marginTop: 20,
   },
 }); 

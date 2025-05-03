@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { View, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from "expo-router";
+import { useRouter, useNavigation } from "expo-router";
 import CustomAlert from '@/components/CustomAlert';
 import { sharedStyles } from '@/components/ui/styles';
 import { ThemedText } from '@/components/ThemedText';
@@ -10,9 +10,9 @@ import { ThemedView } from '@/components/ThemedView';
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const navigation = useNavigation();
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
@@ -31,14 +31,36 @@ export default function LoginScreen() {
       return;
     }
 
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      showAlert("Success", "Logged in successfully", "success");
-      // Navigate to tabs/home after successful login
-      router.replace("/(tabs)/home");
-    }, 1500);
+    // TODO: Implement API call for login
+    // Example API call structure:
+    /*
+    try {
+      const response = await fetch('YOUR_API_ENDPOINT/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Handle successful login
+        showAlert("Success", "Logged in successfully", "success");
+        router.replace("/(tabs)/home");
+      } else {
+        // Handle login error
+        showAlert("Error", "Invalid email or password");
+      }
+    } catch (error) {
+      showAlert("Error", "An error occurred during login");
+    }
+    */
+
+    // Temporary success for testing
+    showAlert("Success", "Logged in successfully", "success");
+    navigation.reset
+    router.replace("/(tabs)/home");
   };
 
   const handleResetPassword = () => {
@@ -47,61 +69,61 @@ export default function LoginScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <TouchableOpacity onPress={() => router.back()} style={sharedStyles.backButton}>
-        <Ionicons name="arrow-back" size={24} color="#2E7D32" />
-      </TouchableOpacity>
-      <View style={sharedStyles.content}>
-        <ThemedText style={styles.title}>Login</ThemedText>
-        <View style={sharedStyles.form}>
-          <View style={sharedStyles.inputContainer}>
-            <Ionicons name="mail-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
-            <TextInput
-              style={sharedStyles.input}
-              placeholder="Email"
-              placeholderTextColor="#666"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          </View>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.content}
+      >
+        <TouchableOpacity onPress={() => router.back()} style={sharedStyles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="#2E7D32" />
+        </TouchableOpacity>
+        <View style={styles.innerContent}>
+          <ThemedText style={styles.title}>Login</ThemedText>
+          <View style={sharedStyles.form}>
+            <View style={sharedStyles.inputContainer}>
+              <Ionicons name="mail-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
+              <TextInput
+                style={sharedStyles.input}
+                placeholder="Email"
+                placeholderTextColor="#666"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
 
-          <View style={sharedStyles.inputContainer}>
-            <Ionicons name="lock-closed-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
-            <TextInput
-              style={sharedStyles.input}
-              placeholder="Password"
-              placeholderTextColor="#666"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-            />
-            <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={sharedStyles.eyeIcon}>
-              <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#2E7D32" />
+            <View style={sharedStyles.inputContainer}>
+              <Ionicons name="lock-closed-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
+              <TextInput
+                style={sharedStyles.input}
+                placeholder="Password"
+                placeholderTextColor="#666"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={sharedStyles.eyeIcon}>
+                <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#2E7D32" />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity 
+              style={sharedStyles.button} 
+              onPress={handleLogin}
+              activeOpacity={0.8}
+            >
+              <ThemedText style={sharedStyles.buttonText}>Login</ThemedText>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              onPress={handleResetPassword}
+              style={styles.forgotPasswordContainer}
+            >
+              <ThemedText style={styles.forgotPasswordText}>Forgot Password?</ThemedText>
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity 
-            style={[sharedStyles.button, isLoading && sharedStyles.buttonDisabled]} 
-            onPress={handleLogin}
-            disabled={isLoading}
-            activeOpacity={0.8}
-          >
-            {isLoading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <ThemedText style={sharedStyles.buttonText}>Login</ThemedText>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            onPress={handleResetPassword}
-            style={styles.forgotPasswordContainer}
-          >
-            <ThemedText style={styles.forgotPasswordText}>Forgot Password?</ThemedText>
-          </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
 
       <CustomAlert
         visible={alertVisible}
@@ -117,8 +139,18 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 140,
+  },
+  innerContent: {
+    flex: 1,
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: 40,
   },
   title: {
     fontSize: 24,
