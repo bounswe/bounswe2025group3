@@ -128,8 +128,8 @@
                     localStorage.setItem('userEmail', data.email);
                     localStorage.setItem('userId', data.user_id);
                     
-                    // Redirect to protected page
-                    window.location.href = '/protected/';
+                    // Redirect to waste logs dashboard instead of protected page
+                    window.location.href = '/waste/';
                 } else {
                     throw new Error('Invalid response from server');
                 }

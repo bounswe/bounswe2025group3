@@ -24,11 +24,16 @@ from rest_framework_simplejwt.views import (
 )
 from apps.authentication.views import login_view, protected_view, register_view
 from django.views.generic import RedirectView
+from apps.general_views import dashboard_view, goals_view, challenges_view, leaderboard_view, not_found_view
+from django.conf import settings
+from django.conf.urls.static import static
+
+# Set custom 404 handler
+handler404 = 'apps.general_views.not_found_view'
 
 urlpatterns = [
     path('', RedirectView.as_view(url='/login/', permanent=True)), # Redirect root to login
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
     path('api/auth/', include(('apps.authentication.api.v1.urls', 'authentication'), namespace='authentication')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -38,8 +43,19 @@ urlpatterns = [
     path('login/', login_view, name='login_view'), 
     path('register/', register_view, name='register_view'), 
     path('protected/', protected_view, name='protected_view'), 
+    path('waste/', include('apps.waste.urls')),  # Frontend waste templates
     path('api/v1/waste/', include('apps.waste.api.v1.urls')),
     
     # Django allauth URLs
-    path('accounts/', include('allauth.urls')),  
+    path('accounts/', include('allauth.urls')),
+    
+    # Placeholder routes
+    path('dashboard/', dashboard_view, name='dashboard_view'),
+    path('goals/', goals_view, name='goals_view'),
+    path('challenges/', challenges_view, name='challenges_view'),
+    path('leaderboard/', leaderboard_view, name='leaderboard_view'),
 ]
+
+# Serve media files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

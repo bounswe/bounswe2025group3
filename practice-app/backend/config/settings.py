@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     # Your apps
     'apps.authentication',
     'apps.waste',
-    'apps.challanges',
+    'apps.challanges',  # Fixed spelling to match directory name
     'apps.user',
     'apps.leaderboard',
     'apps.notifications',
@@ -148,6 +148,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Media files (User uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -216,7 +220,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]
->>>>>>> feat/waste
 }
 
 AUTH_USER_MODEL = 'user.CustomUser'
