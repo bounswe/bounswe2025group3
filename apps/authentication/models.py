@@ -13,7 +13,7 @@ class UserAuthToken(models.Model):
         return timezone.now() < self.expiry
 
     def refresh(self):
-        self.expiry = timezone.now() + timezone.timedelta(days=7)
+        self.expiry = timezone.now() + timedelta(days=7)
         self.save()
         return self
 

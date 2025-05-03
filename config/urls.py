@@ -28,6 +28,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('', RedirectView.as_view(url='/login/', permanent=True)), # Redirect root to login
     path('admin/', admin.site.urls),
+<<<<<<< HEAD
     path('api/auth/', include(('apps.authentication.api.v1.urls', 'authentication'), namespace='authentication')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -37,6 +38,7 @@ urlpatterns = [
     path('login/', login_view, name='login_view'), 
     path('register/', register_view, name='register_view'), 
     path('protected/', protected_view, name='protected_view'), 
+    path('api/v1/waste/', include('apps.waste.api.v1.urls')),
     
     # Django allauth URLs
     path('accounts/', include('allauth.urls')),  
