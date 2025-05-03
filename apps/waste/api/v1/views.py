@@ -69,7 +69,7 @@ class WasteLogDetailView(generics.RetrieveUpdateDestroyAPIView):
         old_score = old_log.get_score()
         log = serializer.save()
         new_score = log.get_score()
-        self.request.user.total_waste_score += (new_score - old_score)
+        self.request.user.total_score += (new_score - old_score)
         self.request.user.save()
 
     def perform_destroy(self, instance):
