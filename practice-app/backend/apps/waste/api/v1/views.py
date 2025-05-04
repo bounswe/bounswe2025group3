@@ -3,12 +3,18 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound, PermissionDenied
+# Import helper module for API documentation
+from common.api_docs import waste_category_docs, waste_log_docs
+# Keep these imports for any custom documentation needs
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 from apps.waste.models import (
     WasteCategory, SubCategory, WasteLog, CustomCategoryRequest, WasteSuggestion, SustainableAction
 )
 from .serializers import (
     WasteCategorySerializer, SubCategorySerializer, WasteLogSerializer,
-    CustomCategoryRequestSerializer, WasteSuggestionSerializer, SustainableActionSerializer
+    CustomCategoryRequestSerializer, WasteSuggestionSerializer, SustainableActionSerializer,
+    AdminActionResponseSerializer, UserScoreSerializer
 )
 
 # WasteCategory Views
@@ -16,6 +22,10 @@ class WasteCategoryListView(generics.ListAPIView):
     queryset = WasteCategory.objects.filter(is_active=True)
     serializer_class = WasteCategorySerializer
     permission_classes = [permissions.AllowAny]
+    
+    @waste_category_docs.list
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
 class WasteCategoryDetailView(generics.RetrieveAPIView):
     queryset = WasteCategory.objects.all()
@@ -37,10 +47,29 @@ class SubCategoryDetailView(generics.RetrieveAPIView):
 class WasteLogListCreateView(generics.ListCreateAPIView):
     serializer_class = WasteLogSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    @waste_log_docs.list
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    
+    @waste_log_docs.create
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
     def get_queryset(self):
         # Only show logs of the current authenticated user
-        return WasteLog.objects.filter(user=self.request.user).order_by('-date')
+        queryset = WasteLog.objects.filter(user=self.request.user).order_by('-date')
+        
+        # Apply date range filters if provided
+        date_from = self.request.query_params.get('date_from')
+        date_to = self.request.query_params.get('date_to')
+        
+        if date_from:
+            queryset = queryset.filter(date__gte=date_from)
+        if date_to:
+            queryset = queryset.filter(date__lte=date_to)
+            
+        return queryset
 
     def perform_create(self, serializer):
         log = serializer.save(user=self.request.user)
@@ -89,7 +118,18 @@ class AdminCustomCategoryRequestListView(generics.ListAPIView):
 
 class AdminCustomCategoryRequestApproveView(APIView):
     permission_classes = [permissions.IsAdminUser]
-
+    serializer_class = AdminActionResponseSerializer
+    
+    @extend_schema(
+        tags=['Admin - Custom Category Requests'],
+        summary='Approve custom category request',
+        description='Admin endpoint to approve a pending custom category request',
+        responses={
+            200: AdminActionResponseSerializer,
+            400: AdminActionResponseSerializer,
+            404: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+        }
+    )
     def post(self, request, pk):
         try:
             req = CustomCategoryRequest.objects.get(pk=pk)
@@ -103,7 +143,18 @@ class AdminCustomCategoryRequestApproveView(APIView):
 
 class AdminCustomCategoryRequestRejectView(APIView):
     permission_classes = [permissions.IsAdminUser]
-
+    serializer_class = AdminActionResponseSerializer
+    
+    @extend_schema(
+        tags=['Admin - Custom Category Requests'],
+        summary='Reject custom category request',
+        description='Admin endpoint to reject a pending custom category request',
+        responses={
+            200: AdminActionResponseSerializer,
+            400: AdminActionResponseSerializer,
+            404: {'type': 'object', 'properties': {'detail': {'type': 'string'}}},
+        }
+    )
     def post(self, request, pk):
         try:
             req = CustomCategoryRequest.objects.get(pk=pk)
@@ -132,7 +183,16 @@ class SustainableActionListCreateView(generics.ListCreateAPIView):
 # User Waste Score View
 class UserWasteScoreView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-
+    serializer_class = UserScoreSerializer
+    
+    @extend_schema(
+        tags=['User Stats'],
+        summary='Get user waste score',
+        description='Returns the total environmental impact score for the authenticated user',
+        responses={
+            200: UserScoreSerializer
+        }
+    )
     def get(self, request):
         total_score = request.user.total_score
         return Response({'user_id': request.user.id, 'total_score': total_score})

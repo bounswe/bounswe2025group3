@@ -22,6 +22,11 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
+# Import drf-spectacular views for API documentation
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+)
 from apps.authentication.views import login_view, protected_view, register_view
 from django.views.generic import RedirectView
 from apps.general_views import dashboard_view, goals_view, challenges_view, leaderboard_view, not_found_view
@@ -54,6 +59,12 @@ urlpatterns = [
     path('goals/', goals_view, name='goals_view'),
     path('challenges/', challenges_view, name='challenges_view'),
     path('leaderboard/', leaderboard_view, name='leaderboard_view'),
+    
+    # API Documentation URLs
+    # URL for the OpenAPI schema (used by Swagger and ReDoc)
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    # URL for the Swagger UI documentation interface
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
 
 # Serve media files in development

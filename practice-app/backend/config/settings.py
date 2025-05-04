@@ -53,6 +53,12 @@ INSTALLED_APPS = [
     'dj_rest_auth', # Add dj_rest_auth
     'dj_rest_auth.registration', # Add dj_rest_auth.registration
 
+    # API Documentation
+    'drf_spectacular',
+
+    # Project-wide utils
+    'common',
+
     # Your apps
     'apps.authentication',
     'apps.waste',
@@ -219,7 +225,29 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# drf-spectacular settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'EcoChallenge Platform API',
+    'DESCRIPTION': 'API documentation for the EcoChallenge platform promoting sustainable habits',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'CONTACT': {'name': 'Group 3', 'url': 'https://github.com/bounswe/bounswe2025group3'},
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'persistAuthorization': True,
+        'displayOperationId': False,
+    },
+    'SECURITY': [
+        {
+            'Bearer': [],
+        }
+    ],
+    'COMPONENT_SPLIT_REQUEST': True,
+    'COMPONENT_NO_READ_ONLY_REQUIRED': False,
 }
 
 AUTH_USER_MODEL = 'user.CustomUser'
@@ -227,7 +255,6 @@ AUTH_USER_MODEL = 'user.CustomUser'
 # dj-rest-auth Settings
 REST_AUTH = {
     'REGISTER_SERIALIZER': 'apps.authentication.api.v1.serializers.CustomRegisterSerializer', # Correct path
-    # Use JWT authentication
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'my-app-auth', # Name of the cookie to save the JWT
     'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token', # Name of the cookie to save the refresh token
@@ -259,7 +286,6 @@ SIMPLE_JWT = {
     
     'JTI_CLAIM': 'jti',
     
-    # Token expiry settings
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(seconds=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),

@@ -2,6 +2,9 @@ from rest_framework import serializers
 from apps.waste.models import (
     WasteLog, WasteCategory, SubCategory, CustomCategoryRequest, WasteSuggestion, SustainableAction
 )
+# Import extend_schema_field for type hinting
+from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.types import OpenApiTypes
 
 class WasteCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,6 +35,7 @@ class WasteLogSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['date_logged', 'score']
 
+    @extend_schema_field(OpenApiTypes.FLOAT)
     def get_score(self, obj):
         return obj.get_score() if obj.sub_category else None
 
@@ -75,3 +79,12 @@ class SustainableActionSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'action_type', 'description', 'date', 'score'
         ]
+
+# Simple response serializers for admin actions
+class AdminActionResponseSerializer(serializers.Serializer):
+    detail = serializers.CharField()
+
+# User score response serializer
+class UserScoreSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    total_score = serializers.FloatField()

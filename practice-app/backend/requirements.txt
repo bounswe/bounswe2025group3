@@ -7,3 +7,4 @@ dj-rest-auth
 cryptography
 requests
 Pillow
+drf-spectacular

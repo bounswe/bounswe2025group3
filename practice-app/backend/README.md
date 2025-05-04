@@ -95,3 +95,28 @@ To run the automated tests for a specific app (e.g., authentication):
 
 ```bash
 python manage.py test apps.authentication.tests
+```
+
+## API Documentation
+
+The project includes automatic API documentation using drf-spectacular, which provides OpenAPI 3.0 schema:
+
+1. **Swagger UI**: Interactive API documentation with testing capabilities
+   - URL: http://127.0.0.1:8000/api/docs/
+
+2. **OpenAPI Schema**: Raw API schema in JSON format
+   - URL: http://127.0.0.1:8000/api/schema/
+
+### Exporting API Schema
+
+You can export the API schema to share with frontend developers or import into other tools:
+
+```bash
+# Export schema to YAML format
+python manage.py export_schema --output=schema.yaml
+
+# Export schema to JSON format
+python manage.py export_schema --format=json --output=schema.json
+```
+
+See `docs/api_documentation_guide.md` for detailed information on documenting API endpoints.
