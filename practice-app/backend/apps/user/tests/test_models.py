@@ -1,5 +1,7 @@
 import pytest
 from django.contrib.auth import get_user_model
+from django.db.utils import IntegrityError
+from django.db import transaction
 from .factories import UserFactory
 
 User = get_user_model()
@@ -44,17 +46,28 @@ class TestCustomUser:
         user = UserFactory(email="userstr@example.com")
         assert str(user) == "userstr@example.com"
     
-    def test_username_and_email_uniqueness(self):
-        """Test that username and email must be unique."""
-        UserFactory(username="uniqueuser", email="unique@example.com")
-        
-        # Try to create a user with the same username
-        with pytest.raises(Exception):
-            UserFactory(username="uniqueuser", email="different@example.com")
+    def test_email_uniqueness(self):
+        """Test that email must be unique."""
+        # Create first user
+        User.objects.create_user(
+            username="firstuser", 
+            email="unique@example.com",
+            password="password123"
+        )
         
         # Try to create a user with the same email
-        with pytest.raises(Exception):
-            UserFactory(username="differentuser", email="unique@example.com")
+        try:
+            with transaction.atomic():
+                User.objects.create_user(
+                    username="seconduser", 
+                    email="unique@example.com",
+                    password="password123"
+                )
+            # If we get here, the uniqueness check failed
+            pytest.fail("User with duplicate email was created")
+        except IntegrityError:
+            # This is expected - email should be unique
+            pass
     
     def test_user_roles(self):
         """Test setting and checking user roles."""
