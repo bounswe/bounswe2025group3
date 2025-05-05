@@ -7,8 +7,9 @@ from apps.authentication.models import UserAuthToken
 User = get_user_model()
 
 class CustomRegisterSerializer(DjRestAuthRegisterSerializer):
-    first_name = serializers.CharField(required=True, max_length=150)
-    last_name = serializers.CharField(required=True, max_length=150)
+    username = serializers.CharField(required=True, max_length=150)
+    first_name = serializers.CharField(required=False, allow_blank=True, max_length=150)
+    last_name = serializers.CharField(required=False, allow_blank=True, max_length=150)
     bio = serializers.CharField(required=False, allow_blank=True)
     city = serializers.CharField(required=False, allow_blank=True, max_length=100)
     country = serializers.CharField(required=False, allow_blank=True, max_length=100)

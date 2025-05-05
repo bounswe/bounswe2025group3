@@ -10,20 +10,16 @@ class CustomUser(AbstractUser):
         MODERATOR = 'MODERATOR', _('Moderator')
         USER = 'USER', _('User')
 
-    # Override username to make it non-unique and optional
+    # Make username required and unique
     username = models.CharField(
         _('username'),
         max_length=150,
-        # unique=False, # Changed from AbstractUser's unique=True
+        unique=True,  # Username must be unique
         help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
         validators=[AbstractUser.username_validator],
         error_messages={
-            # 'unique': _("A user with that username already exists."), # Removed unique error message
+            'unique': _("A user with that username already exists."),
         },
-        # Allow blank/null username if needed, but ensure email is always the primary identifier
-        blank=True, 
-        null=True, # Allow null username
-        unique=False # Explicitly set unique to False
     )
 
     email = models.EmailField(_('email address'), unique=True) 
@@ -39,10 +35,10 @@ class CustomUser(AbstractUser):
     notifications_enabled = models.BooleanField(_('notifications enabled'), default=True) 
     total_score = models.IntegerField(default=0)
 
-    # Use email as the unique identifier for authentication instead of username
+    # Use email as the unique identifier for authentication
     USERNAME_FIELD = 'email'
-    # Remove 'username' from required fields as it's now optional/non-unique
-    REQUIRED_FIELDS = ['first_name', 'last_name'] 
+    # Username is required, but first_name and last_name are not
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.email

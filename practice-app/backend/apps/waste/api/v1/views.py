@@ -58,16 +58,16 @@ class WasteLogListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         # Only show logs of the current authenticated user
-        queryset = WasteLog.objects.filter(user=self.request.user).order_by('-date')
+        queryset = WasteLog.objects.filter(user=self.request.user).order_by('-disposal_date')
         
         # Apply date range filters if provided
-        date_from = self.request.query_params.get('date_from')
-        date_to = self.request.query_params.get('date_to')
+        from_date = self.request.query_params.get('from_date')
+        to_date = self.request.query_params.get('to_date')
         
-        if date_from:
-            queryset = queryset.filter(date__gte=date_from)
-        if date_to:
-            queryset = queryset.filter(date__lte=date_to)
+        if from_date:
+            queryset = queryset.filter(disposal_date__gte=from_date)
+        if to_date:
+            queryset = queryset.filter(disposal_date__lte=to_date)
             
         return queryset
 
