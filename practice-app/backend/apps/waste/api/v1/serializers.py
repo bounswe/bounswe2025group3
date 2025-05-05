@@ -2,7 +2,6 @@ from rest_framework import serializers
 from apps.waste.models import (
     WasteLog, WasteCategory, SubCategory, CustomCategoryRequest, WasteSuggestion, SustainableAction
 )
-# Import extend_schema_field for type hinting
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
 
@@ -23,35 +22,36 @@ class SubCategorySerializer(serializers.ModelSerializer):
         return value
 
 class WasteLogSerializer(serializers.ModelSerializer):
-    sub_category = serializers.PrimaryKeyRelatedField(queryset=SubCategory.objects.filter(is_active=True))
+    sub_category = serializers.PrimaryKeyRelatedField(queryset=SubCategory.objects.filter(is_active=True), allow_null=True)
+    sub_category_name = serializers.CharField(source='sub_category.name', read_only=True)
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     score = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = WasteLog
         fields = [
-            'id', 'sub_category', 'user', 'quantity', 'date_logged', 'disposal_date',
+            'id', 'sub_category', 'sub_category_name', 'user', 'quantity', 'date_logged', 'disposal_date',
             'disposal_location', 'disposal_photo', 'score'
         ]
-        read_only_fields = ['date_logged', 'score']
+        read_only_fields = ['date_logged', 'score', 'sub_category_name']
 
     @extend_schema_field(OpenApiTypes.FLOAT)
     def get_score(self, obj):
         return obj.get_score() if obj.sub_category else None
 
     def validate_quantity(self, value):
-        if value <= 0:
+        if value is not None and value <= 0:
             raise serializers.ValidationError("Quantity must be a positive number.")
         return value
 
     def validate_disposal_date(self, value):
         from datetime import date
-        if value > date.today():
+        if value and value > date.today():
             raise serializers.ValidationError("Disposal date cannot be in the future.")
         return value
 
     def validate_sub_category(self, value):
-        if not value.is_active:
+        if value and not value.is_active:
             raise serializers.ValidationError("Selected subcategory is not active.")
         return value
 
@@ -80,11 +80,9 @@ class SustainableActionSerializer(serializers.ModelSerializer):
             'id', 'user', 'action_type', 'description', 'date', 'score'
         ]
 
-# Simple response serializers for admin actions
 class AdminActionResponseSerializer(serializers.Serializer):
     detail = serializers.CharField()
 
-# User score response serializer
 class UserScoreSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     total_score = serializers.FloatField()
