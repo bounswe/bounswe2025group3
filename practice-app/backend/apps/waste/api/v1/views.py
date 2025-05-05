@@ -59,19 +59,13 @@ class WasteLogListCreateView(generics.ListCreateAPIView):
         queryset = WasteLog.objects.filter(user=self.request.user).order_by('-date_logged')
         
         # Apply date range filters if provided
-        date_from = self.request.query_params.get('date_from')
-        date_to = self.request.query_params.get('date_to')
+        from_date = self.request.query_params.get('from_date')
+        to_date = self.request.query_params.get('to_date')
         
-        if date_from:
-            try:
-                queryset = queryset.filter(date_logged__date__gte=date_from)
-            except ValueError:
-                raise ValidationError("Invalid date_from format. Use YYYY-MM-DD.")
-        if date_to:
-            try:
-                queryset = queryset.filter(date_logged__date__lte=date_to)
-            except ValueError:
-                raise ValidationError("Invalid date_to format. Use YYYY-MM-DD.")
+        if from_date:
+            queryset = queryset.filter(disposal_date__gte=from_date)
+        if to_date:
+            queryset = queryset.filter(disposal_date__lte=to_date)
             
         return queryset
 
