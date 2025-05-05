@@ -263,7 +263,7 @@ REST_AUTH = {
 
 # JWT Settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=1),  # Very short lifetime for testing
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Very short lifetime for testing
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # 1 day
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -287,7 +287,7 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
     
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(seconds=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     'VERIFY_EXPIRATION': True,
 }

@@ -1,4 +1,4 @@
-Django==4.2.20
+"Django==4.2.20
 djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
@@ -8,3 +8,11 @@ cryptography
 requests
 Pillow
 drf-spectacular
+
+# Testing dependencies
+pytest>=7.4.0
+pytest-django>=4.5.2
+factory-boy>=3.3.0
+pytest-factoryboy>=1.1.0
+pytest-cov>=4.1.0
+responses>=0.23.0
