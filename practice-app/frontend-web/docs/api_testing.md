@@ -14,7 +14,7 @@
   {
       "email": "admin@example.com",
       "password": "adminpass"
-  }```
+  }
 
 - Response: 200 OK
 
@@ -26,7 +26,7 @@
     "role": "ADMIN",
     "email": "admin@example.com",
     "user_id": 1
-}```
+}
 
 ### 2. List Waste Logs
 
@@ -52,7 +52,7 @@
             "score": 1.0
         }
     ]
-}```
+}
 
 ### 3. Create Waste Log
 
@@ -63,7 +63,7 @@
   {
       "sub_category": 1,
       "quantity": 0.5
-  }```
+  }
 - Response: 201 Created
 - Sample Response:
 
@@ -77,7 +77,7 @@
     "disposal_location": null,
     "disposal_photo": null,
     "score": 1.0
-}```
+}
 
 ## Notes
 - Created admin user (admin@example.com) via createsuperuser or create_test_users.py for API testing.
