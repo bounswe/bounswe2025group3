@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Login.css'; // Stil dosyası eklendi
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -21,21 +22,26 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="email"
-                placeholder="Email"
-                value={credentials.email}
-                onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={credentials.password}
-                onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-            />
-            <button type="submit">Login</button>
-        </form>
+        <div className="login-container">
+            <form onSubmit={handleSubmit} className="login-form">
+                <h2>Login</h2>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={credentials.email}
+                    onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+                    required
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={credentials.password}
+                    onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                    required
+                />
+                <button type="submit">Login</button>
+            </form>
+        </div>
     );
 };
 
