@@ -1,0 +1,75 @@
+  :root {
+    --accent: #008000;
+  }
+  .login-page .main-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    max-width: 950px;
+    margin: 3rem auto;
+  }
+  
+  .login-page {
+    --bg: #E7E4DF;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+  }
+  
+  
+  .login-page body {
+    margin: 0;
+    background: var(--bg);
+  }
+  
+  .login-page .login-container   { padding: 2rem; }
+  .login-page .navbar            { display:flex; justify-content:space-between; align-items:center; }
+  .login-page .main-content      { display:flex; justify-content:space-between; margin-top:3rem; }
+  .login-page .form-section      { max-width:400px; }
+  
+  .login-page .logo              { font-size:1.5rem; color:var(--accent); font-weight:700; }
+
+  .login-page .nav-links         { display:flex; gap:2rem; list-style:none; }
+  .login-page .nav-links li      { cursor:pointer; color:#444; }
+  .login-page .nav-links li.active {
+    color:var(--accent);
+    border-bottom:2px solid var(--accent);
+  }
+
+  .login-page .main-heading      { font-size:1.8rem; color:var(--accent); width: 520px;}
+  
+  .login-page .input-box         { margin-top:1rem; }
+  .login-page .input-box label   { display:block; font-size:.85rem; color:#444; }
+  .login-page .input-box input   {
+    width:100%; padding:.5rem;
+    border:1px solid var(--accent);
+    border-radius:3px; margin-top:.25rem;
+  }
+  
+  .login-page .options           { display:flex; justify-content:space-between; align-items:center; font-size:.85rem; margin-top:1rem; }
+  
+  .login-page .buttons           { display:flex; gap:1rem; margin-top:1rem; }
+  
+  .login-page .login {
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:.5rem 1.5rem;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .login-page .signup {
+    border:1px solid var(--accent);
+    color:var(--accent);
+    background:#fff;
+    padding:.5rem 1.5rem;
+    font-weight:700;
+    cursor:pointer;
+  }
+  
+  .login-page .social-login      { margin-top:2rem; font-size:.9rem; color:#666; }
+  .login-page .social-links span { margin-right:1.5rem; color:var(--accent); cursor:pointer; }
+  
+  .login-page .image-section img { width:500px; max-width:100%; }
+  

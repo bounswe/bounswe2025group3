@@ -1,4 +1,4 @@
-/* Login.css */
+/* Login.css
 .login-container {
     display: flex;
     justify-content: center;
@@ -65,7 +65,6 @@
     background-color: #64d49a;
 }
 
-/* Responsive design */
 @media (max-width: 600px) {
     .login-form {
         padding: 20px;
@@ -79,4 +78,5 @@
     .login-form button {
         font-size: 14px;
     }
-}
+} 
+*/
