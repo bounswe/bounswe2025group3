@@ -297,10 +297,10 @@ LOGIN_URL = '/login/'
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:8000', # Allow backend itself
-    'http://localhost:8000',  # Allow backend itself (alternative)
-    'null',                   # Allow requests from file:// origins (for local testing)
-    # Add your frontend domain here if deploying (e.g., 'http://localhost:3000')
+    'http://127.0.0.1:8000',  # Backend itself
+    'http://localhost:8000',   # Backend alternative
+    'http://localhost:3000',   # Frontend origin
+    'null',                    # For local testing
 ]
 
 # Allow credentials (cookies, authorization headers) to be sent with requests
