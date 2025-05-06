@@ -1,0 +1,27 @@
+.dashboard-container {
+    padding: 50px;
+    text-align: center;
+}
+
+.dashboard-container h1 {
+    color: #333;
+}
+
+.error {
+    color: red;
+}
+
+nav {
+    margin-top: 20px;
+}
+
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #56ea62;
+    font-size: 18px;
+}
+
+nav a:hover {
+    color: #64d49a;
+}

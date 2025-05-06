@@ -6,7 +6,8 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('access_token');
-    if (token) {
+    const publicEndpoints = ['/api/auth/register/', '/api/token/', '/api/token/refresh/'];
+    if (token && !publicEndpoints.includes(config.url)) {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -14,7 +15,7 @@ api.interceptors.request.use((config) => {
 
 export const getWasteLogs = async () => {
     const response = await api.get('/api/v1/waste/logs/');
-    return response.data.results; // Extract results from paginated response
+    return response.data.results;
 };
 
 export const addWasteLog = async (data) => {
@@ -24,5 +25,20 @@ export const addWasteLog = async (data) => {
 
 export const getSubCategories = async () => {
     const response = await api.get('/api/v1/waste/subcategories/');
+    return response.data;
+};
+
+export const getUserScore = async () => {
+    const response = await api.get('/api/v1/waste/scores/me/');
+    return response.data;
+};
+
+export const getUserProfile = async () => {
+    const response = await api.get('/api/user/me/');
+    return response.data;
+};
+
+export const updateUserProfile = async (data) => {
+    const response = await api.patch('/api/user/me/', data);
     return response.data;
 };

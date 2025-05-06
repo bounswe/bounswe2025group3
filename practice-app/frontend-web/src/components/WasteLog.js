@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getWasteLogs, addWasteLog, getSubCategories } from '../services/api';
+import './WasteLog.css';
 
 const WasteLog = () => {
     const [logs, setLogs] = useState([]);
@@ -54,11 +55,11 @@ const WasteLog = () => {
     };
 
     return (
-        <div>
+        <div className="waste-log-container">
             <h2>Waste Logs</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="error">{error}</p>}
             {loading && <p>Loading...</p>}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="waste-log-form">
                 <select
                     value={form.sub_category}
                     onChange={(e) => setForm({ ...form, sub_category: e.target.value })}

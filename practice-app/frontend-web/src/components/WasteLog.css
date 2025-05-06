@@ -1,0 +1,47 @@
+.waste-log-container {
+    padding: 50px;
+    text-align: center;
+}
+
+.waste-log-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.waste-log-form select,
+.waste-log-form input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.waste-log-form button {
+    background-color: #56ea62;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.waste-log-form button:hover {
+    background-color: #64d49a;
+}
+
+.error {
+    color: red;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px 0;
+}
