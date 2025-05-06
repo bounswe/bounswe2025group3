@@ -72,4 +72,50 @@
   .login-page .social-links span { margin-right:1.5rem; color:var(--accent); cursor:pointer; }
   
   .login-page .image-section img { width:500px; max-width:100%; }
+
+.login-page .input-box textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 1rem;
+    height: 70px;
+    resize: vertical;           
+  }
+
+  .login-page .input-box textarea::placeholder,
+  .login-page .input-box input::placeholder {
+    font-family: inherit;
+    color: #777;
+    opacity: 1;
+  }
   
+  /* ---------- two‑column form layout ---------- */
+.login-page .form-columns { display: flex; gap: 2rem; }
+.login-page .form-col     { flex: 1 1 0; }   
+
+
+.login-page .form-col textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+
+.login-page .bio-full {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 1rem;
+    height: 180px;   
+    resize: none;    
+  }
+
+.login-page .bio-full { resize: none !important; }

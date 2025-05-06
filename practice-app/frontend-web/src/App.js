@@ -5,13 +5,14 @@ import Dashboard from './components/Dashboard';
 import WasteLog from './components/WasteLog';
 import Profile from './components/Profile';
 import LoginPage from './components/LoginPage';
+import SignupPage from './components/SignupPage';
 
 const App = () => {
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<LoginPage />} />
-                <Route path="/signup" element={<Signup />} />
+                <Route path="/signup" element={<SignupPage />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/waste" element={<WasteLog />} />
                 <Route path="/profile" element={<Profile />} />
