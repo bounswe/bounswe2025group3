@@ -263,7 +263,7 @@ REST_AUTH = {
 
 # JWT Settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=1),  # Very short lifetime for testing
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Very short lifetime for testing
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # 1 day
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -287,7 +287,7 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
     
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(seconds=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=30),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     'VERIFY_EXPIRATION': True,
 }
@@ -297,10 +297,10 @@ LOGIN_URL = '/login/'
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:8000', # Allow backend itself
-    'http://localhost:8000',  # Allow backend itself (alternative)
-    'null',                   # Allow requests from file:// origins (for local testing)
-    # Add your frontend domain here if deploying (e.g., 'http://localhost:3000')
+    'http://127.0.0.1:8000',  # Backend itself
+    'http://localhost:8000',   # Backend alternative
+    'http://localhost:3000',   # Frontend origin
+    'null',                    # For local testing
 ]
 
 # Allow credentials (cookies, authorization headers) to be sent with requests

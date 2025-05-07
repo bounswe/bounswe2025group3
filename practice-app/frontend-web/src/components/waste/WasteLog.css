@@ -1,0 +1,294 @@
+.waste-log-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #122e1a, #88eb9a);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.navbar {
+    width: 100%;
+    max-width: 800px;
+    background-color: rgba(199, 232, 202, 0.9);
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.nav-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #56ea62;
+    color: white;
+}
+
+.nav-link.active {
+    background-color: #56ea62;
+    color: white;
+    font-weight: bold;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #56ea62;
+    color: white;
+}
+
+.waste-log-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.waste-log-form-section,
+.waste-log-list-section {
+    background-color: rgb(199, 232, 202);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.waste-log-form-section h3,
+.waste-log-list-section h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.3rem;
+}
+
+.waste-log-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.form-group select,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    background-color: white;
+    appearance: auto;
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+}
+
+.form-group select:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #56ea62;
+    box-shadow: 0 0 5px rgba(86, 234, 98, 0.5);
+}
+
+.form-group textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.retry-button,
+.back-button {
+    background-color: #56ea62;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.retry-button:hover,
+.back-button:hover {
+    background-color: #64d49a;
+}
+
+.retry-button:disabled,
+.back-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.waste-log-form button {
+    background-color: #56ea62;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.waste-log-form button:hover {
+    background-color: #64d49a;
+}
+
+.waste-log-form button:disabled,
+.waste-log-form select:disabled,
+.waste-log-form input:disabled,
+.waste-log-form textarea:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.waste-log-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.waste-log-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.waste-log-item:last-child {
+    border-bottom: none;
+}
+
+.waste-log-item span {
+    font-size: 0.85rem;
+    color: #333;
+}
+
+@media (min-width: 600px) {
+    .waste-log-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .waste-log-form-section,
+    .waste-log-list-section {
+        width: 48%;
+    }
+}
+
+@media (max-width: 600px) {
+    .waste-log-container {
+        padding: 10px;
+    }
+
+    .navbar {
+        padding: 10px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .waste-log-form-section,
+    .waste-log-list-section {
+        padding: 15px;
+    }
+
+    .waste-log-form-section h3,
+    .waste-log-list-section h3 {
+        font-size: 1.2rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .form-group select,
+    .form-group input,
+    .form-group textarea {
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+
+    .waste-log-form button,
+    .retry-button,
+    .back-button {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+
+    .error {
+        font-size: 0.75rem;
+    }
+
+    .waste-log-item span {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .waste-log-form-section,
+    .waste-log-list-section {
+        padding: 10px;
+    }
+
+    .waste-log-form-section h3,
+    .waste-log-list-section h3 {
+        font-size: 1.1rem;
+    }
+}

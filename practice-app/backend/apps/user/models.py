@@ -28,14 +28,16 @@ class CustomUser(AbstractUser):
         MODERATOR = 'MODERATOR', _('Moderator')
         USER = 'USER', _('User')
 
+
     username = models.CharField(
         _('username'),
         max_length=150,
+        unique=True,  # Username must be unique
         help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
         validators=[AbstractUser.username_validator],
-        blank=True,
-        null=True,
-        unique=False
+        error_messages={
+            'unique': _("A user with that username already exists."),
+        },
     )
 
     email = models.EmailField(_('email address'), unique=True)
@@ -51,10 +53,10 @@ class CustomUser(AbstractUser):
     notifications_enabled = models.BooleanField(_('notifications enabled'), default=True)
     total_score = models.IntegerField(default=0)
 
+    # Use email as the unique identifier for authentication
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
-
-    objects = CustomUserManager()
+    # Username is required, but first_name and last_name are not
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.email

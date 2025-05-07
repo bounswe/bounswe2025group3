@@ -2,10 +2,8 @@ from apps.waste.services.scoring import calculate_score, update_user_aggregates
 from rest_framework.response import Response
 from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
-from rest_framework.exceptions import NotFound, PermissionDenied
-# Import helper module for API documentation
+from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from common.api_docs import waste_category_docs, waste_log_docs
-# Keep these imports for any custom documentation needs
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 from apps.waste.models import (
@@ -58,32 +56,27 @@ class WasteLogListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         # Only show logs of the current authenticated user
-        queryset = WasteLog.objects.filter(user=self.request.user).order_by('-date')
+        queryset = WasteLog.objects.filter(user=self.request.user).order_by('-date_logged')
         
         # Apply date range filters if provided
-        date_from = self.request.query_params.get('date_from')
-        date_to = self.request.query_params.get('date_to')
+        from_date = self.request.query_params.get('from_date')
+        to_date = self.request.query_params.get('to_date')
         
-        if date_from:
-            queryset = queryset.filter(date__gte=date_from)
-        if date_to:
-            queryset = queryset.filter(date__lte=date_to)
+        if from_date:
+            queryset = queryset.filter(disposal_date__gte=from_date)
+        if to_date:
+            queryset = queryset.filter(disposal_date__lte=to_date)
             
         return queryset
 
     def perform_create(self, serializer):
         log = serializer.save(user=self.request.user)
-        self.request.user.total_score += log.get_score()
-        self.request.user.save()
+        if log.sub_category:
+            self.request.user.total_score += log.get_score()
+            self.request.user.save()
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-
-        # After saving the log, return updated aggregates too
-        #aggregates = update_user_aggregates(request.user)
-
-        #response.data['aggregates'] = aggregates
-        
         return response
 
 class WasteLogDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -95,15 +88,16 @@ class WasteLogDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         old_log = self.get_object()
-        old_score = old_log.get_score()
+        old_score = old_log.get_score() if old_log.sub_category else 0
         log = serializer.save()
-        new_score = log.get_score()
+        new_score = log.get_score() if log.sub_category else 0
         self.request.user.total_score += (new_score - old_score)
         self.request.user.save()
 
     def perform_destroy(self, instance):
-        self.request.user.total_score -= instance.get_score()
-        self.request.user.save()
+        if instance.sub_category:
+            self.request.user.total_score -= instance.get_score()
+            self.request.user.save()
         instance.delete()
 
 # CustomCategoryRequest Views

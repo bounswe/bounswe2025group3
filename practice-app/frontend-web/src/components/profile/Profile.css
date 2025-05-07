@@ -1,0 +1,116 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #122e1a, #88eb9a);
+    padding: 20px;
+}
+
+.profile-content {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    background-color: rgba(199, 232, 202, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.profile-content h2 {
+    text-align: center;
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #56ea62;
+    box-shadow: 0 0 5px rgba(86, 234, 98, 0.5);
+}
+
+.error {
+    color: red;
+    text-align: center;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+
+.profile-form button {
+    background-color: #56ea62;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-form button:hover {
+    background-color: #64d49a;
+}
+
+.profile-form button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .profile-content {
+        padding: 15px;
+    }
+
+    .profile-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+
+    .profile-form button {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+}
