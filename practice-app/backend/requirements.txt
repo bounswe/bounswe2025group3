@@ -8,6 +8,7 @@ cryptography
 requests
 Pillow
 drf-spectacular
+psycopg2-binary==2.9.9
 
 # Testing dependencies
 pytest>=7.4.0
