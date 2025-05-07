@@ -25,7 +25,7 @@ export const addWasteLog = async (data) => {
 
 export const getSubCategories = async () => {
     const response = await api.get('/api/v1/waste/subcategories/');
-    return response.data;
+    return response.data.results;
 };
 
 export const getUserScore = async () => {
