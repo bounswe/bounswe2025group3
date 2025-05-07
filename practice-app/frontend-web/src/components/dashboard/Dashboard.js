@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getUserScore } from '../services/api';
+import { getUserScore } from '../../services/api';
+import Navbar from '../common/Navbar';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -27,17 +28,20 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard-container">
-            <h1>Welcome, {email}</h1>
-            <p>Your Role: {role}</p>
-            {loading && <p>Loading...</p>}
-            {error && <p className="error">{error}</p>}
-            {score !== null && <p>Your Total Score: {score}</p>}
-            <nav>
-                <Link to="/waste">Log Waste</Link>
-                <Link to="/profile">Profile</Link>
-                <Link to="/challenges">Challenges</Link>
-                <Link to="/leaderboard">Leaderboard</Link>
-            </nav>
+            <Navbar isAuthenticated={true} />
+            <div className="dashboard-content">
+                <h1>Welcome, {email}</h1>
+                <p>Your Role: {role}</p>
+                {loading && <p>Loading...</p>}
+                {error && <p className="error">{error}</p>}
+                {score !== null && <p>Your Total Score: {score}</p>}
+                <nav className="dashboard-links">
+                    <Link to="/waste">Log Waste</Link>
+                    <Link to="/profile">Profile</Link>
+                    <Link to="/challenges">Challenges</Link>
+                    <Link to="/leaderboard">Leaderboard</Link>
+                </nav>
+            </div>
         </div>
     );
 };
