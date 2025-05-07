@@ -50,7 +50,7 @@ urlpatterns = [
     path('protected/', protected_view, name='protected_view'), 
     path('waste/', include('apps.waste.urls')),  # Frontend waste templates
     path('api/v1/waste/', include('apps.waste.api.v1.urls')),
-    path('api/v1/goals/', include('apps.goals.urls')),
+    path('api/v1/goals/', include('apps.goals.api.v1.urls')),
     
     # Django allauth URLs
     path('accounts/', include('allauth.urls')),
