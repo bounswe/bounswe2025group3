@@ -1,66 +1,349 @@
-.dashboard-container {
+/* Dashboard.css - Enhanced Green & Beautiful Styling */
+
+/* Ensure global variables are available or define them */
+:root {
+    --accent: #008000; /* Deep Green */
+    --accent-rgb: 0, 128, 0;
+    --accent-light: #e6f7e6; /* Very Light Green */
+    --accent-medium: #a3d9a3; /* Medium Light Green */
+    --accent-dark: #004d00; /* Darker Green */
+    
+    --bg-page: #f4f6f8; /* Light Grayish Page Background */
+    --bg-content: #ffffff; /* White for Content Sections */
+    --bg-card: #ffffff;
+    
+    --text-primary: #333333;
+    --text-secondary: #555555;
+    --text-light: #777777;
+    --text-on-accent: #ffffff;
+  
+    --border-color: #e0e0e0;
+    --border-color-light: #eeeeee;
+    
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 6px 20px rgba(0, 0, 0, 0.1);
+    --shadow-green-glow: 0 0 15px rgba(var(--accent-rgb), 0.2);
+  
+    --sidebar-bg: #2c3e50; /* Keeping sidebar dark for contrast */
+    --sidebar-text-light: #ecf0f1;
+    --sidebar-accent-hover: rgba(var(--accent-rgb), 0.15);
+  }
+  
+  body { /* Apply to body if this is a global dashboard style */
+      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+  }
+  
+  .dashboard-page-wrapper {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* --- Sidebar (Keep existing good styles, minor tweaks for NavLink active) --- */
+  .dashboard-sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text-light);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 3px 0 10px rgba(0,0,0,0.05);
+    transition: width 0.3s ease;
+  }
+  .sidebar-header {
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(236, 240, 241, 0.1);
+  }
+  .sidebar-logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--accent-medium); /* Brighter green for dark bg */
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
+  .sidebar-user-info {
+    padding: 1rem 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(236, 240, 241, 0.05);
+  }
+  .user-email { font-weight: 500; font-size: 0.95rem; margin-bottom: 0.25rem; word-break: break-all; }
+  .user-role { font-size: 0.8rem; color: #bdc3c7; text-transform: capitalize; }
+  
+  .sidebar-nav ul { list-style: none; padding: 0; margin: 1rem 0; }
+  .sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1.5rem;
+    text-decoration: none;
+    color: var(--sidebar-text-light);
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, color 0.2s ease, border-left-color 0.2s ease;
+    border-left: 4px solid transparent;
+    font-weight: 500;
+  }
+  .sidebar-nav li a:hover {
+    background-color: var(--sidebar-accent-hover);
+    color: var(--accent-medium);
+    border-left-color: var(--accent-medium);
+  }
+  .sidebar-nav li a.active { /* Style for NavLink active state */
+    background-color: var(--sidebar-accent-hover);
+    color: var(--accent); /* Brighter green for active */
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+  .sidebar-nav .nav-icon { font-size: 1.2em; width: 20px; text-align: center; }
+  
+  .sidebar-footer { margin-top: auto; padding: 1.5rem; }
+  .logout-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background-color: rgba(231, 76, 60, 0.15); /* Subtle Red for Logout */
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .logout-button:hover { background-color: #e74c3c; color: var(--text-on-accent); }
+  .logout-button .nav-icon { font-size: 1.1em; }
+  
+  
+  /* --- Main Content Area - Green & Beautiful --- */
+  .dashboard-main-content {
+    flex: 1;
+    padding: 2.5rem;
+    overflow-y: auto;
+    background-color: var(--bg-page);
+  }
+  
+  .main-content-header {
+    margin-bottom: 2.5rem;
+  }
+  .main-content-header h2 {
+    font-size: 2.2rem;
+    color: var(--accent-dark);
+    font-weight: 700; /* Bolder */
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+  }
+  .main-content-header .leaf-icon {
+    margin-right: 0.8rem;
+    font-size: 1.3em; /* Larger icon */
+    color: var(--accent);
+  }
+  .main-content-header p {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+  }
+  
+  .dashboard-content-section {
+    margin-bottom: 2.5rem;
+  }
+  .section-title {
+    font-size: 1.7rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent-light);
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+  }
+  .section-title .leaf-icon {
+    margin-right: 0.75rem;
+    font-size: 1.1em;
+    color: var(--accent);
+  }
+  
+  /* Stats Section & Cards */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .stat-card {
+    background-color: var(--bg-card);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    border: 1px solid var(--border-color-light);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-medium);
+  }
+  .stat-card h4 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .stat-card .stat-value, .stat-card .stat-value-na {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+    line-height: 1.1;
+  }
+  .stat-card .stat-value-na { color: var(--text-light); font-size: 2rem; }
+  .stat-card .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+  }
+  .stat-card .stat-subtext {
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-top: 0.5rem;
+  }
+  
+  /* Score card specific styling (inherits from stat-card) */
+  .score-card {
+    background: linear-gradient(145deg, var(--accent-light), var(--bg-card));
+    border-left: 5px solid var(--accent);
+  }
+  .score-card.high-score .stat-value { color: #28a745; } /* Positive Green */
+  .score-card.medium-score .stat-value { color: #fd7e14; } /* Orange for medium */
+  .score-card.low-score .stat-value { color: #dc3545; } /* Red for low */
+  .score-card.score-na .stat-value-na { color: var(--text-light); }
+  
+  
+  /* Quick Actions Section */
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .quick-action-card {
+    background-color: var(--bg-card);
+    padding: 1.75rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    text-decoration: none;
+    color: var(--text-primary);
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(to right, #122e1a, #88eb9a);
-    padding: 20px;
-}
-
-.dashboard-content {
     text-align: center;
-    max-width: 800px;
-    padding: 20px;
-    background-color: rgba(199, 232, 202, 0.9);
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.dashboard-content h1 {
-    color: #333;
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-.dashboard-content p {
-    color: #555;
-    font-size: 1rem;
-    margin-bottom: 10px;
-}
-
-.error {
-    color: red;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+    border: 1px solid transparent; /* Prepare for hover border */
+  }
+  .quick-action-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: var(--shadow-green-glow);
+    background-color: var(--accent-light);
+    border-color: var(--accent-medium);
+  }
+  .quick-action-card .action-icon {
+    font-size: 2.5rem; /* Larger icon */
+    color: var(--accent);
+    margin-bottom: 1rem;
+    line-height: 1;
+  }
+  .quick-action-card h4 {
+    font-size: 1.25rem;
+    color: var(--accent-dark);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .quick-action-card p {
     font-size: 0.9rem;
-    margin-bottom: 10px;
-}
-
-.dashboard-links {
-    margin-top: 20px;
-}
-
-.dashboard-links a {
-    margin: 0 10px;
-    color: #56ea62;
-    text-decoration: none;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+  
+  /* Eco Tip Section */
+  .eco-tip-card {
+    background-color: var(--accent-light);
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    border-left: 6px solid var(--accent);
+    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.1);
+  }
+  .eco-tip-card p {
     font-size: 1rem;
-    transition: color 0.3s ease;
-}
-
-.dashboard-links a:hover {
-    color: #64d49a;
-}
-
-@media (max-width: 600px) {
-    .dashboard-content {
-        padding: 15px;
+    color: var(--accent-dark);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .learn-more-link {
+    font-size: 0.9rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+  }
+  .learn-more-link:hover {
+    text-decoration: underline;
+    color: var(--accent-dark);
+  }
+  .learn-more-link .arrow-right {
+    margin-left: 0.3rem;
+    transition: transform 0.2s ease;
+  }
+  .learn-more-link:hover .arrow-right {
+    transform: translateX(3px);
+  }
+  
+  /* Loader and Error Styling (Refined) */
+  .loader-container {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 3rem; text-align: center; color: var(--text-secondary); font-size: 1.1rem;
+  }
+  .loader-spinner {
+    border: 6px solid var(--accent-light);
+    border-top: 6px solid var(--accent);
+    border-radius: 50%; width: 50px; height: 50px;
+    animation: spin 0.8s linear infinite; margin-bottom: 1.2rem;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  
+  .error-message-box {
+    background-color: #fff0f1; color: #c82333;
+    padding: 1.2rem 1.5rem; border: 1px solid #f5c6cb;
+    border-left: 5px solid #c82333;
+    border-radius: 8px; margin-bottom: 2rem; display: flex; align-items: center;
+    font-weight: 500;
+  }
+  .error-message-box .leaf-icon { color: #c82333; margin-right: 0.8rem; font-size: 1.3em;}
+  
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+      .dashboard-main-content { padding: 2rem; }
+      .main-content-header h2 { font-size: 2rem; }
+      .section-title { font-size: 1.5rem; }
+  }
+  
+  @media (max-width: 768px) {
+    /* Sidebar becomes horizontal/collapsible or top bar - current CSS makes it horizontal */
+    .dashboard-page-wrapper { flex-direction: column; }
+    .dashboard-sidebar {
+      width: 100%; height: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      /* Consider making sidebar nav scrollable horizontally or stacked */
     }
-
-    .dashboard-content h1 {
-        font-size: 1.5rem;
-    }
-
-    .dashboard-links a {
-        display: block;
-        margin: 10px 0;
-    }
-}
+    .sidebar-nav ul { display: flex; overflow-x: auto; padding: 0.5rem 0; }
+    .sidebar-nav li a { padding: 0.8rem 1rem; border-left: none; border-bottom: 3px solid transparent; }
+    .sidebar-nav li a:hover, .sidebar-nav li a.active { border-bottom-color: var(--accent); background-color: var(--sidebar-accent-hover); }
+    
+    .dashboard-main-content { padding: 1.5rem; }
+    .main-content-header h2 { font-size: 1.8rem; }
+    .section-title { font-size: 1.4rem; }
+    .stats-grid, .quick-actions-grid { grid-template-columns: 1fr; /* Stack cards on small screens */ }
+  }
