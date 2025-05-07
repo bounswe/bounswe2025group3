@@ -1,8 +1,27 @@
 import React, { useState, useEffect } from 'react';
-// Import NavLink for automatic active class styling in the sidebar
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { getUserScore } from '../../services/api';
-import './Dashboard.css';
+import { getUserScore } from '../../services/api'; // Assuming this path is correct
+import './Dashboard.css'; // We will heavily modify this
+
+// Placeholder for icons - consider using an icon library like React Icons
+const Icon = ({ name, className = "" }) => {
+    // Simple emoji mapping for now
+    const icons = {
+        logo: '🌿',
+        waste: '🗑️',
+        leaderboard: '📊',
+        challenges: '🏆',
+        profile: '👤',
+        score: '🌟',
+        actions: '🚀',
+        tip: '💡',
+        logout: '🚪',
+        settings: '⚙️',
+        edit: '✏️',
+        arrowRight: '→'
+    };
+    return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
+};
 
 const Dashboard = () => {
     const [score, setScore] = useState(null);
@@ -12,6 +31,7 @@ const Dashboard = () => {
 
     const email = localStorage.getItem('email');
     const role = localStorage.getItem('role');
+    const firstName = localStorage.getItem('first_name') || email?.split('@')[0] || 'User'; // Fallback for name
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
@@ -23,8 +43,8 @@ const Dashboard = () => {
                 const data = await getUserScore();
                 setScore(data.total_score);
                 setError('');
-            } catch (err)  {
-                setError('Failed to fetch score. Please try again later.');
+            } catch (err) {
+                setError('Failed to fetch your score. Please try again later.');
                 console.error('Error fetching score:', err);
             } finally {
                 setLoading(false);
@@ -39,124 +59,130 @@ const Dashboard = () => {
         localStorage.removeItem('user_id');
         localStorage.removeItem('email');
         localStorage.removeItem('role');
+        localStorage.removeItem('first_name'); // if you store it
+        localStorage.removeItem('last_name');  // if you store it
         navigate('/login');
     };
 
-    const getScoreClass = (currentScore) => {
-        if (currentScore === null) return 'score-na';
-        if (currentScore >= 75) return 'high-score';
-        if (currentScore >= 40) return 'medium-score';
-        return 'low-score';
+    const getScoreCategory = (currentScore) => {
+        if (currentScore === null) return 'default';
+        if (currentScore >= 75) return 'high';
+        if (currentScore >= 40) return 'medium';
+        return 'low';
     };
 
     return (
-        <div className="dashboard-page-wrapper">
-            <aside className="dashboard-sidebar">
-                <div className="sidebar-header">
-                    <Link to="/" className="sidebar-logo">
-                        GreenerLife
-                    </Link>
-                </div>
-                <div className="sidebar-user-info">
-                    <p className="user-email">{email || 'User'}</p>
-                    <p className="user-role">{role || 'Member'}</p>
-                </div>
-                <nav className="sidebar-nav">
-                    <ul>
-                        {/* Use NavLink for automatic active class */}
-                        <li><NavLink to="/dashboard" className={({isActive}) => isActive ? "active" : ""}><span className="nav-icon">🏠</span> Dashboard</NavLink></li>
-                        <li><NavLink to="/waste" className={({isActive}) => isActive ? "active" : ""}><span className="nav-icon">🗑️</span> Log Waste</NavLink></li>
-                        <li><NavLink to="/profile" className={({isActive}) => isActive ? "active" : ""}><span className="nav-icon">👤</span> Profile</NavLink></li>
-                        <li><NavLink to="/challenges" className={({isActive}) => isActive ? "active" : ""}><span className="nav-icon">🏆</span> Challenges</NavLink></li>
-                        <li><NavLink to="/leaderboard" className={({isActive}) => isActive ? "active" : ""}><span className="nav-icon">📊</span> Leaderboard</NavLink></li>
-                    </ul>
+        <div className="dashboard-layout">
+            <header className="dashboard-top-nav">
+                <Link to="/" className="app-logo">
+                    <Icon name="logo" />
+                    GreenerLife
+                </Link>
+                <nav className="main-actions-nav">
+                    <NavLink to="/waste" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
+                        <Icon name="waste" /> Waste Log
+                    </NavLink>
+                    <NavLink to="/leaderboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
+                        <Icon name="leaderboard" /> Leaderboard
+                    </NavLink>
+                    <NavLink to="/challenges" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
+                        <Icon name="challenges" /> Challenges
+                    </NavLink>
                 </nav>
-                <div className="sidebar-footer">
-                    <button onClick={handleLogout} className="logout-button">
-                        <span className="nav-icon">🚪</span> Logout
-                    </button>
-                </div>
-            </aside>
+                {/* Optional: User menu dropdown for profile/logout if top nav gets crowded */}
+            </header>
 
-            <main className="dashboard-main-content">
-                <div className="main-content-header">
-                    <h2><span className="leaf-icon">🌿</span> Your Eco Dashboard</h2>
-                    <p>Welcome back, {email || 'User'}! Let's make a positive impact together.</p>
-                </div>
-
-                {loading && (
-                    <div className="loader-container">
-                        <div className="loader-spinner"></div>
-                        <p>Loading your dashboard data...</p>
+            <div className="dashboard-body-content">
+                <aside className="profile-section-wrapper">
+                    <div className="profile-card">
+                        <div className="profile-avatar-placeholder">
+                            {firstName.charAt(0).toUpperCase()}
+                        </div>
+                        <h3>{firstName}</h3>
+                        <p className="user-email-display">{email}</p>
+                        <p className="user-role-display">Role: {role || 'Member'}</p>
+                        <Link to="/profile" className="profile-action-button view-profile-btn">
+                            <Icon name="edit" /> View Full Profile
+                        </Link>
+                        <button onClick={handleLogout} className="profile-action-button logout-btn-profile">
+                            <Icon name="logout" /> Logout
+                        </button>
                     </div>
-                )}
-                {error && !loading && (
-                    <div className="error-message-box">
-                        <span className="leaf-icon">⚠️</span> {error}
-                    </div>
-                )}
+                </aside>
 
-                {!loading && !error && (
-                    <>
-                        <section className="dashboard-content-section stats-section">
-                            <h3 className="section-title"><span className="leaf-icon">🌟</span> Overview</h3>
-                            <div className="stats-grid">
-                                <div className={`stat-card score-card ${getScoreClass(score)}`}>
-                                    <h4>Your Eco Score</h4>
+                <main className="main-dashboard-details">
+                    <div className="main-content-header-alt">
+                        <h2>Dashboard Overview</h2>
+                        <p>Your journey to a sustainable lifestyle starts here.</p>
+                    </div>
+
+                    {loading && (
+                        <div className="loader-container-main">
+                            <div className="loader-spinner-main"></div>
+                            <p>Fetching your eco-stats...</p>
+                        </div>
+                    )}
+                    {error && !loading && (
+                        <div className="error-message-box-main">
+                            <Icon name="alerts" className="error-icon" /> {error}
+                        </div>
+                    )}
+
+                    {!loading && !error && (
+                        <>
+                            <section className="dashboard-widget score-widget">
+                                <div className="widget-header">
+                                    <h4><Icon name="score" /> Your Eco Score</h4>
+                                </div>
+                                <div className={`score-display score-category-${getScoreCategory(score)}`}>
                                     {score !== null ? (
-                                        <span className="stat-value">{score}</span>
+                                        <span className="score-value">{score}</span>
                                     ) : (
-                                        <span className="stat-value-na">N/A</span>
+                                        <span className="score-value-na">N/A</span>
                                     )}
-                                    <p className="stat-label">points</p>
-                                     {score === null && <small className="stat-subtext">Log waste to see your score!</small>}
+                                    <span className="score-unit">points</span>
                                 </div>
-                                {/* Add more stat cards here if you have other data */}
-                                {/* <div className="stat-card">
-                                    <h4>Items Logged</h4>
-                                    <span className="stat-value">125</span>
-                                    <p className="stat-label">this month</p>
+                                {score === null && <p className="widget-subtext">Log waste to calculate your score!</p>}
+                            </section>
+
+                            <section className="dashboard-widget quick-links-widget">
+                                 <div className="widget-header">
+                                    <h4><Icon name="actions" /> Quick Links</h4>
                                 </div>
-                                <div className="stat-card">
-                                    <h4>Challenges Joined</h4>
-                                    <span className="stat-value">3</span>
-                                    <p className="stat-label">active</p>
-                                </div> */}
-                            </div>
-                        </section>
+                                <div className="quick-links-container">
+                                    <Link to="/waste" className="quick-link-item">
+                                        <Icon name="waste" />
+                                        <span>Log Waste</span>
+                                        <small>Track your impact</small>
+                                    </Link>
+                                    <Link to="/challenges" className="quick-link-item">
+                                        <Icon name="challenges" />
+                                        <span>Join Challenges</span>
+                                        <small>Compete & improve</small>
+                                    </Link>
+                                    <Link to="/leaderboard" className="quick-link-item">
+                                        <Icon name="leaderboard" />
+                                        <span>View Leaderboard</span>
+                                        <small>See top performers</small>
+                                    </Link>
+                                </div>
+                            </section>
 
-                        <section className="dashboard-content-section actions-section">
-                            <h3 className="section-title"><span className="leaf-icon">🚀</span> Quick Actions</h3>
-                            <div className="quick-actions-grid">
-                                <Link to="/waste" className="quick-action-card">
-                                    <span className="action-icon">➕</span>
-                                    <h4>Log New Waste</h4>
-                                    <p>Track your recycling and reduction efforts.</p>
-                                </Link>
-                                <Link to="/challenges" className="quick-action-card">
-                                    <span className="action-icon">🎯</span>
-                                    <h4>View Challenges</h4>
-                                    <p>Join initiatives and boost your impact.</p>
-                                </Link>
-                                <Link to="/profile" className="quick-action-card">
-                                    <span className="action-icon">⚙️</span>
-                                    <h4>Manage Profile</h4>
-                                    <p>Update your information & settings.</p>
-                                </Link>
-                            </div>
-                        </section>
-
-                        {/* Example: Eco Tip Section */}
-                        <section className="dashboard-content-section tip-section">
-                             <h3 className="section-title"><span className="leaf-icon">💡</span> Eco Tip</h3>
-                             <div className="eco-tip-card">
-                                 <p>Did you know? Composting kitchen scraps can reduce household waste by up to 30% and create nutrient-rich soil for your garden!</p>
-                                 <Link to="/blog" className="learn-more-link">Learn more on our blog <span className="arrow-right">→</span></Link>
-                             </div>
-                        </section>
-                    </>
-                )}
-            </main>
+                            <section className="dashboard-widget eco-tip-widget">
+                                <div className="widget-header">
+                                    <h4><Icon name="tip" /> Today's Eco Tip</h4>
+                                </div>
+                                <div className="eco-tip-content">
+                                    <p>"Reduce your carbon footprint by choosing locally sourced and seasonal foods. It supports local farmers and reduces transportation emissions!"</p>
+                                    <Link to="/blog" className="learn-more-inline">
+                                        Discover more tips <Icon name="arrowRight" />
+                                    </Link>
+                                </div>
+                            </section>
+                        </>
+                    )}
+                </main>
+            </div>
         </div>
     );
 };

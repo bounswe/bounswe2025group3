@@ -1,349 +1,410 @@
-/* Dashboard.css - Enhanced Green & Beautiful Styling */
+/* Dashboard.css - New Layout: Top Nav, Profile Left, Content Right */
 
-/* Ensure global variables are available or define them */
+/* --- Global Variables (enhanced for the green theme) --- */
 :root {
-    --accent: #008000; /* Deep Green */
-    --accent-rgb: 0, 128, 0;
-    --accent-light: #e6f7e6; /* Very Light Green */
-    --accent-medium: #a3d9a3; /* Medium Light Green */
-    --accent-dark: #004d00; /* Darker Green */
-    
-    --bg-page: #f4f6f8; /* Light Grayish Page Background */
-    --bg-content: #ffffff; /* White for Content Sections */
-    --bg-card: #ffffff;
-    
-    --text-primary: #333333;
-    --text-secondary: #555555;
-    --text-light: #777777;
-    --text-on-accent: #ffffff;
+    --primary-green: #2ecc71; /* Vibrant Green */
+    --primary-green-dark: #27ae60; /* Darker shade for hovers/active */
+    --primary-green-light: #abebc6; /* Light tint for backgrounds */
+    --primary-green-rgb: 46, 204, 113;
   
-    --border-color: #e0e0e0;
-    --border-color-light: #eeeeee;
-    
-    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --shadow-medium: 0 6px 20px rgba(0, 0, 0, 0.1);
-    --shadow-green-glow: 0 0 15px rgba(var(--accent-rgb), 0.2);
+    --secondary-green: #1abc9c; /* Tealish Green */
+    --secondary-green-dark: #16a085;
   
-    --sidebar-bg: #2c3e50; /* Keeping sidebar dark for contrast */
-    --sidebar-text-light: #ecf0f1;
-    --sidebar-accent-hover: rgba(var(--accent-rgb), 0.15);
+    --neutral-bg: #f4f7f6; /* Very light gray/greenish background */
+    --content-bg: #ffffff;
+    --card-bg: #ffffff;
+  
+    --text-dark: #34495e; /* Dark Blue/Gray */
+    --text-medium: #7f8c8d; /* Medium Gray */
+    --text-light: #95a5a6; /* Light Gray */
+    --text-on-primary: #ffffff;
+  
+    --border-color: #e0e7e5;
+    --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.07);
+    --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.1);
+    --shadow-green-glow: 0 0 20px rgba(var(--primary-green-rgb), 0.25);
+  
+    --font-primary: 'Poppins', 'Segoe UI', 'Roboto', sans-serif; /* Modern font */
   }
   
-  body { /* Apply to body if this is a global dashboard style */
-      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-      background-color: var(--bg-page);
-      color: var(--text-primary);
+  body {
+    font-family: var(--font-primary);
+    background-color: var(--neutral-bg);
+    color: var(--text-dark);
+    margin: 0;
+    line-height: 1.6;
   }
   
-  .dashboard-page-wrapper {
+  .icon {
+    margin-right: 0.5em;
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.1em; /* Default icon size relative to text */
+  }
+  
+  /* --- Main Layout Structure --- */
+  .dashboard-layout {
     display: flex;
+    flex-direction: column;
     min-height: 100vh;
   }
   
-  /* --- Sidebar (Keep existing good styles, minor tweaks for NavLink active) --- */
-  .dashboard-sidebar {
-    width: 260px;
-    background-color: var(--sidebar-bg);
-    color: var(--sidebar-text-light);
+  /* --- Top Navigation Bar --- */
+  .dashboard-top-nav {
     display: flex;
-    flex-direction: column;
-    box-shadow: 3px 0 10px rgba(0,0,0,0.05);
-    transition: width 0.3s ease;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background-color: var(--content-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 3px solid var(--primary-green);
   }
-  .sidebar-header {
-    padding: 1.5rem;
-    text-align: center;
-    border-bottom: 1px solid rgba(236, 240, 241, 0.1);
-  }
-  .sidebar-logo {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: var(--accent-medium); /* Brighter green for dark bg */
-    text-decoration: none;
-    letter-spacing: 1px;
-  }
-  .sidebar-user-info {
-    padding: 1rem 1.5rem;
-    text-align: center;
-    border-bottom: 1px solid rgba(236, 240, 241, 0.05);
-  }
-  .user-email { font-weight: 500; font-size: 0.95rem; margin-bottom: 0.25rem; word-break: break-all; }
-  .user-role { font-size: 0.8rem; color: #bdc3c7; text-transform: capitalize; }
   
-  .sidebar-nav ul { list-style: none; padding: 0; margin: 1rem 0; }
-  .sidebar-nav li a {
+  .app-logo {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
-    padding: 0.9rem 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-green-dark);
     text-decoration: none;
-    color: var(--sidebar-text-light);
-    font-size: 0.95rem;
-    transition: background-color 0.2s ease, color 0.2s ease, border-left-color 0.2s ease;
-    border-left: 4px solid transparent;
-    font-weight: 500;
   }
-  .sidebar-nav li a:hover {
-    background-color: var(--sidebar-accent-hover);
-    color: var(--accent-medium);
-    border-left-color: var(--accent-medium);
+  .app-logo .icon {
+    font-size: 1.5em; /* Larger logo icon */
+    color: var(--primary-green);
   }
-  .sidebar-nav li a.active { /* Style for NavLink active state */
-    background-color: var(--sidebar-accent-hover);
-    color: var(--accent); /* Brighter green for active */
-    border-left-color: var(--accent);
-    font-weight: 600;
-  }
-  .sidebar-nav .nav-icon { font-size: 1.2em; width: 20px; text-align: center; }
   
-  .sidebar-footer { margin-top: auto; padding: 1.5rem; }
-  .logout-button {
+  .main-actions-nav {
+    display: flex;
+    gap: 0.5rem; /* Spacing between nav items */
+  }
+  
+  .nav-action-item {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px; /* Pill shape */
+    text-decoration: none;
+    color: var(--text-medium);
+    font-weight: 500;
+    transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-action-item .icon {
+    color: var(--secondary-green);
+    font-size: 1.2em;
+  }
+  .nav-action-item:hover {
+    background-color: var(--primary-green-light);
+    color: var(--primary-green-dark);
+    box-shadow: 0 2px 8px rgba(var(--primary-green-rgb), 0.15);
+  }
+  .nav-action-item.active {
+    background-color: var(--primary-green);
+    color: var(--text-on-primary);
+    box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
+  }
+  .nav-action-item.active .icon {
+    color: var(--text-on-primary);
+  }
+  
+  /* --- Dashboard Body Content (Profile Left, Main Details Right) --- */
+  .dashboard-body-content {
+    display: flex;
+    flex-grow: 1;
+    padding: 2rem;
+    gap: 2rem;
+  }
+  
+  /* --- Profile Section Wrapper (Left Column) --- */
+  .profile-section-wrapper {
+    flex: 0 0 300px; /* Fixed width for profile column */
+  }
+  
+  .profile-card {
+    background-color: var(--card-bg);
+    padding: 2rem 1.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-soft);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%; /* Optional: make it full height of its column if desired */
+  }
+  
+  .profile-avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: var(--primary-green);
+    color: var(--text-on-primary);
+    font-size: 3rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    width: 100%;
-    padding: 0.8rem 1rem;
-    background-color: rgba(231, 76, 60, 0.15); /* Subtle Red for Logout */
-    color: #e74c3c;
-    border: 1px solid #e74c3c;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-  .logout-button:hover { background-color: #e74c3c; color: var(--text-on-accent); }
-  .logout-button .nav-icon { font-size: 1.1em; }
-  
-  
-  /* --- Main Content Area - Green & Beautiful --- */
-  .dashboard-main-content {
-    flex: 1;
-    padding: 2.5rem;
-    overflow-y: auto;
-    background-color: var(--bg-page);
+    margin-bottom: 1rem;
+    box-shadow: 0 0 0 6px var(--primary-green-light);
   }
   
-  .main-content-header {
-    margin-bottom: 2.5rem;
-  }
-  .main-content-header h2 {
-    font-size: 2.2rem;
-    color: var(--accent-dark);
-    font-weight: 700; /* Bolder */
-    margin-bottom: 0.4rem;
-    display: flex;
-    align-items: center;
-  }
-  .main-content-header .leaf-icon {
-    margin-right: 0.8rem;
-    font-size: 1.3em; /* Larger icon */
-    color: var(--accent);
-  }
-  .main-content-header p {
-    font-size: 1.05rem;
-    color: var(--text-secondary);
-  }
-  
-  .dashboard-content-section {
-    margin-bottom: 2.5rem;
-  }
-  .section-title {
-    font-size: 1.7rem;
-    color: var(--text-primary);
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--accent-light);
-    display: flex;
-    align-items: center;
+  .profile-card h3 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
     font-weight: 600;
   }
-  .section-title .leaf-icon {
-    margin-right: 0.75rem;
-    font-size: 1.1em;
-    color: var(--accent);
+  .user-email-display {
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    margin-bottom: 0.25rem;
+    word-break: break-all;
+  }
+  .user-role-display {
+    font-size: 0.85rem;
+    color: var(--primary-green-dark);
+    background-color: var(--primary-green-light);
+    padding: 0.2rem 0.6rem;
+    border-radius: 15px;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
   }
   
-  /* Stats Section & Cards */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
+  .profile-action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
   }
-  .stat-card {
-    background-color: var(--bg-card);
+  .profile-action-button .icon { font-size: 1em; }
+  
+  .view-profile-btn {
+    background-color: var(--primary-green-light);
+    color: var(--primary-green-dark);
+    border-color: var(--primary-green-dark);
+  }
+  .view-profile-btn:hover {
+    background-color: var(--primary-green-dark);
+    color: var(--text-on-primary);
+  }
+  
+  .logout-btn-profile {
+    background-color: transparent;
+    color: #e74c3c; /* Red for logout */
+    border-color: #e74c3c;
+  }
+  .logout-btn-profile:hover {
+    background-color: #e74c3c;
+    color: var(--text-on-primary);
+  }
+  
+  /* --- Main Dashboard Details (Right Column) --- */
+  .main-dashboard-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Space between widgets */
+  }
+  
+  .main-content-header-alt {
+    margin-bottom: 0.5rem; /* Reduced from previous full header */
+  }
+  .main-content-header-alt h2 {
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+  .main-content-header-alt p {
+    font-size: 1rem;
+    color: var(--text-medium);
+  }
+  
+  /* --- Dashboard Widgets Styling --- */
+  .dashboard-widget {
+    background-color: var(--card-bg);
     padding: 1.5rem;
     border-radius: 12px;
     box-shadow: var(--shadow-soft);
+  }
+  
+  .widget-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .widget-header h4 {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  .widget-header .icon {
+    color: var(--primary-green);
+    font-size: 1.3em;
+    margin-right: 0.6rem;
+  }
+  
+  /* Score Widget Specifics */
+  .score-widget .score-display {
     text-align: center;
-    border: 1px solid var(--border-color-light);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 1rem 0;
   }
-  .stat-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-medium);
-  }
-  .stat-card h4 {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .stat-card .stat-value, .stat-card .stat-value-na {
-    font-size: 2.8rem;
+  .score-widget .score-value, .score-widget .score-value-na {
+    font-size: 3.5rem;
     font-weight: 700;
-    color: var(--accent);
-    display: block;
-    line-height: 1.1;
+    line-height: 1;
+    display: inline-block; /* To sit next to unit */
   }
-  .stat-card .stat-value-na { color: var(--text-light); font-size: 2rem; }
-  .stat-card .stat-label {
+  .score-widget .score-unit {
+    font-size: 1rem;
+    color: var(--text-medium);
+    margin-left: 0.5rem;
+    font-weight: 500;
+  }
+  .score-widget .score-value-na { font-size: 2rem; color: var(--text-light); }
+  .score-widget.score-category-high .score-value { color: var(--primary-green-dark); }
+  .score-widget.score-category-medium .score-value { color: #f39c12; } /* Orange for medium */
+  .score-widget.score-category-low .score-value { color: #e74c3c; } /* Red for low */
+  
+  .widget-subtext {
+    text-align: center;
     font-size: 0.85rem;
     color: var(--text-light);
-    margin-top: 0.25rem;
-  }
-  .stat-card .stat-subtext {
-      font-size: 0.75rem;
-      color: var(--accent);
-      margin-top: 0.5rem;
+    margin-top: 0.5rem;
   }
   
-  /* Score card specific styling (inherits from stat-card) */
-  .score-card {
-    background: linear-gradient(145deg, var(--accent-light), var(--bg-card));
-    border-left: 5px solid var(--accent);
-  }
-  .score-card.high-score .stat-value { color: #28a745; } /* Positive Green */
-  .score-card.medium-score .stat-value { color: #fd7e14; } /* Orange for medium */
-  .score-card.low-score .stat-value { color: #dc3545; } /* Red for low */
-  .score-card.score-na .stat-value-na { color: var(--text-light); }
-  
-  
-  /* Quick Actions Section */
-  .quick-actions-grid {
+  /* Quick Links Widget */
+  .quick-links-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
   }
-  .quick-action-card {
-    background-color: var(--bg-card);
-    padding: 1.75rem 1.5rem;
-    border-radius: 12px;
-    box-shadow: var(--shadow-soft);
+  .quick-link-item {
+    background-color: var(--primary-green-light);
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
     text-decoration: none;
-    color: var(--text-primary);
+    color: var(--primary-green-dark);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
-    border: 1px solid transparent; /* Prepare for hover border */
+    justify-content: center;
   }
-  .quick-action-card:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: var(--shadow-green-glow);
-    background-color: var(--accent-light);
-    border-color: var(--accent-medium);
+  .quick-link-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 10px rgba(var(--primary-green-rgb), 0.2);
   }
-  .quick-action-card .action-icon {
-    font-size: 2.5rem; /* Larger icon */
-    color: var(--accent);
-    margin-bottom: 1rem;
-    line-height: 1;
-  }
-  .quick-action-card h4 {
-    font-size: 1.25rem;
-    color: var(--accent-dark);
+  .quick-link-item .icon {
+    font-size: 2rem; /* Larger icons for quick links */
     margin-bottom: 0.5rem;
-    font-weight: 600;
+    color: var(--primary-green-dark);
+    margin-right: 0; /* Reset margin for centered icon */
   }
-  .quick-action-card p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    flex-grow: 1;
+  .quick-link-item span {
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: block;
+  }
+  .quick-link-item small {
+    font-size: 0.75rem;
+    color: var(--text-medium);
   }
   
-  /* Eco Tip Section */
-  .eco-tip-card {
-    background-color: var(--accent-light);
-    padding: 1.5rem 2rem;
-    border-radius: 10px;
-    border-left: 6px solid var(--accent);
-    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.1);
+  /* Eco Tip Widget */
+  .eco-tip-content p {
+    font-size: 0.95rem;
+    color: var(--text-medium);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
   }
-  .eco-tip-card p {
-    font-size: 1rem;
-    color: var(--accent-dark);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-  .learn-more-link {
+  .learn-more-inline {
     font-size: 0.9rem;
-    color: var(--accent);
+    color: var(--primary-green-dark);
     text-decoration: none;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
   }
-  .learn-more-link:hover {
-    text-decoration: underline;
-    color: var(--accent-dark);
-  }
-  .learn-more-link .arrow-right {
-    margin-left: 0.3rem;
-    transition: transform 0.2s ease;
-  }
-  .learn-more-link:hover .arrow-right {
-    transform: translateX(3px);
-  }
+  .learn-more-inline:hover { text-decoration: underline; }
+  .learn-more-inline .icon { font-size: 1em; margin-left: 0.2rem; }
   
-  /* Loader and Error Styling (Refined) */
-  .loader-container {
+  
+  /* Loader and Error Main Content */
+  .loader-container-main {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 3rem; text-align: center; color: var(--text-secondary); font-size: 1.1rem;
+    padding: 3rem; text-align: center; color: var(--text-medium); font-size: 1rem;
+    background-color: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow-soft);
   }
-  .loader-spinner {
-    border: 6px solid var(--accent-light);
-    border-top: 6px solid var(--accent);
-    border-radius: 50%; width: 50px; height: 50px;
-    animation: spin 0.8s linear infinite; margin-bottom: 1.2rem;
+  .loader-spinner-main {
+    border: 5px solid var(--primary-green-light);
+    border-top: 5px solid var(--primary-green);
+    border-radius: 50%; width: 40px; height: 40px;
+    animation: spin 0.8s linear infinite; margin-bottom: 1rem;
   }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   
-  .error-message-box {
+  .error-message-box-main {
     background-color: #fff0f1; color: #c82333;
-    padding: 1.2rem 1.5rem; border: 1px solid #f5c6cb;
+    padding: 1rem 1.5rem; border: 1px solid #f5c6cb;
     border-left: 5px solid #c82333;
-    border-radius: 8px; margin-bottom: 2rem; display: flex; align-items: center;
+    border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center;
     font-weight: 500;
   }
-  .error-message-box .leaf-icon { color: #c82333; margin-right: 0.8rem; font-size: 1.3em;}
+  .error-message-box-main .icon.error-icon { color: #c82333; font-size: 1.3em; }
   
   
-  /* Responsive adjustments */
+  /* Responsive Adjustments */
   @media (max-width: 992px) {
-      .dashboard-main-content { padding: 2rem; }
-      .main-content-header h2 { font-size: 2rem; }
-      .section-title { font-size: 1.5rem; }
+    .dashboard-body-content {
+      flex-direction: column;
+    }
+    .profile-section-wrapper {
+      flex: 0 0 auto; /* Let it size by content */
+      width: 100%;
+      margin-bottom: 1.5rem; /* Space when stacked */
+    }
+    .profile-card {
+      flex-direction: row; /* Profile card horizontal on smaller screens */
+      align-items: center;
+      text-align: left;
+      padding: 1.5rem;
+    }
+    .profile-avatar-placeholder {
+      width: 70px; height: 70px; font-size: 2rem; margin-right: 1.5rem; margin-bottom: 0;
+    }
+    .profile-card h3 { margin-bottom: 0.1rem; }
+    .profile-action-button { width: auto; padding: 0.6rem 1rem; margin-left: auto; margin-top: 0;}
+    .view-profile-btn { margin-right: 0.5rem;}
   }
   
   @media (max-width: 768px) {
-    /* Sidebar becomes horizontal/collapsible or top bar - current CSS makes it horizontal */
-    .dashboard-page-wrapper { flex-direction: column; }
-    .dashboard-sidebar {
-      width: 100%; height: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      /* Consider making sidebar nav scrollable horizontally or stacked */
+    .dashboard-top-nav {
+      padding: 0.6rem 1rem;
+      flex-direction: column; /* Stack logo and nav on very small screens */
+      align-items: flex-start;
     }
-    .sidebar-nav ul { display: flex; overflow-x: auto; padding: 0.5rem 0; }
-    .sidebar-nav li a { padding: 0.8rem 1rem; border-left: none; border-bottom: 3px solid transparent; }
-    .sidebar-nav li a:hover, .sidebar-nav li a.active { border-bottom-color: var(--accent); background-color: var(--sidebar-accent-hover); }
-    
-    .dashboard-main-content { padding: 1.5rem; }
-    .main-content-header h2 { font-size: 1.8rem; }
-    .section-title { font-size: 1.4rem; }
-    .stats-grid, .quick-actions-grid { grid-template-columns: 1fr; /* Stack cards on small screens */ }
+    .app-logo { font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .main-actions-nav { width: 100%; justify-content: space-around; }
+    .nav-action-item { padding: 0.5rem 0.8rem; font-size: 0.85rem; }
+    .nav-action-item .icon { font-size: 1.1em; }
+  
+    .dashboard-body-content { padding: 1rem; gap: 1rem; }
+    .main-content-header-alt h2 { font-size: 1.5rem; }
+  
+    .quick-links-container { grid-template-columns: 1fr; } /* Stack quick links */
   }
