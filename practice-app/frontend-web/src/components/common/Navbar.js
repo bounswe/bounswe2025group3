@@ -48,21 +48,6 @@ const Navbar = ({ isAuthenticated }) => {
                                 Home
                             </NavLink>
                         </li>
-                        <li>
-                            <NavLink to="/about" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
-                                About us
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/blog" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
-                                Blog
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/pricing" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
-                                Pricing
-                            </NavLink>
-                        </li>
                     </>
                 )}
             </ul>
