@@ -1,7 +1,8 @@
-// src/pages/SignupPage.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Import Link for navigation
+import Navbar from '../common/Navbar'; // Import reusable Navbar
 import './LoginPage.css';
 
 const SignupPage = () => {
@@ -33,7 +34,7 @@ const SignupPage = () => {
     try {
       await axios.post('http://127.0.0.1:8000/api/auth/register/', formData);
       alert('Registration successful! Please log in.');
-      navigate('/');
+      navigate('/login'); // Navigate to login after successful signup
     } catch (err) {
       const data = err.response?.data;
       const msg = data
@@ -49,20 +50,12 @@ const SignupPage = () => {
   return (
     <div className="login-page">
       <div className="login-container">
-        <nav className="navbar">
-          <div className="logo">Greener</div>
-          <ul className="nav-links">
-            <li>Home</li>
-            <li>About us</li>
-            <li>Blog</li>
-            <li>Pricing</li>
-          </ul>
-        </nav>
+        <Navbar isAuthenticated={false} /> {/* Use reusable Navbar */}
 
         <div className="main-content">
           <div className="form-section">
             <h2 className="main-heading">
-              Join the <span style={{ color: 'var(--accent)' }}>Zero Waste</span> Movement
+              Join the <span style={{ color: 'var(--accent)' }}>Zero Waste</span> Movement
             </h2>
             <p>Create an account to start logging and recycling your waste.</p>
             <p style={{ fontSize: '.85rem', color: '#666', marginBottom: '1rem' }}>
@@ -71,9 +64,7 @@ const SignupPage = () => {
             </p>
 
             <form onSubmit={handleSubmit}>
-
               <div className="form-columns">
-
                 <div className="form-col">
                   <div className="input-box">
                     <label htmlFor="username">
@@ -195,7 +186,7 @@ const SignupPage = () => {
 
               <div className="buttons">
                 <button type="submit" className="login">Sign Up</button>
-                <button type="button" className="signup" onClick={() => navigate('/')}>
+                <button type="button" className="signup" onClick={() => navigate('/login')}>
                   Back to Login
                 </button>
               </div>
@@ -203,7 +194,7 @@ const SignupPage = () => {
           </div>
 
           <div className="image-section">
-            <img src="/wasteimage.png" alt="Recycling illustration" />
+            <img src="/wasteimage.png" alt="Recycling illustration" onError={(e) => { e.target.src = 'https://via.placeholder.com/400x400?text=Recycling'; }} />
           </div>
         </div>
       </div>
