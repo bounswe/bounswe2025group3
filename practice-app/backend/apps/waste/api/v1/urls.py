@@ -8,6 +8,8 @@ from .views import (
     WasteSuggestionListView, SustainableActionListCreateView, UserWasteScoreView
 )
 
+app_name = 'waste'
+
 admin_urlpatterns = [
     path('categories/requests/', AdminCustomCategoryRequestListView.as_view(), name='admin-custom-category-request-list'),
     path('categories/requests/<int:pk>/approve/', AdminCustomCategoryRequestApproveView.as_view(), name='admin-custom-category-request-approve'),

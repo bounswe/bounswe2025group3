@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 def dashboard_view(request):
     """Placeholder for dashboard view"""
@@ -9,12 +9,8 @@ def dashboard_view(request):
     return render(request, 'placeholder.html', context)
 
 def goals_view(request):
-    """Placeholder for goals view"""
-    context = {
-        'title': 'Goals',
-        'message': 'Set and track your waste reduction and sustainability goals here.'
-    }
-    return render(request, 'placeholder.html', context)
+    """Redirect to the goals list view"""
+    return redirect('goals_list')
 
 def challenges_view(request):
     """Placeholder for challenges view"""

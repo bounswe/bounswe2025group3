@@ -29,7 +29,7 @@ from drf_spectacular.views import (
 )
 from apps.authentication.views import login_view, protected_view, register_view
 from django.views.generic import RedirectView
-from apps.general_views import dashboard_view, goals_view, challenges_view, leaderboard_view, not_found_view
+from apps.general_views import dashboard_view, challenges_view, leaderboard_view, not_found_view
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -49,14 +49,15 @@ urlpatterns = [
     path('register/', register_view, name='register_view'), 
     path('protected/', protected_view, name='protected_view'), 
     path('waste/', include('apps.waste.urls')),  # Frontend waste templates
+    path('goals/', include('apps.goals.urls')),  # Frontend goals templates
     path('api/v1/waste/', include('apps.waste.api.v1.urls')),
+    path('api/v1/goals/', include('apps.goals.api.v1.urls')),
     
     # Django allauth URLs
     path('accounts/', include('allauth.urls')),
     
     # Placeholder routes
     path('dashboard/', dashboard_view, name='dashboard_view'),
-    path('goals/', goals_view, name='goals_view'),
     path('challenges/', challenges_view, name='challenges_view'),
     path('leaderboard/', leaderboard_view, name='leaderboard_view'),
     
