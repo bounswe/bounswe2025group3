@@ -16,6 +16,7 @@ class Goal(models.Model):
         ('daily', 'Daily'),
         ('weekly', 'Weekly'),
         ('monthly', 'Monthly'),
+        # ('custom', 'Custom') # Add if allowing custom dates
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -26,6 +27,9 @@ class Goal(models.Model):
     progress = models.FloatField(default=0.0)
     is_complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateField(null=True, blank=True, help_text="Start date for custom timeframe goals")
+    end_date = models.DateField(null=True, blank=True, help_text="End date for custom timeframe goals")
+    status = models.CharField(max_length=20, default='active', help_text="Status of the goal (e.g., active, achieved, failed)") # Added status field
 
     def __str__(self):
         return f"{self.user.username} - {self.category.name} ({self.goal_type})"
@@ -33,31 +37,54 @@ class Goal(models.Model):
 
     def update_progress(self):
         today = timezone.now().date()
+        
+        # Determine start and end date based on timeframe or custom dates
+        effective_start_date = self.start_date
+        effective_end_date = self.end_date
 
-        if self.end_date < self.start_date:
+        if self.timeframe == 'daily':
+            effective_start_date = today
+            effective_end_date = today
+        elif self.timeframe == 'weekly':
+            effective_start_date = today - timezone.timedelta(days=today.weekday())
+            effective_end_date = effective_start_date + timezone.timedelta(days=6)
+        elif self.timeframe == 'monthly':
+            effective_start_date = today.replace(day=1)
+            next_month = (today.replace(day=1) + timezone.timedelta(days=32)).replace(day=1)
+            effective_end_date = next_month - timezone.timedelta(days=1)
+        
+        # Only proceed if we have a valid date range
+        if not effective_start_date or not effective_end_date:
+             # Maybe log a warning or handle goals without dates differently
+             return 
+
+        # Ensure dates are logical (though timeframe logic should handle this)
+        if effective_end_date < effective_start_date:
+            # Log error or handle invalid state
             return
 
         logs = WasteLog.objects.filter(
             user=self.user,
-            category=self.category,
-            date__range=(self.start_date, min(today, self.end_date))
+            sub_category__category=self.category, # Filter by category through sub_category
+            disposal_date__range=(effective_start_date, min(today, effective_end_date))
         )
 
-        total = logs.aggregate(total=Sum('amount'))['total'] or 0
+        total = logs.aggregate(total=Sum('quantity'))['total'] or 0 # Use quantity based on previous changes
         self.progress = total
 
-        # Update status
-        if today > self.end_date:
-            if self.progress >= self.target:
-                self.status = 'achieved'
-            else:
-                self.status = 'failed'
-        elif self.progress >= self.target:
+        # Update completion status and overall status
+        if self.progress >= self.target:
+            self.is_complete = True
             self.status = 'achieved'
         else:
-            self.status = 'active'
+            self.is_complete = False
+            # Check if the timeframe has passed
+            if today > effective_end_date:
+                self.status = 'failed'
+            else:
+                self.status = 'active'
 
-        self.save()
+        self.save(update_fields=['progress', 'is_complete', 'status']) # Save only updated fields
     
 
 

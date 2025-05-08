@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     # Your apps
     'apps.authentication',
     'apps.waste',
-    'apps.challanges',  # Fixed spelling to match directory name
+    'apps.challenges',  # Fixed spelling to match directory name
     'apps.user',
     'apps.leaderboard',
     'apps.notifications',
@@ -70,8 +70,6 @@ INSTALLED_APPS = [
     'apps.community',
     'apps.course',
     'apps.goals',
-    'apps.session',
-
 ]
 
 MIDDLEWARE = [

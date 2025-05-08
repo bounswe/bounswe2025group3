@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
-from common.api_docs import waste_category_docs, waste_log_docs
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 from apps.waste.models import (
@@ -21,21 +20,42 @@ class WasteCategoryListView(generics.ListAPIView):
     serializer_class = WasteCategorySerializer
     permission_classes = [permissions.AllowAny]
     
-    @waste_category_docs.list
+    @extend_schema(
+        tags=['Waste Categories'],
+        summary='List waste categories',
+        description='Returns a list of all active waste categories available in the system'
+    )
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+@extend_schema(
+    tags=['Waste Categories'],
+    summary='Get waste category details',
+    description='Returns detailed information about a specific waste category',
+    responses={404: None}
+)
 class WasteCategoryDetailView(generics.RetrieveAPIView):
     queryset = WasteCategory.objects.all()
     serializer_class = WasteCategorySerializer
     permission_classes = [permissions.AllowAny]
 
 # SubCategory Views
+@extend_schema(
+    tags=['Waste Sub-Categories'],
+    summary='List waste sub-categories',
+    description='Returns a list of all active waste sub-categories available in the system'
+)
 class SubCategoryListView(generics.ListAPIView):
     queryset = SubCategory.objects.filter(is_active=True)
     serializer_class = SubCategorySerializer
     permission_classes = [permissions.AllowAny]
 
+@extend_schema(
+    tags=['Waste Sub-Categories'],
+    summary='Get sub-category details',
+    description='Returns detailed information about a specific waste sub-category',
+    responses={404: None}
+)
 class SubCategoryDetailView(generics.RetrieveAPIView):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
@@ -46,11 +66,48 @@ class WasteLogListCreateView(generics.ListCreateAPIView):
     serializer_class = WasteLogSerializer
     permission_classes = [permissions.IsAuthenticated]
     
-    @waste_log_docs.list
+    @extend_schema(
+        tags=['Waste Logs'],
+        summary='List waste logs',
+        description='Returns a list of all waste logs created by the current user',
+        parameters=[
+            OpenApiParameter(
+                name='from_date',
+                type=OpenApiTypes.DATE,
+                location=OpenApiParameter.QUERY,
+                description='Filter items after this date (format: YYYY-MM-DD)',
+                required=False
+            ),
+            OpenApiParameter(
+                name='to_date',
+                type=OpenApiTypes.DATE,
+                location=OpenApiParameter.QUERY,
+                description='Filter items before this date (format: YYYY-MM-DD)',
+                required=False
+            )
+        ]
+    )
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
     
-    @waste_log_docs.create
+    @extend_schema(
+        tags=['Waste Logs'],
+        summary='Create waste log',
+        description='Create a new waste log entry and calculate environmental impact score',
+        responses={201: None},
+        examples=[
+            OpenApiExample(
+                'Waste Log Creation',
+                value={
+                    'sub_category': 1,
+                    'amount': 2.5,
+                    'disposal_method': 'recycled',
+                    'notes': 'Plastic bottles from lunch'
+                },
+                request_only=True,
+            )
+        ]
+    )
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
 
@@ -79,6 +136,15 @@ class WasteLogListCreateView(generics.ListCreateAPIView):
         response = super().create(request, *args, **kwargs)
         return response
 
+@extend_schema(
+    tags=['Waste Logs'],
+    summary='Retrieve, update or delete waste log',
+    description='Get details, update or delete a specific waste log entry',
+    responses={
+        200: WasteLogSerializer,
+        404: None
+    }
+)
 class WasteLogDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = WasteLogSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -101,10 +167,26 @@ class WasteLogDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance.delete()
 
 # CustomCategoryRequest Views
+@extend_schema(
+    tags=['Custom Category Requests'],
+    summary='Request new waste category',
+    description='Submit a request for a new waste category to be added to the system',
+    responses={
+        201: CustomCategoryRequestSerializer
+    }
+)
 class CustomCategoryRequestCreateView(generics.CreateAPIView):
     serializer_class = CustomCategoryRequestSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+@extend_schema(
+    tags=['Admin - Custom Category Requests'],
+    summary='List custom category requests',
+    description='Admin endpoint to view all custom category requests',
+    responses={
+        200: CustomCategoryRequestSerializer(many=True)
+    }
+)
 class AdminCustomCategoryRequestListView(generics.ListAPIView):
     queryset = CustomCategoryRequest.objects.all()
     serializer_class = CustomCategoryRequestSerializer
@@ -161,12 +243,29 @@ class AdminCustomCategoryRequestRejectView(APIView):
         return Response({'detail': 'Request rejected.'})
 
 # WasteSuggestion Views
+@extend_schema(
+    tags=['Waste Suggestions'],
+    summary='List waste suggestions',
+    description='Returns a list of waste reduction and recycling suggestions',
+    responses={
+        200: WasteSuggestionSerializer(many=True)
+    }
+)
 class WasteSuggestionListView(generics.ListAPIView):
     queryset = WasteSuggestion.objects.all()
     serializer_class = WasteSuggestionSerializer
     permission_classes = [permissions.AllowAny]
 
 # SustainableAction Views
+@extend_schema(
+    tags=['Sustainable Actions'],
+    summary='List and create sustainable actions',
+    description='List user sustainable actions or record a new sustainable action',
+    responses={
+        200: SustainableActionSerializer(many=True),
+        201: SustainableActionSerializer
+    }
+)
 class SustainableActionListCreateView(generics.ListCreateAPIView):
     serializer_class = SustainableActionSerializer
     permission_classes = [permissions.IsAuthenticated]

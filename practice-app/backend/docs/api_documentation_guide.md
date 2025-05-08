@@ -13,25 +13,7 @@ Once the server is running, you can access the API documentation at:
 
 ## How to Document Your APIs
 
-### 1. Using Helper Decorators (Recommended)
-
-We've created a helper module in `common/api_docs.py` that provides pre-configured decorators for common API patterns.
-
-Example:
-
-```python
-from common.api_docs import waste_category_docs
-
-class WasteCategoryListView(generics.ListAPIView):
-    queryset = WasteCategory.objects.filter(is_active=True)
-    serializer_class = WasteCategorySerializer
-    
-    @waste_category_docs.list
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-```
-
-### 2. Using Standard drf-spectacular Decorators
+### 1. Using Standard drf-spectacular Decorators
 
 For more complex or custom documentation needs, use drf-spectacular decorators directly:
 
@@ -49,7 +31,7 @@ class WasteCategoryListView(generics.ListAPIView):
     ...
 ```
 
-### 3. Documenting Serializers
+### 2. Documenting Serializers
 
 Add docstrings and help_text to your serializer fields for better documentation:
 
@@ -92,6 +74,7 @@ python manage.py export_schema --validate
 4. **Provide Examples**: Add example requests/responses when helpful
 5. **Document All Responses**: Include success and error response formats
 6. **Use `help_text` in Models**: This improves the documentation of your model fields
+7. **Keep Serializers Documented**: Ensure `help_text` is present in serializers for clarity.
 
 ## Testing Schema Validity
 
@@ -108,6 +91,7 @@ python manage.py export_schema --validate
     tags=['Waste Logs'],
     summary='Create waste log',
     description='Create a new waste log entry and calculate environmental impact score',
+    request=WasteLogSerializer, # Added for clarity on request body
     responses={
         201: WasteLogSerializer,
         400: None,  # Bad request validation errors
