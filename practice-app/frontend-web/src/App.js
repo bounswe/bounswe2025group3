@@ -13,6 +13,7 @@ import Leaderboard from './components/leaderboard/LeaderboardPage'; // Assuming 
 import Challanges from './components/challenges/ChallengesPage'; // Assuming exists
 import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
 import ResetPasswordPage from './components/auth/ResetPasswordPage'; // Assuming exists
+import BlogPostPage from './components/blog/BlogPostPage';
 
 
 const App = () => {
@@ -29,6 +30,8 @@ const App = () => {
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/challenges" element={<Challanges />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/blog/:slug" element={<BlogPostPage />} />
+                {/* Assuming slug is passed as URL parameter */}
                 <Route path="/reset-password/:uid/:token" element={<ResetPasswordPage />} />
                 {/* Assuming uid and token are passed as URL parameters */}
                 
@@ -36,7 +39,6 @@ const App = () => {
                 
                 <Route path="/about" element={<About />} />
                 <Route path="/blog" element={<Blog />} />
-
                 <Route path="/" element={<Home />} /> {/* Redirect root to /home */}
             </Routes>
         </Router>
