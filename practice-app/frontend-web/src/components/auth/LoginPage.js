@@ -68,6 +68,9 @@ const LoginPage = () => {
                         <li className="nav-item active"> {/* Added 'active' class to Login */}
                             <Link to="/login">Login</Link>
                         </li>
+                        <li className="nav-item">
+                        <Link to="/signup">Sign Up</Link>
+            </li>
                     </ul>
                 </nav>
             </div>

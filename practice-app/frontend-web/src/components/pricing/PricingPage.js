@@ -23,6 +23,9 @@ const PricingPage = () => {
                          <li className="nav-item">
                             <Link to="/login">Login</Link>
                         </li>
+                        <li className="nav-item">
+                        <Link to="/signup">Sign Up</Link>
+            </li>
                     </ul>
                 </nav>
             </div>
