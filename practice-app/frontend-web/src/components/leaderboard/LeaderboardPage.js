@@ -13,6 +13,7 @@ const Icon = ({ name, className = "" }) => {
         profile: '👤',
         trophy: '🏆',
         star: '⭐',
+        dashboard: '🏠',
         up: '🔼',
         down: '🔽',
         medalGold: '🥇',
@@ -111,6 +112,9 @@ const LeaderboardPage = () => {
                     GreenerLife
                 </Link>
                 <nav className="main-actions-nav">
+                <NavLink to="/dashboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
+                        <Icon name="dashboard" /> Dashboard {/* Make sure 'dashboard' icon is in your Icon component */}
+                    </NavLink>
                     <NavLink to="/waste" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
                         <Icon name="waste" /> Waste Log
                     </NavLink>
