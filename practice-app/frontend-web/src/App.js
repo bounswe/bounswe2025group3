@@ -11,7 +11,8 @@ import Blog from './components/blog/BlogPage';
 import Pricing from './components/pricing/PricingPage';
 import Leaderboard from './components/leaderboard/LeaderboardPage'; // Assuming exists
 import Challanges from './components/challenges/ChallengesPage'; // Assuming exists
-
+import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
+import ResetPasswordPage from './components/auth/ResetPasswordPage'; // Assuming exists
 
 
 const App = () => {
@@ -27,6 +28,11 @@ const App = () => {
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/challenges" element={<Challanges />} />
+                <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password/:uid/:token" element={<ResetPasswordPage />} />
+                {/* Assuming uid and token are passed as URL parameters */}
+                
+                {/* Assuming these components exist */}
                 
                 <Route path="/about" element={<About />} />
                 <Route path="/blog" element={<Blog />} />

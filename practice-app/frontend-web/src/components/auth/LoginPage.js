@@ -126,7 +126,8 @@ const LoginPage = () => {
                                         />
                                         <span>Remember Me</span>
                                     </label>
-                                    <a href="#" className="forgot-password">Forgot Password?</a>
+                                    <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
+
                                 </div>
                                 
                                 <div className="action-buttons">

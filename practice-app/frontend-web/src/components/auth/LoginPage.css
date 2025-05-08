@@ -286,3 +286,11 @@ body {
     margin-bottom: 2rem;
   }
 }
+/* In LoginPage.css or a new ResetPasswordPage.css */
+
+.reset-password-page .main-heading {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Styles for success-message and error-message are assumed from ForgotPasswordPage additions */
