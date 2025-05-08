@@ -1,121 +1,169 @@
-/* BlogPage.css */
+/* BlogPage.css - Corrected and Refined */
 
+/* --- Assumed :root variables --- */
+:root {
+  --accent: #008000;
+  --accent-dark: #006400;
+  --bg: #E7E4DF;
+  --content-bg: #fff; /* Added for clarity if needed */
+  --text: #333;
+  --light-text: #666;
+  --border-color: #eee; /* Added for consistency */
+  --shadow-color-light: rgba(0, 0, 0, 0.1);
+  --shadow-color-medium: rgba(0, 0, 0, 0.15);
+  --font-primary: 'Segoe UI', 'Roboto', sans-serif; /* Added for consistency */
+}
+
+/* --- Base Page Structure --- */
 .page-wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--bg, #E7E4DF);
-  }
-  
-  .content-container {
-    flex: 1;
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    width: 90%;
-  }
-  
-  .page-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-  
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg, #E7E4DF);
+  font-family: var(--font-primary);
+}
+
+.content-container {
+  flex: 1;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  width: 90%;
+}
+
+/* --- Page Header --- */
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.page-header h1 {
+  font-size: 2.8rem;
+  color: var(--accent, #008000);
+  margin-bottom: 0.5rem;
+  font-weight: 600; /* Added */
+}
+.page-header p {
+  font-size: 1.1rem;
+  color: var(--light-text, #666);
+}
+
+/* --- Blog Grid --- */
+.blog-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem; /* Slightly increased gap */
+}
+
+/* --- Blog Card --- */
+.blog-post-card {
+  background-color: var(--content-bg, #fff);
+  border-radius: 12px; /* More rounded */
+  box-shadow: 0 4px 12px var(--shadow-color-light);
+  overflow: hidden; /* Crucial for image container */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid var(--border-color); /* Subtle border */
+}
+
+.blog-post-card:hover {
+  transform: translateY(-6px); /* Slightly more lift */
+  box-shadow: 0 8px 20px var(--shadow-color-medium);
+}
+
+/* --- Blog Card Image Area (Corrected) --- */
+.post-image-container {
+  width: 100%;
+  height: 200px; /* *** CORRECTED: Fixed height for the image area *** */
+  background-color: #f0f0f0; /* Placeholder background */
+  overflow: hidden; /* Clip the image if it overflows */
+  position: relative;
+}
+
+.post-image { /* The actual <img> tag */
+  display: block; /* Removes bottom space */
+  width: 100%;
+  height: 100%; /* Make image fill the container */
+  object-fit: cover; /* *** Scale while preserving aspect ratio, crop to fit *** */
+  object-position: center center; /* Center the image focus */
+  transition: transform 0.3s ease; /* Zoom effect transition */
+}
+
+.blog-post-card:hover .post-image { /* Zoom effect on card hover */
+  transform: scale(1.05);
+}
+
+/* --- Blog Card Content --- */
+.post-content {
+  padding: 1.5rem;
+  flex-grow: 1; /* Take remaining space */
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+}
+
+.post-title {
+  font-size: 1.4rem; /* Slightly adjusted */
+  margin-bottom: 0.5rem;
+  font-weight: 600; /* Added */
+  color: var(--text, #333); /* Title color */
+  line-height: 1.3; /* Added */
+}
+
+.post-title a {
+  text-decoration: none;
+  color: inherit; /* Inherit color from h2 */
+  transition: color 0.2s ease;
+}
+
+.post-title a:hover {
+  color: var(--accent, #008000); /* Change color on hover */
+}
+
+.post-meta {
+  font-size: 0.8rem; /* Smaller meta text */
+  color: var(--light-text, #666);
+  margin-bottom: 1rem;
+  text-transform: uppercase; /* Optional: Style meta text */
+  letter-spacing: 0.5px; /* Optional */
+}
+
+.post-excerpt {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-body, #555); /* Use body text color */
+  margin-bottom: 1.5rem;
+  flex-grow: 1; /* Allow excerpt to push button down */
+}
+
+.read-more-btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--accent, #008000);
+  color: white;
+  text-decoration: none;
+  border-radius: 20px; /* Pill shape */
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  align-self: flex-start; /* Button aligns to the left */
+  margin-top: auto; /* Push button to bottom if content is short */
+}
+
+.read-more-btn:hover {
+  background-color: var(--accent-dark, #006400);
+  transform: translateY(-2px);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
   .page-header h1 {
-    font-size: 2.8rem;
-    color: var(--accent, #008000); /* Green accent */
-    margin-bottom: 0.5rem;
+    font-size: 2.2rem;
   }
-  
-  .page-header p {
-    font-size: 1.1rem;
-    color: var(--light-text, #666);
-  }
-  
   .blog-posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: 1fr; /* Stack cards */
+    gap: 1.5rem; /* Adjust gap */
   }
-  
-  .blog-post-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+   .content-container {
+    padding: 1.5rem; /* Adjust padding */
   }
-  
-  .blog-post-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-  }
-  
-  .post-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .post-content {
-    padding: 1.5rem;
-    flex-grow: 1; /* Allows button to stick to bottom */
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .post-title {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .post-title a {
-    text-decoration: none;
-    color: var(--accent, #008000); /* Green accent */
-    transition: color 0.2s ease;
-  }
-  
-  .post-title a:hover {
-    color: #005300; /* Darker green */
-  }
-  
-  .post-meta {
-    font-size: 0.85rem;
-    color: var(--light-text, #666);
-    margin-bottom: 1rem;
-  }
-  
-  .post-excerpt {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: var(--text, #333);
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
-  }
-  
-  .read-more-btn {
-    display: inline-block;
-    padding: 0.6rem 1.2rem;
-    background-color: var(--accent, #008000); /* Green accent */
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: 500;
-    text-align: center;
-    transition: background-color 0.3s ease;
-    align-self: flex-start; /* Align button to the start of the flex container */
-  }
-  
-  .read-more-btn:hover {
-    background-color: #006400; /* Darker green */
-  }
-  
-  @media (max-width: 768px) {
-    .page-header h1 {
-      font-size: 2.2rem;
-    }
-    .blog-posts-grid {
-      grid-template-columns: 1fr; /* Stack cards on smaller screens */
-    }
-  }
+}
