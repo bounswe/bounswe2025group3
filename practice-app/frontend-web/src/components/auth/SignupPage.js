@@ -8,7 +8,7 @@ const SignupPage = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    password: '', // Changed from password1 to password
+    password1: '', 
     password2: '',
     first_name: '',
     last_name: '',
@@ -27,14 +27,14 @@ const SignupPage = () => {
     e.preventDefault();
     setError('');
 
-    if (formData.password !== formData.password2) {
+    if (formData.password1 !== formData.password2) {
       setError('Passwords do not match.');
       return;
     }
 
     // Prepare data for submission, backend might expect 'password' not 'password1'
     const submissionData = { ...formData };
-    delete submissionData.password2; // Don't send password2 to backend
+    //delete submissionData.password2; // Don't send password2 to backend
 
     try {
       // Ensure your backend endpoint for registration is correct
@@ -135,10 +135,10 @@ const SignupPage = () => {
                     </label>
                     <input
                       id="password"
-                      name="password" // Changed from password1
+                      name="password1" 
                       type="password"
                       placeholder="Enter Password"
-                      value={formData.password} // Changed from password1
+                      value={formData.password1} 
                       onChange={handleChange}
                       required
                     />
