@@ -73,9 +73,6 @@ const SignupPage = () => {
               <Link to="/blog">Blog</Link>
             </li>
             <li className="nav-item">
-              <Link to="/pricing">Pricing</Link>
-            </li>
-            <li className="nav-item">
               <Link to="/login">Login</Link>
             </li>
             <li className="nav-item active"> {/* Sign Up is active */}

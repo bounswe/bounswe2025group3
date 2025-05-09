@@ -49,9 +49,6 @@ const AboutUsPage = () => {
                         <li className="nav-item">
                             <NavLink to="/blog" className={({isActive}) => isActive ? "active-link-class" : ""}>Blog</NavLink>
                         </li>
-                        <li className="nav-item">
-                            <NavLink to="/pricing" className={({isActive}) => isActive ? "active-link-class" : ""}>Pricing</NavLink>
-                        </li>
                          <li className="nav-item">
                             <NavLink to="/login" className={({isActive}) => isActive ? "active-link-class" : ""}>Login</NavLink>
                         </li>

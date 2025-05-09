@@ -53,9 +53,6 @@ const Home = () => {
                             <Link to="/blog">Blog</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/pricing">Pricing</Link>
-                        </li>
-                        <li className="nav-item">
                             <Link to="/login">Login</Link>
                         </li>
                         <li className="nav-item">
@@ -162,7 +159,7 @@ const Home = () => {
                         <li><Link to="/">Home</Link></li> {/* Updated to / */}
                         <li><Link to="/about">About Us</Link></li>
                         <li><Link to="/blog">Blog</Link></li>
-                        {/* You might want to add Pricing and Login here too for consistency */}
+                        {/* You might want to add Login here too for consistency */}
                     </ul>
                     <p>© 2025 Greener. All rights reserved.</p>
                 </div>

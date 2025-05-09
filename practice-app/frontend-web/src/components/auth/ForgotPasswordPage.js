@@ -51,7 +51,6 @@ const ForgotPasswordPage = () => {
                         <li className="nav-item"><Link to="/">Home</Link></li>
                         <li className="nav-item"><Link to="/about">About us</Link></li>
                         <li className="nav-item"><Link to="/blog">Blog</Link></li>
-                        <li className="nav-item"><Link to="/pricing">Pricing</Link></li>
                         <li className="nav-item"><Link to="/login">Login</Link></li>
                         <li className="nav-item"><Link to="/signup">Sign Up</Link></li>
                     </ul>
