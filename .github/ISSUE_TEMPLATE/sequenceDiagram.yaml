@@ -1,0 +1,70 @@
+name: Sequence Diagram Task
+description: Assign a sequence diagram creation task.
+title: "[Sequence Diagram]: "
+labels: ["priority: medium", "design"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Sequence Diagram Task for [Feature Name]
+        This task is to create a **Sequence Diagram** that visualizes the interactions for the specified feature.
+
+  - type: input
+    id: feature-name
+    attributes:
+      label: Feature Name
+      description: What feature is this sequence diagram for?
+      placeholder: e.g., User Login Flow
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a brief description of the process to be visualized.
+      placeholder: Describe the sequence of interactions.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actors
+    attributes:
+      label: Actors & Components
+      description: List the key actors (e.g., User, System, Database, External API).
+      placeholder: e.g., User, Authentication Service, Database
+      value: | 
+        Actually, you can edit these. They do not have to be as given
+
+  - type: dropdown
+    id: tools
+    attributes:
+      label: Suggested Tools
+      description: Select the tool you plan to use.
+      options:
+        - Draw.io
+        - Lucidchart
+        - PlantUML
+        - Other
+
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: Expected outputs of this task.
+      value: |
+        - **Sequence Diagram** (PNG/SVG)
+        - **Source file** (e.g., .drawio, .uml)
+
+        ### Note:
+        - If you feel a bit frustrated about this task, do not hesitate to assign a friend for them to help you.
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Confirmation
+      description: Ensure all necessary elements are included.
+      options:
+        - label: I have reviewed the feature requirements and will include all necessary components.
+          required: true
