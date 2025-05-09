@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #28a745; /* Green */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .error-message {
+            color: red;
+            margin-top: 1rem;
+            display: none;
+            white-space: pre-wrap; /* To show detailed errors */
+        }
+        .login-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .login-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password1">Password:</label>
+                <input type="password" id="password1" name="password1" required minlength="8">
+            </div>
+            <div class="form-group">
+                <label for="password2">Confirm Password:</label>
+                <input type="password" id="password2" name="password2" required minlength="8">
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio (Optional):</label>
+                <textarea id="bio" name="bio"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="city">City (Optional):</label>
+                <input type="text" id="city" name="city">
+            </div>
+            <div class="form-group">
+                <label for="country">Country (Optional):</label>
+                <input type="text" id="country" name="country">
+            </div>
+            <button type="submit">Register</button>
+            <div id="errorMessage" class="error-message"></div>
+        </form>
+        <a href="/login/" class="login-link">Already have an account? Login</a>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const first_name = document.getElementById('first_name').value;
+            const last_name = document.getElementById('last_name').value;
+            const email = document.getElementById('email').value;
+            const password1 = document.getElementById('password1').value;
+            const password2 = document.getElementById('password2').value;
+            const bio = document.getElementById('bio').value;
+            const city = document.getElementById('city').value;
+            const country = document.getElementById('country').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            errorMessage.style.display = 'none'; // Hide previous errors
+
+            if (password1 !== password2) {
+                errorMessage.textContent = 'Passwords do not match.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/register/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, first_name, last_name, email, password1, password2, bio, city, country })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Registration successful
+                    console.log('Registration successful:', data);
+                    // Redirect to login page with a success parameter
+                    window.location.href = '/login/?registered=true';
+                } else {
+                    // Handle specific error cases
+                    console.error('Registration failed:', data);
+                    
+                    let errorText = '';
+                    
+                    // Check for email uniqueness error
+                    if (data.email && data.email.includes('user with this email already exists')) {
+                        errorText = 'A user with this email address already exists. Please use a different email address or try to log in.';
+                    } 
+                    // Check for non-field errors (general errors)
+                    else if (data.non_field_errors) {
+                        errorText = data.non_field_errors.join('\n');
+                    }
+                    // Handle field-specific errors
+                    else {
+                        // Format all field errors into a readable string
+                        for (const [field, errors] of Object.entries(data)) {
+                            const fieldErrors = Array.isArray(errors) ? errors.join(', ') : errors;
+                            errorText += `${field}: ${fieldErrors}\n`;
+                        }
+                    }
+                    
+                    errorMessage.textContent = errorText || 'Registration failed. Please check your information and try again.';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                errorMessage.textContent = 'Network error. Please check your connection and try again.';
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

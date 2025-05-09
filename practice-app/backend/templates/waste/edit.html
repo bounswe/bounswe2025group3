@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Edit Waste Log</h1>
+  
+  {% if not categories %}
+  <div class="alert alert-warning">
+    No waste categories are available. Please contact an administrator.
+  </div>
+  {% else %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      <label for="category" class="form-label">Waste Category</label>
+      <select id="category" class="form-select" name="category" required>
+        <option value="">-- Select Category --</option>
+        {% for category in categories %}
+          <option value="{{ category.id }}" {% if waste_log and waste_log.sub_category and waste_log.sub_category.category.id == category.id %}selected{% endif %}>
+            {{ category.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    <div class="mb-3">
+      <label for="subcategory" class="form-label">Subcategory</label>
+      <select id="subcategory" class="form-select" name="subcategory" required>
+        <option value="">-- Select Subcategory --</option>
+        {% if waste_log and waste_log.sub_category %}
+          {% for subcategory in subcategories %}
+            {% if subcategory.category.id == waste_log.sub_category.category.id %}
+              <option value="{{ subcategory.id }}" {% if waste_log.sub_category.id == subcategory.id %}selected{% endif %} data-unit="{{ subcategory.unit }}">
+                {{ subcategory.name }}
+              </option>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </select>
+    </div>
+    
+    <div class="mb-3">
+      <label for="quantity" class="form-label">Quantity</label>
+      <input type="number" step="0.01" class="form-control" id="quantity" name="quantity" value="{{ waste_log.quantity|default:'' }}" required>
+      <div id="unitLabel" class="form-text">{% if waste_log and waste_log.sub_category %}Unit: {{ waste_log.sub_category.unit }}{% else %}Unit will be displayed based on selected subcategory{% endif %}</div>
+    </div>
+    
+    <div class="mb-3">
+      <label for="disposal_date" class="form-label">Disposal Date</label>
+      <input type="date" class="form-control" id="disposal_date" name="disposal_date" value="{% if waste_log and waste_log.disposal_date %}{{ waste_log.disposal_date|date:'Y-m-d' }}{% endif %}">
+    </div>
+    
+    <div class="mb-3">
+      <label for="disposal_location" class="form-label">Disposal Location (Optional)</label>
+      <input type="text" class="form-control" id="disposal_location" name="disposal_location" value="{{ waste_log.disposal_location|default:'' }}">
+    </div>
+    
+    <div class="mb-3">
+      <label for="disposal_photo" class="form-label">Photo Evidence (Optional)</label>
+      {% if waste_log and waste_log.disposal_photo %}
+        <div class="mb-2">
+          <img src="{{ waste_log.disposal_photo.url }}" alt="Current photo" class="img-thumbnail" style="max-height: 200px;">
+          <p class="small">Current photo</p>
+        </div>
+      {% endif %}
+      <input type="file" class="form-control" id="disposal_photo" name="disposal_photo">
+      <div class="form-text">Upload a new photo to replace the current one, or leave empty to keep the current photo.</div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% if waste_log %}{% url 'waste_detail' waste_log.id %}{% else %}{% url 'waste_index' %}{% endif %}" class="btn btn-secondary">Cancel</a>
+  </form>
+  {% endif %}
+</div>
+
+<!-- JavaScript to handle dynamic subcategory loading -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('category');
+    const subcategorySelect = document.getElementById('subcategory');
+    const unitLabel = document.getElementById('unitLabel');
+    
+    // Subcategories organized by category ID
+    const subcategoriesByCategory = {
+      {% for category in categories %}
+        '{{ category.id }}': [
+          {% for subcategory in subcategories %}
+            {% if subcategory.category.id == category.id %}
+              {id: '{{ subcategory.id }}', name: '{{ subcategory.name }}', unit: '{{ subcategory.unit }}'},
+            {% endif %}
+          {% endfor %}
+        ],
+      {% endfor %}
+    };
+    
+    // Update subcategories when category changes
+    categorySelect.addEventListener('change', function() {
+      const categoryId = this.value;
+      subcategorySelect.innerHTML = '<option value="">-- Select Subcategory --</option>';
+      
+      if (categoryId && subcategoriesByCategory[categoryId]) {
+        subcategoriesByCategory[categoryId].forEach(function(subcategory) {
+          const option = document.createElement('option');
+          option.value = subcategory.id;
+          option.textContent = subcategory.name;
+          option.dataset.unit = subcategory.unit;
+          subcategorySelect.appendChild(option);
+        });
+      }
+    });
+    
+    // Update unit label when subcategory changes
+    subcategorySelect.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      if (selectedOption && selectedOption.dataset.unit) {
+        unitLabel.textContent = `Unit: ${selectedOption.dataset.unit}`;
+      } else {
+        unitLabel.textContent = 'Unit will be displayed based on selected subcategory';
+      }
+    });
+  });
+</script>
+{% endblock %}
