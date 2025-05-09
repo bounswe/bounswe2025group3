@@ -1,0 +1,396 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(to right, #122e1a, #88eb9a);
+    color: #333;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(to bottom, #88eb9a, #122e1a); /* Fallback gradient */
+    color: white;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 20px;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in;
+}
+
+.hero-content p {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    animation: fadeIn 1.5s ease-in;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.cta-button {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cta-button.primary {
+    background-color: #56ea62;
+    color: white;
+}
+
+.cta-button.secondary {
+    background-color: transparent;
+    border: 2px solid #56ea62;
+    color: #56ea62;
+}
+
+.cta-button:hover {
+    transform: scale(1.05);
+}
+
+.cta-button.primary:hover {
+    background-color: #64d49a;
+}
+
+.cta-button.secondary:hover {
+    background-color: #56ea62;
+    color: white;
+}
+
+/* Mission Section */
+.mission-section {
+    padding: 60px 20px;
+    text-align: center;
+    background-color: rgba(199, 232, 202, 0.9);
+}
+
+.mission-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.mission-section p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.mission-features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.feature {
+    max-width: 300px;
+    text-align: center;
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.feature h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Eco-Tips Carousel */
+.tips-section {
+    padding: 60px 20px;
+    background: linear-gradient(to right, #88eb9a, #122e1a);
+    color: white;
+    text-align: center;
+}
+
+.tips-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.tips-carousel {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.tip-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    flex: 1;
+    animation: slideIn 0.5s ease;
+}
+
+.tip-card p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.tip-category {
+    font-size: 0.9rem;
+    color: #56ea62;
+}
+
+.carousel-arrow {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.carousel-arrow:hover {
+    color: #56ea62;
+}
+
+/* Rewards Section */
+.rewards-section {
+    padding: 60px 20px;
+    background-color: white;
+    text-align: center;
+}
+
+.rewards-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.rewards-section p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.rewards-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.reward-card {
+    max-width: 300px;
+    text-align: center;
+    padding: 20px;
+    background: rgba(199, 232, 202, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.reward-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+}
+
+.reward-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.reward-card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+    padding: 60px 20px;
+    background-color: rgba(199, 232, 202, 0.9);
+    text-align: center;
+}
+
+.testimonials-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.testimonials {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.testimonial {
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.testimonial span {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Footer */
+.footer {
+    background-color: #122e1a;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.footer-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links li a:hover {
+    color: #56ea62;
+}
+
+.footer p {
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .hero-section {
+        height: 60vh;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    .mission-features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .rewards-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .testimonials {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .cta-button {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .mission-section h2,
+    .tips-section h2,
+    .rewards-section h2,
+    .testimonials-section h2 {
+        font-size: 2rem;
+    }
+
+    .tips-carousel {
+        flex-direction: column;
+    }
+
+    .carousel-arrow {
+        font-size: 1.5rem;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

@@ -1,0 +1,289 @@
+/* LeaderboardPage.css */
+
+/* --- Import or define global variables and base styles --- */
+/* (Assuming :root variables from Dashboard.css are available or defined here) */
+:root {
+    --primary-green: #2ecc71;
+    --primary-green-dark: #27ae60;
+    --primary-green-light: #abebc6;
+    --primary-green-rgb: 46, 204, 113;
+    --secondary-green: #1abc9c;
+    --neutral-bg: #f4f7f6;
+    --content-bg: #ffffff;
+    --card-bg: #ffffff;
+    --text-dark: #34495e;
+    --text-medium: #7f8c8d;
+    --text-light: #95a5a6;
+    --text-on-primary: #ffffff;
+    --border-color: #e0e7e5;
+    --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.07);
+    --font-primary: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+  }
+  
+  /* --- Base Page Layout --- */
+  .leaderboard-page-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--neutral-bg);
+    font-family: var(--font-primary);
+  }
+  
+  /* --- Top Navigation Bar Styles (Copied/Adapted from Dashboard.css for consistency) --- */
+  .dashboard-top-nav { /* Reusing class for shared style */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background-color: var(--content-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 3px solid var(--primary-green);
+  }
+  .app-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-green-dark);
+    text-decoration: none;
+  }
+  .app-logo .icon { font-size: 1.5em; color: var(--primary-green); margin-right: 0.5em; }
+  .main-actions-nav { display: flex; gap: 0.5rem; }
+  .nav-action-item {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    color: var(--text-medium);
+    font-weight: 500;
+    transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-action-item .icon { color: var(--secondary-green); font-size: 1.2em; margin-right: 0.5em; }
+  .nav-action-item:hover {
+    background-color: var(--primary-green-light);
+    color: var(--primary-green-dark);
+    box-shadow: 0 2px 8px rgba(var(--primary-green-rgb), 0.15);
+  }
+  .nav-action-item.active {
+    background-color: var(--primary-green);
+    color: var(--text-on-primary);
+    box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
+  }
+  .nav-action-item.active .icon { color: var(--text-on-primary); }
+  
+  /* --- Main Leaderboard Content Area --- */
+  .leaderboard-main-content {
+    flex-grow: 1;
+    padding: 2rem 2.5rem;
+    max-width: 1000px; /* Max width for better readability */
+    margin: 0 auto; /* Center content */
+    width: 100%;
+  }
+  
+  .leaderboard-header-section {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .leaderboard-header-section h1 {
+    font-size: 2.5rem;
+    color: var(--primary-green-dark);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: inline-flex; /* To align icon nicely */
+    align-items: center;
+  }
+  .leaderboard-header-section h1 .icon {
+    color: var(--primary-green);
+    font-size: 1.3em;
+    margin-right: 0.6rem;
+  }
+  .leaderboard-header-section p {
+    font-size: 1.1rem;
+    color: var(--text-medium);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* --- Leaderboard Table Styling --- */
+  .leaderboard-table-wrapper {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden; /* For rounded corners with table */
+  }
+  
+  .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .leaderboard-table th {
+    background-color: var(--primary-green-light);
+    color: var(--primary-green-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .leaderboard-table th:first-child { border-top-left-radius: 12px; }
+  .leaderboard-table th:last-child { border-top-right-radius: 12px; }
+  
+  
+  .leaderboard-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .leaderboard-table tbody tr:hover {
+    background-color: var(--neutral-bg);
+  }
+  
+  .rank-cell {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    width: 80px; /* Fixed width for rank */
+    text-align: center;
+  }
+  .rank-icon { font-size: 1.5em; vertical-align: middle; }
+  .rank-icon.gold { color: #ffd700; }
+  .rank-icon.silver { color: #c0c0c0; }
+  .rank-icon.bronze { color: #cd7f32; }
+  .rank-number {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      border-radius: 50%;
+      background-color: var(--border-color);
+      font-size: 0.9rem;
+  }
+  
+  .player-cell {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--text-on-primary);
+    font-size: 1.1rem;
+  }
+  
+  .player-name {
+    font-weight: 500;
+    color: var(--text-dark);
+  }
+  
+  .you-badge {
+    background-color: var(--primary-green);
+    color: var(--text-on-primary);
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    margin-left: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  .score-cell {
+    font-weight: 600;
+    color: var(--primary-green-dark);
+    font-size: 1.1rem;
+    text-align: right;
+  }
+  
+  /* Current User Row Highlighting */
+  .current-user-row {
+    background-color: var(--primary-green-light) !important; /* Important to override hover */
+    border-left: 4px solid var(--primary-green-dark);
+    border-right: 4px solid var(--primary-green-dark);
+  }
+  .current-user-row td:first-child { position: relative; left: -4px;} /* Adjust for border */
+  .current-user-row td:last-child { position: relative; right: -4px;}
+  
+  
+  /* --- Loader and Error Message Styles (Can be reused from Dashboard.css if global) --- */
+  .loader-container-main { /* Ensure these are defined if not globally available */
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 3rem; text-align: center; color: var(--text-medium); font-size: 1rem;
+    background-color: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow-soft);
+  }
+  .loader-spinner-main {
+    border: 5px solid var(--primary-green-light);
+    border-top: 5px solid var(--primary-green);
+    border-radius: 50%; width: 40px; height: 40px;
+    animation: spin 0.8s linear infinite; margin-bottom: 1rem;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  
+  .error-message-box-main { /* Ensure these are defined */
+    background-color: #fff0f1; color: #c82333;
+    padding: 1rem 1.5rem; border: 1px solid #f5c6cb;
+    border-left: 5px solid #c82333;
+    border-radius: 8px; margin-bottom: 1.5rem; display: flex; align-items: center;
+    font-weight: 500;
+  }
+  .error-message-box-main .icon.error-icon { color: #c82333; font-size: 1.3em; margin-right: 0.5em;}
+  
+  
+  /* Empty State */
+  .empty-leaderboard-message {
+      text-align: center;
+      padding: 3rem 1rem;
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft);
+      color: var(--text-medium);
+  }
+  .empty-leaderboard-message .icon {
+      font-size: 3rem;
+      color: var(--primary-green-light);
+      display: block;
+      margin-bottom: 1rem;
+  }
+  .empty-leaderboard-message p {
+      font-size: 1.1rem;
+      font-weight: 500;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .leaderboard-main-content { padding: 1.5rem 1rem; }
+    .leaderboard-header-section h1 { font-size: 2rem; }
+    .leaderboard-header-section p { font-size: 1rem; }
+  
+    .leaderboard-table th,
+    .leaderboard-table td {
+      padding: 0.75rem;
+      font-size: 0.9rem;
+    }
+    .avatar-placeholder { width: 30px; height: 30px; font-size: 0.9rem; margin-right: 0.75rem;}
+    .player-name { font-size: 0.9rem;}
+    .score-cell { font-size: 1rem; }
+    .rank-cell { font-size: 1rem;}
+    .rank-icon {font-size: 1.3em;}
+  }
+  
+  @media (max-width: 480px) {
+      /* On very small screens, you might want to hide some columns or make the table scrollable horizontally */
+      .leaderboard-table-wrapper { overflow-x: auto; }
+      .leaderboard-table { min-width: 500px; } /* Ensure table doesn't break too badly */
+  }
