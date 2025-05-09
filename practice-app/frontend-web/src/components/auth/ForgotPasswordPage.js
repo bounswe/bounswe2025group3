@@ -47,6 +47,10 @@ const ForgotPasswordPage = () => {
         <div className="login-page forgot-password-page"> {/* Reusing login-page structure */}
             <div className="nav-container">
                 <nav className="navbar">
+                <Link to="/" className="navbar-brand">
+                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
+                        <span className="navbar-app-name">GREENER</span>
+                    </Link>
                     <ul className="main-nav">
                         <li className="nav-item"><Link to="/">Home</Link></li>
                         <li className="nav-item"><Link to="/about">About us</Link></li>

@@ -121,7 +121,7 @@ const ChallengesPage = () => {
             {/* --- Top Navigation Bar --- */}
             <header className="dashboard-top-nav">
                 <Link to="/" className="app-logo">
-                    <Icon name="logo" /> GreenerLife
+                    <Icon name="logo" /> Greener
                 </Link>
                 <nav className="main-actions-nav">
                     <NavLink to="/dashboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>

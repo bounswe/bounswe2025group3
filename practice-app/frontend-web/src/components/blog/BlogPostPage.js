@@ -133,13 +133,17 @@ const BlogPostPage = () => {
                  {/* You might want the nav bar here too */}
                  <div className="nav-container">
                     <nav className="navbar">
+                    <Link to="/" className="navbar-brand">
+                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
+                        <span className="navbar-app-name">GREENER</span>
+                        </Link>
                         {/* ... (Copy nav bar UL from BlogPage) ... */}
                          <ul className="main-nav">
                             <li className="nav-item"><Link to="/">Home</Link></li>
                             <li className="nav-item"><Link to="/about">About us</Link></li>
                             <li className="nav-item"><Link to="/blog">Blog</Link></li>
                             <li className="nav-item"><Link to="/login">Login</Link></li>
-                            <li className="nav-item"><Link to="/signup">Sign Up</Link></li>
+                            <li className="nav-item"><Link to="/signup"className="nav-button-style signup-button-style">Sign Up</Link></li>
                         </ul>
                     </nav>
                 </div>

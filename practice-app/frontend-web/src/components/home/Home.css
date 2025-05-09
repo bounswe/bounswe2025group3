@@ -394,3 +394,203 @@
         gap: 10px;
     }
 }
+
+/* Home.css */
+
+/* --- Your existing :root variables --- */
+:root {
+    --accent: #008000;
+    --text: #333;
+    --light-text: #666;
+    /* Add if missing from your root or if you want to use these */
+    --brand-text-color: var(--accent);
+    --nav-link-color: var(--text);
+    --nav-link-hover-color: var(--accent);
+    --nav-link-active-color: var(--accent);
+  }
+  
+  
+  /* --- YOUR EXISTING .home-container, .hero-section etc. STYLES ... --- */
+  /* ALL THE WAY DOWN TO .nav-container */
+  .home-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: linear-gradient(to right, #122e1a, #88eb9a);
+      color: #333;
+  }
+  
+  /* ... (all your other styles for sections like hero, mission, etc.) ... */
+  
+  
+  /* --- Navigation Bar Styles (Original + Additions for Brand) --- */
+  .nav-container {
+    padding: 1rem 2rem; /* Your original padding */
+    border-bottom: 1px solid #ddd;
+    background-color: #fff; /* Added background for clarity */
+    position: sticky; /* Added for sticky nav */
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Added subtle shadow */
+  }
+  
+  .navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex; /* ** MODIFIED: Make navbar a flex container ** */
+    align-items: center; /* ** ADDED: Vertically align brand and nav links ** */
+    /* justify-content: space-between; -- We will try to avoid this to keep main-nav centered */
+  }
+  
+  /* --- NEW STYLES FOR BRAND (Logo + Name) --- */
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-right: auto; /* ** ADDED: Push the navigation links to the right of the brand ** */
+                       /* This effectively makes the brand take the left-most space */
+  }
+  
+  .navbar-logo-image {
+    height: 35px;   /* <<<--- ADJUST THIS VALUE TO CONTROL LOGO SIZE */
+    width: auto;    /* Maintain aspect ratio */
+    margin-right: 0.5rem; /* Space between logo and name */
+  }
+  
+  .navbar-app-name {
+    font-size: 1.4rem; /* Adjust as needed */
+    font-weight: 700;
+    color: var(--brand-text-color, var(--accent)); /* Use your brand green */
+    text-transform: uppercase;
+  }
+  /* --- END OF NEW BRAND STYLES --- */
+  
+  
+  /* YOUR EXISTING .main-nav and .nav-item styles */
+  .main-nav {
+    display: flex;
+    list-style: none;
+    gap: 2rem; /* Your original gap */
+    justify-content: center; /* Your original centering */
+    padding: 0;
+    margin: 0;
+    /* flex-grow: 1; -- Potentially add this if centering is off with the brand */
+  }
+  
+  .nav-item {
+    padding: 0.5rem 0; /* Your original padding */
+    cursor: pointer;
+    color: var(--text);
+    position: relative;
+  }
+  
+  .nav-item a { /* General link styling for NavLink */
+    text-decoration: none;
+    color: var(--nav-link-color, var(--text)); /* Using variable for consistency */
+    font-weight: 500;
+    padding: 0.25rem 0.5rem; /* Added some padding for better click target */
+    border-radius: 4px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  
+  .nav-item a:hover, /* Hover for all nav links */
+  .nav-item a.active-link-class { /* Active style for NavLink */
+    color: var(--nav-link-hover-color, var(--accent));
+    /* Optional: background-color: rgba(var(--accent-rgb, 0,128,0), 0.08); */
+  }
+  
+  .nav-item a.active-link-class {
+      font-weight: 600; /* Bolder active link */
+  }
+  
+  /* Assuming NavLink active class is 'active-link-class' or just 'active' */
+  .nav-item a.active-link-class::after { /* Your existing active underline */
+    content: '';
+    position: absolute;
+    bottom: 0; /* Original bottom */
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+  
+  /* --- NEW STYLES FOR NAV BUTTON (if you want Sign Up to look like a button) --- */
+  .nav-item a.nav-button-style {
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-left: 0.5rem; /* Space from other links */
+    color: white; /* Default button text color */
+    background-color: var(--accent);
+    border: 2px solid var(--accent);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .nav-item a.nav-button-style.signup-button-style:hover {
+    background-color: var(--accent-dark, #549d54); /* Define --accent-dark if not present */
+    border-color: var(--accent-dark, #77c677);
+    color: white;
+  }
+  /* --- END OF NEW NAV BUTTON STYLES --- */
+  
+  
+  /* --- YOUR EXISTING STYLES for footer, animations, responsive sections below --- */
+  /* ... (all your styles from .footer onwards, including media queries) ... */
+  /* ... ENSURE the responsive media queries for .navbar and .main-nav are checked ... */
+  
+  /* --- Potential responsive adjustments for the modified navbar --- */
+  @media (max-width: 850px) { /* Or your preferred breakpoint */
+    .navbar {
+      flex-direction: column; /* Stack brand and nav links */
+      align-items: flex-start; /* Align brand to the start */
+    }
+    .navbar-brand {
+      margin-bottom: 0.75rem; /* Space when stacked */
+      margin-right: 0; /* Reset margin */
+    }
+    .main-nav {
+      width: 100%; /* Nav links take full width */
+      justify-content: flex-start; /* Align links to the start */
+      flex-direction: column; /* Stack li items */
+      align-items: flex-start; /* Align li items to start */
+      gap: 0.2rem;
+    }
+    .nav-item {
+      width: 100%; /* Make list items full width */
+    }
+    .nav-item a { /* Make links full width */
+        display: block;
+        padding: 0.8rem 0.5rem;
+    }
+    .nav-item a.active-link-class::after {
+      left: 0.5rem; width: 30px; transform: none;
+    }
+    .nav-item a.nav-button-style {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        text-align: center;
+        display: inline-block; /* So it doesn't take full width unless intended */
+        width: auto;
+    }
+  }
+  
+  @media (max-width: 480px) {
+      .navbar-logo-image { height: 30px; margin-right: 0.4rem;}
+      .navbar-app-name { font-size: 1.2rem; }
+      .nav-container { padding: 0.8rem 1rem; }
+  }
+  
+  /* Fallback for icons if images fail (from your original code) */
+  .feature-icon { /* Your original .feature-icon style */
+      width: 60px;
+      height: 60px;
+      margin-bottom: 15px;
+  }
+  .icon-fallback {
+      display: inline-block; padding: 10px; background-color: #eee;
+      border-radius: 4px; font-size: 0.8rem; color: #555; text-align: center;
+  }
+  .icon-fallback-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 50px; height: 50px; border-radius: 50%; background-color: var(--accent);
+      color: white; font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;
+  }

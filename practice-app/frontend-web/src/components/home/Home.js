@@ -1,31 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-// import Navbar from '../common/Navbar'; // Removed this
+import { Link, NavLink } from 'react-router-dom'; // Using NavLink for active class
 import './Home.css';
 
-// Mock eco-tips since /api/v1/waste/suggestions/ requires authentication
+// Mock eco-tips and badges (keeping these from your original code)
 const mockEcoTips = [
     { id: 1, text: 'Switch to reusable bags to cut plastic waste.', related_category: 'Plastic', topic: 'Waste Reduction' },
     { id: 2, text: 'Compost food scraps to enrich your garden soil.', related_category: 'Organic', topic: 'Waste Reduction' },
     { id: 3, text: 'Recycle old electronics at certified centers.', related_category: 'Electronic', topic: 'Waste Reduction' },
     { id: 4, text: 'Fix leaks to conserve water at home.', related_category: null, topic: 'Water Conservation' },
 ];
-
-// Mock badges
 const mockBadges = [
     { name: 'First Step', description: 'Log your first waste reduction', icon: '/icons/first-step.png' },
     { name: 'Plastic Buster', description: 'Reduce 10 kg of plastic waste', icon: '/icons/plastic-buster.png' },
     { name: 'Sustainability Streak', description: 'Log waste reduction for 7 days', icon: '/icons/streak.png' },
 ];
+// Icon component (assuming you have this or similar)
+const Icon = ({ name, className = "" }) => {
+    const icons = {
+        leaf: '🌿', // For footer logo
+        arrowLeft: '←', // For carousel
+        arrowRight: '→', // For carousel
+        quote: '❝', // For testimonials
+        // Example for feature icons if paths are an issue
+        logWaste: '/icons/waste.png',
+        joinChallenges: '/icons/challenge.png',
+        earnRewards: '/icons/reward.png',
+    };
+    if (name === 'logWaste' || name === 'joinChallenges' || name === 'earnRewards') {
+        return <img src={icons[name]} alt={name} className={`feature-icon ${className}`} onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML += `<span class="icon-fallback">${name.replace(/([A-Z])/g, ' $1').trim()}</span>`; }} />;
+    }
+    return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
+};
+
 
 const Home = () => {
     const [currentTip, setCurrentTip] = useState(0);
 
-    // Carousel auto-scroll for eco-tips
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentTip((prev) => (prev + 1) % mockEcoTips.length);
-        }, 5000); // Change tip every 5 seconds
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
 
@@ -38,35 +52,43 @@ const Home = () => {
     };
 
     return (
-        <div className="home-container">
-            {/* === New Navigation Bar START === */}
+        <div className="home-container"> {/* Renamed to home-page-wrapper in previous advanced example, but keeping home-container as per your CSS */}
+            {/* === Updated Navigation Bar START === */}
             <div className="nav-container">
-                <nav className="navbar">
+                <nav className="navbar"> {/* This will be display: flex */}
+                    {/* Logo and App Name - Added Here */}
+                    <Link to="/" className="navbar-brand">
+                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
+                        <span className="navbar-app-name">GREENER</span>
+                    </Link>
+
                     <ul className="main-nav">
-                        <li className="nav-item active"> {/* Home is active */}
-                            <Link to="/">Home</Link>
+                        {/* Using NavLink for active class styling */}
+                        <li className="nav-item">
+                            <NavLink to="/" className={({isActive}) => isActive ? "active-link-class" : ""}>Home</NavLink>
                         </li>
                         <li className="nav-item">
-                            <Link to="/about">About us</Link>
+                            <NavLink to="/about" className={({isActive}) => isActive ? "active-link-class" : ""}>About us</NavLink>
                         </li>
                         <li className="nav-item">
-                            <Link to="/blog">Blog</Link>
+                            <NavLink to="/blog" className={({isActive}) => isActive ? "active-link-class" : ""}>Blog</NavLink>
+                        </li>
+                        {/* Adding Pricing back as it's a common public page */}
+                        
+                        <li className="nav-item">
+                            <NavLink to="/login" className={({isActive}) => isActive ? "active-link-class" : ""}>Login</NavLink>
                         </li>
                         <li className="nav-item">
-                            <Link to="/login">Login</Link>
+                            <NavLink to="/signup" className="nav-button-style signup-button-style">Sign Up</NavLink>
                         </li>
-                        <li className="nav-item">
-                        <Link to="/signup">Sign Up</Link>
-            </li>
                     </ul>
                 </nav>
             </div>
-            {/* === New Navigation Bar END === */}
-
-            {/* Removed: <Navbar isAuthenticated={false} /> */}
+            {/* === Updated Navigation Bar END === */}
 
             {/* Hero Section */}
             <section className="hero-section">
+                {/* ... (rest of your hero section JSX) ... */}
                 <div className="hero-content">
                     <h1>Make Every Day a Zero Waste Day</h1>
                     <p>Join our community to track waste, earn rewards, and live sustainably!</p>
@@ -83,21 +105,22 @@ const Home = () => {
 
             {/* Mission Section */}
             <section className="mission-section">
+                 {/* ... (rest of your mission section JSX) ... */}
                 <h2>Why Zero Waste Challenge?</h2>
                 <p>Empower yourself to reduce waste, set goals, and join a global movement for sustainability.</p>
                 <div className="mission-features">
                     <div className="feature">
-                        <img src="/icons/waste.png" alt="Waste Tracking" className="feature-icon" />
+                        <Icon name="logWaste" /> {/* Using Icon component */}
                         <h3>Log Waste</h3>
                         <p>Track your waste reduction with detailed logs by category and quantity.</p>
                     </div>
                     <div className="feature">
-                        <img src="/icons/challenge.png" alt="Challenges" className="feature-icon" />
+                        <Icon name="joinChallenges" /> {/* Using Icon component */}
                         <h3>Join Challenges</h3>
                         <p>Participate in fun community challenges to reduce waste together.</p>
                     </div>
                     <div className="feature">
-                        <img src="/icons/reward.png" alt="Rewards" className="feature-icon" />
+                        <Icon name="earnRewards" /> {/* Using Icon component */}
                         <h3>Earn Rewards</h3>
                         <p>Unlock badges and virtual eco-world achievements for your efforts.</p>
                     </div>
@@ -106,9 +129,10 @@ const Home = () => {
 
             {/* Eco-Tips Carousel */}
             <section className="tips-section">
+                 {/* ... (rest of your tips section JSX) ... */}
                 <h2>Sustainability Tips</h2>
                 <div className="tips-carousel">
-                    <button className="carousel-arrow left" onClick={handlePrevTip}>←</button>
+                    <button className="carousel-arrow left" onClick={handlePrevTip}><Icon name="arrowLeft" /></button>
                     <div className="tip-card">
                         <p>{mockEcoTips[currentTip].text}</p>
                         <span className="tip-category">
@@ -117,18 +141,19 @@ const Home = () => {
                                 : `Topic: ${mockEcoTips[currentTip].topic}`}
                         </span>
                     </div>
-                    <button className="carousel-arrow right" onClick={handleNextTip}>→</button>
+                    <button className="carousel-arrow right" onClick={handleNextTip}><Icon name="arrowRight" /></button>
                 </div>
             </section>
 
             {/* Rewards Showcase */}
             <section className="rewards-section">
+                {/* ... (rest of your rewards section JSX) ... */}
                 <h2>Unlock Amazing Rewards</h2>
                 <p>Earn badges and build your virtual eco-world as you reduce waste!</p>
                 <div className="rewards-grid">
                     {mockBadges.map((badge) => (
                         <div key={badge.name} className="reward-card">
-                            <img src={badge.icon} alt={badge.name} className="reward-icon" />
+                            <img src={badge.icon} alt={badge.name} className="reward-icon" onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML += `<span class="icon-fallback-badge">${badge.name.charAt(0)}</span>`; }}/>
                             <h3>{badge.name}</h3>
                             <p>{badge.description}</p>
                         </div>
@@ -138,14 +163,15 @@ const Home = () => {
 
             {/* Testimonials Section */}
             <section className="testimonials-section">
+                {/* ... (rest of your testimonials section JSX) ... */}
                 <h2>Our Community</h2>
                 <div className="testimonials">
                     <div className="testimonial">
-                        <p>"Logging my waste helped me reduce plastic by 10 kg and earn my Plastic Buster badge!"</p>
+                        <p><Icon name="quote" /> "Logging my waste helped me reduce plastic by 10 kg and earn my Plastic Buster badge!"</p>
                         <span>- Emma, Eco Explorer</span>
                     </div>
                     <div className="testimonial">
-                        <p>"The challenges are so motivating! I love competing with my friends."</p>
+                        <p><Icon name="quote" /> "The challenges are so motivating! I love competing with my friends."</p>
                         <span>- Liam, Green Starter</span>
                     </div>
                 </div>
@@ -153,15 +179,15 @@ const Home = () => {
 
             {/* Footer */}
             <footer className="footer">
+                {/* ... (rest of your footer JSX) ... */}
                 <div className="footer-content">
-                    <div className="footer-logo">Greener</div>
+                    <div className="footer-logo"><Icon name="leaf" /> Greener</div> {/* Using Icon component */}
                     <ul className="footer-links">
-                        <li><Link to="/">Home</Link></li> {/* Updated to / */}
+                        <li><Link to="/">Home</Link></li>
                         <li><Link to="/about">About Us</Link></li>
                         <li><Link to="/blog">Blog</Link></li>
-                        {/* You might want to add Login here too for consistency */}
                     </ul>
-                    <p>© 2025 Greener. All rights reserved.</p>
+                    <p>© {new Date().getFullYear()} Greener. All rights reserved.</p> {/* Dynamic year */}
                 </div>
             </footer>
         </div>

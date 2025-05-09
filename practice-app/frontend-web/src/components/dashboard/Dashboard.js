@@ -77,7 +77,7 @@ const Dashboard = () => {
             <header className="dashboard-top-nav">
                 <Link to="/" className="app-logo">
                     <Icon name="logo" />
-                    GreenerLife
+                    Greener
                 </Link>
                 <nav className="main-actions-nav">
                 <NavLink to="/dashboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>

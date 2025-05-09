@@ -40,6 +40,10 @@ const BlogPage = () => {
             {/* --- Navigation Bar (Using NavLink for active state) --- */}
              <div className="nav-container">
                 <nav className="navbar">
+                <Link to="/" className="navbar-brand">
+                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
+                        <span className="navbar-app-name">GREENER</span>
+                    </Link>
                     <ul className="main-nav">
                         <li className="nav-item">
                             <NavLink to="/" className={({isActive}) => isActive ? "active-link-class" : ""}>Home</NavLink>
@@ -54,7 +58,7 @@ const BlogPage = () => {
                             <NavLink to="/login" className={({isActive}) => isActive ? "active-link-class" : ""}>Login</NavLink>
                         </li>
                          <li className="nav-item">
-                            <NavLink to="/signup" className={({isActive}) => isActive ? "active-link-class" : ""}>Sign Up</NavLink>
+                            <NavLink to="/signup" className="nav-button-style signup-button-style">Sign Up</NavLink>
                         </li>
                     </ul>
                 </nav>

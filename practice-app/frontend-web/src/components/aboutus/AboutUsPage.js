@@ -39,6 +39,10 @@ const AboutUsPage = () => {
             {/* --- Navigation Bar (from original login.js style) --- */}
             <div className="nav-container">
                 <nav className="navbar">
+                <Link to="/" className="navbar-brand">
+                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
+                        <span className="navbar-app-name">GREENER</span>
+                    </Link>
                     <ul className="main-nav">
                         <li className="nav-item">
                             <NavLink to="/" className={({isActive}) => isActive ? "active-link-class" : ""}>Home</NavLink>
@@ -53,7 +57,7 @@ const AboutUsPage = () => {
                             <NavLink to="/login" className={({isActive}) => isActive ? "active-link-class" : ""}>Login</NavLink>
                         </li>
                         <li className="nav-item">
-                        <Link to="/signup">Sign Up</Link>
+                        <Link to="/signup"className="nav-button-style signup-button-style">Sign Up</Link>
             </li>
                     </ul>
                 </nav>

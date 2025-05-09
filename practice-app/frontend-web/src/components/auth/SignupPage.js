@@ -62,6 +62,10 @@ const SignupPage = () => {
     <div className="login-page signup-page"> {/* Added signup-page for specific scoping if needed */}
       <div className="nav-container">
         <nav className="navbar">
+        <Link to="/" className="navbar-brand">
+                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
+                        <span className="navbar-app-name">GREENER</span>
+                    </Link>
           <ul className="main-nav">
             <li className="nav-item">
               <Link to="/">Home</Link>
@@ -76,7 +80,7 @@ const SignupPage = () => {
               <Link to="/login">Login</Link>
             </li>
             <li className="nav-item active"> {/* Sign Up is active */}
-              <Link to="/signup">Sign Up</Link>
+              <Link to="/signup"className="nav-button-style signup-button-style">Sign Up</Link>
             </li>
           </ul>
         </nav>

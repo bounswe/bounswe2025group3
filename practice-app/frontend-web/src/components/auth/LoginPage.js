@@ -52,6 +52,10 @@ const LoginPage = () => {
         <div className="login-page">
             <div className="nav-container">
                 <nav className="navbar">
+                <Link to="/" className="navbar-brand">
+                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
+                        <span className="navbar-app-name">GREENER</span>
+                    </Link>
                     <ul className="main-nav">
                         <li className="nav-item"> {/* Removed 'active' class from Home */}
                             <Link to="/">Home</Link>
@@ -66,7 +70,7 @@ const LoginPage = () => {
                             <Link to="/login">Login</Link>
                         </li>
                         <li className="nav-item">
-                        <Link to="/signup">Sign Up</Link>
+                        <Link to="/signup"className="nav-button-style signup-button-style">Sign Up</Link>
             </li>
                     </ul>
                 </nav>

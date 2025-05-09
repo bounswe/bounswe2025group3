@@ -120,7 +120,7 @@ const WasteLog = () => {
             {/* --- Top Navigation Bar --- */}
             <header className="dashboard-top-nav">
                 <Link to="/" className="app-logo">
-                    <Icon name="logo" /> GreenerLife
+                    <Icon name="logo" /> Greener
                 </Link>
                 <nav className="main-actions-nav">
                     {/* Add Dashboard link here */}
