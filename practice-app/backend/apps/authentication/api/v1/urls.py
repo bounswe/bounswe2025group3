@@ -1,13 +1,12 @@
 from django.urls import path, include, re_path
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView, PasswordChangeView
 
-from .views import RegisterView, LoginView, GoogleLoginView, ProtectedTestView
+from .views import RegisterView, LoginView, ProtectedTestView
 
 urlpatterns = [
     # Custom Views (already refactored)
     path('register/', RegisterView.as_view(), name='rest_register'), 
     path('login/', LoginView.as_view(), name='rest_login'),       
-    path('google/', GoogleLoginView.as_view(), name='google_login'),
     path('test-protected/', ProtectedTestView.as_view(), name='test-protected'),
 
     # Manually added dj-rest-auth password URLs

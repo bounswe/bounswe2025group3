@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env.local file
+load_dotenv(Path(__file__).resolve().parent.parent / '.env.local')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -187,9 +192,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_ADAPTER = 'allauth.account.adapter.DefaultAccountAdapter'
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
-ACCOUNT_LOGOUT_ON_GET = False # Use POST for logout for security
+ACCOUNT_LOGOUT_ON_GET = True  # Allow logout with a GET request
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/login/'  # Redirect to login page after logout
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_SESSION_REMEMBER = None # Or True
 ACCOUNT_USERNAME_BLACKLIST = []
@@ -205,15 +210,29 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
+        },
+        # You need to replace these with your actual Google API credentials
+        'APP': {
+            'client_id': os.getenv('GOOGLE_CLIENT_ID'),
+            'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
+            'key': ''
         }
-        # Add 'APP' dictionary with 'client_id' and 'secret' from Google Cloud Console
-        # 'APP': {
-        #     'client_id': 'YOUR_GOOGLE_CLIENT_ID',
-        #     'secret': 'YOUR_GOOGLE_CLIENT_SECRET',
-        #     'key': ''
-        # }
     }
 }
+
+# Skip the intermediate social login confirmation page
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+# Auto-connect social accounts to existing users with the same email
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+
+# Automatically connect social accounts to existing Django users with matching email
+SOCIALACCOUNT_ADAPTER = 'apps.authentication.adapters.CustomSocialAccountAdapter'
+
+# Where to redirect after successful login
+LOGIN_REDIRECT_URL = '/waste/'  # Redirect to the waste dashboard
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

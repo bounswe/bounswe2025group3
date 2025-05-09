@@ -9,6 +9,7 @@ requests
 Pillow
 drf-spectacular
 psycopg2-binary==2.9.9
+python-dotenv
 
 # Testing dependencies
 pytest>=7.4.0

@@ -67,6 +67,49 @@
             text-align: center;
             display: none;
         }
+        /* Google login button styles */
+        .or-divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        .or-divider:before, .or-divider:after {
+            content: "";
+            position: absolute;
+            height: 1px;
+            background-color: #ddd;
+            top: 50%;
+            width: 45%;
+        }
+        .or-divider:before {
+            left: 0;
+        }
+        .or-divider:after {
+            right: 0;
+        }
+        .google-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            color: #757575;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .google-button img {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+        #google-signin-container {
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -85,9 +128,18 @@
             <button type="submit">Login</button>
             <div id="errorMessage" class="error-message"></div>
         </form>
+        
+        <div class="or-divider">OR</div>
+        
+        {% load socialaccount %}
+        <a href="{% provider_login_url 'google' %}" class="google-button">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo">
+            Sign in with Google
+        </a>
+        
         <a href="/register/" class="register-link">Don't have an account? Register</a>
-        <!-- OAuth buttons can be added here later -->
     </div>
+
     <script>
         // Check if user just registered
         const urlParams = new URLSearchParams(window.location.search);
@@ -140,6 +192,12 @@
                 errorMessage.style.display = 'block';
             }
         });
+        
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
     </script>
 </body>
 </html>
