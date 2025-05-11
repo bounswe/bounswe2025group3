@@ -35,6 +35,7 @@ const AdminDashboardStaticContent = memo(({
   searchQueryUsers,
   handleUserSearch,
   isRenderCategoryRequestButtonAlways = false,
+  router,
 }: {
   stats: AdminStats | null;
   isUserManagementVisible: boolean;
@@ -42,6 +43,7 @@ const AdminDashboardStaticContent = memo(({
   searchQueryUsers: string;
   handleUserSearch: (text: string) => void;
   isRenderCategoryRequestButtonAlways?: boolean;
+  router: any;
 }) => {
   return (
     <>
@@ -69,7 +71,7 @@ const AdminDashboardStaticContent = memo(({
         
         <TouchableOpacity 
           style={styles.actionButton}
-          onPress={toggleUserManagementVisibility}
+          onPress={() => router.push('/admin/user-management')}
         >
           <View style={styles.actionIconContainer}>
             <Ionicons name="people" size={24} color="#FFFFFF" />
@@ -78,33 +80,14 @@ const AdminDashboardStaticContent = memo(({
             <ThemedText style={styles.actionTitle}>User Management</ThemedText>
             <ThemedText style={styles.actionDescription}>View, edit, and manage user accounts</ThemedText>
           </View>
-          <Ionicons name={isUserManagementVisible ? "chevron-down" : "chevron-forward"} size={24} color="#666" />
+          <Ionicons name="chevron-forward" size={24} color="#666" />
         </TouchableOpacity>
-        
-        {isUserManagementVisible && (
-          <View style={styles.userSearchContainerOutsideList}> 
-            <Ionicons name="search" size={20} color="#666" style={styles.userSearchIcon} />
-            <TextInput
-              style={styles.userSearchInput}
-              placeholder="Search users..."
-              value={searchQueryUsers}
-              onChangeText={handleUserSearch}
-              autoCapitalize="none"
-              blurOnSubmit={false}
-              keyboardShouldPersistTaps="always"
-            />
-            {searchQueryUsers.length > 0 && (
-              <TouchableOpacity onPress={() => handleUserSearch("")}>
-                <Ionicons name="close-circle" size={20} color="#666" />
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
         
         {/* Render Category Requests button if not expanding users OR if explicitly told to always render */}
         {(isRenderCategoryRequestButtonAlways || !isUserManagementVisible) && (
           <TouchableOpacity 
             style={styles.actionButton}
+            onPress={() => router.push('/admin/category-requests')}
           >
             <View style={[styles.actionIconContainer, { backgroundColor: '#FF9800' }]}>
               <Ionicons name="list" size={24} color="#FFFFFF" />
@@ -113,7 +96,7 @@ const AdminDashboardStaticContent = memo(({
               <ThemedText style={styles.actionTitle}>Category Requests</ThemedText>
               <ThemedText style={styles.actionDescription}>Approve or reject category requests</ThemedText>
             </View>
-            <Ionicons name={"chevron-forward"} size={24} color="#666" />
+            <Ionicons name="chevron-forward" size={24} color="#666" />
           </TouchableOpacity>
         )}
       </View>
@@ -150,8 +133,16 @@ export default function AdminDashboard() {
       let pendingRequests = 0;
       
       if (requestsResponse.ok) {
-        const requestsData = await requestsResponse.json();
-        pendingRequests = requestsData.length || 0;
+        const data = await requestsResponse.json();
+        // Handle paginated response format (results field)
+        const requestsData = data.results || data;
+        
+        if (Array.isArray(requestsData)) {
+          pendingRequests = requestsData.filter((req: any) => req.status === 'pending').length || 0;
+        } else {
+          pendingRequests = 0;
+          console.error('Unexpected format for category requests data:', data);
+        }
       }
       
       setStats({
@@ -171,10 +162,10 @@ export default function AdminDashboard() {
       const response = await TokenManager.authenticatedFetch(API_ENDPOINTS.USER.USERS);
       if (response.ok) {
         const data = await response.json();
-        setUsers(data.results);
-        setFilteredUsers(data.results);
+        setUsers(data.results || []);
+        setFilteredUsers(data.results || []);
       } else {
-        console.error('Failed to fetch users list');
+        console.error('Failed to fetch users list, status:', response.status);
         Alert.alert("Error", "Failed to fetch users list.");
       }
     } catch (error) {
@@ -347,14 +338,16 @@ export default function AdminDashboard() {
       searchQueryUsers={searchQueryUsers}
       handleUserSearch={handleUserSearch}
       isRenderCategoryRequestButtonAlways={false}
+      router={router}
     />
-  ), [stats, isUserManagementVisible, searchQueryUsers]);
+  ), [stats, isUserManagementVisible, searchQueryUsers, router, handleUserSearch, toggleUserManagementVisibility]);
 
   const ListFooter = useMemo(() => (
     isUserManagementVisible ? (
       <View style={styles.footerContainer}> 
         <TouchableOpacity 
           style={styles.actionButton}
+          onPress={() => router.push('/admin/category-requests')}
         >
           <View style={[styles.actionIconContainer, { backgroundColor: '#FF9800' }]}>
             <Ionicons name="list" size={24} color="#FFFFFF" />
@@ -363,11 +356,11 @@ export default function AdminDashboard() {
             <ThemedText style={styles.actionTitle}>Category Requests</ThemedText>
             <ThemedText style={styles.actionDescription}>Approve or reject category requests</ThemedText>
           </View>
-          <Ionicons name={"chevron-forward"} size={24} color="#666" />
+          <Ionicons name="chevron-forward" size={24} color="#666" />
         </TouchableOpacity>
       </View>
     ) : null
-  ), [isUserManagementVisible]);
+  ), [isUserManagementVisible, router]);
 
   return (
     <ThemedView style={styles.container}>
@@ -377,8 +370,8 @@ export default function AdminDashboard() {
         <>
           {isUserManagementVisible ? (
             <FlatList
-              key={contentKey}
-              data={filteredUsers}
+              key={`user-list-${contentKey}`}
+              data={filteredUsers || []}
               renderItem={renderUserItem}
               keyExtractor={(item) => item.id.toString()}
               ListHeaderComponent={ListHeader}
@@ -420,6 +413,7 @@ export default function AdminDashboard() {
                 searchQueryUsers={searchQueryUsers}
                 handleUserSearch={handleUserSearch}
                 isRenderCategoryRequestButtonAlways={true}
+                router={router}
               />
             </ScrollView>
           )}

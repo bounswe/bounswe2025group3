@@ -18,15 +18,16 @@ import {
 interface CategoryRequest {
   id: number;
   name: string;
-  description: string;
-  suggested_category: string;
+  description: string | null;
+  suggested_category: number | null;
   unit: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  user: {
+  status: 'pending' | 'approved' | 'rejected';
+  admin_notes: string | null;
+  user?: {  // Make user optional since it's not in the API response
     id: number;
     username: string;
     email: string;
-  };
+  } | number;
 }
 
 export default function CategoryRequestsScreen() {
@@ -44,13 +45,27 @@ export default function CategoryRequestsScreen() {
       
       if (response.ok) {
         const data = await response.json();
-        setRequests(data);
-        setFilteredRequests(data);
+        
+        // Handle paginated response format
+        const requestsData = data.results || data;
+        
+        if (Array.isArray(requestsData)) {
+          setRequests(requestsData);
+          setFilteredRequests(requestsData);
+        } else {
+          console.error('Unexpected format for category requests data:', data);
+          setRequests([]);
+          setFilteredRequests([]);
+        }
       } else {
         console.error('Failed to fetch category requests');
+        setRequests([]);
+        setFilteredRequests([]);
       }
     } catch (error) {
       console.error('Error fetching category requests:', error);
+      setRequests([]);
+      setFilteredRequests([]);
     } finally {
       setIsLoading(false);
       setRefreshing(false);
@@ -73,8 +88,8 @@ export default function CategoryRequestsScreen() {
     
     const filtered = requests.filter(request => 
       request.name.toLowerCase().includes(text.toLowerCase()) ||
-      request.description.toLowerCase().includes(text.toLowerCase()) ||
-      request.user.username.toLowerCase().includes(text.toLowerCase())
+      (request.description?.toLowerCase() || '').includes(text.toLowerCase()) ||
+      (typeof request.user === 'object' && request.user?.username.toLowerCase().includes(text.toLowerCase()))
     );
     
     setFilteredRequests(filtered);
@@ -100,12 +115,12 @@ export default function CategoryRequestsScreen() {
       if (response.ok) {
         // Update the request in our state
         const updatedRequests = requests.map(req => 
-          req.id === requestId ? { ...req, status: 'APPROVED' } : req
+          req.id === requestId ? { ...req, status: 'approved' as const } : req
         );
         setRequests(updatedRequests);
         setFilteredRequests(
           filteredRequests.map(req => 
-            req.id === requestId ? { ...req, status: 'APPROVED' } : req
+            req.id === requestId ? { ...req, status: 'approved' as const } : req
           )
         );
         
@@ -134,12 +149,12 @@ export default function CategoryRequestsScreen() {
       if (response.ok) {
         // Update the request in our state
         const updatedRequests = requests.map(req => 
-          req.id === requestId ? { ...req, status: 'REJECTED' } : req
+          req.id === requestId ? { ...req, status: 'rejected' as const } : req
         );
         setRequests(updatedRequests);
         setFilteredRequests(
           filteredRequests.map(req => 
-            req.id === requestId ? { ...req, status: 'REJECTED' } : req
+            req.id === requestId ? { ...req, status: 'rejected' as const } : req
           )
         );
         
@@ -154,7 +169,7 @@ export default function CategoryRequestsScreen() {
   };
 
   const renderRequestItem = ({ item }: { item: CategoryRequest }) => {
-    const isPending = item.status === 'PENDING';
+    const isPending = item.status === 'pending';
     
     return (
       <View style={styles.requestCard}>
@@ -162,29 +177,38 @@ export default function CategoryRequestsScreen() {
           <ThemedText style={styles.requestName}>{item.name}</ThemedText>
           <View style={[
             styles.statusBadge,
-            item.status === 'APPROVED' ? styles.approvedBadge : 
-            item.status === 'REJECTED' ? styles.rejectedBadge : 
+            item.status === 'approved' ? styles.approvedBadge : 
+            item.status === 'rejected' ? styles.rejectedBadge : 
             styles.pendingBadge
           ]}>
-            <ThemedText style={styles.statusBadgeText}>{item.status}</ThemedText>
+            <ThemedText style={styles.statusBadgeText}>
+              {item.status.toUpperCase()}
+            </ThemedText>
           </View>
         </View>
         
-        <ThemedText style={styles.requestDescription}>{item.description}</ThemedText>
-        
         <View style={styles.detailsContainer}>
           <View style={styles.detailRow}>
-            <ThemedText style={styles.detailLabel}>Category:</ThemedText>
-            <ThemedText style={styles.detailValue}>{item.suggested_category}</ThemedText>
+            <ThemedText style={styles.detailLabel}>Description:</ThemedText>
+            <ThemedText style={styles.detailValue}>
+              {item.description || 'No description provided'}
+            </ThemedText>
           </View>
           <View style={styles.detailRow}>
             <ThemedText style={styles.detailLabel}>Unit:</ThemedText>
             <ThemedText style={styles.detailValue}>{item.unit}</ThemedText>
           </View>
-          <View style={styles.detailRow}>
-            <ThemedText style={styles.detailLabel}>Requested by:</ThemedText>
-            <ThemedText style={styles.detailValue}>{item.user.username}</ThemedText>
-          </View>
+          {item.user && (
+            <View style={styles.detailRow}>
+              <ThemedText style={styles.detailLabel}>Requested by:</ThemedText>
+              <ThemedText style={styles.detailValue}>
+                {typeof item.user === 'object' && item.user.username ? 
+                  item.user.username : 
+                  typeof item.user === 'number' ? 
+                    `User #${item.user}` : ''}
+              </ThemedText>
+            </View>
+          )}
         </View>
         
         {isPending && (
