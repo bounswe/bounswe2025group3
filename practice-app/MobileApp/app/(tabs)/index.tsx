@@ -5,7 +5,8 @@ import { API_ENDPOINTS } from '@/constants/api';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View, ActivityIndicator, Image, SafeAreaView, RefreshControl } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface UserScore {
   user_id: number;
@@ -20,10 +21,20 @@ interface WasteLog {
   score: number;
 }
 
+// Mock eco-tips (similar to web frontend)
+const ecoTips = [
+  { id: 1, text: 'Switch to reusable bags to cut plastic waste.', related_category: 'Plastic', topic: 'Waste Reduction' },
+  { id: 2, text: 'Compost food scraps to enrich your garden soil.', related_category: 'Organic', topic: 'Waste Reduction' },
+  { id: 3, text: 'Recycle old electronics at certified centers.', related_category: 'Electronic', topic: 'Waste Reduction' },
+  { id: 4, text: 'Fix leaks to conserve water at home.', related_category: null, topic: 'Water Conservation' },
+];
+
 export default function HomeScreen() {
   const [userScore, setUserScore] = useState<UserScore | null>(null);
   const [recentLogs, setRecentLogs] = useState<WasteLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [currentTip, setCurrentTip] = useState(0);
   const router = useRouter();
 
   const fetchData = async () => {
@@ -45,41 +56,87 @@ export default function HomeScreen() {
       console.error('Error fetching dashboard data:', error);
     } finally {
       setIsLoading(false);
+      setRefreshing(false);
     }
   };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
       fetchData();
+      
+      // Rotate through eco tips every 5 seconds
+      const interval = setInterval(() => {
+        setCurrentTip((prev) => (prev + 1) % ecoTips.length);
+      }, 5000);
+      
+      return () => clearInterval(interval);
     }, [])
   );
 
+  const handlePrevTip = () => {
+    setCurrentTip((prev) => (prev - 1 + ecoTips.length) % ecoTips.length);
+  };
+
+  const handleNextTip = () => {
+    setCurrentTip((prev) => (prev + 1) % ecoTips.length);
+  };
+
   if (isLoading) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText>Loading...</ThemedText>
-      </ThemedView>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#56ea62" />
+      </View>
     );
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <ScrollView style={styles.content}>
+    <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={['#88eb9a', '#122e1a']}
+        style={styles.headerBackground}
+      >
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <Image 
+              source={require('@/assets/images/greener-logo.png')} 
+              style={styles.logo} 
+              resizeMode="contain"
+            />
+            <ThemedText style={styles.headerTitle}>GREENER</ThemedText>
+          </View>
+        </View>
+      </LinearGradient>
+
+      <ScrollView 
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#56ea62']} />
+        }
+      >
         {/* Welcome Section */}
         <View style={styles.welcomeSection}>
-          <ThemedText style={styles.welcomeText}>Dashboard</ThemedText>
+          <ThemedText style={styles.welcomeText}>Welcome to GREENER</ThemedText>
+          <ThemedText style={styles.subtitle}>Make Every Day a Zero Waste Day</ThemedText>
         </View>
 
         {/* Stats Card */}
         <View style={styles.statsCard}>
           <View style={styles.statsHeader}>
-            <Ionicons name="leaf" size={24} color="#2E7D32" />
+            <Ionicons name="leaf" size={24} color="#56ea62" />
             <ThemedText style={styles.statsTitle}>Your Impact Score</ThemedText>
           </View>
           <View style={styles.scoreContainer}>
-            <ThemedText style={styles.scoreValue}>
-              {userScore?.total_score?.toFixed(1) || '0.0'}
-            </ThemedText>
+            <View style={styles.scoreValueContainer}>
+              <ThemedText style={styles.scoreValue}>
+                {userScore?.total_score ? Number(userScore.total_score).toFixed(1) : '0.0'}
+              </ThemedText>
+            </View>
             <ThemedText style={styles.scoreLabel}>Environmental Impact Points</ThemedText>
           </View>
           <TouchableOpacity
@@ -87,8 +144,31 @@ export default function HomeScreen() {
             onPress={() => router.push('/waste')}
           >
             <ThemedText style={styles.viewAllText}>View Waste Log</ThemedText>
-            <Ionicons name="arrow-forward" size={20} color="#2E7D32" />
+            <Ionicons name="arrow-forward" size={20} color="#56ea62" />
           </TouchableOpacity>
+        </View>
+
+        {/* Eco-Tips Section (from web) */}
+        <View style={styles.tipsSection}>
+          <ThemedText style={styles.tipsTitle}>Sustainability Tips</ThemedText>
+          <View style={styles.tipsCarousel}>
+            <TouchableOpacity onPress={handlePrevTip} style={styles.carouselArrow}>
+              <Ionicons name="chevron-back" size={24} color="#ffffff" />
+            </TouchableOpacity>
+            
+            <View style={styles.tipCard}>
+              <ThemedText style={styles.tipText}>{ecoTips[currentTip].text}</ThemedText>
+              <ThemedText style={styles.tipCategory}>
+                {ecoTips[currentTip].related_category
+                  ? `Category: ${ecoTips[currentTip].related_category}`
+                  : `Topic: ${ecoTips[currentTip].topic}`}
+              </ThemedText>
+            </View>
+            
+            <TouchableOpacity onPress={handleNextTip} style={styles.carouselArrow}>
+              <Ionicons name="chevron-forward" size={24} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Recent Activity Section */}
@@ -105,7 +185,7 @@ export default function HomeScreen() {
               {recentLogs.map((log) => (
                 <View key={log.id} style={styles.activityItem}>
                   <View style={styles.activityIcon}>
-                    <Ionicons name="leaf-outline" size={24} color="#2E7D32" />
+                    <Ionicons name="leaf-outline" size={24} color="#56ea62" />
                   </View>
                   <View style={styles.activityContent}>
                     <ThemedText style={styles.activityTitle}>
@@ -128,7 +208,7 @@ export default function HomeScreen() {
             </View>
           ) : (
             <View style={styles.emptyState}>
-              <Ionicons name="leaf-outline" size={48} color="#A5D6A7" />
+              <Ionicons name="leaf-outline" size={48} color="#56ea62" />
               <ThemedText style={styles.emptyStateText}>
                 No recent waste logs. Start tracking your waste!
               </ThemedText>
@@ -147,44 +227,77 @@ export default function HomeScreen() {
           <ThemedText style={styles.comingSoonTitle}>Coming Soon</ThemedText>
           <View style={styles.comingSoonGrid}>
             <View style={styles.comingSoonItem}>
-              <Ionicons name="trophy-outline" size={32} color="#A5D6A7" />
+              <Ionicons name="trophy-outline" size={32} color="#56ea62" />
               <ThemedText style={styles.comingSoonText}>Challenges</ThemedText>
             </View>
             <View style={styles.comingSoonItem}>
-              <Ionicons name="people-outline" size={32} color="#A5D6A7" />
+              <Ionicons name="people-outline" size={32} color="#56ea62" />
               <ThemedText style={styles.comingSoonText}>Friends</ThemedText>
             </View>
             <View style={styles.comingSoonItem}>
-              <Ionicons name="trending-up-outline" size={32} color="#A5D6A7" />
+              <Ionicons name="trending-up-outline" size={32} color="#56ea62" />
               <ThemedText style={styles.comingSoonText}>Achievements</ThemedText>
             </View>
             <View style={styles.comingSoonItem}>
-              <Ionicons name="calendar-outline" size={32} color="#A5D6A7" />
+              <Ionicons name="calendar-outline" size={32} color="#56ea62" />
               <ThemedText style={styles.comingSoonText}>Events</ThemedText>
             </View>
           </View>
         </View>
       </ScrollView>
-    </ThemedView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E8F5E9'
+  },
+  headerBackground: {
+    paddingTop: 20,
+  },
+  header: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    letterSpacing: 1,
   },
   content: {
     flex: 1,
+    backgroundColor: '#ffffff',
+  },
+  scrollContent: {
+    paddingBottom: 40,
   },
   welcomeSection: {
     padding: 20,
-    paddingTop: 40,
+    backgroundColor: '#E8F5E9',
   },
   welcomeText: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '700',
     marginBottom: 8,
+    color: '#2E7D32',
   },
   subtitle: {
     fontSize: 16,
@@ -192,28 +305,52 @@ const styles = StyleSheet.create({
   },
   statsCard: {
     margin: 20,
-    padding: 20,
-    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: '#ffffff',
     borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   statsHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 1,
   },
   statsTitle: {
     fontSize: 18,
     fontWeight: '600',
     marginLeft: 8,
+    color: '#2E7D32',
   },
   scoreContainer: {
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 1,
+    paddingVertical: 10,
+  },
+  scoreValueContainer: {
+    padding: 8,
+    minWidth: 100, 
+    minHeight: 44, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f9f0', // Very light green background
+    borderRadius: 12,
   },
   scoreValue: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#2E7D32',
+    fontSize: 28,
+    fontWeight: '600',
+    color: '#56ea62',
+    marginBottom: 0,
+    includeFontPadding: false,
+    textAlign: 'center',
+    lineHeight: 32,
   },
   scoreLabel: {
     fontSize: 14,
@@ -224,14 +361,51 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,
-    backgroundColor: 'white',
+    backgroundColor: '#E8F5E9',
     borderRadius: 8,
   },
   viewAllText: {
-    color: '#2E7D32',
+    color: '#56ea62',
     fontSize: 16,
     fontWeight: '500',
     marginRight: 8,
+  },
+  tipsSection: {
+    padding: 20,
+    backgroundColor: 'rgba(18, 46, 26, 0.9)',
+  },
+  tipsTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 16,
+    color: '#ffffff',
+    textAlign: 'center',
+  },
+  tipsCarousel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  carouselArrow: {
+    padding: 8,
+  },
+  tipCard: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 12,
+    padding: 16,
+    marginHorizontal: 8,
+  },
+  tipText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  tipCategory: {
+    fontSize: 12,
+    color: '#56ea62',
+    textAlign: 'center',
   },
   section: {
     padding: 20,
@@ -245,10 +419,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '600',
+    color: '#2E7D32',
   },
   seeAllText: {
-    color: '#2E7D32',
+    color: '#56ea62',
     fontSize: 14,
+    fontWeight: '500',
   },
   activityList: {
     gap: 12,
@@ -257,14 +433,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#ffffff',
     borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#E8F5E9',
   },
   activityIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#E8F5E9',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -275,6 +461,7 @@ const styles = StyleSheet.create({
   activityTitle: {
     fontSize: 16,
     fontWeight: '500',
+    color: '#333',
   },
   activitySubtitle: {
     fontSize: 14,
@@ -287,14 +474,16 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   scoreText: {
-    color: '#2E7D32',
+    color: '#56ea62',
     fontWeight: '600',
   },
   emptyState: {
     alignItems: 'center',
     padding: 32,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#ffffff',
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E8F5E9',
   },
   emptyStateText: {
     fontSize: 16,
@@ -303,7 +492,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   addButton: {
-    backgroundColor: '#2E7D32',
+    backgroundColor: '#56ea62',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
@@ -315,29 +504,42 @@ const styles = StyleSheet.create({
   },
   comingSoonSection: {
     padding: 20,
+    backgroundColor: '#E8F5E9',
     marginTop: 8,
   },
   comingSoonTitle: {
     fontSize: 20,
     fontWeight: '600',
     marginBottom: 16,
+    color: '#2E7D32',
+    textAlign: 'center',
   },
   comingSoonGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 16,
+    justifyContent: 'center',
   },
   comingSoonItem: {
     flex: 1,
     minWidth: '45%',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     gap: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
   },
   comingSoonText: {
     fontSize: 14,
-    color: '#666',
+    color: '#2E7D32',
+    fontWeight: '500',
   },
-}); 
+});

@@ -7,6 +7,13 @@ import { Tabs } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
 
+// Define consistent colors from our web frontend
+const GREENER_COLORS = {
+  primary: '#2E7D32',
+  secondary: '#56ea62',
+  background: '#E8F5E9',
+};
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
@@ -20,7 +27,8 @@ export default function TabLayout() {
   return (
     <View style={styles.container}>
       <Tabs screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: GREENER_COLORS.secondary,
+        tabBarInactiveTintColor: GREENER_COLORS.primary,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
@@ -28,6 +36,15 @@ export default function TabLayout() {
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '500' as const,
+        },
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          borderTopColor: GREENER_COLORS.background,
+          elevation: 5,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
         },
         tabBarHideOnKeyboard: true,
       }}>
@@ -46,6 +63,6 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
   },
 });
