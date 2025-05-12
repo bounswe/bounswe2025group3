@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block title %}Goal Detail - {{ goal.category.name }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'goals_list' %}">Goals</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ goal.category.name }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">{{ goal.category.name }} Goal</h4>
+          <span class="badge bg-light text-dark">
+            {{ goal.get_goal_type_display }} | {{ goal.get_timeframe_display }}
+          </span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Goal Progress</h5>
+            <div class="progress mb-3" style="height: 25px;">
+              <div class="progress-bar" role="progressbar" 
+                   style="width: {{ goal.progress_percentage|floatformat:0 }}%;" 
+                   aria-valuenow="{{ goal.progress_percentage|floatformat:0 }}" 
+                   aria-valuemin="0" 
+                   aria-valuemax="100">
+                {{ goal.progress_percentage|floatformat:0 }}%
+              </div>
+            </div>
+            
+            <div class="row mb-4">
+              <div class="col-6 text-center">
+                <h6>Current</h6>
+                <h3>{{ goal.progress|floatformat:1 }} kg</h3>
+              </div>
+              <div class="col-6 text-center">
+                <h6>Target</h6>
+                <h3>{{ goal.target|floatformat:1 }} kg</h3>
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge {% if goal.is_complete %}bg-success{% else %}bg-primary{% endif %} p-2">
+                {% if goal.is_complete %}Completed{% else %}In Progress{% endif %}
+              </span>
+              <small class="text-muted">Started: {{ goal.created_at|date:"M d, Y" }}</small>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <h5>Statistics</h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Goal Type
+                <span>{{ goal.get_goal_type_display }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Category
+                <span>{{ goal.category.name }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Timeframe
+                <span>{{ goal.get_timeframe_display }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Remaining
+                <span>{{ goal.remaining|floatformat:1 }} kg</span>
+              </li>
+              {% if goal.days_left %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Days Left
+                <span>{{ goal.days_left }}</span>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      {% if not goal.is_complete %}
+      <div class="card-footer">
+        <div class="d-flex justify-content-end">
+          <button id="updateProgressBtn" class="btn btn-outline-primary">Record Progress</button>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Recent Activity</h5>
+      </div>
+      <div class="card-body">
+        {% if waste_logs %}
+          <ul class="list-group list-group-flush">
+            {% for log in waste_logs %}
+              <li class="list-group-item">
+                <div class="d-flex justify-content-between">
+                  <span>{{ log.amount }} kg</span>
+                  <small class="text-muted">{{ log.date|date:"M d, Y" }}</small>
+                </div>
+                <small>{{ log.notes|default:"No notes" }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted">No recent activity for this goal.</p>
+        {% endif %}
+      </div>
+      {% if waste_logs %}
+      <div class="card-footer">
+        <a href="/waste/logs/?category={{ goal.category.id }}" class="btn btn-sm btn-outline-secondary d-block">View All Logs</a>
+      </div>
+      {% endif %}
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Tips</h5>
+      </div>
+      <div class="card-body">
+        <p>Here are some tips to help you achieve your goal:</p>
+        <ul>
+          {% if goal.goal_type == 'reduction' %}
+            <li>Avoid single-use items when possible</li>
+            <li>Buy products with less packaging</li>
+            <li>Use reusable containers and bags</li>
+            <li>Plan meals to reduce food waste</li>
+          {% else %}
+            <li>Learn which items can be recycled in your area</li>
+            <li>Clean containers before recycling</li>
+            <li>Separate different types of recyclables</li>
+            <li>Find special recycling centers for electronics</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Progress Update Modal -->
+<div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="progressModalLabel">Update Progress for {{ goal.category.name }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="progressForm" method="post" action="{% url 'waste:waste-log-list-create' %}">
+          {% csrf_token %}
+          <input type="hidden" name="redirect_to" value="{% url 'goal_detail' goal.id %}">
+          
+          <div class="mb-3">
+              <label for="sub_category" class="form-label">Specific Item Type</label>
+              <select name="sub_category" id="sub_category" class="form-select" required>
+                  <option value="">Select specific item...</option>
+                  {% for sub_cat in sub_categories %}
+                      <option value="{{ sub_cat.id }}">{{ sub_cat.name }}</option>
+                  {% endfor %}
+              </select>
+              <div class="form-text">Select the specific type of item you are logging.</div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity (kg)</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="0.1" step="0.1" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="disposal_date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="disposal_date" name="disposal_date" value="{{ today|date:'Y-m-d' }}" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="notes" class="form-label">Notes (optional)</label>
+            <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="saveProgressBtn">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const updateProgressBtn = document.getElementById('updateProgressBtn');
+    const saveProgressBtn = document.getElementById('saveProgressBtn');
+    const progressForm = document.getElementById('progressForm');
+    const progressModal = new bootstrap.Modal(document.getElementById('progressModal'));
+    const csrfTokenInput = progressForm.querySelector('input[name="csrfmiddlewaretoken"]');
+    const redirectToInput = progressForm.querySelector('input[name="redirect_to"]');
+    
+    if (updateProgressBtn) {
+      updateProgressBtn.addEventListener('click', function() {
+        progressModal.show();
+      });
+    }
+    
+    if (saveProgressBtn) {
+      saveProgressBtn.addEventListener('click', async function() {
+        const quantityInput = document.getElementById('quantity');
+        const dateInput = document.getElementById('disposal_date');
+        const notesInput = document.getElementById('notes');
+        const subCategoryInput = document.getElementById('sub_category');
+        const csrfToken = csrfTokenInput ? csrfTokenInput.value : '';
+        const redirectToUrl = redirectToInput ? redirectToInput.value : window.location.href;
+
+        const formData = {
+          sub_category: subCategoryInput ? parseInt(subCategoryInput.value) : null,
+          quantity: quantityInput ? parseFloat(quantityInput.value) : null,
+          disposal_date: dateInput ? dateInput.value : null,
+          notes: notesInput ? notesInput.value : ''
+        };
+
+        if (!formData.sub_category || !formData.quantity || !formData.disposal_date) {
+          console.log('Null values:', formData);
+          alert('Please fill in all required fields.');
+          return;
+        }
+
+        saveProgressBtn.disabled = true;
+        saveProgressBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+
+        try {
+          const response = await api('v1/waste/logs/', {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify(formData) 
+          });
+
+          if (response && (response.id || (response.status && response.status >= 200 && response.status < 300)) ) {
+             window.location.href = redirectToUrl;
+          } else {
+             let errorMsg = 'Failed to save progress.';
+             if (response && response.detail) {
+               errorMsg = response.detail;
+             } else if (response) {
+               try {
+                 errorMsg = JSON.stringify(response);
+               } catch (e) { /* ignore */ }
+             }
+             alert(`Error: ${errorMsg}`);
+          }
+        } catch (error) {
+          console.error('Error submitting form:', error);
+          alert('An unexpected error occurred. Please try again.');
+        } finally {
+          saveProgressBtn.disabled = false;
+          saveProgressBtn.textContent = 'Save';
+        }
+      });
+    }
+  });
+</script>
+{% endblock %} 

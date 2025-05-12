@@ -5,6 +5,7 @@ from datetime import timedelta
 import uuid
 from django.utils.text import slugify
 import re
+import requests
 
 User = get_user_model()
 
@@ -46,19 +47,41 @@ class TokenService:
 class OAuthService:
     @staticmethod
     def verify_provider_token(provider, token):
-        # TODO: Implement actual Google token verification
-        # This is just a mock implementation
-        if provider == 'google' and token == 'valid_google_token':
+        print(f"Verifying {provider} token: {token[:10]}...")
+        
+        if provider == 'google':
             try:
-                # Here you would actually verify the token with Google
-                # For now, we just mock the response
-                return {
-                    'provider_user_id': 'google123',
-                    'email': 'googleuser@example.com'
+                # Google token verification endpoint
+                google_verify_url = 'https://www.googleapis.com/oauth2/v3/tokeninfo'
+                print(f"Making request to: {google_verify_url}?id_token={token[:10]}...")
+                
+                response = requests.get(f'{google_verify_url}?id_token={token}')
+                
+                print(f"Google API response: status={response.status_code}")
+                
+                if not response.ok:
+                    print(f"Google API error: {response.text}")
+                    return None
+                
+                google_data = response.json()
+                print(f"Google data received: {google_data.keys()}")
+                
+                # Extract relevant user info
+                result = {
+                    'provider_user_id': google_data.get('sub'),
+                    'email': google_data.get('email'),
+                    'first_name': google_data.get('given_name', ''),
+                    'last_name': google_data.get('family_name', '')
                 }
+                
+                print(f"Extracted user data: {result}")
+                return result
+                
             except Exception as e:
+                print(f"Google token verification error: {str(e)}")
                 return None
-        return None  # Return None for invalid tokens
+                
+        return None  # Unsupported provider or token verification failed
 
     @staticmethod
     def get_or_create(user, provider, provider_user_id):

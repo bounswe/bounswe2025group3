@@ -5,3 +5,4 @@ data.json
 .env
 postgres_data
 .coverage
+.env.local

@@ -18,6 +18,20 @@
       const res = await fetch(`/api/${path}`, options);
       return res.json();
     }
+
+    // Function to handle logout for both server and client-side auth
+    function handleLogout() {
+      // Clear localStorage tokens
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userId');
+      
+      // Redirect to the Django logout URL
+      window.location.href = "{% url 'account_logout' %}";
+      return false;
+    }
   </script>
 </head>
 <body>
@@ -36,8 +50,22 @@
         <li class="nav-item"><a class="nav-link" href="/leaderboard/">Leaderboard</a></li>
       </ul>
       <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="/login/">Login</a></li>
-        <li class="nav-item"><a class="nav-link" href="/register/">Register</a></li>
+        {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ user.email }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="{% url 'account_email' %}">Manage Email</a></li>
+              <li><a class="dropdown-item" href="{% url 'account_change_password' %}">Change Password</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#" onclick="return handleLogout();">Logout</a></li>
+            </ul>
+          </li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="/login/">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="/register/">Register</a></li>
+        {% endif %}
       </ul>
     </div>
   </div>
