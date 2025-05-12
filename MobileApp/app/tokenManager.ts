@@ -43,13 +43,13 @@ class TokenManager {
     }
   
     try {
-      const response = await fetch(`${API_BASE_URL}/api/token/refresh/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ refresh: refreshToken }),
-      });
+    const response = await fetch(`${API_BASE_URL}/api/token/refresh/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
   
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -128,13 +128,13 @@ class TokenManager {
   
     if (response.status === 401) {
       try {
-        // Token might have expired, try refreshing it
-        accessToken = await this.refreshAccessToken();
-        if (!accessToken) {
-          throw new Error("Unable to refresh access token.");
-        }
-    
-        response = await fetchWithToken(accessToken);
+      // Token might have expired, try refreshing it
+      accessToken = await this.refreshAccessToken();
+      if (!accessToken) {
+        throw new Error("Unable to refresh access token.");
+      }
+  
+      response = await fetchWithToken(accessToken);
         
         if (response.status === 401) {
           // If still getting 401 after refresh, clear tokens and throw error
@@ -152,4 +152,4 @@ class TokenManager {
 }
 
 // Export a single instance of TokenManager
-export default new TokenManager();
+export default new TokenManager(); 

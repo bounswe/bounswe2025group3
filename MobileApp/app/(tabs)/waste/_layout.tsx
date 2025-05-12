@@ -8,21 +8,15 @@ export default function WasteLayout() {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <Stack
-        screenOptions={{
-          headerShown: false,
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+        <Stack.Screen
+        name="index"
+        options={{
+            headerShown: false,
         }}
-      >
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="categories"
-          options={{
-            headerShown: false,
-          }}
         />
         <Stack.Screen
           name="add"
@@ -40,8 +34,8 @@ export default function WasteLayout() {
           name="custom_category_request"
           options={{
             headerShown: false,
-          }}
-        />
+        }}
+      />
       </Stack>
     </View>
   );

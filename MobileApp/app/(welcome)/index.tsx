@@ -25,7 +25,7 @@ export default function Index() {
           <View style={styles.header}>
             <Ionicons name="leaf" size={60} color="#2E7D32" style={sharedStyles.logo} />
             <Text style={styles.title}>Welcome to</Text>
-            <Text style={styles.appName}>ZeroWaste</Text>
+            <Text style={styles.appName}>Greener</Text>
             <Text style={styles.subtitle}>Join our community in making the world a better place</Text>
           </View>
 

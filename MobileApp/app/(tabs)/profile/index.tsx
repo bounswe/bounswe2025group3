@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from '@/constants/api';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Linking, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 interface UserProfile {
   id: number;
@@ -145,6 +145,21 @@ export default function ProfileScreen() {
               <ThemedText style={[styles.settingText, styles.logoutText]}>Logout</ThemedText>
             </View>
             <Ionicons name="chevron-forward" size={24} color="#666" />
+          </TouchableOpacity>
+        </View>
+
+        {/* About */}
+        <View style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>Contact Us</ThemedText>
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={() => Linking.openURL('https://github.com/bounswe/bounswe2025group3')}
+          >
+            <View style={styles.settingLeft}>
+              <Ionicons name="logo-github" size={24} color="#333" />
+              <ThemedText style={styles.settingText}>GitHub</ThemedText>
+            </View>
+            <Ionicons name="open-outline" size={24} color="#666" />
           </TouchableOpacity>
         </View>
       </ScrollView>

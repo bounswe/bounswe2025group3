@@ -23,6 +23,9 @@ export default function GoalsLayout() {
       <Stack.Screen
         name="[id]"
       />
+      <Stack.Screen
+        name="templates"
+      />
     </Stack>
   );
 } 

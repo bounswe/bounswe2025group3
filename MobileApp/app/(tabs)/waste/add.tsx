@@ -2,7 +2,7 @@ import TokenManager from '@/app/tokenManager';
 import CustomAlert from '@/components/CustomAlert';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { API_ENDPOINTS } from '@/constants/api';
+import { API_BASE_URL, API_ENDPOINTS } from '@/constants/api';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
@@ -53,18 +53,36 @@ export default function AddWasteScreen() {
     fetchCategories();
   }, []);
 
+  const fetchAllPages = async (url: string) => {
+    let allResults: SubCategory[] = [];
+    let currentUrl: string | null = url;
+    
+    while (currentUrl) {
+      const response = await TokenManager.authenticatedFetch(currentUrl);
+      if (!response.ok) break;
+      const data = await response.json();
+      allResults = allResults.concat(data.results || []);
+      
+      // If next URL is absolute, convert it to relative by removing the base URL
+      if (data.next) {
+        currentUrl = data.next.replace(API_BASE_URL, '');
+      } else {
+        currentUrl = null;
+      }
+    }
+    return allResults;
+  };
+
   const fetchCategories = async () => {
     try {
-      const [categoriesResponse, subCategoriesResponse] = await Promise.all([
-        TokenManager.authenticatedFetch(API_ENDPOINTS.WASTE.CATEGORIES),
-        TokenManager.authenticatedFetch(API_ENDPOINTS.WASTE.SUBCATEGORIES)
-      ]);
+      const categoriesResponse = await TokenManager.authenticatedFetch(API_ENDPOINTS.WASTE.CATEGORIES);
       
-      if (categoriesResponse.ok && subCategoriesResponse.ok) {
+      if (categoriesResponse.ok) {
         const categoriesData = await categoriesResponse.json();
-        const subCategoriesData = await subCategoriesResponse.json();
         setCategories(categoriesData.results || []);
-        setSubCategories(subCategoriesData.results || []);
+        
+        const allSubCategories = await fetchAllPages(API_ENDPOINTS.WASTE.SUBCATEGORIES);
+        setSubCategories(allSubCategories);
       }
     } catch (error) {
       console.error('Error fetching categories:', error);

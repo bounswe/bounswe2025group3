@@ -20,9 +20,31 @@ interface WasteLog {
   score: number;
 }
 
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  is_active: boolean;
+}
+
+interface Goal {
+  id: number;
+  category: Category;
+  goal_type: 'reduction' | 'recycling';
+  timeframe: 'daily' | 'weekly' | 'monthly';
+  target: number;
+  progress: number;
+  is_complete: boolean;
+  created_at: string;
+  start_date: string;
+  end_date: string;
+  status: string;
+}
+
 export default function HomeScreen() {
   const [userScore, setUserScore] = useState<UserScore | null>(null);
   const [recentLogs, setRecentLogs] = useState<WasteLog[]>([]);
+  const [activeGoals, setActiveGoals] = useState<Goal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -40,6 +62,17 @@ export default function HomeScreen() {
       if (logsResponse.ok) {
         const logsData = await logsResponse.json();
         setRecentLogs(logsData.results.slice(0, 5)); // Get only 5 most recent logs
+      }
+
+      // Fetch active goals
+      const goalsResponse = await TokenManager.authenticatedFetch(API_ENDPOINTS.GOALS.LIST);
+      if (goalsResponse.ok) {
+        const goalsData = await goalsResponse.json();
+        // Filter active goals and sort by end date
+        const active = goalsData.results
+          .filter((goal: Goal) => !goal.is_complete)
+          .sort((a: Goal, b: Goal) => new Date(a.end_date).getTime() - new Date(b.end_date).getTime());
+        setActiveGoals(active.slice(0, 3)); // Show top 3 active goals
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -89,6 +122,84 @@ export default function HomeScreen() {
             <ThemedText style={styles.viewAllText}>View Waste Log</ThemedText>
             <Ionicons name="arrow-forward" size={20} color="#2E7D32" />
           </TouchableOpacity>
+        </View>
+
+        {/* Active Goals Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <ThemedText style={styles.sectionTitle}>Active Goals</ThemedText>
+            <TouchableOpacity onPress={() => router.push('/goals')}>
+              <ThemedText style={styles.seeAllText}>See All</ThemedText>
+            </TouchableOpacity>
+          </View>
+
+          {activeGoals.length > 0 ? (
+            <View style={styles.goalsList}>
+              {activeGoals.map((goal) => (
+                <TouchableOpacity
+                  key={goal.id}
+                  style={styles.goalItem}
+                  onPress={() => router.push({
+                    pathname: "/goals/[id]",
+                    params: { id: goal.id }
+                  })}
+                >
+                  <View style={styles.goalHeader}>
+                    <ThemedText style={styles.goalTitle}>{goal.category.name}</ThemedText>
+                    <View style={styles.goalType}>
+                      <Ionicons
+                        name={goal.goal_type === 'reduction' ? 'trending-down' : 'reload'}
+                        size={16}
+                        color="#2E7D32"
+                      />
+                      <ThemedText style={styles.goalTypeText}>
+                        {goal.goal_type.charAt(0).toUpperCase() + goal.goal_type.slice(1)}
+                      </ThemedText>
+                    </View>
+                  </View>
+
+                  <View style={styles.progressContainer}>
+                    <View style={styles.progressBar}>
+                      <View
+                        style={[
+                          styles.progressFill,
+                          { width: `${(goal.progress / goal.target) * 100}%` },
+                        ]}
+                      />
+                    </View>
+                    <ThemedText style={styles.progressText}>
+                      {goal.progress.toFixed(1)} / {goal.target.toFixed(1)} kg
+                    </ThemedText>
+                  </View>
+
+                  <View style={styles.goalFooter}>
+                    <View style={styles.deadlineContainer}>
+                      <Ionicons name="time-outline" size={16} color="#666" />
+                      <ThemedText style={styles.deadlineText}>
+                        Due: {new Date(goal.end_date).toLocaleDateString()}
+                      </ThemedText>
+                    </View>
+                    <ThemedText style={styles.timeframeText}>
+                      {goal.timeframe.charAt(0).toUpperCase() + goal.timeframe.slice(1)}
+                    </ThemedText>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : (
+            <View style={styles.emptyState}>
+              <Ionicons name="flag-outline" size={48} color="#A5D6A7" />
+              <ThemedText style={styles.emptyStateText}>
+                No active goals. Set your first sustainability goal!
+              </ThemedText>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => router.push('/goals/add')}
+              >
+                <ThemedText style={styles.addButtonText}>Create Goal</ThemedText>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
 
         {/* Recent Activity Section */}
@@ -159,8 +270,8 @@ export default function HomeScreen() {
               <ThemedText style={styles.comingSoonText}>Achievements</ThemedText>
             </View>
             <View style={styles.comingSoonItem}>
-              <Ionicons name="calendar-outline" size={32} color="#A5D6A7" />
-              <ThemedText style={styles.comingSoonText}>Events</ThemedText>
+              <Ionicons name="chatbox-outline" size={32} color="#A5D6A7" />
+              <ThemedText style={styles.comingSoonText}>Forums</ThemedText>
             </View>
           </View>
         </View>
@@ -338,6 +449,78 @@ const styles = StyleSheet.create({
   },
   comingSoonText: {
     fontSize: 14,
+    color: '#666',
+  },
+  goalsList: {
+    gap: 12,
+  },
+  goalItem: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  goalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  goalTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  goalType: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  goalTypeText: {
+    fontSize: 14,
+    color: '#2E7D32',
+  },
+  progressContainer: {
+    marginBottom: 12,
+  },
+  progressBar: {
+    height: 6,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 3,
+    marginBottom: 4,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#2E7D32',
+    borderRadius: 3,
+  },
+  progressText: {
+    fontSize: 12,
+    color: '#666',
+    textAlign: 'right',
+  },
+  goalFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  deadlineContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  deadlineText: {
+    fontSize: 12,
+    color: '#666',
+  },
+  timeframeText: {
+    fontSize: 12,
     color: '#666',
   },
 }); 
