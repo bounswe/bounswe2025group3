@@ -17,8 +17,10 @@ import {
 } from "react-native";
 
 interface AdminStats {
-  totalUsers: number;
-  pendingRequests: number;
+  total_users: number;
+  moderators: number;
+  admins: number;
+  pending_category_requests: number;
 }
 
 interface ExtendedUserProfile extends UserProfile {
@@ -55,13 +57,25 @@ const AdminDashboardStaticContent = memo(({
       <View style={styles.statsContainer}>
         <View style={styles.statsCard}>
           <Ionicons name="people" size={28} color="#2E7D32" />
-          <ThemedText style={styles.statsValue}>{stats?.totalUsers || 0}</ThemedText>
+          <ThemedText style={styles.statsValue}>{stats?.total_users || 0}</ThemedText>
           <ThemedText style={styles.statsLabel}>Total Users</ThemedText>
         </View>
         
         <View style={styles.statsCard}>
-          <Ionicons name="list" size={28} color="#2E7D32" />
-          <ThemedText style={styles.statsValue}>{stats?.pendingRequests || 0}</ThemedText>
+          <Ionicons name="shield" size={28} color="#2E7D32" />
+          <ThemedText style={styles.statsValue}>{stats?.moderators || 0}</ThemedText>
+          <ThemedText style={styles.statsLabel}>Moderators</ThemedText>
+        </View>
+        
+        <View style={styles.statsCard}>
+          <Ionicons name="shield-checkmark" size={28} color="#2E7D32" />
+          <ThemedText style={styles.statsValue}>{stats?.admins || 0}</ThemedText>
+          <ThemedText style={styles.statsLabel}>Admins</ThemedText>
+        </View>
+        
+        <View style={styles.statsCard}>
+          <Ionicons name="file-tray-full" size={28} color="#2E7D32" />
+          <ThemedText style={styles.statsValue}>{stats?.pending_category_requests || 0}</ThemedText>
           <ThemedText style={styles.statsLabel}>Pending Requests</ThemedText>
         </View>
       </View>
@@ -118,39 +132,57 @@ export default function AdminDashboard() {
   const [contentKey, setContentKey] = useState(0);
 
   const fetchStats = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      
-      const usersResponse = await TokenManager.authenticatedFetch(API_ENDPOINTS.USER.USERS);
-      let totalUsers = 0;
+      // Use authenticatedFetch to get user data
+      const usersResponse = await TokenManager.authenticatedFetch(
+        API_ENDPOINTS.USER.USERS
+      );
       
       if (usersResponse.ok) {
-        const userData = await usersResponse.json();
-        totalUsers = userData.count || 0;
-      }
-      
-      const requestsResponse = await TokenManager.authenticatedFetch(API_ENDPOINTS.WASTE.ADMIN.CATEGORY_REQUESTS);
-      let pendingRequests = 0;
-      
-      if (requestsResponse.ok) {
-        const data = await requestsResponse.json();
-        // Handle paginated response format (results field)
-        const requestsData = data.results || data;
+        const data = await usersResponse.json();
+        const usersData = data.results || [];
         
-        if (Array.isArray(requestsData)) {
-          pendingRequests = requestsData.filter((req: any) => req.status === 'pending').length || 0;
-        } else {
-          pendingRequests = 0;
-          console.error('Unexpected format for category requests data:', data);
+        setUsers(usersData);
+        setFilteredUsers(usersData);
+        
+        const stats = {
+          total_users: 0,
+          moderators: 0,
+          admins: 0,
+          pending_category_requests: 0
+        };
+        
+        usersData.forEach((user: ExtendedUserProfile) => {
+          if (user.role === 'USER') stats.total_users++;
+          else if (user.role === 'MODERATOR') stats.moderators++;
+          else if (user.role === 'ADMIN') stats.admins++;
+        });
+        
+        // Get category requests count
+        const categoryResponse = await TokenManager.authenticatedFetch(
+          API_ENDPOINTS.WASTE.ADMIN.CATEGORY_REQUESTS
+        );
+        
+        if (categoryResponse.ok) {
+          const categoryData = await categoryResponse.json();
+          const requestsData = categoryData.results || [];
+          
+          if (Array.isArray(requestsData)) {
+            stats.pending_category_requests = requestsData.filter((req: any) => 
+              req.status && req.status.toLowerCase() === 'pending'
+            ).length;
+          }
         }
+        
+        setStats(stats);
+      } else {
+        console.error('Failed to fetch users list, status:', usersResponse.status);
+        Alert.alert("Error", "Failed to fetch admin data.");
       }
-      
-      setStats({
-        totalUsers,
-        pendingRequests
-      });
     } catch (error) {
       console.error('Error fetching admin stats:', error);
+      Alert.alert("Error", "An error occurred while fetching admin data.");
     } finally {
       setIsLoading(false);
     }
@@ -159,7 +191,11 @@ export default function AdminDashboard() {
   const fetchUsersList = async () => {
     setIsLoadingUsers(true);
     try {
-      const response = await TokenManager.authenticatedFetch(API_ENDPOINTS.USER.USERS);
+      // Use authenticatedFetch for API calls
+      const response = await TokenManager.authenticatedFetch(
+        API_ENDPOINTS.USER.USERS
+      );
+      
       if (response.ok) {
         const data = await response.json();
         setUsers(data.results || []);
@@ -184,8 +220,8 @@ export default function AdminDashboard() {
   useFocusEffect(
     useCallback(() => {
       if (!stats) {
-        setIsLoading(true);
-        fetchStats().finally(() => setIsLoading(false));
+      setIsLoading(true);
+      fetchStats().finally(() => setIsLoading(false));
       }
       if (isUserManagementVisible && users.length === 0) {
         fetchUsersList();
@@ -223,6 +259,12 @@ export default function AdminDashboard() {
   };
 
   const handleToggleActive = async (user: ExtendedUserProfile) => {
+    // Don't allow activating/deactivating admin users
+    if (user.role === 'ADMIN') {
+      Alert.alert("Error", "Admin users cannot be deactivated from this interface.");
+      return;
+    }
+    
     try {
       const newStatus = !user.is_active;
       const response = await TokenManager.authenticatedFetch(
@@ -237,6 +279,10 @@ export default function AdminDashboard() {
         const updateUserState = (u: ExtendedUserProfile) => u.id === user.id ? { ...u, is_active: newStatus } : u;
         setUsers(prevUsers => prevUsers.map(updateUserState));
         setFilteredUsers(prevFilteredUsers => prevFilteredUsers.map(updateUserState));
+        
+        // Refresh stats
+        fetchStats();
+        
         Alert.alert("Success", `User ${user.username} has been ${newStatus ? 'activated' : 'deactivated'}.`);
       } else {
         Alert.alert("Error", "Failed to update user status");
@@ -248,16 +294,17 @@ export default function AdminDashboard() {
   };
 
   const handleRoleChange = async (user: ExtendedUserProfile, newRole: 'USER' | 'MODERATOR') => {
+    // Don't allow changing admin roles
     if (user.role === 'ADMIN') {
       Alert.alert("Error", "Admin roles cannot be changed from this interface.");
       return;
     }
+    
     try {
       const response = await TokenManager.authenticatedFetch(
         API_ENDPOINTS.USER.SET_USER_ROLE(user.id),
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ role: newRole }),
         }
       );
@@ -277,6 +324,8 @@ export default function AdminDashboard() {
   };
 
   const renderUserItem = ({ item }: { item: ExtendedUserProfile }) => {
+    const isAdmin = item.role === 'ADMIN';
+    
     return (
       <View style={styles.userCard}>
         <View style={styles.userInfo}>
@@ -287,7 +336,7 @@ export default function AdminDashboard() {
           <View style={styles.badgesContainer}>
             <View style={[
               styles.roleBadge,
-              item.role === 'ADMIN' ? styles.adminBadge : 
+              isAdmin ? styles.adminBadge : 
               item.role === 'MODERATOR' ? styles.moderatorBadge : 
               styles.userBadge
             ]}>
@@ -298,33 +347,45 @@ export default function AdminDashboard() {
             )}
           </View>
         </View>
-        <View style={styles.userActions}>
-          <TouchableOpacity 
-            style={[styles.userActionButton, !item.is_active ? styles.activateButton : styles.deactivateButton]}
-            onPress={() => handleToggleActive(item)}
-          >
-            <Ionicons name={!item.is_active ? "checkmark-circle" : "ban"} size={20} color="white" />
-            <ThemedText style={styles.userActionButtonText}>{!item.is_active ? "Activate" : "Deactivate"}</ThemedText>
-          </TouchableOpacity>
-          {item.role === 'USER' && (
-            <TouchableOpacity
-              style={[styles.userActionButton, styles.moderatorButton]}
-              onPress={() => handleRoleChange(item, 'MODERATOR')}
+        
+        {!isAdmin && (
+          <View style={styles.userActions}>
+            <TouchableOpacity 
+              style={[styles.userActionButton, !item.is_active ? styles.activateButton : styles.deactivateButton]}
+              onPress={() => handleToggleActive(item)}
             >
-              <Ionicons name="shield-checkmark-outline" size={20} color="white" />
-              <ThemedText style={styles.userActionButtonText}>Make Moderator</ThemedText>
+              <Ionicons name={!item.is_active ? "checkmark-circle" : "ban"} size={20} color="white" />
+              <ThemedText style={styles.userActionButtonText}>{!item.is_active ? "Activate" : "Deactivate"}</ThemedText>
             </TouchableOpacity>
-          )}
-          {item.role === 'MODERATOR' && (
-            <TouchableOpacity
-              style={[styles.userActionButton, styles.userRoleButton]}
-              onPress={() => handleRoleChange(item, 'USER')}
-            >
-              <Ionicons name="person-outline" size={20} color="white" />
-              <ThemedText style={styles.userActionButtonText}>Make User</ThemedText>
-            </TouchableOpacity>
-          )}
-        </View>
+            {item.role === 'USER' && (
+              <TouchableOpacity
+                style={[styles.userActionButton, styles.moderatorButton]}
+                onPress={() => handleRoleChange(item, 'MODERATOR')}
+              >
+                <Ionicons name="shield-checkmark-outline" size={20} color="white" />
+                <ThemedText style={styles.userActionButtonText}>Make Moderator</ThemedText>
+              </TouchableOpacity>
+            )}
+            {item.role === 'MODERATOR' && (
+              <TouchableOpacity
+                style={[styles.userActionButton, styles.userRoleButton]}
+                onPress={() => handleRoleChange(item, 'USER')}
+              >
+                <Ionicons name="person-outline" size={20} color="white" />
+                <ThemedText style={styles.userActionButtonText}>Make User</ThemedText>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+        
+        {isAdmin && (
+          <View style={styles.protectedAccountContainer}>
+            <Ionicons name="shield-checkmark" size={20} color="#673AB7" />
+            <ThemedText style={styles.protectedAccountText}>
+              Admin accounts cannot be modified from this interface
+            </ThemedText>
+          </View>
+        )}
       </View>
     );
   };
@@ -345,77 +406,77 @@ export default function AdminDashboard() {
   const ListFooter = useMemo(() => (
     isUserManagementVisible ? (
       <View style={styles.footerContainer}> 
-        <TouchableOpacity 
-          style={styles.actionButton}
+            <TouchableOpacity 
+                style={styles.actionButton}
           onPress={() => router.push('/admin/category-requests')}
-        >
-          <View style={[styles.actionIconContainer, { backgroundColor: '#FF9800' }]}>
-            <Ionicons name="list" size={24} color="#FFFFFF" />
-          </View>
-          <View style={styles.actionTextContainer}>
-            <ThemedText style={styles.actionTitle}>Category Requests</ThemedText>
-            <ThemedText style={styles.actionDescription}>Approve or reject category requests</ThemedText>
-          </View>
+            >
+                <View style={[styles.actionIconContainer, { backgroundColor: '#FF9800' }]}>
+                <Ionicons name="list" size={24} color="#FFFFFF" />
+                </View>
+                <View style={styles.actionTextContainer}>
+                <ThemedText style={styles.actionTitle}>Category Requests</ThemedText>
+                <ThemedText style={styles.actionDescription}>Approve or reject category requests</ThemedText>
+                </View>
           <Ionicons name="chevron-forward" size={24} color="#666" />
-        </TouchableOpacity>
-      </View>
+            </TouchableOpacity>
+        </View>
     ) : null
   ), [isUserManagementVisible, router]);
 
-  return (
-    <ThemedView style={styles.container}>
+    return (
+      <ThemedView style={styles.container}>
       {isLoading ? (
         <ActivityIndicator size="large" color="#2E7D32" style={styles.loadingIndicator} />
       ) : (
         <>
           {isUserManagementVisible ? (
-            <FlatList
+        <FlatList
               key={`user-list-${contentKey}`}
               data={filteredUsers || []}
-              renderItem={renderUserItem}
-              keyExtractor={(item) => item.id.toString()}
-              ListHeaderComponent={ListHeader}
-              ListFooterComponent={ListFooter}
-              contentContainerStyle={styles.listContentContainer}
-              refreshing={isRefreshingUsers}
-              onRefresh={handleUserRefresh}
+          renderItem={renderUserItem}
+          keyExtractor={(item) => item.id.toString()}
+          ListHeaderComponent={ListHeader}
+          ListFooterComponent={ListFooter}
+          contentContainerStyle={styles.listContentContainer}
+          refreshing={isRefreshingUsers}
+          onRefresh={handleUserRefresh}
               keyboardShouldPersistTaps="always"
               keyboardDismissMode="none"
               removeClippedSubviews={false}
               initialNumToRender={10}
               maxToRenderPerBatch={10}
               updateCellsBatchingPeriod={50}
-              ListEmptyComponent={() => (
-                isLoadingUsers ? (
-                    <View style={styles.userEmptyContainer}> 
-                        <ActivityIndicator size="large" color="#2E7D32" />
-                    </View>
-                ) : (
-                    <View style={styles.userEmptyContainer}>
-                        <Ionicons name="people-outline" size={50} color="#CCC" />
-                        <ThemedText style={styles.userEmptyText}>
-                        {searchQueryUsers.length > 0 ? "No users match your search" : "No users found"}
-                        </ThemedText>
-                    </View>
-                )
-              )}
+          ListEmptyComponent={() => (
+            isLoadingUsers ? (
+                <View style={styles.userEmptyContainer}> 
+                    <ActivityIndicator size="large" color="#2E7D32" />
+                </View>
+            ) : (
+                <View style={styles.userEmptyContainer}>
+                    <Ionicons name="people-outline" size={50} color="#CCC" />
+                    <ThemedText style={styles.userEmptyText}>
+                    {searchQueryUsers.length > 0 ? "No users match your search" : "No users found"}
+                    </ThemedText>
+                </View>
+            )
+          )}
             />
           ) : (
-            <ScrollView 
-              style={styles.contentScrollView}
-              keyboardShouldPersistTaps="handled"
+      <ScrollView 
+        style={styles.contentScrollView}
+        keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
-            >
-              <AdminDashboardStaticContent 
-                stats={stats}
-                isUserManagementVisible={isUserManagementVisible}
-                toggleUserManagementVisibility={toggleUserManagementVisibility}
-                searchQueryUsers={searchQueryUsers}
-                handleUserSearch={handleUserSearch}
-                isRenderCategoryRequestButtonAlways={true}
+      >
+        <AdminDashboardStaticContent 
+          stats={stats}
+          isUserManagementVisible={isUserManagementVisible}
+          toggleUserManagementVisibility={toggleUserManagementVisibility}
+          searchQueryUsers={searchQueryUsers}
+          handleUserSearch={handleUserSearch}
+          isRenderCategoryRequestButtonAlways={true}
                 router={router}
-              />
-            </ScrollView>
+        />
+      </ScrollView>
           )}
         </>
       )}
@@ -523,5 +584,18 @@ const styles = StyleSheet.create({
   footerContainer: {
     marginTop: 10,
     marginBottom: 10,
+  },
+  protectedAccountContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+  },
+  protectedAccountText: {
+    fontSize: 14,
+    color: '#666',
+    marginLeft: 10,
   },
 }); 

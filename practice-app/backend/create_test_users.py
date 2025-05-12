@@ -13,6 +13,7 @@ users_to_create = [
     {
         'email': 'admin@example.com',
         'password': 'adminpass',
+        'username': 'admin',
         'first_name': 'Admin',
         'last_name': 'User',
         'role': User.Role.ADMIN,
@@ -22,21 +23,24 @@ users_to_create = [
     {
         'email': 'moderator@example.com',
         'password': 'modpass',
+        'username': 'moderator',
         'first_name': 'Moderator',
         'last_name': 'User',
         'role': User.Role.MODERATOR
     },
     {
-        'email': 'user1@example.com',
+        'email': 'regularuser@example.com',
         'password': 'userpass',
-        'first_name': 'User',
+        'username': 'regular1',
+        'first_name': 'Regular1',
         'last_name': 'One',
         'role': User.Role.USER
     },
     {
-        'email': 'user2@example.com',
+        'email': 'regularuser2@example.com',
         'password': 'userpass',
-        'first_name': 'User',
+        'username': 'regular2',
+        'first_name': 'Regular2',
         'last_name': 'Two',
         'role': User.Role.USER
     },
@@ -45,6 +49,7 @@ users_to_create = [
 for user_data in users_to_create:
     email = user_data['email']
     password = user_data['password']
+    username = user_data['username']
     role = user_data['role']
     is_superuser = user_data.get('is_superuser', False)
     is_staff = user_data.get('is_staff', False)
@@ -58,6 +63,7 @@ for user_data in users_to_create:
     try:
         User.objects.create(
             email=email,
+            username=username,
             password=make_password(password),
             role=role,
             is_superuser=is_superuser,

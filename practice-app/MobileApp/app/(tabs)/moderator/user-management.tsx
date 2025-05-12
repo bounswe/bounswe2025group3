@@ -4,7 +4,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { API_ENDPOINTS, UserProfile } from "@/constants/api";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useRouter } from "expo-router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { 
   StyleSheet, 
   TouchableOpacity, 
@@ -21,7 +21,7 @@ interface ExtendedUserProfile extends UserProfile {
   is_superuser: boolean;
 }
 
-export default function UserManagementScreen() {
+export default function ModeratorUserManagementScreen() {
   const [users, setUsers] = useState<ExtendedUserProfile[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<ExtendedUserProfile[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,8 +38,14 @@ export default function UserManagementScreen() {
       
       if (response.ok) {
         const data = await response.json();
-        setUsers(data.results || []);
-        setFilteredUsers(data.results || []);
+        
+        // Filter out admins and moderators - moderators should only see regular users
+        const regularUsers = (data.results || []).filter(
+          (user: ExtendedUserProfile) => user.role === 'USER'
+        );
+        
+        setUsers(regularUsers);
+        setFilteredUsers(regularUsers);
       } else {
         console.error('Failed to fetch users list, status:', response.status);
         Alert.alert("Error", "Failed to fetch users list.");
@@ -87,11 +93,6 @@ export default function UserManagementScreen() {
   };
 
   const handleToggleActive = async (user: ExtendedUserProfile) => {
-    if (user.role === 'ADMIN') {
-      Alert.alert("Error", "Admin users cannot be deactivated from this interface.");
-      return;
-    }
-    
     try {
       const newStatus = !user.is_active;
       const response = await TokenManager.authenticatedFetch(
@@ -116,38 +117,7 @@ export default function UserManagementScreen() {
     }
   };
 
-  const handleRoleChange = async (user: ExtendedUserProfile, newRole: 'USER' | 'MODERATOR') => {
-    if (user.role === 'ADMIN') {
-      Alert.alert("Error", "Admin roles cannot be changed from this interface.");
-      return;
-    }
-    try {
-      const response = await TokenManager.authenticatedFetch(
-        API_ENDPOINTS.USER.SET_USER_ROLE(user.id),
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ role: newRole }),
-        }
-      );
-      if (response.ok) {
-        const updateUserState = (u: ExtendedUserProfile) => u.id === user.id ? { ...u, role: newRole } : u;
-        setUsers(prevUsers => prevUsers.map(updateUserState));
-        setFilteredUsers(prevFilteredUsers => prevFilteredUsers.map(updateUserState));
-        Alert.alert("Success", `User ${user.username}'s role has been updated to ${newRole}.`);
-      } else {
-        const errorData = await response.json().catch(() => ({ detail: "Failed to update user role" }));
-        Alert.alert("Error", errorData.detail || "Failed to update user role");
-      }
-    } catch (error) {
-      console.error('Error updating user role:', error);
-      Alert.alert("Error", "An error occurred while updating user role");
-    }
-  };
-
   const renderUserItem = ({ item }: { item: ExtendedUserProfile }) => {
-    const isAdmin = item.role === 'ADMIN';
-    
     return (
       <View style={styles.userCard}>
         <View style={styles.userHeader}>
@@ -156,12 +126,7 @@ export default function UserManagementScreen() {
             <ThemedText style={styles.email}>{item.email}</ThemedText>
           </View>
           <View style={styles.badgesContainer}>
-            <View style={[
-              styles.roleBadge,
-              isAdmin ? styles.adminBadge : 
-              item.role === 'MODERATOR' ? styles.moderatorBadge : 
-              styles.userBadge
-            ]}>
+            <View style={styles.userBadge}>
               <ThemedText style={styles.roleBadgeText}>{item.role}</ThemedText>
             </View>
             {!item.is_active && (
@@ -197,65 +162,41 @@ export default function UserManagementScreen() {
           )}
         </View>
         
-        {!isAdmin && (
-          <View style={styles.actionsContainer}>
-            <TouchableOpacity 
-              style={[styles.actionButton, !item.is_active ? styles.activateButton : styles.deactivateButton]}
-              onPress={() => handleToggleActive(item)}
-            >
-              <Ionicons name={!item.is_active ? "checkmark-circle" : "ban"} size={20} color="white" />
-              <ThemedText style={styles.actionButtonText}>
-                {!item.is_active ? "Activate" : "Deactivate"}
-              </ThemedText>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.actionButton, styles.roleButton]}
-              onPress={() => 
-                handleRoleChange(
-                  item, 
-                  item.role === 'USER' ? 'MODERATOR' : 'USER'
-                )
-              }
-            >
-              <Ionicons name="swap-horizontal" size={20} color="white" />
-              <ThemedText style={styles.actionButtonText}>
-                {item.role === 'USER' ? "Make Moderator" : "Make User"}
-              </ThemedText>
-            </TouchableOpacity>
-          </View>
-        )}
-        
-        {isAdmin && (
-          <View style={styles.protectedAccountContainer}>
-            <Ionicons name="shield-checkmark" size={20} color="#673AB7" />
-            <ThemedText style={styles.protectedAccountText}>
-              Admin accounts cannot be modified from this interface
+        <View style={styles.actionsContainer}>
+          <TouchableOpacity 
+            style={[styles.actionButton, !item.is_active ? styles.activateButton : styles.deactivateButton]}
+            onPress={() => handleToggleActive(item)}
+          >
+            <Ionicons name={!item.is_active ? "checkmark-circle" : "ban"} size={20} color="white" />
+            <ThemedText style={styles.actionButtonText}>
+              {!item.is_active ? "Activate" : "Deactivate"}
             </ThemedText>
-          </View>
-        )}
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
 
+  const renderHeader = useMemo(() => (
+    <View style={styles.header}>
+      <ThemedText style={styles.headerTitle}>Regular Users</ThemedText>
+      <ThemedText style={styles.headerSubtitle}>
+        As a moderator, you can only manage regular users. 
+        You cannot see or manage other moderators or admin accounts.
+      </ThemedText>
+    </View>
+  ), []);
+
   if (isLoading && !refreshing) {
     return (
       <ThemedView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#673AB7" />
+        <ActivityIndicator size="large" color="#2E7D32" />
       </ThemedView>
     );
   }
 
   return (
     <ThemedView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <ThemedText style={styles.headerTitle}>User Management</ThemedText>
-        <ThemedText style={styles.headerSubtitle}>
-          View and manage all users in the system
-        </ThemedText>
-      </View>
-      
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
@@ -280,6 +221,7 @@ export default function UserManagementScreen() {
         contentContainerStyle={styles.listContainer}
         refreshing={refreshing}
         onRefresh={handleRefresh}
+        ListHeaderComponent={renderHeader}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Ionicons name="people-outline" size={50} color="#CCC" />
@@ -307,23 +249,24 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 16,
+    paddingBottom: 0,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
     marginBottom: 8,
   },
   headerSubtitle: {
     fontSize: 14,
     color: '#666',
+    marginBottom: 16,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    marginHorizontal: 16,
-    marginBottom: 16,
+    margin: 16,
     paddingHorizontal: 16,
     paddingVertical: 8,
     shadowColor: '#000',
@@ -342,6 +285,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     padding: 16,
+    paddingTop: 0,
   },
   userCard: {
     backgroundColor: '#FFFFFF',
@@ -382,14 +326,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 12,
   },
-  adminBadge: {
-    backgroundColor: '#673AB7',
-  },
-  moderatorBadge: {
-    backgroundColor: '#4CAF50',
-  },
   userBadge: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#2E7D32',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
   },
   roleBadgeText: {
     fontSize: 12,
@@ -444,13 +385,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   activateButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#2E7D32',
   },
   deactivateButton: {
-    backgroundColor: '#F44336',
-  },
-  roleButton: {
-    backgroundColor: '#FF9800',
+    backgroundColor: '#D32F2F',
   },
   emptyContainer: {
     paddingVertical: 40,
@@ -462,19 +400,5 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 16,
     textAlign: 'center',
-  },
-  protectedAccountContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#F5F5F5',
-    borderRadius: 8,
-    marginTop: 8,
-  },
-  protectedAccountText: {
-    fontSize: 14,
-    color: '#666',
-    marginLeft: 8,
-    fontStyle: 'italic',
   },
 }); 

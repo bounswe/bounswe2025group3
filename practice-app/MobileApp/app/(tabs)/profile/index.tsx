@@ -138,6 +138,16 @@ export default function ProfileScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.settingItem}
+            onPress={() => router.push('/profile/jwt-debug')}
+          >
+            <View style={styles.settingLeft}>
+              <Ionicons name="key-outline" size={24} color="#2E7D32" />
+              <ThemedText style={styles.settingText}>Debug JWT Token</ThemedText>
+            </View>
+            <Ionicons name="chevron-forward" size={24} color="#666" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingItem}
             onPress={handleLogout}
           >
             <View style={styles.settingLeft}>

@@ -19,6 +19,7 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   'target': 'track-changes',
   'shield.fill': 'admin-panel-settings',
+  'shield.lefthalf.fill': 'security',
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],

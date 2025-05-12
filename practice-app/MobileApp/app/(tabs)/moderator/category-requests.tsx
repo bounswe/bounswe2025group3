@@ -23,14 +23,14 @@ interface CategoryRequest {
   unit: string;
   status: 'pending' | 'approved' | 'rejected';
   admin_notes: string | null;
-  user?: {
+  user?: {  // Make user optional since it's not in the API response
     id: number;
     username: string;
     email: string;
   } | number;
 }
 
-export default function CategoryRequestsScreen() {
+export default function ModeratorCategoryRequestsScreen() {
   const [requests, setRequests] = useState<CategoryRequest[]>([]);
   const [filteredRequests, setFilteredRequests] = useState<CategoryRequest[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,6 +41,7 @@ export default function CategoryRequestsScreen() {
   const fetchRequests = async () => {
     try {
       setIsLoading(true);
+      // Use authenticated fetch to get category requests
       const response = await TokenManager.authenticatedFetch(
         API_ENDPOINTS.WASTE.ADMIN.CATEGORY_REQUESTS
       );
@@ -242,7 +243,7 @@ export default function CategoryRequestsScreen() {
   if (isLoading && !refreshing) {
     return (
       <ThemedView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#673AB7" />
+        <ActivityIndicator size="large" color="#2E7D32" />
       </ThemedView>
     );
   }
@@ -299,6 +300,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  header: {
+    padding: 16,
+    paddingBottom: 0,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 8,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 16,
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -352,10 +367,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    backgroundColor: '#E0E0E0',
   },
   pendingBadge: {
-    backgroundColor: '#F57C00',
+    backgroundColor: '#FFA000',
   },
   approvedBadge: {
     backgroundColor: '#2E7D32',
@@ -367,11 +381,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#FFFFFF',
     fontWeight: '500',
-  },
-  requestDescription: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 16,
   },
   detailsContainer: {
     backgroundColor: '#F5F5F5',
@@ -412,31 +421,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#D32F2F',
   },
   actionButtonText: {
-    color: '#FFFFFF',
+    color: 'white',
     fontWeight: '500',
   },
   emptyContainer: {
-    flex: 1,
+    paddingVertical: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
   emptyText: {
     fontSize: 16,
     color: '#666',
     marginTop: 16,
     textAlign: 'center',
-  },
-  header: {
-    padding: 16,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#666',
   },
 }); 
