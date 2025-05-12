@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css';
+import { GoogleLogin } from '@react-oauth/google';
+//import jwt_decode from 'jwt-decode'; // Optional if you want to decode the token
 
-// Social login functionality
 const handleSocialLogin = (provider) => {
-    console.log(`Attempting to login with ${provider}`);
-    // This would typically redirect to OAuth flow
-    // For example: window.location.href = `http://127.0.0.1:8000/api/auth/${provider}/`;
+    if (provider === 'google') {
+        window.location.href = 'http://127.0.0.1:8000/accounts/google/login/';
+    }
+    // You can handle other providers similarly
 };
 
 const LoginPage = () => {
@@ -164,14 +166,22 @@ const LoginPage = () => {
                                         <i className="social-icon linkedin-icon"></i>
                                         <span>LinkedIn</span>
                                     </button>
-                                    <button 
-                                        type="button" 
-                                        className="social-button google"
-                                        onClick={() => handleSocialLogin('google')}
-                                    >
-                                        <i className="social-icon google-icon"></i>
-                                        <span>Google</span>
-                                    </button>
+                                    <div className="social-button google">
+                                    <GoogleLogin
+                                        onSuccess={(credentialResponse) => {
+                                        const idToken = credentialResponse.credential;
+                                        //const userData = jwt_decode(idToken); // Optional
+                                        //console.log("Google user:", userData);
+
+                                        // Save the token locally or call your backend here
+                                        localStorage.setItem('google_id_token', idToken);
+                                        navigate('/dashboard'); // or wherever you want
+                                        }}
+                                        onError={() => {
+                                        setError("Google login failed.");
+                                        }}
+                                    />
+                                    </div>
                                 </div>
                             </div>
                         </form>
