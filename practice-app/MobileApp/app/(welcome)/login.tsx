@@ -7,7 +7,8 @@ import { API_BASE_URL, API_ENDPOINTS } from '@/constants/api';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -72,65 +73,87 @@ export default function LoginScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.content}
+    <View style={styles.container}>
+      <LinearGradient
+        colors={['#88eb9a', '#122e1a']}
+        style={styles.backgroundGradient}
       >
-        <TouchableOpacity onPress={() => router.back()} style={sharedStyles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#2E7D32" />
-        </TouchableOpacity>
-        <View style={styles.innerContent}>
-          <ThemedText style={styles.title}>Welcome Back</ThemedText>
-          <View style={sharedStyles.form}>
-            <View style={sharedStyles.inputContainer}>
-              <Ionicons name="mail-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
-              <TextInput
-                style={sharedStyles.input}
-                placeholder="Email"
-                placeholderTextColor="#666"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
+        <View style={styles.overlay}>
+          <KeyboardAvoidingView 
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.content}
+          >
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <Ionicons name="arrow-back" size={24} color="#fff" />
+            </TouchableOpacity>
+
+            <View style={styles.headerContainer}>
+              <Image 
+                source={require('@/assets/images/greener-logo.png')} 
+                style={styles.logo} 
+                resizeMode="contain"
               />
+              <ThemedText style={styles.title}>Welcome Back</ThemedText>
+              <ThemedText style={styles.subtitle}>Sign in to continue your eco journey</ThemedText>
             </View>
 
-            <View style={sharedStyles.inputContainer}>
-              <Ionicons name="lock-closed-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
-              <TextInput
-                style={sharedStyles.input}
-                placeholder="Password"
-                placeholderTextColor="#666"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-              />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={sharedStyles.eyeIcon}>
-                <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#2E7D32" />
+            <View style={styles.formContainer}>
+              <View style={[sharedStyles.inputContainer, styles.inputOverride]}>
+                <Ionicons name="mail-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
+                <TextInput
+                  style={sharedStyles.input}
+                  placeholder="Email"
+                  placeholderTextColor="#666"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              </View>
+
+              <View style={[sharedStyles.inputContainer, styles.inputOverride]}>
+                <Ionicons name="lock-closed-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
+                <TextInput
+                  style={sharedStyles.input}
+                  placeholder="Password"
+                  placeholderTextColor="#666"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                />
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={sharedStyles.eyeIcon}>
+                  <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#2E7D32" />
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity 
+                style={[styles.loginButton, isLoading && { opacity: 0.7 }]} 
+                onPress={handleLogin}
+                disabled={isLoading}
+                activeOpacity={0.8}
+              >
+                <ThemedText style={styles.buttonText}>
+                  {isLoading ? "Logging in..." : "Login"}
+                </ThemedText>
               </TouchableOpacity>
+
+              <TouchableOpacity 
+                onPress={handleResetPassword}
+                style={styles.forgotPasswordContainer}
+              >
+                <ThemedText style={styles.forgotPasswordText}>Forgot Password?</ThemedText>
+              </TouchableOpacity>
+              
+              <View style={styles.registerContainer}>
+                <ThemedText style={styles.registerText}>Don't have an account? </ThemedText>
+                <TouchableOpacity onPress={() => router.push("/(welcome)/register")}>
+                  <ThemedText style={styles.registerLink}>Sign Up</ThemedText>
+                </TouchableOpacity>
+              </View>
             </View>
-
-            <TouchableOpacity 
-              style={[sharedStyles.button, isLoading && { opacity: 0.7 }]} 
-              onPress={handleLogin}
-              disabled={isLoading}
-              activeOpacity={0.8}
-            >
-              <ThemedText style={sharedStyles.buttonText}>
-                {isLoading ? "Logging in..." : "Login"}
-              </ThemedText>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              onPress={handleResetPassword}
-              style={styles.forgotPasswordContainer}
-            >
-              <ThemedText style={styles.forgotPasswordText}>Forgot Password?</ThemedText>
-            </TouchableOpacity>
-          </View>
+          </KeyboardAvoidingView>
         </View>
-      </KeyboardAvoidingView>
+      </LinearGradient>
 
       <CustomAlert
         visible={alertVisible}
@@ -139,38 +162,108 @@ export default function LoginScreen() {
         type={alertType}
         onClose={() => setAlertVisible(false)}
       />
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+  },
+  backgroundGradient: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    paddingHorizontal: 20,
   },
   content: {
     flex: 1,
-    padding: 20,
-    paddingTop: 140,
+    justifyContent: 'center',
   },
-  innerContent: {
-    flex: 1,
-    justifyContent: 'flex-start',
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 0,
+    zIndex: 10,
+    padding: 10,
+  },
+  headerContainer: {
     alignItems: 'center',
-    marginTop: 40,
+    marginBottom: 30,
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    marginBottom: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: '#ffffff',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#ffffff',
+    textAlign: 'center',
     marginBottom: 20,
   },
+  formContainer: {
+    width: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+  },
+  inputOverride: {
+    width: '100%',
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  loginButton: {
+    backgroundColor: '#56ea62',
+    height: 50,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    width: '100%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   forgotPasswordContainer: {
-    marginTop: 10,
-    marginBottom: 20,
+    marginTop: 15,
+    alignSelf: 'flex-end',
   },
   forgotPasswordText: {
     color: '#2E7D32',
     fontSize: 14,
-    textDecorationLine: 'underline',
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    marginTop: 30,
+  },
+  registerText: {
+    color: '#333',
+  },
+  registerLink: {
+    color: '#56ea62',
+    fontWeight: 'bold',
   },
 });

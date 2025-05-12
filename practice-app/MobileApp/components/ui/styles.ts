@@ -1,5 +1,20 @@
 import { Platform, StyleSheet } from 'react-native';
 
+// Define color constants to match web frontend
+const colors = {
+  primary: '#2E7D32',        // Primary green
+  secondary: '#56ea62',      // Lighter green from web
+  primaryDark: '#122e1a',    // Dark green from web gradient
+  primaryLight: '#88eb9a',   // Light green from web gradient
+  background: '#E8F5E9',     // Light background
+  white: '#ffffff',
+  text: {
+    primary: '#333333',
+    secondary: '#555555',
+    light: '#666666',
+  }
+};
+
 export const sharedStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -19,7 +34,7 @@ export const sharedStyles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: 'rgba(232, 245, 233, 0.5)',
+    backgroundColor: `rgba(${parseInt(colors.primaryLight.slice(1, 3), 16)}, ${parseInt(colors.primaryLight.slice(3, 5), 16)}, ${parseInt(colors.primaryLight.slice(5, 7), 16)}, 0.5)`,
     top: -100,
     left: -100,
     opacity: 0.5,
@@ -29,7 +44,7 @@ export const sharedStyles = StyleSheet.create({
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: 'rgba(232, 245, 233, 0.5)',
+    backgroundColor: `rgba(${parseInt(colors.primaryLight.slice(1, 3), 16)}, ${parseInt(colors.primaryLight.slice(3, 5), 16)}, ${parseInt(colors.primaryLight.slice(5, 7), 16)}, 0.5)`,
     bottom: -50,
     right: -50,
     opacity: 0.5,
@@ -45,12 +60,12 @@ export const sharedStyles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#2E7D32',
+    color: colors.primary,
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.text.light,
     textAlign: 'center',
   },
   form: {
@@ -86,7 +101,7 @@ export const sharedStyles = StyleSheet.create({
   input: {
     flex: 1,
     height: 50,
-    color: '#333',
+    color: colors.text.primary,
     ...Platform.select({
       ios: {
         paddingVertical: 12,
@@ -100,7 +115,7 @@ export const sharedStyles = StyleSheet.create({
     padding: 10,
   },
   button: {
-    backgroundColor: '#2E7D32',
+    backgroundColor: colors.primary,
     height: 50,
     borderRadius: 10,
     justifyContent: 'center',
@@ -123,10 +138,11 @@ export const sharedStyles = StyleSheet.create({
     }),
   },
   buttonDisabled: {
-    backgroundColor: '#81C784',
+    backgroundColor: colors.primaryLight,
+    opacity: 0.7,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.white,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -136,10 +152,10 @@ export const sharedStyles = StyleSheet.create({
     marginTop: 20,
   },
   footerText: {
-    color: '#666',
+    color: colors.text.light,
   },
   footerLink: {
-    color: '#2E7D32',
+    color: colors.primary,
     fontWeight: 'bold',
   },
   // Common styles from login and register
@@ -149,7 +165,7 @@ export const sharedStyles = StyleSheet.create({
   },
   link: {
     marginTop: 15,
-    color: '#2e7d32',
+    color: colors.primary,
   },
   backButton: {
     position: 'absolute',
@@ -162,7 +178,7 @@ export const sharedStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
-    backgroundColor: '#E8F5E9',
+    backgroundColor: colors.background,
     padding: 15,
     borderRadius: 10,
     shadowColor: '#000',
@@ -176,25 +192,28 @@ export const sharedStyles = StyleSheet.create({
   },
   featureText: {
     marginLeft: 10,
-    color: '#2E7D32',
+    color: colors.primary,
     fontSize: 16,
   },
   buttonContainer: {
     marginBottom: 40,
+    width: '100%',
+    paddingHorizontal: 20,
   },
   loginButton: {
-    backgroundColor: '#2E7D32',
+    backgroundColor: colors.secondary,
+    transition: 'transform 0.3s ease, background-color 0.3s ease',
   },
   registerButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: '#2E7D32',
+    borderColor: colors.secondary,
   },
   buttonIcon: {
     marginRight: 10,
   },
   registerButtonText: {
-    color: '#2E7D32',
+    color: colors.primary,
   },
   modalContainer: {
     position: 'absolute',
@@ -202,6 +221,6 @@ export const sharedStyles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
   },
 }); 

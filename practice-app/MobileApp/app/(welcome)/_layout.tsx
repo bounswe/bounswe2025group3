@@ -2,7 +2,7 @@ import TokenManager from '@/app/tokenManager';
 import { API_ENDPOINTS } from '@/constants/api';
 import { Stack, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
 
 export default function RootLayout() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -43,8 +43,8 @@ export default function RootLayout() {
 
   if (isCheckingAuth) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#2E7D32" />
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#56ea62" />
       </View>
     );
   }
@@ -53,8 +53,10 @@ export default function RootLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        animation: 'slide_from_right',
-        presentation: 'modal',
+        animation: 'fade_from_bottom',
+        animationDuration: 300,
+        presentation: 'transparentModal',
+        contentStyle: { backgroundColor: 'transparent' }
       }}
     >
       <Stack.Screen
@@ -72,3 +74,12 @@ export default function RootLayout() {
     </Stack>
   );
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1, 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    backgroundColor: '#E8F5E9'
+  }
+});
