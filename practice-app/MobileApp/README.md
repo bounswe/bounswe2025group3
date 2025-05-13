@@ -1,50 +1,105 @@
-# Welcome to your Expo app 👋
+## Project Setup and Running Instructions
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+### Phase 1: Get the Backend Running
 
-## Get started
+1.  **Navigate to the backend directory:**
+    ```bash
+    cd practice-app/backend
+    ```
 
-1. Install dependencies
+2.  **Create and Activate a Virtual Environment:**
+    *   For macOS/Linux:
+        ```bash
+        python3 -m venv venv
+        source venv/bin/activate
+        ```
+    *   For Windows:
+        ```bash
+        python -m venv venv
+        .\venv\Scripts\activate
+        ```
+    *(Ensure `(venv)` appears in your terminal prompt.)*
 
-   ```bash
-   npm install
-   ```
+3.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-2. Start the app
+4.  **Apply Database Migrations:**
+    ```bash
+    python manage.py migrate
+    ```
 
-   ```bash
-   npx expo start
-   ```
+5.  **Create Test Data for Waste Categories:**
+    ```bash
+    python manage.py create_waste_test_data
+    ```
 
-In the output, you'll find options to open the app in a
+6.  **(Optional) Create a Superuser:**
+    ```bash
+    python manage.py createsuperuser
+    ```
+    *(Follow the prompts.)*
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+7.  **Modify Django Settings for Local Network Access:**
+    *   Open the file `practice-app/backend/config/settings.py`.
+    *   Find the `ALLOWED_HOSTS` setting.
+    *   Change it to:
+        ```python
+        // filepath: practice-app/backend/config/settings.py
+        // ...existing code...
+        ALLOWED_HOSTS = ['*']
+        // ...existing code...
+        ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+8.  **Run the Django Development Server:**
+    ```bash
+    python manage.py runserver 0.0.0.0:8000
+    ```
+    *(The backend API should be accessible at `http://<your-local-ip-address>:8000/` and `http://127.0.0.1:8000/`.)*
 
-## Get a fresh project
+### Phase 2: Configure and Run the Mobile App
 
-When you're ready, run:
+1.  **Identify Your Computer's Local IP Address:**
+    *   **macOS:** `ifconfig | grep "inet " | grep -v 127.0.0.1` or System Settings > Network.
+    *   **Windows:** `ipconfig` in Command Prompt (look for IPv4 Address).
+    *   **Linux:** `ip addr show` or `hostname -I`.
+    *(Let's assume your IP is `192.168.1.100` for the next step; replace it with your actual IP.)*
 
-```bash
-npm run reset-project
-```
+2.  **Update API Base URL in the Mobile App:**
+    *   Open the file `practice-app/MobileApp/constants/api.ts`.
+    *   Change `API_BASE_URL` to your computer's IP address:
+        ```typescript
+        // filepath: practice-app/MobileApp/constants/api.ts
+        // ...existing code...
+        export const API_BASE_URL = 'http://<YOUR_COMPUTER_IP_ADDRESS>:8000'; 
+        // Example: export const API_BASE_URL = 'http://192.168.1.100:8000';
+        // ...existing code...
+        ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+3.  **Navigate to the MobileApp directory:**
+    *(Open a new terminal for this, or navigate from the project root)*
+    ```bash
+    cd practice-app/MobileApp
+    ```
 
-## Learn more
+4.  **Install Mobile App Dependencies:**
+    ```bash
+    npm install 
+    ```
 
-To learn more about developing your project with Expo, look at the following resources:
+5.  **Run the Mobile App:**
+    ```bash
+    npx expo start
+    ```
+    *(Follow the instructions in the terminal to open the app on a device/emulator.)*
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Summary of Terminals
 
-## Join the community
+*   **Terminal 1 (Backend - from `bounswe2025group3/practice-app/backend`):**
+    1.  `source venv/bin/activate` (or `.\venv\Scripts\activate` on Windows)
+    2.  `python manage.py runserver 0.0.0.0:8000`
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+*   **Terminal 2 (Mobile App - from `bounswe2025group3/practice-app/MobileApp`):**
+    1.  `npm install`
+    2.  `npx expo start`

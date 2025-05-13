@@ -3,6 +3,7 @@
 // export const API_BASE_URL = 'http://127.0.0.1:8000'; // Use localhost for testing
 export const API_BASE_URL = 'http://10.0.2.2:8000'; // Special IP for Android emulator to access host machine
 
+
 // API Endpoints organized by feature
 export const API_ENDPOINTS = {
   // Authentication endpoints
@@ -25,8 +26,6 @@ export const API_ENDPOINTS = {
     USERS: '/api/user/users/',
     USER_BY_ID: (id: number) => `/api/user/users/${id}/`,
     SET_ACTIVE_STATUS: (id: number) => `/api/user/users/${id}/set_active_status/`,
-    ASSIGN_ROLE: (id: number) => `/api/user/users/${id}/assign_role/`,
-    SET_USER_ROLE: (id: number) => `/api/user/users/${id}/set-role/`,
   },
 
   // Waste management endpoints
