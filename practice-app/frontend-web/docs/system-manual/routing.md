@@ -1,6 +1,3 @@
-
-#### File: `docs/system-manual/routing.md`
-```markdown
 # Routing
 
 ## Overview

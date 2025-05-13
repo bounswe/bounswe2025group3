@@ -1,8 +1,3 @@
-
-### User Manual (Feature Guides) Files
-
-#### File: `docs/user-manual/feature-guides/about-us.md`
-```markdown
 # About Us Guide
 
 ## Purpose

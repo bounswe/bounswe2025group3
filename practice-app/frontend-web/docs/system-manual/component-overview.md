@@ -1,6 +1,3 @@
-
-**File: `docs/system-manual/component-overview.md`**
-```markdown
 # Component Overview
 
 ## Core Components

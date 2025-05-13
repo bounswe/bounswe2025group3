@@ -1,6 +1,3 @@
-
-**File: `docs/testing/sample-tests.md`**
-```markdown
 # Sample Tests
 
 ## Unit Test for LoginPage.js
