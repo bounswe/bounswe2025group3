@@ -1,8 +1,65 @@
+import { Platform } from 'react-native';
+import { 
+  isDockerized, 
+  isTunnelMode, 
+  DOCKER_BACKEND_URL, 
+  PUBLIC_BACKEND_URL, 
+  TUNNEL_BACKEND_URL 
+} from './docker-env';
+
 // Base URL for the API
 // export const API_BASE_URL = 'http://192.168.1.7:8000';
 // export const API_BASE_URL = 'http://127.0.0.1:8000'; // Use localhost for testing
-export const API_BASE_URL = 'http://10.0.2.2:8000'; // Special IP for Android emulator to access host machine
+// export const API_BASE_URL = 'http://10.0.2.2:8000'; // Special IP for Android emulator to access host machine
 
+// Dynamic API_BASE_URL that works in both development and Docker environments
+// In Docker, backend service would be accessed as "http://backend:8000" or via environment variable
+// For development on physical device, configure this to your computer's IP address
+// For Android emulator, use 10.0.2.2 to access the host machine
+const getBaseUrl = () => {
+  // If we have a direct environment variable, use that first (highest priority)
+  if (process.env.EXPO_DOCKER_BACKEND_URL) {
+    console.log(`Using Docker backend URL from env: ${process.env.EXPO_DOCKER_BACKEND_URL}`);
+    return process.env.EXPO_DOCKER_BACKEND_URL;
+  }
+  
+  // If we're in tunnel mode, use the tunnel-specific URL
+  if (isTunnelMode()) {
+    console.log('Using tunnel mode backend URL');
+    return TUNNEL_BACKEND_URL;
+  }
+  
+  // If we're in Docker but not using tunnel
+  if (isDockerized()) {
+    console.log('Using Docker backend URL');
+    return DOCKER_BACKEND_URL;
+  }
+  
+  // Platform-specific URLs for local development
+  if (Platform.OS === 'android') {
+    console.log('Using Android emulator special IP');
+    return TUNNEL_BACKEND_URL; // 10.0.2.2:8000
+  }
+  
+  if (Platform.OS === 'ios') {
+    console.log('Using iOS simulator URL');
+    return PUBLIC_BACKEND_URL; // 127.0.0.1:8000
+  }
+  
+  if (Platform.OS === 'web') {
+    console.log('Using web URL');
+    return PUBLIC_BACKEND_URL; // 127.0.0.1:8000
+  }
+  
+  // Default fallback
+  console.log('Using default backend URL');
+  return PUBLIC_BACKEND_URL;
+};
+
+// Get the base URL and log it for debugging
+const baseUrl = getBaseUrl();
+console.log(`=== API Base URL: ${baseUrl} ===`);
+export const API_BASE_URL = baseUrl;
 
 // API Endpoints organized by feature
 export const API_ENDPOINTS = {

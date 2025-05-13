@@ -4,9 +4,10 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { sharedStyles } from '@/components/ui/styles';
 import { API_BASE_URL, API_ENDPOINTS } from '@/constants/api';
+import { isTunnelMode, DOCKER_BACKEND_URL, TUNNEL_BACKEND_URL } from '@/constants/docker-env';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { KeyboardAvoidingView, Platform, StyleSheet, TextInput, TouchableOpacity, View, Image } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -20,6 +21,18 @@ export default function LoginScreen() {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<'success' | 'error'>('error');
   const [isLoading, setIsLoading] = useState(false);
+  const [debugInfo, setDebugInfo] = useState("");
+
+  // Collect debug information
+  useEffect(() => {
+    const info = `
+      Platform: ${Platform.OS}
+      Tunnel Mode: ${isTunnelMode() ? "Yes" : "No"}
+      API URL: ${API_BASE_URL}
+    `;
+    setDebugInfo(info);
+    console.log("Debug Info:", info);
+  }, []);
 
   const showAlert = (title: string, message: string, type: 'success' | 'error' = 'error') => {
     setAlertTitle(title);
@@ -36,7 +49,35 @@ export default function LoginScreen() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGIN}`, {
+      console.log(`Attempting login with email: ${email}`);
+      
+      // Use test account regardless of backend connection for demo
+      if (email === "test@example.com" && password === "password123") {
+        console.log("Using test account - bypassing backend");
+        // Create a dummy token for testing
+        const dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlRlc3QgVXNlciIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+        await TokenManager.saveTokens(dummyToken, dummyToken);
+        TokenManager.setEmail(email);
+        showAlert("Success", "Logged in with test account", "success");
+        
+        // Wait a bit to show the success message
+        setTimeout(() => {
+          router.replace("/(tabs)");
+        }, 1000);
+        return;
+      }
+      
+      // Determine best API URL
+      let apiUrl = API_BASE_URL;
+      if (isTunnelMode()) {
+        // In tunnel mode, URL in constants might not be usable from the device
+        console.log('Running in tunnel mode, using tunnel URL');
+        apiUrl = TUNNEL_BACKEND_URL;
+      }
+      
+      console.log(`Using API URL: ${apiUrl}${API_ENDPOINTS.AUTH.LOGIN}`);
+
+      const response = await fetch(`${apiUrl}${API_ENDPOINTS.AUTH.LOGIN}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,22 +88,42 @@ export default function LoginScreen() {
         }),
       });
 
-      if (response.ok) {
-        const json = await response.json();
-        if ("access" in json) {
-          const { access, refresh } = json;
-          await TokenManager.saveTokens(access, refresh);
-          TokenManager.setEmail(email);
-          showAlert("Success", "Logged in successfully", "success");
-          router.replace("/(tabs)");
-        } else {
-          showAlert("Error", "Invalid response from server");
-        }
+      console.log(`Login response status: ${response.status}`);
+      
+      // For debugging - show the response even for errors
+      let responseText;
+      try {
+        responseText = await response.text();
+        console.log(`Response body: ${responseText}`);
+      } catch (e) {
+        console.log(`Error reading response text: ${e}`);
+        responseText = 'Unable to read response';
+      }
+
+      // Parse the response if it's JSON
+      let json;
+      try {
+        json = JSON.parse(responseText);
+      } catch (e) {
+        console.log(`Error parsing JSON: ${e}`);
+        json = null;
+      }
+
+      if (response.ok && json && "access" in json) {
+        const { access, refresh } = json;
+        console.log("Login successful, saving tokens");
+        await TokenManager.saveTokens(access, refresh);
+        TokenManager.setEmail(email);
+        showAlert("Success", "Logged in successfully", "success");
+        router.replace("/(tabs)");
       } else {
-        showAlert("Error", "Invalid email or password");
+        const errorMsg = json && json.detail ? json.detail : "Invalid email or password";
+        console.log(`Login error: ${errorMsg}`);
+        showAlert("Error", errorMsg);
       }
     } catch (error) {
-      showAlert("Error", "Invalid email or password");
+      console.error(`Login exception: ${error}`);
+      showAlert("Error", `Connection error: ${error}`);
     } finally {
       setIsLoading(false);
     }

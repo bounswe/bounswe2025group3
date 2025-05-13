@@ -94,6 +94,47 @@
     ```
     *(Follow the instructions in the terminal to open the app on a device/emulator.)*
 
+### Running with Docker (Recommended)
+
+We've dockerized the application to make it easier to run consistently across different environments.
+
+1. **Prerequisites:**
+   * Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+   * Make sure Docker is running on your machine
+
+2. **Run the application using Docker Compose:**
+   ```bash
+   # Navigate to the practice-app directory
+   cd practice-app
+   
+   # Build and start all services
+   docker compose up --build
+   ```
+
+3. **Accessing the Mobile App:**
+   * When the mobile app container starts, it will display a QR code in the terminal
+   * Scan this QR code with the Expo Go app on your phone
+   * Alternatively, you can access the web version at http://localhost:19006
+
+4. **Test Login Credentials:**
+   * For testing in the dockerized environment, use:
+     * Email: test@example.com
+     * Password: password123
+
+5. **Troubleshooting:**
+   * If you need to see logs from just the mobile app:
+     ```
+     docker compose logs -f mobile-app
+     ```
+   * If you need to restart just the mobile app:
+     ```
+     docker compose restart mobile-app
+     ```
+   * If you need to run just the mobile app:
+     ```
+     docker compose run --service-ports mobile-app
+     ```
+
 ### Summary of Terminals
 
 *   **Terminal 1 (Backend - from `bounswe2025group3/practice-app/backend`):**
@@ -103,3 +144,6 @@
 *   **Terminal 2 (Mobile App - from `bounswe2025group3/practice-app/MobileApp`):**
     1.  `npm install`
     2.  `npx expo start`
+
+*   **Using Docker (Recommended - from `bounswe2025group3/practice-app`):**
+    1.  `docker compose up --build`

@@ -47,6 +47,8 @@ class TokenManager {
       const refreshEndpoint = "api/token/refresh/";
       const url = `${API_BASE_URL}/${refreshEndpoint}`;
       
+      console.log(`Attempting to refresh token at: ${url}`);
+      
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -55,19 +57,38 @@ class TokenManager {
         body: JSON.stringify({ refresh: refreshToken }),
       });
   
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Token refresh failed:', errorData);
-        throw new Error(errorData.detail || "Token refresh failed");
+      console.log(`Token refresh response status: ${response.status}`);
+      
+      // For debugging - log the response
+      let responseText;
+      try {
+        responseText = await response.text();
+        console.log(`Token refresh response: ${responseText}`);
+      } catch (e) {
+        console.error(`Error reading response text: ${e}`);
+        responseText = 'Unable to read response';
       }
-  
-      const data = await response.json();
+      
+      // Try to parse JSON
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        console.error(`Error parsing token refresh response: ${e}`);
+        throw new Error("Invalid response format");
+      }
+      
+      if (!response.ok) {
+        console.error('Token refresh failed:', data);
+        throw new Error(data.detail || "Token refresh failed");
+      }
       
       if (!data.access || !data.refresh) {
         console.error('Invalid token response:', data);
         throw new Error("Invalid token response");
       }
 
+      console.log('Token refresh successful, storing new tokens');
       await SecureStore.setItemAsync("accessToken", data.access);
       await SecureStore.setItemAsync("refreshToken", data.refresh);
   

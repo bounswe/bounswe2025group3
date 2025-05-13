@@ -99,4 +99,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
-}; 
+};
+
+// Add default export for the UserContext
+export default UserContext; 
