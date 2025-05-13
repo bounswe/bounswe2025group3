@@ -1,7 +1,8 @@
 from django.urls import path, include, re_path
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView, PasswordChangeView
+from rest_framework_simplejwt.views import TokenRefreshView
 
-from .views import RegisterView, LoginView, ProtectedTestView
+from .views import RegisterView, LoginView, ProtectedTestView, GoogleLoginView
 
 urlpatterns = [
     # Custom Views (already refactored)
@@ -15,4 +16,7 @@ urlpatterns = [
     re_path(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$',
             PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
     path('password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
+
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('google/', GoogleLoginView.as_view(), name='google_login'),
 ]

@@ -50,6 +50,29 @@ const LoginPage = () => {
         }
     };
 
+    // Handle Google login response
+    const handleGoogleLoginSuccess = async (credentialResponse) => {
+        try {
+            // Send the Google credential to your backend
+            const response = await axios.post('http://127.0.0.1:8000/api/auth/google/', {
+                id_token: credentialResponse.credential
+            });
+            
+            // Save tokens and user info
+            localStorage.setItem('access_token', response.data.access);
+            localStorage.setItem('refresh_token', response.data.refresh);
+            localStorage.setItem('user_id', response.data.user_id);
+            localStorage.setItem('email', response.data.email);
+            localStorage.setItem('role', response.data.role || 'user');
+            
+            // Redirect to dashboard
+            navigate('/dashboard');
+        } catch (error) {
+            console.error('Google login failed:', error);
+            setError('Google login failed: ' + (error.response?.data?.detail || error.message || 'Unknown error'));
+        }
+    };
+
     return (
         <div className="login-page">
             <div className="nav-container">
@@ -168,17 +191,9 @@ const LoginPage = () => {
                                     </button>
                                     <div className="social-button google">
                                     <GoogleLogin
-                                        onSuccess={(credentialResponse) => {
-                                        const idToken = credentialResponse.credential;
-                                        //const userData = jwt_decode(idToken); // Optional
-                                        //console.log("Google user:", userData);
-
-                                        // Save the token locally or call your backend here
-                                        localStorage.setItem('google_id_token', idToken);
-                                        navigate('/dashboard'); // or wherever you want
-                                        }}
+                                        onSuccess={handleGoogleLoginSuccess}
                                         onError={() => {
-                                        setError("Google login failed.");
+                                            setError("Google login failed.");
                                         }}
                                     />
                                     </div>
