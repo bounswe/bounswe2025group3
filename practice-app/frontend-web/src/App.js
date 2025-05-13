@@ -1,17 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './components/home/Home';
-import Login from './components/auth/LoginPage'; // Assuming updated path
-import Signup from './components/auth/SignupPage'; // Assuming exists
+import Login from './components/auth/LoginPage'; 
+import Signup from './components/auth/SignupPage'; 
 import WasteLog from './components/waste/WasteLog';
-import Dashboard from './components/dashboard/Dashboard'; // Assuming exists
-import Profile from './components/profile/Profile'; // Assuming exists
+import Dashboard from './components/dashboard/Dashboard'; 
+import Profile from './components/profile/Profile'; 
 import About from './components/aboutus/AboutUsPage';
 import Blog from './components/blog/BlogPage';
-import Leaderboard from './components/leaderboard/LeaderboardPage'; // Assuming exists
-import Challanges from './components/challenges/ChallengesPage'; // Assuming exists
+import Leaderboard from './components/leaderboard/LeaderboardPage'; 
+import Challanges from './components/challenges/ChallengesPage';
 import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
-import ResetPasswordPage from './components/auth/ResetPasswordPage'; // Assuming exists
+import ResetPasswordPage from './components/auth/ResetPasswordPage'; 
 import BlogPostPage from './components/blog/BlogPostPage';
 
 //import Pricing from './components/pricing/PricingPage';
