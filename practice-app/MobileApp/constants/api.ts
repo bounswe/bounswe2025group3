@@ -121,6 +121,7 @@ export const API_ENDPOINTS = {
   GOALS: {
     LIST: '/api/v1/goals/goals/',
     BY_ID: (id: string) => `/api/v1/goals/goals/${id}/`,
+    CREATE: '/api/v1/goals/goals/',
     CREATE_FROM_TEMPLATE: (templateId: number) => 
       `/api/v1/goals/goals/api-template/${templateId}/`,
     TEMPLATES: '/api/v1/goals/templates/',

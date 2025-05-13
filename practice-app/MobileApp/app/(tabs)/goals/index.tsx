@@ -121,13 +121,21 @@ export default function GoalsScreen() {
         <View style={styles.dateInfo}>
           <Ionicons name="play" size={16} color="#666" />
           <ThemedText style={styles.dateText}>
-            Start: {new Date(item.start_date).toLocaleDateString()}
+            Start: {new Date(item.start_date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
           </ThemedText>
         </View>
         <View style={styles.dateInfo}>
           <Ionicons name="stop" size={16} color="#666" />
           <ThemedText style={styles.dateText}>
-            End: {new Date(item.end_date).toLocaleDateString()}
+            End: {new Date(item.end_date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
           </ThemedText>
         </View>
       </View>

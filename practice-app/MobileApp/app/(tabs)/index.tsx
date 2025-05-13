@@ -228,7 +228,11 @@ export default function HomeScreen() {
                     <View style={styles.deadlineContainer}>
                       <Ionicons name="time-outline" size={16} color="#666" />
                       <ThemedText style={styles.deadlineText}>
-                        Due: {new Date(goal.end_date).toLocaleDateString()}
+                        Due: {new Date(goal.end_date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
                       </ThemedText>
                     </View>
                     <ThemedText style={styles.timeframeText}>

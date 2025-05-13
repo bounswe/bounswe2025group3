@@ -287,14 +287,22 @@ export default function GoalDetailsScreen() {
             <View style={styles.detailItem}>
               <ThemedText style={styles.detailLabel}>Created</ThemedText>
               <ThemedText style={styles.detailValue}>
-                {new Date(goal.created_at).toLocaleDateString()}
+                {new Date(goal.created_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
               </ThemedText>
             </View>
             {goal.start_date && (
               <View style={styles.detailItem}>
                 <ThemedText style={styles.detailLabel}>Start Date</ThemedText>
                 <ThemedText style={styles.detailValue}>
-                  {new Date(goal.start_date).toLocaleDateString()}
+                  {new Date(goal.start_date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
                 </ThemedText>
               </View>
             )}
@@ -302,7 +310,11 @@ export default function GoalDetailsScreen() {
               <View style={styles.detailItem}>
                 <ThemedText style={styles.detailLabel}>End Date</ThemedText>
                 <ThemedText style={styles.detailValue}>
-                  {new Date(goal.end_date).toLocaleDateString()}
+                  {new Date(goal.end_date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
                 </ThemedText>
               </View>
             )}

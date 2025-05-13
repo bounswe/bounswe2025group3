@@ -261,7 +261,11 @@ export default function AddGoalScreen() {
             </View>
             <ThemedText style={styles.timeframeInfo}>
               End date will be automatically set to {
-                calculateEndDate(startDate, timeframe).toLocaleDateString()
+                calculateEndDate(startDate, timeframe).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })
               }
             </ThemedText>
           </View>
@@ -272,7 +276,11 @@ export default function AddGoalScreen() {
               style={styles.dateButton}
               onPress={() => setShowDatePicker(true)}
             >
-              <ThemedText>{startDate.toLocaleDateString()}</ThemedText>
+              <ThemedText>{startDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</ThemedText>
             </TouchableOpacity>
             {showDatePicker && (
               <DateTimePicker
