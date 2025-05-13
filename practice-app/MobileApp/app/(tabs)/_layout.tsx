@@ -6,6 +6,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { Tabs } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
+import { useUser } from '@/app/UserContext';
 
 // Define consistent colors from our web frontend
 const GREENER_COLORS = {
@@ -16,12 +17,12 @@ const GREENER_COLORS = {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { user } = useUser();
 
   // Common tab options
   const getTabOptions = (iconName: IconSymbolName, label: string) => ({
     tabBarIcon: ({ color }: { color: string }) => <IconSymbol size={28} name={iconName} color={color} />,
     tabBarLabel: label,
-    tabBarButton: HapticTab,
   });
 
   return (
@@ -53,8 +54,22 @@ export default function TabLayout() {
         <Tabs.Screen name="goals" options={getTabOptions("target", "Goals")} />
         <Tabs.Screen name="forum" options={getTabOptions("bubble.left.fill", "Forum")} />
         <Tabs.Screen name="profile" options={getTabOptions("person.circle.fill", "Profile")} />
-        <Tabs.Screen name="admin" options={getTabOptions("shield.fill", "Admin")} />
-        <Tabs.Screen name="moderator" options={getTabOptions("shield.lefthalf.fill", "Moderator")} />
+        <Tabs.Screen 
+          name="admin" 
+          options={{
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="shield.fill" color={color} />,
+            tabBarLabel: "Admin",
+            href: user?.role === 'ADMIN' ? undefined : null
+          }} 
+        />
+        <Tabs.Screen 
+          name="moderator" 
+          options={{
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="shield.lefthalf.fill" color={color} />,
+            tabBarLabel: "Moderator",
+            href: (user?.role === 'ADMIN' || user?.role === 'MODERATOR') ? undefined : null
+          }} 
+        />
       </Tabs>
     </View>
   );

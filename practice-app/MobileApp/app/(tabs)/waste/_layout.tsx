@@ -33,12 +33,6 @@ export default function WasteLayout() {
           }}
         />
         <Stack.Screen
-          name="categories"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
           name="add"
           options={{
             headerShown: false,

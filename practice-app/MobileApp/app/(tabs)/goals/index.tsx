@@ -12,7 +12,25 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Image,
+  SafeAreaView,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+
+// Define consistent colors from our web frontend
+const GREENER_COLORS = {
+  primary: '#2E7D32',
+  secondary: '#56ea62',
+  primaryDark: '#122e1a',
+  primaryLight: '#88eb9a',
+  background: '#E8F5E9',
+  white: '#ffffff',
+  text: {
+    primary: '#333333',
+    secondary: '#555555',
+    light: '#666666',
+  }
+};
 
 interface Category {
   id: number;
@@ -132,35 +150,47 @@ export default function GoalsScreen() {
 
   if (isLoading) {
     return (
-      <ThemedView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#2E7D32" />
-      </ThemedView>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={GREENER_COLORS.secondary} />
+      </View>
     );
   }
 
   return (
-    <ThemedView style={styles.container}>
-      <View style={styles.header}>
-        <ThemedText style={styles.title}>My Goals</ThemedText>
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => router.push("/goals/add")}
-          >
-            <Ionicons name="add" size={24} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.templatesButton}
-            onPress={() => router.push({ pathname: "/goals/templates" })}
-          >
-            <Ionicons name="list-outline" size={24} color="#2E7D32" />
-          </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={[GREENER_COLORS.primaryLight, GREENER_COLORS.primaryDark]}
+        style={styles.headerBackground}
+      >
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <Image 
+              source={require('@/assets/images/greener-logo.png')} 
+              style={styles.logo} 
+              resizeMode="contain"
+            />
+            <ThemedText style={styles.headerTitle}>My Goals</ThemedText>
+          </View>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => router.push("/goals/add")}
+            >
+              <Ionicons name="add" size={24} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.templatesButton}
+              onPress={() => router.push({ pathname: "/goals/templates" })}
+            >
+              <Ionicons name="list-outline" size={24} color={GREENER_COLORS.white} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </LinearGradient>
 
       {goals.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Ionicons name="flag" size={48} color="#2E7D32" />
+          <Ionicons name="flag" size={48} color={GREENER_COLORS.secondary} />
           <ThemedText style={styles.emptyText}>
             No goals yet. Create your first sustainability goal!
           </ThemedText>
@@ -173,33 +203,48 @@ export default function GoalsScreen() {
           contentContainerStyle={styles.list}
         />
       )}
-    </ThemedView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: GREENER_COLORS.white,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: GREENER_COLORS.background,
+  },
+  headerBackground: {
+    paddingTop: 20,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
+  headerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: GREENER_COLORS.white,
+    letterSpacing: 1,
   },
   addButton: {
-    backgroundColor: '#2E7D32',
+    backgroundColor: GREENER_COLORS.secondary,
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -207,15 +252,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   templatesButton: {
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#2E7D32',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     width: 40,
     height: 40,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 8,
   },
   list: {
     padding: 20,
