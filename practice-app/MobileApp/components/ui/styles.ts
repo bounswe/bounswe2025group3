@@ -202,7 +202,6 @@ export const sharedStyles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: colors.secondary,
-    transition: 'transform 0.3s ease, background-color 0.3s ease',
   },
   registerButton: {
     backgroundColor: colors.white,
