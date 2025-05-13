@@ -8,13 +8,14 @@ class ChallengeService:
 
     @staticmethod
     def create(user, data):
-        if not user.is_staff:
-            raise ValidationError("You don't have permission to create a challenge.")
         
         challenge = Challenge.objects.create(
             name=data['name'],
             description=data['description'],
-            goal=data['goal'],
+            goal_quantity=data['goal_quantity'],
+            unit=data['unit'],
+            target_category=data['target_category'],
+            target_subcategory=data.get('target_subcategory'),  # optional
             start_date=data['start_date'],
             end_date=data['end_date'],
             entry_type=data['entry_type'],
@@ -40,29 +41,30 @@ class ChallengeService:
         return participation
 
     @staticmethod
-    def track_progress():
-        """
-        Recalculate scores for all participants based on WasteLogs.
-        Assumes that each WasteLog has a get_score() method.
-        """
-        participations = ChallengeParticipation.objects.select_related('user', 'challenge').all()
+    def track_progress(user=None, waste_log=None):
+        if waste_log:
+            # Only update relevant participations for the given waste_log
+            participations = ChallengeParticipation.objects.filter(
+                user=waste_log.user,
+                challenge__start_date__lte=waste_log.disposal_date,
+                challenge__end_date__gte=waste_log.disposal_date
+            )
+        elif user:
+            participations = ChallengeParticipation.objects.filter(user=user)
+        else:
+            participations = ChallengeParticipation.objects.all()
 
         for participation in participations:
-            logs = WasteLog.objects.filter(
+            challenge = participation.challenge
+            waste_logs = WasteLog.objects.filter(
                 user=participation.user,
-                date_logged__range=(participation.challenge.start_date, participation.challenge.end_date)
+                disposal_date__range=[challenge.start_date, challenge.end_date]
             )
 
-            total_score = 0
-            for log in logs:
-                if log.quantity and log.sub_category:
-                    try:
-                        total_score += log.get_score()
-                    except:
-                        continue  # handle logs with missing data or invalid sub_category
-            
+            total_score = sum([log.quantity for log in waste_logs])
             participation.score = total_score
             participation.save()
+
 
 
 class TeamService:

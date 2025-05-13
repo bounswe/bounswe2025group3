@@ -16,15 +16,24 @@ class ChallengeViewSet(viewsets.ModelViewSet):
     serializer_class = ChallengeSerializer
 
     def get_queryset(self):
-        # Filter challenges by status (e.g., active or past)
         queryset = Challenge.objects.all()
-        status_filter = self.request.query_params.get('status', None)
-        if status_filter:
-            if status_filter == 'active':
-                queryset = queryset.filter(start_date__lte=timezone.now(), end_date__gte=timezone.now())
-            elif status_filter == 'past':
-                queryset = queryset.filter(end_date__lt=timezone.now())
+        status_filter = self.request.query_params.get("status")
+
+        if status_filter == "active":
+            queryset = queryset.filter(start_date__lte=timezone.now(), end_date__gte=timezone.now())
+        elif status_filter == "past":
+            queryset = queryset.filter(end_date__lt=timezone.now())
+
+        category = self.request.query_params.get("target_category")
+        if category:
+            queryset = queryset.filter(target_category_id=category)
+
+        subcategory = self.request.query_params.get("target_subcategory")
+        if subcategory:
+            queryset = queryset.filter(target_subcategory_id=subcategory)
+
         return queryset
+
 
     def perform_create(self, serializer):
         ChallengeService.create(user=self.request.user, data=serializer.validated_data)

@@ -1,28 +1,59 @@
 from rest_framework import serializers
 from ...models import ChallengeTemplate, Challenge, ChallengeParticipation, Team
 from django.contrib.auth import get_user_model
+from apps.waste.models import WasteCategory, SubCategory
 
 User = get_user_model()
 
 
 class ChallengeTemplateSerializer(serializers.ModelSerializer):
+    target_category = serializers.PrimaryKeyRelatedField(
+        queryset=WasteCategory.objects.all(), required=False
+    )
+    target_subcategory = serializers.PrimaryKeyRelatedField(
+        queryset=SubCategory.objects.all(), required=False
+    )
+
     class Meta:
         model = ChallengeTemplate
         fields = [
             "id",
             "name",
             "description",
-            "goal",
-            "duration_days",
+            "goal_quantity",
+            "unit",
+            "target_category",
+            "target_subcategory",
+            "start_date",
+            "end_date",
             "entry_type",
             "created_at",
         ]
-        read_only_fields = fields
+        read_only_fields = ["id", "created_at"]
+
+    def validate(self, attrs):
+        category = attrs.get("target_category")
+        subcategory = attrs.get("target_subcategory")
+
+        if category and subcategory:
+            raise serializers.ValidationError("Only one of target_category or target_subcategory should be set.")
+        if not category and not subcategory:
+            raise serializers.ValidationError("Either target_category or target_subcategory must be set.")
+
+        return attrs
+
 
 
 class ChallengeSerializer(serializers.ModelSerializer):
     creator = serializers.HiddenField(default=serializers.CurrentUserDefault())
     participants_count = serializers.SerializerMethodField()
+
+    target_category = serializers.PrimaryKeyRelatedField(
+        queryset=WasteCategory.objects.all(), required=False
+    )
+    target_subcategory = serializers.PrimaryKeyRelatedField(
+        queryset=SubCategory.objects.all(), required=False
+    )
 
     class Meta:
         model = Challenge
@@ -30,7 +61,10 @@ class ChallengeSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
-            "goal",
+            "goal_quantity",
+            "unit",
+            "target_category",
+            "target_subcategory",
             "start_date",
             "end_date",
             "entry_type",
@@ -49,6 +83,15 @@ class ChallengeSerializer(serializers.ModelSerializer):
         end = attrs.get("end_date")
         if start and end and start >= end:
             raise serializers.ValidationError("End date must be after start date.")
+
+        category = attrs.get("target_category")
+        subcategory = attrs.get("target_subcategory")
+
+        if category and subcategory:
+            raise serializers.ValidationError("Only one of target_category or target_subcategory should be set.")
+        if not category and not subcategory:
+            raise serializers.ValidationError("Either target_category or target_subcategory must be set.")
+
         return attrs
 
 
