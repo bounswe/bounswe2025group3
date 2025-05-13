@@ -116,3 +116,41 @@
       margin-bottom: 2rem;
     }
   }
+
+  /* ---------- Nav “Sign Up” pill – fix for SignupPage ---------- */
+
+/* 1. Base look: full-width pill with white text */
+.nav-button-style,
+.signup-button-style {
+  display: inline-block;
+  padding: 0.55rem 1.6rem;
+  background: var(--accent, #2f7e21);
+  color: #fff !important;           /* keep text visible */
+  font-weight: 600;
+  border: 2px solid var(--accent, #2f7e21);
+  border-radius: 9999px;            /* pill */
+  text-decoration: none;            /* no underline */
+  line-height: 1;                   /* reset zero-height issue */
+  transition: background 0.25s, color 0.25s;
+}
+
+.nav-button-style:hover,
+.signup-button-style:hover {
+  background: #fff;
+  color: var(--accent, #2f7e21) !important;
+}
+
+/* 2. When the li has .active, kill the green underline             */
+/*    (otherwise you see the skinny stripe below the pill)          */
+.nav-item.active .nav-button-style,
+.nav-item.active .signup-button-style {
+  border-bottom: none !important;
+}
+
+/* 3. Optional – tighter on mobile */
+@media (max-width: 768px) {
+  .nav-button-style,
+  .signup-button-style {
+    padding: 0.45rem 1.2rem;
+  }
+}
