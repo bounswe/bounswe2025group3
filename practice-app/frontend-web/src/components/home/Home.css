@@ -1,0 +1,596 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(to right, #122e1a, #88eb9a);
+    color: #333;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(to bottom, #88eb9a, #122e1a); /* Fallback gradient */
+    color: white;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 20px;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in;
+}
+
+.hero-content p {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    animation: fadeIn 1.5s ease-in;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.cta-button {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cta-button.primary {
+    background-color: #56ea62;
+    color: white;
+}
+
+.cta-button.secondary {
+    background-color: transparent;
+    border: 2px solid #56ea62;
+    color: #56ea62;
+}
+
+.cta-button:hover {
+    transform: scale(1.05);
+}
+
+.cta-button.primary:hover {
+    background-color: #64d49a;
+}
+
+.cta-button.secondary:hover {
+    background-color: #56ea62;
+    color: white;
+}
+
+/* Mission Section */
+.mission-section {
+    padding: 60px 20px;
+    text-align: center;
+    background-color: rgba(199, 232, 202, 0.9);
+}
+
+.mission-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.mission-section p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.mission-features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.feature {
+    max-width: 300px;
+    text-align: center;
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.feature h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Eco-Tips Carousel */
+.tips-section {
+    padding: 60px 20px;
+    background: linear-gradient(to right, #88eb9a, #122e1a);
+    color: white;
+    text-align: center;
+}
+
+.tips-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.tips-carousel {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.tip-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    flex: 1;
+    animation: slideIn 0.5s ease;
+}
+
+.tip-card p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.tip-category {
+    font-size: 0.9rem;
+    color: #56ea62;
+}
+
+.carousel-arrow {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.carousel-arrow:hover {
+    color: #56ea62;
+}
+
+/* Rewards Section */
+.rewards-section {
+    padding: 60px 20px;
+    background-color: white;
+    text-align: center;
+}
+
+.rewards-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.rewards-section p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.rewards-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.reward-card {
+    max-width: 300px;
+    text-align: center;
+    padding: 20px;
+    background: rgba(199, 232, 202, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.reward-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 15px;
+}
+
+.reward-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.reward-card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+    padding: 60px 20px;
+    background-color: rgba(199, 232, 202, 0.9);
+    text-align: center;
+}
+
+.testimonials-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.testimonials {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.testimonial {
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.testimonial span {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Footer */
+.footer {
+    background-color: #122e1a;
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.footer-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links li a:hover {
+    color: #56ea62;
+}
+
+.footer p {
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .hero-section {
+        height: 60vh;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    .mission-features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .rewards-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .testimonials {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .cta-button {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .mission-section h2,
+    .tips-section h2,
+    .rewards-section h2,
+    .testimonials-section h2 {
+        font-size: 2rem;
+    }
+
+    .tips-carousel {
+        flex-direction: column;
+    }
+
+    .carousel-arrow {
+        font-size: 1.5rem;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Home.css */
+
+/* --- Your existing :root variables --- */
+:root {
+    --accent: #008000;
+    --text: #333;
+    --light-text: #666;
+    /* Add if missing from your root or if you want to use these */
+    --brand-text-color: var(--accent);
+    --nav-link-color: var(--text);
+    --nav-link-hover-color: var(--accent);
+    --nav-link-active-color: var(--accent);
+  }
+  
+  
+  /* --- YOUR EXISTING .home-container, .hero-section etc. STYLES ... --- */
+  /* ALL THE WAY DOWN TO .nav-container */
+  .home-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: linear-gradient(to right, #122e1a, #88eb9a);
+      color: #333;
+  }
+  
+  /* ... (all your other styles for sections like hero, mission, etc.) ... */
+  
+  
+  /* --- Navigation Bar Styles (Original + Additions for Brand) --- */
+  .nav-container {
+    padding: 1rem 2rem; /* Your original padding */
+    border-bottom: 1px solid #ddd;
+    background-color: #fff; /* Added background for clarity */
+    position: sticky; /* Added for sticky nav */
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Added subtle shadow */
+  }
+  
+  .navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex; /* ** MODIFIED: Make navbar a flex container ** */
+    align-items: center; /* ** ADDED: Vertically align brand and nav links ** */
+    /* justify-content: space-between; -- We will try to avoid this to keep main-nav centered */
+  }
+  
+  /* --- NEW STYLES FOR BRAND (Logo + Name) --- */
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-right: auto; /* ** ADDED: Push the navigation links to the right of the brand ** */
+                       /* This effectively makes the brand take the left-most space */
+  }
+  
+  .navbar-logo-image {
+    height: 35px;   /* <<<--- ADJUST THIS VALUE TO CONTROL LOGO SIZE */
+    width: auto;    /* Maintain aspect ratio */
+    margin-right: 0.5rem; /* Space between logo and name */
+  }
+  
+  .navbar-app-name {
+    font-size: 1.4rem; /* Adjust as needed */
+    font-weight: 700;
+    color: var(--brand-text-color, var(--accent)); /* Use your brand green */
+    text-transform: uppercase;
+  }
+  /* --- END OF NEW BRAND STYLES --- */
+  
+  
+  /* YOUR EXISTING .main-nav and .nav-item styles */
+  .main-nav {
+    display: flex;
+    list-style: none;
+    gap: 2rem; /* Your original gap */
+    justify-content: center; /* Your original centering */
+    padding: 0;
+    margin: 0;
+    /* flex-grow: 1; -- Potentially add this if centering is off with the brand */
+  }
+  
+  .nav-item {
+    padding: 0.5rem 0; /* Your original padding */
+    cursor: pointer;
+    color: var(--text);
+    position: relative;
+  }
+  
+  .nav-item a { /* General link styling for NavLink */
+    text-decoration: none;
+    color: var(--nav-link-color, var(--text)); /* Using variable for consistency */
+    font-weight: 500;
+    padding: 0.25rem 0.5rem; /* Added some padding for better click target */
+    border-radius: 4px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  
+  .nav-item a:hover, /* Hover for all nav links */
+  .nav-item a.active-link-class { /* Active style for NavLink */
+    color: var(--nav-link-hover-color, var(--accent));
+    /* Optional: background-color: rgba(var(--accent-rgb, 0,128,0), 0.08); */
+  }
+  
+  .nav-item a.active-link-class {
+      font-weight: 600; /* Bolder active link */
+  }
+  
+  /* Assuming NavLink active class is 'active-link-class' or just 'active' */
+  .nav-item a.active-link-class::after { /* Your existing active underline */
+    content: '';
+    position: absolute;
+    bottom: 0; /* Original bottom */
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+  
+  /* --- NEW STYLES FOR NAV BUTTON (if you want Sign Up to look like a button) --- */
+  .nav-item a.nav-button-style {
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-left: 0.5rem; /* Space from other links */
+    color: white; /* Default button text color */
+    background-color: var(--accent);
+    border: 2px solid var(--accent);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .nav-item a.nav-button-style.signup-button-style:hover {
+    background-color: var(--accent-dark, #549d54); /* Define --accent-dark if not present */
+    border-color: var(--accent-dark, #77c677);
+    color: white;
+  }
+  /* --- END OF NEW NAV BUTTON STYLES --- */
+  
+  
+  /* --- YOUR EXISTING STYLES for footer, animations, responsive sections below --- */
+  /* ... (all your styles from .footer onwards, including media queries) ... */
+  /* ... ENSURE the responsive media queries for .navbar and .main-nav are checked ... */
+  
+  /* --- Potential responsive adjustments for the modified navbar --- */
+  @media (max-width: 850px) { /* Or your preferred breakpoint */
+    .navbar {
+      flex-direction: column; /* Stack brand and nav links */
+      align-items: flex-start; /* Align brand to the start */
+    }
+    .navbar-brand {
+      margin-bottom: 0.75rem; /* Space when stacked */
+      margin-right: 0; /* Reset margin */
+    }
+    .main-nav {
+      width: 100%; /* Nav links take full width */
+      justify-content: flex-start; /* Align links to the start */
+      flex-direction: column; /* Stack li items */
+      align-items: flex-start; /* Align li items to start */
+      gap: 0.2rem;
+    }
+    .nav-item {
+      width: 100%; /* Make list items full width */
+    }
+    .nav-item a { /* Make links full width */
+        display: block;
+        padding: 0.8rem 0.5rem;
+    }
+    .nav-item a.active-link-class::after {
+      left: 0.5rem; width: 30px; transform: none;
+    }
+    .nav-item a.nav-button-style {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        text-align: center;
+        display: inline-block; /* So it doesn't take full width unless intended */
+        width: auto;
+    }
+  }
+  
+  @media (max-width: 480px) {
+      .navbar-logo-image { height: 30px; margin-right: 0.4rem;}
+      .navbar-app-name { font-size: 1.2rem; }
+      .nav-container { padding: 0.8rem 1rem; }
+  }
+  
+  /* Fallback for icons if images fail (from your original code) */
+  .feature-icon { /* Your original .feature-icon style */
+      width: 60px;
+      height: 60px;
+      margin-bottom: 15px;
+  }
+  .icon-fallback {
+      display: inline-block; padding: 10px; background-color: #eee;
+      border-radius: 4px; font-size: 0.8rem; color: #555; text-align: center;
+  }
+  .icon-fallback-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 50px; height: 50px; border-radius: 50%; background-color: var(--accent);
+      color: white; font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;
+  }
