@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
-import '../leaderboard/LeaderboardPage.css';
+import './GoalsPage.css'; // Assuming you have a CSS file for styling
 
 // ----- Config -----
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
