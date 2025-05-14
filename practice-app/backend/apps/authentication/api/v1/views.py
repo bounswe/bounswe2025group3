@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from .serializers import CustomTokenObtainPairSerializer, RegisterSerializer
 from apps.authentication.services import AuthenticationService, OAuthService
 from rest_framework.permissions import IsAuthenticated, AllowAny
+
 # Import direct schema tools
 from drf_spectacular.utils import extend_schema, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
@@ -25,7 +26,7 @@ User = get_user_model()
 class RegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
-    
+
     @extend_schema(
         tags=['Authentication'],
         summary='User Registration',

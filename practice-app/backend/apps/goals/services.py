@@ -36,7 +36,7 @@ class GoalService:
         try:
             goal = Goal.objects.get(id=goal_id)
             # Placeholder logic for tracking
-            goal.progress = 50  # Replace with actual logic
+            goal.progress = 50 
             goal.is_complete = goal.progress >= goal.target
             goal.save()
             return {
