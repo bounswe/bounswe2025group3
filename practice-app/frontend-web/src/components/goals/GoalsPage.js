@@ -1,256 +1,167 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
-import './GoalsPage.css'; // Assuming you have a CSS file for styling
+import './GoalsPage.css';
 
 // ----- Config -----
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
 
-// ----- Small util for emojis / icons -----
+// ----- Icon util -----
 const Icon = ({ name, className = '' }) => {
   const icons = {
-    logo: '🌿',
-    waste: '🗑️',
-    leaderboard: '📊',
-    challenges: '🏆',
-    profile: '👤',
-    trophy: '🏆',
-    star: '⭐',
-    dashboard: '🏠',
-    goal: '🎯',
-    plus: '➕',
+    logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆', dashboard: '🏠', goal: '🎯', plus: '➕'
   };
   return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
-// ----- Main Component -----
 const GoalsPage = () => {
-  /* ------------------------------ state ------------------------------ */
+  /* -------------------- state -------------------- */
   const [goals, setGoals] = useState([]);
+  const [categories, setCategories] = useState([]); // <‑‑ fetched from backend
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  // form state for new goal
-  const [newGoal, setNewGoal] = useState({
-    category_id: '',
-    goal_type: 'reduction',
-    timeframe: 'daily',
-    target: '',
-    start_date: '',
-    end_date: '',
-  });
+  const [error, setError]   = useState('');
   const [creating, setCreating] = useState(false);
+  const [newGoal, setNewGoal] = useState({
+    category_id: '', goal_type: 'reduction', timeframe: 'daily', target: '', start_date: '', end_date: ''
+  });
 
-  /* ------------------------- fetch existing goals ------------------------- */
+  const token = localStorage.getItem('access_token');
+
+  /* -------------------- helpers -------------------- */
+  const authHeader = { Authorization: `Bearer ${token}` };
+
+  /* -------------------- fetch on mount -------------------- */
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
-      setError('You must be logged in to view your goals.');
-      setLoading(false);
-      return;
-    }
+    if (!token) { setError('You must be logged in.'); setLoading(false); return; }
 
-    const fetchGoals = async () => {
+    const fetchAll = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${API_URL}/api/v1/goals/goals/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        // DRF default pagination shape => {results: [...]} OR plain array
-        const list = Array.isArray(res.data) ? res.data : res.data.results ?? [];
-        setGoals(list);
+        const [goalRes, catRes] = await Promise.all([
+          axios.get(`${API_URL}/api/v1/goals/goals/`, { headers: authHeader }),
+          axios.get(`${API_URL}/api/v1/waste/categories/`, { headers: authHeader }) // path reused from WasteLog
+        ]);
+        const goalList = Array.isArray(goalRes.data) ? goalRes.data : goalRes.data.results ?? [];
+        const catList  = Array.isArray(catRes.data)  ? catRes.data  : catRes.data.results  ?? [];
+        setGoals(goalList);
+        setCategories(catList);
         setError('');
       } catch (err) {
         console.error(err);
-        setError('Failed to load goals.');
-      } finally {
-        setLoading(false);
-      }
+        setError('Failed to load goals or categories.');
+      } finally { setLoading(false); }
     };
-    fetchGoals();
-  }, []);
+    fetchAll();
+  }, []); // eslint‑disable‑line
 
-  /* --------------------------- create new goal --------------------------- */
-  const handleFieldChange = (e) => {
-    const { name, value } = e.target;
-    setNewGoal((prev) => ({ ...prev, [name]: value }));
-  };
+  /* -------------------- form handlers -------------------- */
+  const handleFieldChange = (e) => setNewGoal({ ...newGoal, [e.target.name]: e.target.value });
 
-    const handleAddGoal = async (e) => {
+  const handleAddGoal = async (e) => {
     e.preventDefault();
-
-    // --- simple client‑side validation ---
-    if (!newGoal.category_id || !newGoal.target) {
-      setError('Category and target are required.');
-      return;
-    }
-
+    if (!newGoal.category_id || !newGoal.target) { setError('Category and target are required.'); return; }
     setCreating(true);
     try {
-      const token = localStorage.getItem('access_token');
-
-      // build payload dynamically → leave out empty fields so DRF doesn’t choke on "" dates
-            const userId = Number(localStorage.getItem('user_id'));
+      const user = Number(localStorage.getItem('user_id'));
       const payload = {
-        user: userId,                // <- backend requires this field
+        user,
         category_id: Number(newGoal.category_id),
         goal_type: newGoal.goal_type,
         timeframe: newGoal.timeframe,
         target: Number(newGoal.target),
+        ...(newGoal.start_date && { start_date: newGoal.start_date }),
+        ...(newGoal.end_date   && { end_date:   newGoal.end_date   })
       };
-      if (newGoal.start_date) payload.start_date = newGoal.start_date;
-      if (newGoal.end_date)   payload.end_date   = newGoal.end_date;
-
-      await axios.post(`${API_URL}/api/v1/goals/goals/`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      await axios.post(`${API_URL}/api/v1/goals/goals/`, payload, { headers: authHeader });
       // refresh list
-      const refreshed = await axios.get(`${API_URL}/api/v1/goals/goals/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const list = Array.isArray(refreshed.data) ? refreshed.data : refreshed.data.results ?? [];
-      setGoals(list);
-
-      // reset form
+      const fresh = await axios.get(`${API_URL}/api/v1/goals/goals/`, { headers: authHeader });
+      setGoals(Array.isArray(fresh.data) ? fresh.data : fresh.data.results ?? []);
       setNewGoal({ category_id: '', goal_type: 'reduction', timeframe: 'daily', target: '', start_date: '', end_date: '' });
       setError('');
     } catch (err) {
-      console.error(err);
-      // Try to surface DRF validation details if available
       const apiMsg = err?.response?.data ? JSON.stringify(err.response.data) : 'Bad request';
       setError(`Unable to create goal: ${apiMsg}`);
-    } finally {
-      setCreating(false);
-    }
+    } finally { setCreating(false); }
   };
 
-  /* ------------------------------ render ------------------------------ */
+  /* -------------------- render -------------------- */
   return (
-    <div className="leaderboard-page-layout">
-      {/* ---------- top nav ---------- */}
+    <div className="goals-page-layout">
+      {/* nav */}
       <header className="dashboard-top-nav">
-        <Link to="/" className="app-logo">
-          <Icon name="logo" /> Greener
-        </Link>
+        <Link to="/" className="app-logo"><Icon name="logo"/> Greener</Link>
         <nav className="main-actions-nav">
-          <NavLink to="/dashboard" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
-            <Icon name="dashboard" /> Dashboard
-          </NavLink>
-          <NavLink to="/waste" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
-            <Icon name="waste" /> Waste Log
-          </NavLink>
-          <NavLink to="/goals" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
-            <Icon name="goal" /> Goals
-          </NavLink>
-          <NavLink to="/leaderboard" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
-            <Icon name="leaderboard" /> Leaderboard
-          </NavLink>
-            <NavLink to="/challenges" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                <Icon name="challenges" /> Challenges
-            </NavLink>
+          <NavLink to="/dashboard"   className={({isActive})=>`nav-action-item ${isActive?'active':''}`}> <Icon name="dashboard"/> Dashboard </NavLink>
+          <NavLink to="/waste"       className={({isActive})=>`nav-action-item ${isActive?'active':''}`}> <Icon name="waste"/> Waste Log </NavLink>
+          <NavLink to="/goals"       className={({isActive})=>`nav-action-item ${isActive?'active':''}`}> <Icon name="goal"/> Goals </NavLink>
+          <NavLink to="/leaderboard" className={({isActive})=>`nav-action-item ${isActive?'active':''}`}> <Icon name="leaderboard"/> Leaderboard </NavLink>
+          <NavLink to="/challenges"  className={({isActive})=>`nav-action-item ${isActive?'active':''}`}> <Icon name="challenges"/> Challenges </NavLink>
         </nav>
       </header>
 
-      <main className="leaderboard-main-content">
-        <div className="leaderboard-header-section">
-          <h1>
-            <Icon name="goal" /> Your Goals
-          </h1>
-          <p>Track your sustainability targets and monitor your progress over time.</p>
+      <main className="goals-main-content">
+        <div className="goals-header-section">
+          <h1><Icon name="goal"/> Your Goals</h1>
+          <p>Set targets and watch your progress.</p>
         </div>
 
-        {/* ---------- Add‑Goal Form ---------- */}
-        <div className="leaderboard-table-wrapper" style={{ marginBottom: '2rem', padding: '1.5rem' }}>
-          <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem' }}>
-            <Icon name="plus" /> Add a New Goal
-          </h2>
-          <form onSubmit={handleAddGoal} className="goal-form" style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))' }}>
-            <input
-              type="number"
-              name="category_id"
-              placeholder="Category ID"
-              value={newGoal.category_id}
-              onChange={handleFieldChange}
-              required
-            />
-            <select name="goal_type" value={newGoal.goal_type} onChange={handleFieldChange} required>
+        {/* form */}
+        <div className="goal-form-card" style={{marginBottom:'2rem',padding:'1.5rem'}}>
+          <h2 style={{marginBottom:'1rem',fontSize:'1.25rem'}}><Icon name="plus"/> Add a New Goal</h2>
+          {categories.length === 0 && <p style={{color:'var(--text-medium)'}}>No waste categories available – cannot create goals.</p>}
+          <form onSubmit={handleAddGoal} className="goal-form">
+            <select name="category_id" value={newGoal.category_id} onChange={handleFieldChange} required disabled={creating||categories.length===0}>
+              <option value="">Select Category…</option>
+              {categories.map(c=> <option key={c.id} value={c.id}>{c.name} ({c.unit})</option>)}
+            </select>
+            <select name="goal_type" value={newGoal.goal_type} onChange={handleFieldChange} required disabled={creating}>
               <option value="reduction">Reduction</option>
               <option value="increase">Increase</option>
             </select>
-            <select name="timeframe" value={newGoal.timeframe} onChange={handleFieldChange} required>
+            <select name="timeframe" value={newGoal.timeframe} onChange={handleFieldChange} required disabled={creating}>
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
               <option value="yearly">Yearly</option>
             </select>
-            <input
-              type="number"
-              name="target"
-              placeholder="Target units"
-              value={newGoal.target}
-              onChange={handleFieldChange}
-              required
-            />
-            <input type="date" name="start_date" value={newGoal.start_date} onChange={handleFieldChange} />
-            <input type="date" name="end_date" value={newGoal.end_date} onChange={handleFieldChange} />
-            <button type="submit" className="nav-action-item" disabled={creating} style={{ gridColumn: 'span 2' }}>
-              {creating ? 'Saving…' : 'Create Goal'}
+            <input type="number" name="target" placeholder="Target units" value={newGoal.target} onChange={handleFieldChange} required disabled={creating}/>
+            <input type="date" name="start_date" value={newGoal.start_date} onChange={handleFieldChange} disabled={creating}/>
+            <input type="date" name="end_date"   value={newGoal.end_date}   onChange={handleFieldChange} disabled={creating}/>
+            <button type="submit" disabled={creating||categories.length===0} style={{gridColumn:'span 2'}}>
+              {creating?'Saving…':'Create Goal'}
             </button>
           </form>
         </div>
 
-        {/* ---------- status messages ---------- */}
-        {loading && (
-          <div className="loader-container-main">
-            <div className="loader-spinner-main"></div>
-            <p>Loading goals…</p>
-          </div>
-        )}
+        {/* status */}
+        {loading && <div className="loader-container-main"><div className="loader-spinner-main"/> <p>Loading…</p></div>}
+        {error && !loading && <div className="error-message-box-main">{error}</div>}
 
-        {error && !loading && (
-          <div className="error-message-box-main">
-            {error}
-          </div>
-        )}
-
-        {/* ---------- Goals list ---------- */}
-        {!loading && !error && goals.length > 0 && (
-          <div className="leaderboard-table-wrapper">
-            <table className="leaderboard-table">
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Timeframe</th>
-                  <th>Target</th>
-                  <th>Progress</th>
-                </tr>
-              </thead>
+        {/* list */}
+        {!loading && !error && goals.length>0 && (
+          <div className="goals-table-wrapper">
+            <table className="goals-table">
+              <thead><tr><th>Category</th><th>Timeframe</th><th>Target</th><th>Progress</th></tr></thead>
               <tbody>
-                {goals.map((goal) => (
-                  <tr key={goal.id}>
-                    <td>{goal.category?.name ?? goal.category ?? goal.category_id}</td>
-                    <td>{goal.timeframe}</td>
-                    <td>{goal.target ?? goal.target_amount} units</td>
-                    <td>
-                      {goal.progress} / {(goal.target ?? goal.target_amount) || 1}{' '}
-                      ({(goal.target ?? goal.target_amount)
-                        ? Math.round(((goal.progress || 0) / (goal.target ?? goal.target_amount)) * 100)
-                        : 0}
-                      %)
-                    </td>
-                  </tr>
-                ))}
+                {goals.map(g=>{
+                  const cat = categories.find(c=>c.id===g.category_id) || g.category;
+                  const target = g.target ?? g.target_amount;
+                  return (
+                    <tr key={g.id}>
+                      <td>{cat?.name ?? cat}</td>
+                      <td>{g.timeframe}</td>
+                      <td>{target} units</td>
+                      <td>{g.progress} / {target} ({target?Math.round(((g.progress||0)/target)*100):0}%)</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         )}
 
-        {!loading && !error && goals.length === 0 && (
-          <div className="empty-leaderboard-message">
-            <Icon name="goal" />
-            <p>No goals found. Start by creating your first sustainability target!</p>
-          </div>
+        {!loading && !error && goals.length===0 && (
+          <div className="empty-goals-message"><Icon name="goal"/><p>No goals yet – add one above.</p></div>
         )}
       </main>
     </div>
