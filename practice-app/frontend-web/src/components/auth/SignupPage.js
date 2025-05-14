@@ -4,11 +4,14 @@ import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css'; // For shared base styles
 import './SignupPage.css'; // For signup-specific styles
 
+// Use environment variable or default to localhost:10000
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+
 const SignupPage = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    password1: '', 
+    password: '', // Changed from password1 to password to match backend
     password2: '',
     first_name: '',
     last_name: '',
@@ -27,7 +30,7 @@ const SignupPage = () => {
     e.preventDefault();
     setError('');
 
-    if (formData.password1 !== formData.password2) {
+    if (formData.password !== formData.password2) {
       setError('Passwords do not match.');
       return;
     }
@@ -37,10 +40,15 @@ const SignupPage = () => {
     //delete submissionData.password2; // Don't send password2 to backend
 
     try {
+      console.debug('Registration attempt:', { 
+        email: formData.email, 
+        username: formData.username,
+        apiUrl: API_URL 
+      });
       // Ensure your backend endpoint for registration is correct
       // and it expects 'password' field not 'password1'.
       // If it expects 'password1', change 'password' back to 'password1' in state and here.
-      await axios.post('http://127.0.0.1:8000/api/auth/register/', submissionData);
+      await axios.post(`${API_URL}/api/auth/register/`, submissionData);
       alert('Registration successful! Please log in.');
       navigate('/login');
     } catch (err) {
@@ -136,10 +144,10 @@ const SignupPage = () => {
                     </label>
                     <input
                       id="password"
-                      name="password1" 
+                      name="password" 
                       type="password"
                       placeholder="Enter Password"
-                      value={formData.password1} 
+                      value={formData.password} 
                       onChange={handleChange}
                       required
                     />

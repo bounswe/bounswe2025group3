@@ -64,7 +64,12 @@ This repository contains the source code for the CMPE352/451 Group 3 project, an
     python manage.py createsuperuser
     ```
 
-7.  **Run the development server:**
+7. **Create test templates for goals:**
+    ```bash
+    python manage.py create_test_goal_templates
+    ```
+
+8.  **Run the development server:**
     ```bash
     python manage.py runserver
     ```

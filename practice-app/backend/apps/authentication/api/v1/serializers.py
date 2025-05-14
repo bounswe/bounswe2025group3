@@ -6,6 +6,31 @@ from apps.authentication.models import UserAuthToken
 
 User = get_user_model()
 
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True)
+    password2 = serializers.CharField(write_only=True, required=True, label="Confirm password")
+    
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'password', 'password2', 'first_name', 'last_name')
+        extra_kwargs = {
+            'first_name': {'required': False},
+            'last_name': {'required': False},
+        }
+        
+    def validate(self, data):
+        if data['password'] != data['password2']:
+            raise serializers.ValidationError({"password2": "Passwords don't match"})
+        return data
+        
+    def create(self, validated_data):
+        validated_data.pop('password2')
+        password = validated_data.pop('password')
+        user = User.objects.create(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+
 class CustomRegisterSerializer(DjRestAuthRegisterSerializer):
     username = serializers.CharField(required=True, max_length=150)
     first_name = serializers.CharField(required=False, allow_blank=True, max_length=150)
