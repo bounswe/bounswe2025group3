@@ -1,38 +1,30 @@
 from django.db import models
 from django.conf import settings
-from apps.waste.models import WasteCategory
+from apps.waste.models import SubCategory
 from apps.waste.models import WasteLog  # adjust if it's elsewhere
 from django.utils import timezone
 from django.db.models import Sum 
 
 class Goal(models.Model):
-    GOAL_TYPE_CHOICES = [
-        ('reduction', 'Reduction'),
-        ('recycling', 'Recycling'),
-        # add more as needed
-    ]
 
     TIMEFRAME_CHOICES = [
         ('daily', 'Daily'),
         ('weekly', 'Weekly'),
         ('monthly', 'Monthly'),
-        # ('custom', 'Custom') # Add if allowing custom dates
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    category = models.ForeignKey(WasteCategory, on_delete=models.CASCADE)
-    goal_type = models.CharField(max_length=50, choices=GOAL_TYPE_CHOICES)
+    category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     timeframe = models.CharField(max_length=20, choices=TIMEFRAME_CHOICES)
     target = models.FloatField()
     progress = models.FloatField(default=0.0)
     is_complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     start_date = models.DateField(null=True, blank=True, help_text="Start date for custom timeframe goals")
-    end_date = models.DateField(null=True, blank=True, help_text="End date for custom timeframe goals")
     status = models.CharField(max_length=20, default='active', help_text="Status of the goal (e.g., active, achieved, failed)") # Added status field
 
     def __str__(self):
-        return f"{self.user.username} - {self.category.name} ({self.goal_type})"
+        return f"{self.user.username} - {self.category.name}"
     
 
     def update_progress(self):
@@ -40,7 +32,6 @@ class Goal(models.Model):
         
         # Determine start and end date based on timeframe or custom dates
         effective_start_date = self.start_date
-        effective_end_date = self.end_date
 
         if self.timeframe == 'daily':
             effective_start_date = today
@@ -65,7 +56,7 @@ class Goal(models.Model):
 
         logs = WasteLog.objects.filter(
             user=self.user,
-            sub_category__category=self.category, # Filter by category through sub_category
+            sub_category=self.category, # Filter by category through sub_category
             disposal_date__range=(effective_start_date, min(today, effective_end_date))
         )
 
@@ -91,7 +82,7 @@ class Goal(models.Model):
 class GoalTemplate(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    category = models.ForeignKey(WasteCategory, on_delete=models.CASCADE, related_name="goal_templates")
+    category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="goal_templates")
     target = models.FloatField(help_text="Target value the user should aim to reach")
     timeframe = models.CharField(max_length=50, help_text="Timeframe description (e.g., 'weekly', 'monthly')")
     created_at = models.DateTimeField(auto_now_add=True)
