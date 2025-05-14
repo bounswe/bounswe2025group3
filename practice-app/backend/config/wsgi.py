@@ -8,14 +8,16 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 """
 
 import os
-from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
-# Initialize Django WSGI application
-application = get_wsgi_application()
-
-# Reset database on Render deployment
+# Reset database on Render deployment before initializing Django
 if os.environ.get('RENDER'):
+    import django
+    django.setup()
     from config.db_init import reset_db
     reset_db()
+
+# Initialize Django WSGI application
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
