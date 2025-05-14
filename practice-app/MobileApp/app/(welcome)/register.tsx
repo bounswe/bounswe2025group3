@@ -6,7 +6,8 @@ import { API_BASE_URL, API_ENDPOINTS } from '@/constants/api';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRouter } from "expo-router";
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -88,18 +89,32 @@ export default function RegisterScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.content}
+    <View style={styles.container}>
+      <LinearGradient
+        colors={['#88eb9a', '#122e1a']}
+        style={styles.backgroundGradient}
       >
-        <TouchableOpacity onPress={() => router.back()} style={sharedStyles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#2E7D32" />
-        </TouchableOpacity>
-          <View style={styles.innerContent}>
-            <ThemedText style={styles.title}>Create Account</ThemedText>
-            <View style={sharedStyles.form}>
-              <View style={sharedStyles.inputContainer}>
+        <View style={styles.overlay}>
+          <KeyboardAvoidingView 
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.content}
+          >
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <Ionicons name="arrow-back" size={24} color="#fff" />
+            </TouchableOpacity>
+
+            <View style={styles.headerContainer}>
+              <Image 
+                source={require('@/assets/images/greener-logo.png')} 
+                style={styles.logo} 
+                resizeMode="contain"
+              />
+              <ThemedText style={styles.title}>Create Account</ThemedText>
+              <ThemedText style={styles.subtitle}>Join our eco-friendly community</ThemedText>
+            </View>
+
+            <View style={styles.formContainer}>
+              <View style={[sharedStyles.inputContainer, styles.inputOverride]}>
                 <Ionicons name="person-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
                 <TextInput
                   style={sharedStyles.input}
@@ -111,7 +126,7 @@ export default function RegisterScreen() {
                 />
               </View>
 
-              <View style={sharedStyles.inputContainer}>
+              <View style={[sharedStyles.inputContainer, styles.inputOverride]}>
                 <Ionicons name="mail-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
                 <TextInput
                   style={sharedStyles.input}
@@ -124,7 +139,7 @@ export default function RegisterScreen() {
                 />
               </View>
 
-              <View style={sharedStyles.inputContainer}>
+              <View style={[sharedStyles.inputContainer, styles.inputOverride]}>
                 <Ionicons name="lock-closed-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
                 <TextInput
                   style={sharedStyles.input}
@@ -139,7 +154,7 @@ export default function RegisterScreen() {
                 </TouchableOpacity>
               </View>
 
-              <View style={sharedStyles.inputContainer}>
+              <View style={[sharedStyles.inputContainer, styles.inputOverride]}>
                 <Ionicons name="lock-closed-outline" size={20} color="#2E7D32" style={sharedStyles.inputIcon} />
                 <TextInput
                   style={sharedStyles.input}
@@ -155,18 +170,26 @@ export default function RegisterScreen() {
               </View>
 
               <TouchableOpacity 
-                style={[sharedStyles.button, isLoading && { opacity: 0.7 }]} 
+                style={[styles.registerButton, isLoading && { opacity: 0.7 }]} 
                 onPress={handleRegister}
                 disabled={isLoading}
                 activeOpacity={0.8}
               >
-                <ThemedText style={sharedStyles.buttonText}>
-                  {isLoading ? "Registering..." : "Register"}
+                <ThemedText style={styles.buttonText}>
+                  {isLoading ? "Registering..." : "Create Account"}
                 </ThemedText>
               </TouchableOpacity>
+
+              <View style={styles.loginContainer}>
+                <ThemedText style={styles.loginText}>Already have an account? </ThemedText>
+                <TouchableOpacity onPress={() => router.push("/(welcome)/login")}>
+                  <ThemedText style={styles.loginLink}>Sign In</ThemedText>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-      </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </View>
+      </LinearGradient>
 
       <CustomAlert
         visible={alertVisible}
@@ -175,29 +198,97 @@ export default function RegisterScreen() {
         type={alertType}
         onClose={() => setAlertVisible(false)}
       />
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+  },
+  backgroundGradient: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    paddingHorizontal: 20,
   },
   content: {
     flex: 1,
-    padding: 20,
-    paddingTop: 140,
+    justifyContent: 'center',
   },
-  innerContent: {
-    flex: 1,
-    justifyContent: 'flex-start',
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    zIndex: 1,
+  },
+  headerContainer: {
     alignItems: 'center',
-    marginTop: 40,
+    marginBottom: 40,
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    marginBottom: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 20,
+    color: '#ffffff',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#ffffff',
+    textAlign: 'center',
+    opacity: 0.9,
+  },
+  formContainer: {
+    width: '100%',
+  },
+  inputOverride: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    marginBottom: 15,
+  },
+  registerButton: {
+    backgroundColor: '#56ea62',
+    height: 50,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  loginContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  loginText: {
+    color: '#ffffff',
+    fontSize: 14,
+  },
+  loginLink: {
+    color: '#56ea62',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });

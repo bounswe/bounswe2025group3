@@ -1,6 +1,5 @@
 import { Stack } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Define consistent colors from our web frontend
 const GREENER_COLORS = {
@@ -13,10 +12,9 @@ const GREENER_COLORS = {
 };
 
 export default function ProfileLayout() {
-  const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container]}>
       <Stack
         screenOptions={{
           headerShown: false,
