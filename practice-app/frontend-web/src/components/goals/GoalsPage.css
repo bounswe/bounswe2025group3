@@ -1,0 +1,252 @@
+/* GoalsPage.css — standalone styles for the Goals feature */
+
+:root {
+    --primary-green: #2ecc71;
+    --primary-green-dark: #27ae60;
+    --primary-green-light: #abebc6;
+    --primary-green-rgb: 46, 204, 113;
+    --secondary-green: #1abc9c;
+    --neutral-bg: #f4f7f6;
+    --content-bg: #ffffff;
+    --card-bg: #ffffff;
+    --text-dark: #34495e;
+    --text-medium: #7f8c8d;
+    --text-light: #95a5a6;
+    --text-on-primary: #ffffff;
+    --border-color: #e0e7e5;
+    --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.07);
+    --font-primary: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+  }
+  
+  /* ---------- Base Layout ---------- */
+  .goals-page-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--neutral-bg);
+    font-family: var(--font-primary);
+  }
+  
+  /* ---------- Top Navigation (shared look) ---------- */
+  .dashboard-top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background-color: var(--content-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 3px solid var(--primary-green);
+  }
+  .app-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-green-dark);
+    text-decoration: none;
+  }
+  .app-logo .icon { font-size: 1.5em; color: var(--primary-green); margin-right: 0.5em; }
+  .main-actions-nav { display: flex; gap: 0.5rem; }
+  .nav-action-item {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    color: var(--text-medium);
+    font-weight: 500;
+    transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-action-item .icon {
+    color: var(--secondary-green);
+    font-size: 1.2em;
+    margin-right: 0.5em;
+  }
+  .nav-action-item:hover {
+    background-color: var(--primary-green-light);
+    color: var(--primary-green-dark);
+    box-shadow: 0 2px 8px rgba(var(--primary-green-rgb), 0.15);
+  }
+  .nav-action-item.active {
+    background-color: var(--primary-green);
+    color: var(--text-on-primary);
+    box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
+  }
+  .nav-action-item.active .icon { color: var(--text-on-primary); }
+  
+  /* ---------- Main Content ---------- */
+  .goals-main-content {
+    flex-grow: 1;
+    padding: 2rem 2.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .goals-header-section {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .goals-header-section h1 {
+    font-size: 2.5rem;
+    color: var(--primary-green-dark);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  .goals-header-section h1 .icon {
+    color: var(--primary-green);
+    font-size: 1.3em;
+    margin-right: 0.6rem;
+  }
+  .goals-header-section p {
+    font-size: 1.1rem;
+    color: var(--text-medium);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* ---------- Card / Table Wrapper ---------- */
+  .goals-table-wrapper,
+  .goal-form-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+  }
+  
+  .goals-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .goals-table th,
+  .goals-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .goals-table th {
+    background-color: var(--primary-green-light);
+    color: var(--primary-green-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .goals-table tbody tr:last-child td { border-bottom: none; }
+  .goals-table tbody tr:hover { background-color: var(--neutral-bg); }
+  
+  /* ---------- Form Controls ---------- */
+  .goal-form {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  .goal-form input[type="number"],
+  .goal-form input[type="date"],
+  .goal-form select {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: var(--content-bg);
+    color: var(--text-dark);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .goal-form input:focus,
+  .goal-form select:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(var(--primary-green-rgb), 0.25);
+  }
+  .goal-form button {
+    background-color: var(--primary-green);
+    color: var(--text-on-primary);
+    border: none;
+    padding: 0.8rem 1.4rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .goal-form button:hover:not(:disabled) {
+    background-color: var(--primary-green-dark);
+    box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
+  }
+  .goal-form button:disabled {
+    background-color: var(--primary-green-light);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* ---------- Loader / Error ---------- */
+  .loader-container-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-medium);
+    font-size: 1rem;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+  }
+  .loader-spinner-main {
+    border: 5px solid var(--primary-green-light);
+    border-top: 5px solid var(--primary-green);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  
+  .error-message-box-main {
+    background-color: #fff0f1;
+    color: #c82333;
+    padding: 1rem 1.5rem;
+    border: 1px solid #f5c6cb;
+    border-left: 5px solid #c82333;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+  }
+  
+  /* ---------- Empty State ---------- */
+  .empty-goals-message {
+    text-align: center;
+    padding: 3rem 1rem;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    color: var(--text-medium);
+  }
+  .empty-goals-message .icon {
+    font-size: 3rem;
+    color: var(--primary-green-light);
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  /* ---------- Responsive tweaks ---------- */
+  @media (max-width: 768px) {
+    .goals-main-content { padding: 1.5rem 1rem; }
+    .goals-header-section h1 { font-size: 2rem; }
+    .goals-header-section p { font-size: 1rem; }
+    .goals-table th,
+    .goals-table td { padding: 0.75rem; font-size: 0.9rem; }
+  }
+  @media (max-width: 480px) {
+    .goals-table-wrapper { overflow-x: auto; }
+    .goals-table { min-width: 500px; }
+  }
+  

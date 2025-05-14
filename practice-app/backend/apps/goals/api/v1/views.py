@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from django.http import JsonResponse
 from apps.goals.models import Goal, GoalTemplate
-from apps.waste.models import WasteCategory, WasteLog
+from apps.waste.models import SubCategory, WasteLog
 from .serializers import GoalTemplateSerializer, GoalSerializer
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, extend_schema_view
 from drf_spectacular.types import OpenApiTypes
@@ -156,27 +156,25 @@ class GoalViewSet(viewsets.ModelViewSet):
             
         if request.method == 'POST':
             category_id = request.POST.get('category')
-            goal_type = request.POST.get('goal_type')
             timeframe = request.POST.get('timeframe')
             target = request.POST.get('target')
             
             # Validate form data
-            if category_id and goal_type and timeframe and target:
+            if category_id and timeframe and target:
                 try:
-                    category = WasteCategory.objects.get(id=category_id)
+                    category = SubCategory.objects.get(id=category_id)
                     goal = Goal.objects.create(
                         user=request.user,
                         category=category,
-                        goal_type=goal_type,
                         timeframe=timeframe,
                         target=float(target),
                     )
                     return redirect('/api/v1/goals/goals/{}/detail-view/'.format(goal.id))
-                except (WasteCategory.DoesNotExist, ValueError):
+                except (SubCategory.DoesNotExist, ValueError):
                     pass  # Handle in the template with error message
         
         # GET request or form validation failed
-        waste_categories = WasteCategory.objects.all()
+        waste_categories = SubCategory.objects.all()
         
         context = {
             'waste_categories': waste_categories,
@@ -231,7 +229,6 @@ class GoalViewSet(viewsets.ModelViewSet):
         goal = Goal.objects.create(
             user=request.user,
             category=template.category,
-            goal_type='reduction',  # Default, can be customized
             timeframe=template.timeframe,
             target=template.target,
         )

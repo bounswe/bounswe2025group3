@@ -1,16 +1,15 @@
 from .models import Goal
-from waste.models import WasteCategory
+from waste.models import SubCategory
 from django.core.exceptions import ObjectDoesNotExist
 
 class GoalService:
 
     @staticmethod
     def create(user, category_id, target, timeframe):
-        category = WasteCategory.objects.get(id=category_id)
+        category = SubCategory.objects.get(id=category_id)
         goal = Goal.objects.create(
             user=user,
-            category=category,
-            goal_type='reduction',  # or set dynamically
+            category=category,  # or set dynamically
             timeframe=timeframe,
             target=target,
         )

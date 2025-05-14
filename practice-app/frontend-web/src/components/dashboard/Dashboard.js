@@ -19,6 +19,7 @@ const Icon = ({ name, className = "" }) => {
         dashboard: '🏠',
         settings: '⚙️',
         edit: '✏️',
+        goal: '🎯',
         arrowRight: '→'
     };
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
@@ -85,6 +86,9 @@ const Dashboard = () => {
                     </NavLink>
                     <NavLink to="/waste" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
                         <Icon name="waste" /> Waste Log
+                    </NavLink>
+                    <NavLink to="/goals"  className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
+                        <Icon name="goal" /> Goals
                     </NavLink>
                     <NavLink to="/leaderboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
                         <Icon name="leaderboard" /> Leaderboard

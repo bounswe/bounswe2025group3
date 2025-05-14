@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
 from apps.goals.models import GoalTemplate
-from apps.waste.models import WasteCategory
+from apps.waste.models import SubCategory
 
 class Command(BaseCommand):
     help = 'Create test goal templates for development and testing.'
@@ -11,14 +11,14 @@ class Command(BaseCommand):
             {
                 "name": "Reduce Plastic Waste - Monthly",
                 "description": "Keep your plastic waste under 2kg this month.",
-                "category_name": "Organic",
+                "category_name": "Plastic Bottles",
                 "target": 2.0,
                 "timeframe": "monthly"
             },
             {
                 "name": "Cut Food Waste - Weekly",
                 "description": "Limit food waste to less than 1kg per week.",
-                "category_name": "Glass",
+                "category_name": "Food Scraps",
                 "target": 1.0,
                 "timeframe": "weekly"
             },
@@ -29,8 +29,8 @@ class Command(BaseCommand):
             category_name = template_data["category_name"]
 
             try:
-                category = WasteCategory.objects.get(name=category_name)
-            except WasteCategory.DoesNotExist:
+                category = SubCategory.objects.get(name=category_name)
+            except SubCategory.DoesNotExist:
                 self.stdout.write(self.style.WARNING(
                     f"⚠️ WasteCategory '{category_name}' not found. Skipping template '{name}'."
                 ))

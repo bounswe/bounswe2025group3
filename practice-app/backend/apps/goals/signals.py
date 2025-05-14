@@ -14,9 +14,11 @@ def update_related_goals(sender, instance, **kwargs):
     # Find active goals for the same user and category
     related_goals = Goal.objects.filter(
         user=instance.user,
-        category=instance.sub_category.category, # Access category via sub_category
+        category=instance.sub_category, # Access category via sub_category
         is_complete=False
     )
     
     for goal in related_goals:
         goal.update_progress()
+
+
