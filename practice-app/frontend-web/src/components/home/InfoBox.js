@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
   fetchWikidataDescriptionRecycling,
-  fetchWikidataDescriptionSustainableDevelopment
+  fetchWikidataDescriptionSustainableDevelopment,
+  fetchWikidataDescriptionCircularEconomy,
 } from '../../services/wikidata';
 
 const InfoBox = () => {
   const [recyclingDesc, setRecyclingDesc] = useState("Loading recycling...");
   const [sustainableDesc, setSustainableDesc] = useState("Loading sustainable development...");
+  const [circularEconomyDesc, setCircularEconomyDesc] = useState("Loading circular economy...");
 
   useEffect(() => {
     fetchWikidataDescriptionRecycling()
