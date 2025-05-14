@@ -30,7 +30,7 @@ class GoalTemplateSerializer(serializers.ModelSerializer):
 class GoalSerializer(serializers.ModelSerializer):
     progress = serializers.FloatField(
         read_only=True,
-        help_text="Current progress towards the goal (in kg)"
+        help_text="Current progress towards the goal"
     )
     
     status = serializers.CharField(

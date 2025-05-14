@@ -8,13 +8,13 @@ from .models import Goal
 def update_related_goals(sender, instance, **kwargs):
     """Update goal progress when a relevant WasteLog is created or deleted."""
     # Ensure sub_category exists before proceeding
-    if not instance.sub_category:
+    if not instance.category:
         return
         
     # Find active goals for the same user and category
     related_goals = Goal.objects.filter(
         user=instance.user,
-        category=instance.sub_category.category, # Access category via sub_category
+        category=instance.category, # Access category via sub_category
         is_complete=False
     )
     
