@@ -116,7 +116,7 @@ const GoalsPage = () => {
             </select>
             <select name="goal_type" value={newGoal.goal_type} onChange={handleFieldChange} required disabled={creating}>
               <option value="reduction">Reduction</option>
-              <option value="increase">Increase</option>
+              <option value="recycling">Recycling</option>
             </select>
             <select name="timeframe" value={newGoal.timeframe} onChange={handleFieldChange} required disabled={creating}>
               <option value="daily">Daily</option>
