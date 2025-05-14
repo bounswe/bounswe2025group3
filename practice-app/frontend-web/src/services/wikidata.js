@@ -13,3 +13,23 @@ export async function fetchWikidataDescriptionRecycling(itemId = "Q132580", lang
     return "Failed to load description.";
   }
 }
+
+export const fetchWikidataDescriptionSustainableDevelopment = async () => {
+  try {
+    const response = await fetch(
+      'https://www.wikidata.org/wiki/Special:EntityData/Q131201.json'
+    );
+    const data = await response.json();
+
+    const entity = data.entities?.Q131201;
+    const description = entity?.descriptions?.en?.value;
+
+    const fallback =
+      "Sustainable development is development that meets the needs of the present without compromising the ability of future generations to meet their own needs.";
+
+    return description && description.length > 10 ? description : fallback;
+  } catch (error) {
+    console.error("Error fetching sustainable development description:", error);
+    return "Failed to load sustainable development description.";
+  }
+};

@@ -1,21 +1,30 @@
-// src/components/home/InfoBox.js
-
 import React, { useEffect, useState } from 'react';
-import { fetchWikidataDescriptionRecycling } from '../../services/wikidata';
+import {
+  fetchWikidataDescriptionRecycling,
+  fetchWikidataDescriptionSustainableDevelopment
+} from '../../services/wikidata';
 
 const InfoBox = () => {
-  const [description, setDescription] = useState("Loading...");
+  const [recyclingDesc, setRecyclingDesc] = useState("Loading recycling...");
+  const [sustainableDesc, setSustainableDesc] = useState("Loading sustainable development...");
 
   useEffect(() => {
     fetchWikidataDescriptionRecycling()
-      .then(setDescription)
-      .catch(() => setDescription("Failed to load description."));
+      .then(setRecyclingDesc)
+      .catch(() => setRecyclingDesc("Failed to load recycling description."));
+
+    fetchWikidataDescriptionSustainableDevelopment()
+      .then(setSustainableDesc)
+      .catch(() => setSustainableDesc("Failed to load description."));
   }, []);
 
   return (
     <div className="info-box">
       <h3>♻️ What is Recycling?</h3>
-      <p>{description}</p>
+      <p>{recyclingDesc}</p>
+
+      <h3>🧭 What is Sustainable Development?</h3>
+      <p>{sustainableDesc}</p>
     </div>
   );
 };
