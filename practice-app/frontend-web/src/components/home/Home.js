@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom'; // Using NavLink for active class
 import './Home.css';
+import InfoBox from './components/home/InfoBox';
 
 // Mock eco-tips and badges (keeping these from your original code)
 const mockEcoTips = [
@@ -175,6 +176,11 @@ const Home = () => {
                         <span>- Liam, Green Starter</span>
                     </div>
                 </div>
+            </section>
+
+            {/* ✅ New InfoBox Section */}
+            <section className="info-box-section">
+                <InfoBox />
             </section>
 
             {/* Footer */}
