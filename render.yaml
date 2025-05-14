@@ -36,7 +36,7 @@ services:
       - key: NODE_VERSION
         value: 18.15.0
       - key: PORT
-        value: 10000
+        value: 3000
       - key: REACT_APP_API_URL
         value: https://ecochallenge-backend.onrender.com
     autoDeploy: true
