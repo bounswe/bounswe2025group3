@@ -315,8 +315,8 @@ LOGIN_URL = '/login/'
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:8000',  # Backend itself
-    'http://localhost:8000',   # Backend alternative
+    'http://127.0.0.1:10000',  # Backend itself
+    'http://localhost:10000',   # Backend alternative
     'http://localhost:3000',   # Frontend origin
     'https://ecochallenge-frontend.onrender.com',
     'https://ecochallenge-backend.onrender.com',
