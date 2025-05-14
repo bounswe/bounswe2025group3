@@ -7,8 +7,8 @@ from apps.authentication.models import UserAuthToken
 User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-    password2 = serializers.CharField(write_only=True, label="Confirm password")
+    password = serializers.CharField(write_only=True, required=True)
+    password2 = serializers.CharField(write_only=True, required=True, label="Confirm password")
     
     class Meta:
         model = User
@@ -18,10 +18,10 @@ class RegisterSerializer(serializers.ModelSerializer):
             'last_name': {'required': False},
         }
         
-    def validate_password2(self, value):
-        if value != self.initial_data.get('password'):
-            raise serializers.ValidationError("Passwords don't match")
-        return value
+    def validate(self, data):
+        if data['password'] != data['password2']:
+            raise serializers.ValidationError({"password2": "Passwords don't match"})
+        return data
         
     def create(self, validated_data):
         validated_data.pop('password2')
