@@ -56,7 +56,7 @@ class Goal(models.Model):
 
         logs = WasteLog.objects.filter(
             user=self.user,
-            sub_category__category=self.category, # Filter by category through sub_category
+            sub_category=self.category, # Filter by category through sub_category
             disposal_date__range=(effective_start_date, min(today, effective_end_date))
         )
 

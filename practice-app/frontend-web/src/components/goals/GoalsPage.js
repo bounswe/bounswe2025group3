@@ -104,7 +104,6 @@ const GoalsPage = () => {
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
-              <option value="yearly">Yearly</option>
             </select>
             <input type="number" name="target" placeholder="Target units" value={newGoal.target} onChange={handleFieldChange} required disabled={creating} />
             <button type="submit" disabled={creating || categories.length === 0} style={{ gridColumn: 'span 2' }}>

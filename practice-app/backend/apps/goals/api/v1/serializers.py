@@ -2,8 +2,8 @@ from apps.goals.models import Goal
 from django.utils import timezone
 from rest_framework import serializers
 from apps.goals.models import GoalTemplate
-from apps.waste.models import WasteCategory
-from apps.waste.api.v1.serializers import WasteCategorySerializer
+from apps.waste.models import SubCategory
+from apps.waste.api.v1.serializers import SubCategorySerializer
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
 
@@ -38,14 +38,14 @@ class GoalSerializer(serializers.ModelSerializer):
         help_text="Current status of the goal (active, achieved, failed)"
     )
     
-    category = WasteCategorySerializer(
+    category = SubCategorySerializer(
         read_only=True,
         help_text="Waste category details"
     )
     
     category_id = serializers.PrimaryKeyRelatedField(
         source='category', 
-        queryset=WasteCategory.objects.all(), 
+        queryset=SubCategory.objects.all(), 
         write_only=True,
         help_text="ID of the waste category for this goal"
     )
