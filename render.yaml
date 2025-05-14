@@ -5,7 +5,7 @@ services:
     env: python
     region: frankfurt
     buildCommand: ./practice-app/backend/build.sh
-    startCommand: cd practice-app/backend && gunicorn config.wsgi:application --bind 0.0.0.0:10000
+    startCommand: cd practice-app/backend && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
     healthCheckPath: /
     envVars:
       - key: PYTHON_VERSION
@@ -36,7 +36,7 @@ services:
       - key: NODE_VERSION
         value: 18.15.0
       - key: PORT
-        value: 3000
+        value: 10000
       - key: REACT_APP_API_URL
         value: https://ecochallenge-backend.onrender.com
     autoDeploy: true
