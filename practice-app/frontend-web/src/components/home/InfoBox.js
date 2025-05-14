@@ -16,6 +16,9 @@ const InfoBox = () => {
     fetchWikidataDescriptionSustainableDevelopment()
       .then(setSustainableDesc)
       .catch(() => setSustainableDesc("Failed to load description."));
+      fetchWikidataDescriptionCircularEconomy()
+      .then(setCircularEconomyDesc)
+      .catch(() => setCircularEconomyDesc("Failed to load circular economy description."));
   }, []);
 
   return (
@@ -25,6 +28,8 @@ const InfoBox = () => {
 
       <h3>🧭 What is Sustainable Development?</h3>
       <p>{sustainableDesc}</p>
+      <h3>🔄 What is Circular Economy?</h3>
+      <p>{circularEconomyDesc}</p>
     </div>
   );
 };
