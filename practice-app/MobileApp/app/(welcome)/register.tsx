@@ -44,20 +44,45 @@ export default function RegisterScreen() {
 
     setIsLoading(true);
     try {
+      const requestBody = {
+        username,
+        email,
+        password: password,
+        password2: confirmPassword,
+      };
+      
+      console.log('Registration request:', {
+        url: `${API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`,
+        method: 'POST',
+        body: { ...requestBody, password1: '***', password2: '***' } // Hide passwords in logs
+      });
+      
       const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          username,
-          email,
-          password1: password,
-          password2: confirmPassword,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
+      console.log('Registration response status:', response.status);
+      console.log('Registration response headers:', Object.fromEntries(response.headers.entries()));
+      
+      // Get response text first for debugging
+      const responseText = await response.text();
+      console.log('Registration response body:', responseText);
+
+      // Try to parse JSON if possible
+      let errorData;
+      try {
+        errorData = JSON.parse(responseText);
+      } catch (e) {
+        console.error('Error parsing response:', e);
+        errorData = null;
+      }
+
       if (response.ok) {
+        console.log('Registration successful');
         showAlert("Success", "Registered successfully", "success");
         setTimeout(() => {
           setAlertVisible(false);
@@ -70,19 +95,31 @@ export default function RegisterScreen() {
           });
         }, 900);
       } else {
-        const errorData = await response.json();
-        if (errorData.username) {
-          showAlert("Error", "Username is already taken");
-        } else if (errorData.email) {
-          showAlert("Error", "Email is already registered");
-        } else if (errorData.password1) {
-          showAlert("Error", errorData.password1[0]);
+        console.error('Registration failed:', errorData);
+        
+        // Handle specific error cases
+        if (errorData) {
+          if (errorData.username) {
+            showAlert("Error", Array.isArray(errorData.username) ? errorData.username[0] : "Username is already taken");
+          } else if (errorData.email) {
+            showAlert("Error", Array.isArray(errorData.email) ? errorData.email[0] : "Email is already registered");
+          } else if (errorData.password) {
+          } else if (errorData.password1) {
+            showAlert("Error", Array.isArray(errorData.password1) ? errorData.password1[0] : "Invalid password");
+          } else if (errorData.password2) {
+            showAlert("Error", Array.isArray(errorData.password2) ? errorData.password2[0] : "Passwords do not match");
+          } else if (errorData.detail) {
+            showAlert("Error", errorData.detail);
+          } else {
+            showAlert("Error", "Registration failed. Please try again.");
+          }
         } else {
           showAlert("Error", "Registration failed. Please try again.");
         }
       }
     } catch (error) {
-      showAlert("Error", "Registration failed. Please try again.");
+      console.error('Registration error:', error);
+      showAlert("Error", "Registration failed. Please check your internet connection and try again.");
     } finally {
       setIsLoading(false);
     }
