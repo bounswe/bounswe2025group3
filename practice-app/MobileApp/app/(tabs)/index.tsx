@@ -8,6 +8,7 @@ import { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View, ActivityIndicator, Image, SafeAreaView, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { EnvironmentalNews } from '@/components/EnvironmentalNews';
+import EnvironmentalStat from '@/components/EnvironmentalStat';
 
 interface UserScore {
   user_id: number;
@@ -366,6 +367,14 @@ export default function HomeScreen() {
         {/* Environmental News Section */}
         <View style={styles.newsSection}>
           <EnvironmentalNews />
+        </View>
+
+        {/* Environmental Stats Section */}
+        <View style={styles.statsSection}>
+          <View style={styles.sectionHeader}>
+            <ThemedText style={styles.sectionTitle}>Environmental Statistics</ThemedText>
+          </View>
+          <EnvironmentalStat />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -750,6 +759,22 @@ const styles = StyleSheet.create({
   newsSection: {
     margin: 20,
     marginTop: 0,
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  statsSection: {
+    margin: 20,
+    marginTop: 0,
+    padding: 20,
+    paddingBottom: 0,
     backgroundColor: '#ffffff',
     borderRadius: 16,
     shadowColor: '#000',

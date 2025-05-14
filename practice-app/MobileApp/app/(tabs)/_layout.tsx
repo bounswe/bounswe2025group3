@@ -52,6 +52,13 @@ export default function TabLayout() {
         <Tabs.Screen name="index" options={getTabOptions("house.fill", "Home")} />
         <Tabs.Screen name="waste" options={getTabOptions("leaf.fill", "Waste Log")} />
         <Tabs.Screen name="goals" options={getTabOptions("target", "Goals")} />
+        <Tabs.Screen 
+          name="environment" 
+          options={{
+            ...getTabOptions("globe.europe.africa.fill", "Environment"),
+            href: null  // Hide this tab
+          }} 
+        />
         <Tabs.Screen name="forum" options={getTabOptions("bubble.left.fill", "Forum")} />
         <Tabs.Screen name="profile" options={getTabOptions("person.circle.fill", "Profile")} />
         <Tabs.Screen 
@@ -59,7 +66,7 @@ export default function TabLayout() {
           options={{
             tabBarIcon: ({ color }) => <IconSymbol size={28} name="shield.fill" color={color} />,
             tabBarLabel: "Admin",
-            href: user?.role === 'ADMIN' ? undefined : null
+            href: null  // Hide this tab from all users
           }} 
         />
         <Tabs.Screen 
@@ -67,7 +74,7 @@ export default function TabLayout() {
           options={{
             tabBarIcon: ({ color }) => <IconSymbol size={28} name="shield.lefthalf.fill" color={color} />,
             tabBarLabel: "Moderator",
-            href: (user?.role === 'ADMIN' || user?.role === 'MODERATOR') ? undefined : null
+            href: null  // Hide this tab from all users
           }} 
         />
       </Tabs>
