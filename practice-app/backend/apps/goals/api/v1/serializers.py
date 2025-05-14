@@ -53,17 +53,15 @@ class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
         fields = [
-            'id', 'user', 'category', 'category_id', 'goal_type', 'timeframe',
-            'target', 'progress', 'is_complete', 'created_at', 'start_date', 'end_date', 'status'
+            'id', 'user', 'category', 'category_id', 'timeframe',
+            'target', 'progress', 'is_complete', 'created_at', 'start_date', 'status'
         ]
         read_only_fields = ['id', 'progress', 'is_complete', 'status', 'created_at']
         extra_kwargs = {
             'user': {'write_only': True},
-            'goal_type': {'help_text': 'Type of goal (reduction, recycling, etc.)'},
             'timeframe': {'help_text': 'Timeframe for the goal (daily, weekly, monthly)'},
             'target': {'help_text': 'Target amount in kg'},
             'start_date': {'help_text': 'Date when the goal starts (YYYY-MM-DD)'},
-            'end_date': {'help_text': 'Date when the goal ends (YYYY-MM-DD)'}
         }
 
     def create(self, validated_data):
@@ -79,9 +77,3 @@ class GoalSerializer(serializers.ModelSerializer):
         instance.update_progress()
         return instance
 
-    def validate(self, attrs):
-        start = attrs.get("start_date")
-        end = attrs.get("end_date")
-        if start and end and start >= end:
-            raise serializers.ValidationError("start_date must be earlier than end_date.")
-        return attrs
