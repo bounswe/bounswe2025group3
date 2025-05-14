@@ -13,6 +13,7 @@ import Challanges from './components/challenges/ChallengesPage';
 import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
 import ResetPasswordPage from './components/auth/ResetPasswordPage'; 
 import BlogPostPage from './components/blog/BlogPostPage';
+import GoalsPage from './components/goals/GoalsPage';
 
 // Add debugging information for build and environment
 console.debug('App Initialization:', {
@@ -34,6 +35,7 @@ const App = () => {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/waste" element={<WasteLog />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/goals" element={<GoalsPage />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/challenges" element={<Challanges />} />
