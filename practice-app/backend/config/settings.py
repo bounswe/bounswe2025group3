@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-2jh2)^kw$euw8xophhuqp_z$muwv6^jg*un9hm&)t--@1pjtsm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -155,8 +155,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 # Media files (User uploads)
 MEDIA_URL = '/media/'
@@ -315,12 +314,21 @@ LOGIN_URL = '/login/'
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:10000',  # Backend itself
-    'http://localhost:10000',   # Backend alternative
+    'http://127.0.0.1:8000',  # Backend itself
+    'http://localhost:8000',   # Backend alternative
     'http://localhost:3000',   # Frontend origin
-    'https://ecochallenge-frontend.onrender.com',
-    'https://ecochallenge-backend.onrender.com',
+    'null',                    # For local testing
 ]
 
 # Allow credentials (cookies, authorization headers) to be sent with requests
 CORS_ALLOW_CREDENTIALS = True
+
+# Optional: Allow specific headers if needed beyond defaults
+# CORS_ALLOW_HEADERS = list(default_headers) + [
+#     'my-custom-header',
+# ]
+
+# Optional: Allow specific methods if needed beyond defaults (GET, POST, PUT, PATCH, DELETE, OPTIONS)
+# CORS_ALLOW_METHODS = list(default_methods) + [
+#     'CUSTOM',
+# ]
