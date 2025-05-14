@@ -271,13 +271,24 @@ AUTH_USER_MODEL = 'user.CustomUser'
 
 # dj-rest-auth Settings
 REST_AUTH = {
-    'REGISTER_SERIALIZER': 'apps.authentication.api.v1.serializers.CustomRegisterSerializer', # Correct path
+    'REGISTER_SERIALIZER': 'apps.authentication.api.v1.serializers.CustomRegisterSerializer',
     'USE_JWT': True,
-    'JWT_AUTH_COOKIE': 'my-app-auth', # Name of the cookie to save the JWT
-    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token', # Name of the cookie to save the refresh token
-    'SESSION_LOGIN': False, # Disable session login as we use JWT
+    'JWT_AUTH_COOKIE': 'my-app-auth',
+    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
+    'SESSION_LOGIN': False,
+    'SIGNUP_FIELDS': {
+        'username': {'required': True},
+        'email': {'required': True},
+    },
 }
 
+# New format for account fields configuration
+ACCOUNT_SIGNUP_FIELDS = [
+    'username*',  # Required
+    'email*',     # Required
+    'password1*', # Required
+    'password2*'  # Required
+]
 # JWT Settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Very short lifetime for testing

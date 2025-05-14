@@ -52,7 +52,7 @@ urlpatterns = [
     path('goals/', include('apps.goals.urls')),  # Frontend goals templates
     path('api/v1/waste/', include('apps.waste.api.v1.urls')),
     path('api/v1/goals/', include('apps.goals.api.v1.urls')),
-    
+    path('api/v1/recommendations/', include('apps.community.api.v1.urls')),
     # Django allauth URLs
     path('accounts/', include('allauth.urls')),
     
