@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom'; // Using NavLink for active class
 import './Home.css';
-import InfoBox from './components/home/InfoBox';
+import InfoBox from './InfoBox';
 
 // Mock eco-tips and badges (keeping these from your original code)
 const mockEcoTips = [
