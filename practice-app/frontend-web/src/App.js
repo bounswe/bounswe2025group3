@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Home from './components/home/Home';
 import Login from './components/auth/LoginPage'; 
 import Signup from './components/auth/SignupPage'; 
@@ -13,6 +13,14 @@ import Challanges from './components/challenges/ChallengesPage';
 import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
 import ResetPasswordPage from './components/auth/ResetPasswordPage'; 
 import BlogPostPage from './components/blog/BlogPostPage';
+
+// Add debugging information for build and environment
+console.debug('App Initialization:', {
+    NODE_ENV: process.env.NODE_ENV,
+    PUBLIC_URL: process.env.PUBLIC_URL,
+    REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+    BUILD_TIME: new Date().toISOString()
+});
 
 //import Pricing from './components/pricing/PricingPage';
 //<Route path="/pricing" element={<Pricing />} />

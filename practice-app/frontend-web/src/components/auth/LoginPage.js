@@ -5,9 +5,12 @@ import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
 //import jwt_decode from 'jwt-decode'; // Optional if you want to decode the token
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+
 const handleSocialLogin = (provider) => {
+    console.debug('Social login initiated:', { provider, API_URL });
     if (provider === 'google') {
-        window.location.href = 'http://127.0.0.1:8000/accounts/google/login/';
+        window.location.href = `${API_URL}/accounts/google/login/`;
     }
     // You can handle other providers similarly
 };
@@ -26,7 +29,8 @@ const LoginPage = () => {
             return;
         }
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+            console.debug('Login attempt:', { email: credentials.email, apiUrl: API_URL });
+            const response = await axios.post(`${API_URL}/api/token/`, {
                 email: credentials.email,
                 password: credentials.password,
             });
@@ -53,8 +57,9 @@ const LoginPage = () => {
     // Handle Google login response
     const handleGoogleLoginSuccess = async (credentialResponse) => {
         try {
+            console.debug('Google login attempt:', { credential: !!credentialResponse.credential, apiUrl: API_URL });
             // Send the Google credential to your backend
-            const response = await axios.post('http://127.0.0.1:8000/api/auth/google/', {
+            const response = await axios.post(`${API_URL}/api/auth/google/`, {
                 id_token: credentialResponse.credential
             });
             

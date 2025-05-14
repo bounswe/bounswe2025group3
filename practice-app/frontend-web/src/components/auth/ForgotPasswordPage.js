@@ -6,6 +6,9 @@ import './LoginPage.css'; // Reusing styles
 // You might want a specific CSS for minor adjustments:
 // import './ForgotPasswordPage.css'; 
 
+// Use environment variable or default to localhost:10000
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
@@ -26,8 +29,9 @@ const ForgotPasswordPage = () => {
         }
 
         try {
+            console.debug('Password reset request:', { email, apiUrl: API_URL });
             // Replace with your backend endpoint for initiating password reset
-            await axios.post('http://127.0.0.1:8000/api/auth/password_reset/', { email });
+            await axios.post(`${API_URL}/api/auth/password_reset/`, { email });
             setMessage('If an account with that email exists, a password reset link has been sent. Please check your inbox (and spam folder).');
             setEmail(''); // Clear the form
         } catch (err) {
