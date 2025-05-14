@@ -1,7 +1,8 @@
 from django.utils import timezone
 from django.db.models import Sum
 from rest_framework.exceptions import ValidationError
-from .models import Challenge, ChallengeParticipation, WasteLog, Team
+from .models import Challenge, ChallengeParticipation, Team
+from apps.waste.models import WasteLog
 
 
 class ChallengeService:

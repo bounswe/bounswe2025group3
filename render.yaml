@@ -1,0 +1,50 @@
+services:
+  # Backend Service
+  - type: web
+    name: ecochallenge-backend
+    env: python
+    region: frankfurt
+    buildCommand: ./practice-app/backend/build.sh
+    startCommand: cd practice-app/backend && gunicorn config.wsgi:application --bind 0.0.0.0:10000
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ecochallenge-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings_production
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: PORT
+        value: 10000
+    autoDeploy: true
+    plan: free
+
+  # Frontend Service
+  - type: web
+    name: ecochallenge-frontend
+    env: node
+    region: frankfurt
+    buildCommand: cd practice-app/frontend-web && npm install && npm run build
+    startCommand: cd practice-app/frontend-web && npx serve -s build -l $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: 18.15.0
+      - key: PORT
+        value: 3000
+      - key: REACT_APP_API_URL
+        value: https://ecochallenge-backend.onrender.com
+    autoDeploy: true
+    plan: free
+
+databases:
+  - name: ecochallenge-db
+    databaseName: ecochallenge
+    user: ecochallenge
+    region: frankfurt
+    plan: free

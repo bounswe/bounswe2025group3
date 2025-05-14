@@ -31,6 +31,8 @@ services:
       - DEBUG=True
       - DATABASE_URL=postgres://postgres:postgres@db:5432/ecochallenge
       - DJANGO_SETTINGS_MODULE=config.settings_docker
+    env_file:
+      - .env.local
 
 volumes:
   postgres_data: 

@@ -10,7 +10,9 @@ Pillow
 drf-spectacular
 psycopg2-binary==2.9.9
 python-dotenv
-
+gunicorn
+whitenoise
+dj-database-url
 # Testing dependencies
 pytest>=7.4.0
 pytest-django>=4.5.2
