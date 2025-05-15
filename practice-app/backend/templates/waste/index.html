@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Waste Logs</h1>
+  
+  <div class="d-flex justify-content-between mb-4">
+    <h3>Your Waste Logs</h3>
+    <a href="{% url 'waste_add' %}" class="btn btn-primary">Add New Log</a>
+  </div>
+
+  {% if waste_logs %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Date Logged</th>
+          <th>Category</th>
+          <th>Subcategory</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+          <th>Score</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in waste_logs %}
+        <tr>
+          <td>{{ log.date_logged|date:"M d, Y" }}</td>
+          <td>{{ log.sub_category.category.name }}</td>
+          <td>{{ log.sub_category.name }}</td>
+          <td>{{ log.quantity }}</td>
+          <td>{{ log.sub_category.unit }}</td>
+          <td>{{ log.get_score }}</td>
+          <td>
+            <a href="{% url 'waste_detail' log.id %}" class="btn btn-sm btn-info">View</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-info">
+      You haven't logged any waste yet. <a href="{% url 'waste_add' %}">Add your first waste log!</a>
+    </div>
+  {% endif %}
+
+  <div class="mt-5">
+    <h3>Waste Statistics</h3>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+          <div class="card-header">Total Score</div>
+          <div class="card-body">
+            <h5 class="card-title">{{ total_score }}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+          <div class="card-header">Total Items Logged</div>
+          <div class="card-body">
+            <h5 class="card-title">{{ total_logs }}</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+          <div class="card-header">Most Common Category</div>
+          <div class="card-body">
+            <h5 class="card-title">{{ most_common_category }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

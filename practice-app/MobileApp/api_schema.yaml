@@ -1,0 +1,2626 @@
+openapi: 3.0.3
+info:
+  title: EcoChallenge Platform API
+  version: 1.0.0 (1.0.0)
+  description: API documentation for the EcoChallenge platform promoting sustainable
+    habits
+  contact:
+    name: Group 3
+    url: https://github.com/bounswe/bounswe2025group3
+paths:
+  /api/auth/login/:
+    post:
+      operationId: api_auth_login_create
+      description: Authenticate a user with email/password and receive JWT tokens
+      summary: User Login
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+            examples:
+              LoginRequest:
+                value:
+                  email: user@example.com
+                  password: secure_password
+                summary: Login Request
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+        required: true
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/auth/password/change/:
+    post:
+      operationId: api_auth_password_change_create
+      description: 'Calls Django Auth SetPasswordForm save method.
+
+
+        Accepts the following POST parameters: new_password1, new_password2
+
+        Returns the success/fail message.'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordChangeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/auth/password/reset/:
+    post:
+      operationId: api_auth_password_reset_create
+      description: 'Calls Django Auth PasswordResetForm save method.
+
+
+        Accepts the following POST parameters: email
+
+        Returns the success/fail message.'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/auth/password/reset/confirm/{uidb64}/{token}/:
+    post:
+      operationId: api_auth_password_reset_confirm_create
+      description: "Password reset e-mail link is confirmed, therefore\nthis resets\
+        \ the user's password.\n\nAccepts the following POST parameters: token, uid,\n\
+        \    new_password1, new_password2\nReturns the success/fail message."
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+          pattern: ^[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32}$
+        required: true
+      - in: path
+        name: uidb64
+        schema:
+          type: string
+          pattern: ^[0-9A-Za-z_\-]+$
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirmRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/auth/register/:
+    post:
+      operationId: api_auth_register_create
+      description: Register a new user account
+      summary: User Registration
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomRegisterRequest'
+            examples:
+              RegistrationRequest:
+                value:
+                  email: newuser@example.com
+                  password1: secure_password
+                  password2: secure_password
+                summary: Registration Request
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomRegisterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomRegisterRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/auth/test-protected/:
+    get:
+      operationId: api_auth_test_protected_retrieve
+      description: Test API endpoint that requires authentication. Returns user information
+        when authorized.
+      summary: Protected Resource Test
+      tags:
+      - Authentication
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/token/:
+    post:
+      operationId: api_token_create
+      description: 'Takes a set of user credentials and returns an access and refresh
+        JSON web
+
+        token pair to prove the authentication of those credentials.'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+        required: true
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: No response body
+  /api/token/refresh/:
+    post:
+      operationId: api_token_refresh_create
+      description: 'Takes a refresh type JSON web token and returns an access type
+        JSON web
+
+        token if the refresh token is valid.'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/token/verify/:
+    post:
+      operationId: api_token_verify_create
+      description: 'Takes a token and indicates if it is valid.  This view provides
+        no
+
+        information about a token''s fitness for a particular use.'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenVerifyRequest'
+        required: true
+      security:
+      - Bearer: []
+      responses:
+        '200':
+          description: No response body
+  /api/user/me/:
+    get:
+      operationId: api_user_me_retrieve
+      description: 'Retrieve or update the profile of the currently authenticated
+        user.
+
+        Allows GET, PUT, PATCH requests.'
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    put:
+      operationId: api_user_me_update
+      description: 'Retrieve or update the profile of the currently authenticated
+        user.
+
+        Allows GET, PUT, PATCH requests.'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserProfileRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: api_user_me_partial_update
+      description: 'Retrieve or update the profile of the currently authenticated
+        user.
+
+        Allows GET, PUT, PATCH requests.'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/user/users/:
+    get:
+      operationId: api_user_users_list
+      description: 'Admin endpoint for managing users.
+
+        Provides list, retrieve, create, update, partial_update, destroy actions.
+
+        Restricted to Admin users only.
+
+        Includes action for Admins/Moderators to activate/deactivate users.'
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAdminUserList'
+          description: ''
+    post:
+      operationId: api_user_users_create
+      description: 'Admin endpoint for managing users.
+
+        Provides list, retrieve, create, update, partial_update, destroy actions.
+
+        Restricted to Admin users only.
+
+        Includes action for Admins/Moderators to activate/deactivate users.'
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminUserRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+  /api/user/users/{id}/:
+    get:
+      operationId: api_user_users_retrieve
+      description: 'Admin endpoint for managing users.
+
+        Provides list, retrieve, create, update, partial_update, destroy actions.
+
+        Restricted to Admin users only.
+
+        Includes action for Admins/Moderators to activate/deactivate users.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+    put:
+      operationId: api_user_users_update
+      description: 'Admin endpoint for managing users.
+
+        Provides list, retrieve, create, update, partial_update, destroy actions.
+
+        Restricted to Admin users only.
+
+        Includes action for Admins/Moderators to activate/deactivate users.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminUserRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+    patch:
+      operationId: api_user_users_partial_update
+      description: 'Admin endpoint for managing users.
+
+        Provides list, retrieve, create, update, partial_update, destroy actions.
+
+        Restricted to Admin users only.
+
+        Includes action for Admins/Moderators to activate/deactivate users.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUserRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+    delete:
+      operationId: api_user_users_destroy
+      description: 'Admin endpoint for managing users.
+
+        Provides list, retrieve, create, update, partial_update, destroy actions.
+
+        Restricted to Admin users only.
+
+        Includes action for Admins/Moderators to activate/deactivate users.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '204':
+          description: No response body
+  /api/user/users/{id}/set_active_status/:
+    post:
+      operationId: api_user_users_set_active_status_create
+      description: 'Activate or deactivate a user account.
+
+        Accessible only by Admins or Moderators.
+
+        Expects {''is_active'': true/false} in the request body.'
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminUserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminUserRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUser'
+          description: ''
+  /api/v1/goals/goals/:
+    get:
+      operationId: api_v1_goals_goals_list
+      description: Returns a list of all goals created by the current user
+      summary: List user goals
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Goals
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGoalList'
+          description: ''
+    post:
+      operationId: api_v1_goals_goals_create
+      description: Create a new sustainability goal
+      summary: Create a goal
+      tags:
+      - Goals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GoalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GoalRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+          description: ''
+        '400':
+          description: No response body
+  /api/v1/goals/goals/{id}/:
+    get:
+      operationId: api_v1_goals_goals_retrieve
+      description: Returns details of a specific goal
+      summary: Get goal details
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Goals
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+          description: ''
+        '404':
+          description: No response body
+    put:
+      operationId: api_v1_goals_goals_update
+      description: Update an existing goal (can only update goals that have not started)
+      summary: Update a goal
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Goals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GoalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GoalRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+          description: ''
+        '400':
+          description: No response body
+        '404':
+          description: No response body
+    patch:
+      operationId: api_v1_goals_goals_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGoalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedGoalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedGoalRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+          description: ''
+    delete:
+      operationId: api_v1_goals_goals_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/goals/goals/api-template/{template_id}/:
+    post:
+      operationId: api_v1_goals_goals_api_template_create
+      description: Create a new goal based on the selected template
+      summary: Create goal from template
+      parameters:
+      - in: path
+        name: template_id
+        schema:
+          type: integer
+        description: ID of the template to use
+        required: true
+      tags:
+      - Goals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GoalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GoalRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+          description: ''
+        '404':
+          description: No response body
+  /api/v1/goals/templates/:
+    get:
+      operationId: api_v1_goals_templates_list
+      description: Returns a list of all available goal templates that users can choose
+        from
+      summary: List all goal templates
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Goal Templates
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGoalTemplateList'
+          description: ''
+  /api/v1/waste/admin/categories/requests/:
+    get:
+      operationId: api_v1_waste_admin_categories_requests_list
+      description: Admin endpoint to view all custom category requests
+      summary: List custom category requests
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Admin - Custom Category Requests
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCustomCategoryRequestList'
+          description: ''
+  /api/v1/waste/admin/categories/requests/{id}/approve/:
+    post:
+      operationId: api_v1_waste_admin_categories_requests_approve_create
+      description: Admin endpoint to approve a pending custom category request
+      summary: Approve custom category request
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Admin - Custom Category Requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminActionResponseRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminActionResponseRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminActionResponseRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminActionResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminActionResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+          description: ''
+  /api/v1/waste/admin/categories/requests/{id}/reject/:
+    post:
+      operationId: api_v1_waste_admin_categories_requests_reject_create
+      description: Admin endpoint to reject a pending custom category request
+      summary: Reject custom category request
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Admin - Custom Category Requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminActionResponseRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminActionResponseRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminActionResponseRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminActionResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminActionResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+          description: ''
+  /api/v1/waste/categories/:
+    get:
+      operationId: api_v1_waste_categories_list
+      description: Returns a list of all active waste categories available in the
+        system
+      summary: List waste categories
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Waste Categories
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWasteCategoryList'
+          description: ''
+  /api/v1/waste/categories/{id}/:
+    get:
+      operationId: api_v1_waste_categories_retrieve
+      description: Returns detailed information about a specific waste category
+      summary: Get waste category details
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Waste Categories
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '404':
+          description: No response body
+  /api/v1/waste/categories/request/:
+    post:
+      operationId: api_v1_waste_categories_request_create
+      description: Submit a request for a new waste category to be added to the system
+      summary: Request new waste category
+      tags:
+      - Custom Category Requests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomCategoryRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomCategoryRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomCategoryRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomCategoryRequest'
+          description: ''
+  /api/v1/waste/logs/:
+    get:
+      operationId: api_v1_waste_logs_list
+      description: Returns a list of all waste logs created by the current user
+      summary: List waste logs
+      parameters:
+      - in: query
+        name: from_date
+        schema:
+          type: string
+          format: date
+        description: 'Filter items after this date (format: YYYY-MM-DD)'
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: to_date
+        schema:
+          type: string
+          format: date
+        description: 'Filter items before this date (format: YYYY-MM-DD)'
+      tags:
+      - Waste Logs
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWasteLogList'
+          description: ''
+    post:
+      operationId: api_v1_waste_logs_create
+      description: Create a new waste log entry and calculate environmental impact
+        score
+      summary: Create waste log
+      tags:
+      - Waste Logs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WasteLogRequest'
+            examples:
+              WasteLogCreation:
+                value:
+                  sub_category: 1
+                  amount: 2.5
+                  disposal_method: recycled
+                  notes: Plastic bottles from lunch
+                summary: Waste Log Creation
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WasteLogRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WasteLogRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '201':
+          description: No response body
+  /api/v1/waste/logs/{id}/:
+    get:
+      operationId: api_v1_waste_logs_retrieve
+      description: Get details, update or delete a specific waste log entry
+      summary: Retrieve, update or delete waste log
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Waste Logs
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WasteLog'
+          description: ''
+        '404':
+          description: No response body
+    put:
+      operationId: api_v1_waste_logs_update
+      description: Get details, update or delete a specific waste log entry
+      summary: Retrieve, update or delete waste log
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Waste Logs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WasteLogRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WasteLogRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WasteLogRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WasteLog'
+          description: ''
+        '404':
+          description: No response body
+    patch:
+      operationId: api_v1_waste_logs_partial_update
+      description: Get details, update or delete a specific waste log entry
+      summary: Retrieve, update or delete waste log
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Waste Logs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWasteLogRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWasteLogRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWasteLogRequest'
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WasteLog'
+          description: ''
+        '404':
+          description: No response body
+    delete:
+      operationId: api_v1_waste_logs_destroy
+      description: Get details, update or delete a specific waste log entry
+      summary: Retrieve, update or delete waste log
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Waste Logs
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WasteLog'
+          description: ''
+        '404':
+          description: No response body
+  /api/v1/waste/scores/me/:
+    get:
+      operationId: api_v1_waste_scores_me_retrieve
+      description: Returns the total environmental impact score for the authenticated
+        user
+      summary: Get user waste score
+      tags:
+      - User Stats
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserScore'
+          description: ''
+  /api/v1/waste/subcategories/:
+    get:
+      operationId: api_v1_waste_subcategories_list
+      description: Returns a list of all active waste sub-categories available in
+        the system
+      summary: List waste sub-categories
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Waste Sub-Categories
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSubCategoryList'
+          description: ''
+  /api/v1/waste/subcategories/{id}/:
+    get:
+      operationId: api_v1_waste_subcategories_retrieve
+      description: Returns detailed information about a specific waste sub-category
+      summary: Get sub-category details
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Waste Sub-Categories
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '404':
+          description: No response body
+  /api/v1/waste/suggestions/:
+    get:
+      operationId: api_v1_waste_suggestions_list
+      description: Returns a list of waste reduction and recycling suggestions
+      summary: List waste suggestions
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Waste Suggestions
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWasteSuggestionList'
+          description: ''
+  /api/v1/waste/sustainable-actions/:
+    get:
+      operationId: api_v1_waste_sustainable_actions_list
+      description: List user sustainable actions or record a new sustainable action
+      summary: List and create sustainable actions
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Sustainable Actions
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSustainableActionList'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSustainableActionList'
+          description: ''
+    post:
+      operationId: api_v1_waste_sustainable_actions_create
+      description: List user sustainable actions or record a new sustainable action
+      summary: List and create sustainable actions
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - Sustainable Actions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SustainableActionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SustainableActionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SustainableActionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - Bearer: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSustainableActionList'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SustainableAction'
+          description: ''
+components:
+  schemas:
+    AdminActionResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    AdminActionResponseRequest:
+      type: object
+      properties:
+        detail:
+          type: string
+          minLength: 1
+      required:
+      - detail
+    AdminUser:
+      type: object
+      description: 'Serializer for Admin users to manage other user accounts.
+
+        Allows viewing/editing most fields, including role and active status.
+
+        Handles password setting securely.'
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        bio:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          type: string
+          nullable: true
+          maxLength: 100
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_superuser:
+          type: boolean
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        notifications_enabled:
+          type: boolean
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        last_login:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - date_joined
+      - email
+      - id
+      - last_login
+      - username
+    AdminUserRequest:
+      type: object
+      description: 'Serializer for Admin users to manage other user accounts.
+
+        Allows viewing/editing most fields, including role and active status.
+
+        Handles password setting securely.'
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        bio:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          type: string
+          nullable: true
+          maxLength: 100
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_superuser:
+          type: boolean
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        notifications_enabled:
+          type: boolean
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - username
+    CustomCategoryRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+        suggested_category:
+          type: integer
+          nullable: true
+        unit:
+          type: string
+          maxLength: 20
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+        admin_notes:
+          type: string
+          readOnly: true
+          nullable: true
+      required:
+      - admin_notes
+      - id
+      - name
+      - status
+      - unit
+    CustomCategoryRequestRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+        suggested_category:
+          type: integer
+          nullable: true
+        unit:
+          type: string
+          minLength: 1
+          maxLength: 20
+      required:
+      - name
+      - unit
+    CustomRegisterRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+        password1:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password2:
+          type: string
+          writeOnly: true
+          minLength: 1
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        bio:
+          type: string
+        city:
+          type: string
+          maxLength: 100
+        country:
+          type: string
+          maxLength: 100
+      required:
+      - email
+      - password1
+      - password2
+      - username
+    CustomTokenObtainPairRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    Goal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/WasteCategory'
+          readOnly: true
+          description: Waste category details
+        goal_type:
+          allOf:
+          - $ref: '#/components/schemas/GoalTypeEnum'
+          description: 'Type of goal (reduction, recycling, etc.)
+
+
+            * `reduction` - Reduction
+
+            * `recycling` - Recycling'
+        timeframe:
+          allOf:
+          - $ref: '#/components/schemas/TimeframeEnum'
+          description: 'Timeframe for the goal (daily, weekly, monthly)
+
+
+            * `daily` - Daily
+
+            * `weekly` - Weekly
+
+            * `monthly` - Monthly'
+        target:
+          type: number
+          format: double
+          description: Target amount in kg
+        progress:
+          type: number
+          format: double
+          readOnly: true
+          description: Current progress towards the goal (in kg)
+        is_complete:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        start_date:
+          type: string
+          format: date
+          nullable: true
+          description: Date when the goal starts (YYYY-MM-DD)
+        end_date:
+          type: string
+          format: date
+          nullable: true
+          description: Date when the goal ends (YYYY-MM-DD)
+        status:
+          type: string
+          readOnly: true
+          description: Current status of the goal (active, achieved, failed)
+      required:
+      - category
+      - created_at
+      - goal_type
+      - id
+      - is_complete
+      - progress
+      - status
+      - target
+      - timeframe
+    GoalRequest:
+      type: object
+      properties:
+        user:
+          type: integer
+          writeOnly: true
+        category_id:
+          type: integer
+          writeOnly: true
+          description: ID of the waste category for this goal
+        goal_type:
+          allOf:
+          - $ref: '#/components/schemas/GoalTypeEnum'
+          description: 'Type of goal (reduction, recycling, etc.)
+
+
+            * `reduction` - Reduction
+
+            * `recycling` - Recycling'
+        timeframe:
+          allOf:
+          - $ref: '#/components/schemas/TimeframeEnum'
+          description: 'Timeframe for the goal (daily, weekly, monthly)
+
+
+            * `daily` - Daily
+
+            * `weekly` - Weekly
+
+            * `monthly` - Monthly'
+        target:
+          type: number
+          format: double
+          description: Target amount in kg
+        start_date:
+          type: string
+          format: date
+          nullable: true
+          description: Date when the goal starts (YYYY-MM-DD)
+        end_date:
+          type: string
+          format: date
+          nullable: true
+          description: Date when the goal ends (YYYY-MM-DD)
+      required:
+      - category_id
+      - goal_type
+      - target
+      - timeframe
+      - user
+    GoalTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Name of the goal template
+          maxLength: 255
+        description:
+          type: string
+          description: Detailed description of the goal template
+        category:
+          type: integer
+          description: Waste category ID associated with this template
+        category_name:
+          type: string
+          readOnly: true
+          description: Name of the waste category associated with this template
+        target:
+          type: number
+          format: double
+          description: Target value to reach (in kg)
+        timeframe:
+          type: string
+          description: Time period for the goal (e.g., "weekly", "monthly")
+          maxLength: 50
+      required:
+      - category
+      - category_name
+      - description
+      - id
+      - name
+      - target
+      - timeframe
+    GoalTypeEnum:
+      enum:
+      - reduction
+      - recycling
+      type: string
+      description: '* `reduction` - Reduction
+
+        * `recycling` - Recycling'
+    NameEnum:
+      enum:
+      - Recyclable
+      - Organic
+      - Electronic
+      - Glass
+      - Cooking Oil
+      - Clothing
+      - Other
+      type: string
+      description: '* `Recyclable` - Recyclable
+
+        * `Organic` - Organic
+
+        * `Electronic` - Electronic
+
+        * `Glass` - Glass
+
+        * `Cooking Oil` - Cooking Oil
+
+        * `Clothing` - Clothing
+
+        * `Other` - Other'
+    PaginatedAdminUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminUser'
+    PaginatedCustomCategoryRequestList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomCategoryRequest'
+    PaginatedGoalList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Goal'
+    PaginatedGoalTemplateList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoalTemplate'
+    PaginatedSubCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubCategory'
+    PaginatedSustainableActionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SustainableAction'
+    PaginatedWasteCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WasteCategory'
+    PaginatedWasteLogList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WasteLog'
+    PaginatedWasteSuggestionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WasteSuggestion'
+    PasswordChangeRequest:
+      type: object
+      properties:
+        new_password1:
+          type: string
+          minLength: 1
+          maxLength: 128
+        new_password2:
+          type: string
+          minLength: 1
+          maxLength: 128
+      required:
+      - new_password1
+      - new_password2
+    PasswordResetConfirmRequest:
+      type: object
+      description: Serializer for confirming a password reset attempt.
+      properties:
+        new_password1:
+          type: string
+          minLength: 1
+          maxLength: 128
+        new_password2:
+          type: string
+          minLength: 1
+          maxLength: 128
+        uid:
+          type: string
+          minLength: 1
+        token:
+          type: string
+          minLength: 1
+      required:
+      - new_password1
+      - new_password2
+      - token
+      - uid
+    PasswordResetRequest:
+      type: object
+      description: Serializer for requesting a password reset e-mail.
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+      required:
+      - email
+    PatchedAdminUserRequest:
+      type: object
+      description: 'Serializer for Admin users to manage other user accounts.
+
+        Allows viewing/editing most fields, including role and active status.
+
+        Handles password setting securely.'
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        bio:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          type: string
+          nullable: true
+          maxLength: 100
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_superuser:
+          type: boolean
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        notifications_enabled:
+          type: boolean
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+    PatchedGoalRequest:
+      type: object
+      properties:
+        user:
+          type: integer
+          writeOnly: true
+        category_id:
+          type: integer
+          writeOnly: true
+          description: ID of the waste category for this goal
+        goal_type:
+          allOf:
+          - $ref: '#/components/schemas/GoalTypeEnum'
+          description: 'Type of goal (reduction, recycling, etc.)
+
+
+            * `reduction` - Reduction
+
+            * `recycling` - Recycling'
+        timeframe:
+          allOf:
+          - $ref: '#/components/schemas/TimeframeEnum'
+          description: 'Timeframe for the goal (daily, weekly, monthly)
+
+
+            * `daily` - Daily
+
+            * `weekly` - Weekly
+
+            * `monthly` - Monthly'
+        target:
+          type: number
+          format: double
+          description: Target amount in kg
+        start_date:
+          type: string
+          format: date
+          nullable: true
+          description: Date when the goal starts (YYYY-MM-DD)
+        end_date:
+          type: string
+          format: date
+          nullable: true
+          description: Date when the goal ends (YYYY-MM-DD)
+    PatchedUserProfileRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        bio:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          type: string
+          nullable: true
+          maxLength: 100
+        notifications_enabled:
+          type: boolean
+    PatchedWasteLogRequest:
+      type: object
+      properties:
+        sub_category:
+          type: integer
+          nullable: true
+        quantity:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          nullable: true
+        disposal_date:
+          type: string
+          format: date
+          nullable: true
+        disposal_location:
+          type: string
+          nullable: true
+          maxLength: 100
+        disposal_photo:
+          type: string
+          format: binary
+          nullable: true
+    RestAuthDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+          readOnly: true
+      required:
+      - detail
+    RoleEnum:
+      enum:
+      - ADMIN
+      - MODERATOR
+      - USER
+      type: string
+      description: '* `ADMIN` - Admin
+
+        * `MODERATOR` - Moderator
+
+        * `USER` - User'
+    StatusEnum:
+      enum:
+      - pending
+      - approved
+      - rejected
+      type: string
+      description: '* `pending` - Pending
+
+        * `approved` - Approved
+
+        * `rejected` - Rejected'
+    SubCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        category:
+          type: integer
+        description:
+          type: string
+          nullable: true
+        score_per_unit:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+        unit:
+          $ref: '#/components/schemas/UnitEnum'
+        is_active:
+          type: boolean
+      required:
+      - category
+      - id
+      - name
+      - score_per_unit
+      - unit
+    SustainableAction:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        action_type:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+        date:
+          type: string
+          format: date
+        score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+      required:
+      - action_type
+      - date
+      - id
+      - score
+    SustainableActionRequest:
+      type: object
+      properties:
+        action_type:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+        date:
+          type: string
+          format: date
+        score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+      required:
+      - action_type
+      - date
+      - score
+    TimeframeEnum:
+      enum:
+      - daily
+      - weekly
+      - monthly
+      type: string
+      description: '* `daily` - Daily
+
+        * `weekly` - Weekly
+
+        * `monthly` - Monthly'
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    TokenVerifyRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - token
+    UnitEnum:
+      enum:
+      - kg
+      - g
+      - mg
+      - l
+      - ml
+      - pcs
+      type: string
+      description: '* `kg` - Kilogram
+
+        * `g` - Gram
+
+        * `mg` - Milligram
+
+        * `l` - Liter
+
+        * `ml` - Milliliter
+
+        * `pcs` - Piece'
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        bio:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          type: string
+          nullable: true
+          maxLength: 100
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        notifications_enabled:
+          type: boolean
+      required:
+      - date_joined
+      - email
+      - id
+      - role
+      - username
+    UserProfileRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        bio:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        country:
+          type: string
+          nullable: true
+          maxLength: 100
+        notifications_enabled:
+          type: boolean
+    UserScore:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        total_score:
+          type: number
+          format: double
+      required:
+      - total_score
+      - user_id
+    WasteCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/NameEnum'
+        description:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+      required:
+      - id
+      - name
+    WasteCategoryRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/NameEnum'
+        description:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+      required:
+      - name
+    WasteLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        sub_category:
+          type: integer
+          nullable: true
+        sub_category_name:
+          type: string
+          readOnly: true
+        quantity:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          nullable: true
+        date_logged:
+          type: string
+          format: date-time
+          readOnly: true
+        disposal_date:
+          type: string
+          format: date
+          nullable: true
+        disposal_location:
+          type: string
+          nullable: true
+          maxLength: 100
+        disposal_photo:
+          type: string
+          format: uri
+          nullable: true
+        score:
+          type: number
+          format: float
+          readOnly: true
+      required:
+      - date_logged
+      - id
+      - score
+      - sub_category
+      - sub_category_name
+    WasteLogRequest:
+      type: object
+      properties:
+        sub_category:
+          type: integer
+          nullable: true
+        quantity:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,4}(?:\.\d{0,2})?$
+          nullable: true
+        disposal_date:
+          type: string
+          format: date
+          nullable: true
+        disposal_location:
+          type: string
+          nullable: true
+          maxLength: 100
+        disposal_photo:
+          type: string
+          format: binary
+          nullable: true
+      required:
+      - sub_category
+    WasteSuggestion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+        related_category:
+          type: integer
+          nullable: true
+        related_subcategory:
+          type: integer
+          nullable: true
+        created_by:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - text
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
