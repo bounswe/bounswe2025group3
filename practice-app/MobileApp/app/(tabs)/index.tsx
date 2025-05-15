@@ -209,12 +209,12 @@ export default function HomeScreen() {
                     <ThemedText style={styles.goalTitle}>{goal.category.name}</ThemedText>
                     <View style={styles.goalType}>
                       <Ionicons
-                        name={goal.goal_type === 'reduction' ? 'trending-down' : 'reload'}
+                        name="leaf"
                         size={16}
                         color="#56ea62"
                       />
                       <ThemedText style={styles.goalTypeText}>
-                        {goal.goal_type.charAt(0).toUpperCase() + goal.goal_type.slice(1)}
+                        Goal
                       </ThemedText>
                     </View>
                   </View>
