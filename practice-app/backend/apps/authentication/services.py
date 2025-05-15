@@ -80,7 +80,46 @@ class OAuthService:
             except Exception as e:
                 print(f"Google token verification error: {str(e)}")
                 return None
-                
+        
+        elif provider == 'github':
+            try:
+                # Get user info from GitHub
+                user_resp = requests.get(
+                    'https://api.github.com/user',
+                    headers={'Authorization': f'token {token}'}
+                )
+                if not user_resp.ok:
+                    print(f"GitHub API error: {user_resp.text}")
+                    return None
+                user_data = user_resp.json()
+                # Get email (may need to fetch from /user/emails if not public)
+                email = user_data.get('email')
+                if not email:
+                    emails_resp = requests.get(
+                        'https://api.github.com/user/emails',
+                        headers={'Authorization': f'token {token}'}
+                    )
+                    if emails_resp.ok:
+                        emails = emails_resp.json()
+                        # Find primary, verified email
+                        for e in emails:
+                            if e.get('primary') and e.get('verified'):
+                                email = e.get('email')
+                                break
+                        if not email and emails:
+                            email = emails[0].get('email')
+                result = {
+                    'provider_user_id': str(user_data.get('id')),
+                    'email': email,
+                    'first_name': user_data.get('name', '').split(' ')[0] if user_data.get('name') else '',
+                    'last_name': ' '.join(user_data.get('name', '').split(' ')[1:]) if user_data.get('name') else ''
+                }
+                print(f"Extracted GitHub user data: {result}")
+                return result
+            except Exception as e:
+                print(f"GitHub token verification error: {str(e)}")
+                return None
+        
         return None  # Unsupported provider or token verification failed
 
     @staticmethod

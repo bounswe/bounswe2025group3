@@ -153,3 +153,97 @@ class GoogleLoginView(APIView):
         except Exception as e:
             print(f"Google auth error: {str(e)}")
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class GitHubLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    @extend_schema(
+        tags=['Authentication'],
+        summary='GitHub OAuth Login',
+        description='Authenticate a user using GitHub OAuth access token and receive JWT tokens',
+        responses={
+            200: OpenApiTypes.OBJECT,
+            400: OpenApiTypes.OBJECT,
+        },
+        examples=[
+            OpenApiExample(
+                'GitHub OAuth Login Request',
+                value={'access_token': 'github_oauth_access_token'},
+                request_only=True,
+            )
+        ]
+    )
+    def post(self, request):
+        try:
+
+            access_token = request.data.get('access_token')
+            code = request.data.get('code')
+            # If code is provided, exchange it for an access token
+            if not access_token and code:
+                # Exchange code for access token
+                import requests
+                client_id = os.environ.get('GITHUB_CLIENT_ID')
+                client_secret = os.environ.get('GITHUB_CLIENT_SECRET')
+                print('GITHUB_CLIENT_ID:', client_id)
+                print('GITHUB_CLIENT_SECRET:', client_secret)
+                if not client_id or not client_secret:
+                    return Response({'error': 'GitHub client ID/secret not configured'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                token_resp = requests.post(
+                    'https://github.com/login/oauth/access_token',
+                    headers={'Accept': 'application/json'},
+                    data={
+                        'client_id': client_id,
+                        'client_secret': client_secret,
+                        'code': code,
+                    }
+                )
+                if not token_resp.ok:
+                    return Response({'error': 'Failed to exchange code for access token', 'details': token_resp.text}, status=status.HTTP_400_BAD_REQUEST)
+                token_data = token_resp.json()
+                access_token = token_data.get('access_token')
+                if not access_token:
+                    return Response({'error': 'No access token received from GitHub', 'details': token_data}, status=status.HTTP_400_BAD_REQUEST)
+
+
+            if not access_token:
+                return Response({'error': 'No access token or code provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+            github_data = OAuthService.verify_provider_token('github', access_token)
+            if not github_data:
+                return Response({'error': 'Invalid GitHub token'}, status=status.HTTP_400_BAD_REQUEST)
+
+            email = github_data.get('email')
+            if not email:
+                return Response({'error': 'Email not provided by GitHub'}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                first_name = github_data.get('first_name', '')
+                last_name = github_data.get('last_name', '')
+                username = AuthenticationService.generate_unique_username(email.split('@')[0])
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=None,  # No password for social auth users
+                    first_name=first_name,
+                    last_name=last_name,
+                )
+
+            OAuthService.get_or_create(
+                user=user,
+                provider='github',
+                provider_user_id=github_data.get('provider_user_id')
+            )
+
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'user_id': user.id,
+                'email': user.email,
+                'role': getattr(user, 'role', 'user')
+            })
+        except Exception as e:
+            print(f"GitHub auth error: {str(e)}")
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

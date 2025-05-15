@@ -2,7 +2,7 @@ from django.urls import path, include, re_path
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView, PasswordChangeView
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from .views import RegisterView, LoginView, ProtectedTestView, GoogleLoginView
+from .views import RegisterView, LoginView, ProtectedTestView, GoogleLoginView, GitHubLoginView
 
 urlpatterns = [
     # Custom Views (already refactored)
@@ -19,5 +19,6 @@ urlpatterns = [
 
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('google/', GoogleLoginView.as_view(), name='google_login'),
+    path('github/', GitHubLoginView.as_view(), name='github_login'),
 
 ]

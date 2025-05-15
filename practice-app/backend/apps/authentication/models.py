@@ -21,6 +21,7 @@ class UserAuthToken(models.Model):
 class OAuth(models.Model):
     PROVIDERS = (
         ('google', 'Google'),
+        ('github', 'GitHub'),
         # Add more if needed
     )
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='oauth_accounts')
