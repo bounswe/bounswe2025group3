@@ -32,7 +32,6 @@ interface UserProfile {
 export default function AddGoalScreen() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [goalType, setGoalType] = useState<'reduction' | 'recycling'>('reduction');
   const [timeframe, setTimeframe] = useState<'daily' | 'weekly' | 'monthly'>('weekly');
   const [target, setTarget] = useState('');
   const [startDate, setStartDate] = useState(new Date());
@@ -118,7 +117,6 @@ export default function AddGoalScreen() {
           body: JSON.stringify({
             user: userProfile.id,
             category_id: selectedCategory,
-            goal_type: goalType,
             timeframe,
             target: parseFloat(target),
             start_date: startDate.toISOString().split('T')[0],
@@ -185,54 +183,6 @@ export default function AddGoalScreen() {
                   </ThemedText>
                 </TouchableOpacity>
               ))}
-            </View>
-          </View>
-
-          <View style={styles.formGroup}>
-            <ThemedText style={styles.label}>Goal Type</ThemedText>
-            <View style={styles.buttonGroup}>
-              <TouchableOpacity
-                style={[
-                  styles.typeButton,
-                  goalType === 'reduction' && styles.typeButtonActive,
-                ]}
-                onPress={() => setGoalType('reduction')}
-              >
-                <Ionicons
-                  name="trending-down"
-                  size={20}
-                  color={goalType === 'reduction' ? 'white' : '#2E7D32'}
-                />
-                <ThemedText
-                  style={[
-                    styles.typeButtonText,
-                    goalType === 'reduction' && styles.typeButtonTextActive,
-                  ]}
-                >
-                  Reduction
-                </ThemedText>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.typeButton,
-                  goalType === 'recycling' && styles.typeButtonActive,
-                ]}
-                onPress={() => setGoalType('recycling')}
-              >
-                <Ionicons
-                  name="reload"
-                  size={20}
-                  color={goalType === 'recycling' ? 'white' : '#2E7D32'}
-                />
-                <ThemedText
-                  style={[
-                    styles.typeButtonText,
-                    goalType === 'recycling' && styles.typeButtonTextActive,
-                  ]}
-                >
-                  Recycling
-                </ThemedText>
-              </TouchableOpacity>
             </View>
           </View>
 
@@ -394,27 +344,6 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flexDirection: 'row',
     gap: 12,
-  },
-  typeButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#2E7D32',
-    borderRadius: 8,
-    gap: 8,
-  },
-  typeButtonActive: {
-    backgroundColor: '#2E7D32',
-  },
-  typeButtonText: {
-    color: '#2E7D32',
-    fontWeight: '500',
-  },
-  typeButtonTextActive: {
-    color: 'white',
   },
   timeframeButton: {
     flex: 1,
