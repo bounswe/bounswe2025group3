@@ -101,12 +101,12 @@ export default function GoalsScreen() {
       <View style={styles.goalDetails}>
         <View style={styles.goalInfo}>
           <Ionicons
-            name={item.goal_type === 'reduction' ? 'trending-down' : 'reload'}
+            name="leaf"
             size={20}
             color="#2E7D32"
           />
           <ThemedText style={styles.goalInfoText}>
-            {item.goal_type.charAt(0).toUpperCase() + item.goal_type.slice(1)}
+            Goal
           </ThemedText>
         </View>
         <View style={styles.goalInfo}>
