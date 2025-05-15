@@ -6,14 +6,22 @@ import { GoogleLogin } from '@react-oauth/google';
 //import jwt_decode from 'jwt-decode'; // Optional if you want to decode the token
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
+const GITHUB_REDIRECT_URI = process.env.REACT_APP_GITHUB_REDIRECT_URI || 'http://localhost:3000/github-callback';
 
 const handleSocialLogin = (provider) => {
     console.debug('Social login initiated:', { provider, API_URL });
     if (provider === 'google') {
         window.location.href = `${API_URL}/accounts/google/login/`;
     }
+    else if (provider === 'github') {
+        const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(GITHUB_REDIRECT_URI)}&scope=user:email`;
+        window.location.href = githubAuthUrl;
+    }
     // You can handle other providers similarly
 };
+
+
 
 const LoginPage = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -180,11 +188,11 @@ const LoginPage = () => {
                                 <div className="social-options">
                                     <button 
                                         type="button" 
-                                        className="social-button facebook"
-                                        onClick={() => handleSocialLogin('facebook')}
+                                        className="social-button github"
+                                        onClick={() => handleSocialLogin('github')}
                                     >
-                                        <i className="social-icon facebook-icon"></i>
-                                        <span>Facebook</span>
+                                        <i className="social-icon github-icon"></i>
+                                        <span>GitHub</span>
                                     </button>
                                     <button 
                                         type="button" 
