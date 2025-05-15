@@ -242,12 +242,12 @@ export default function GoalDetailsScreen() {
           <View style={styles.cardHeader}>
             <View style={styles.goalTypeContainer}>
               <Ionicons
-                name={goal.goal_type === 'reduction' ? 'trending-down' : 'reload'}
+                name="leaf"
                 size={24}
                 color="#2E7D32"
               />
               <ThemedText style={styles.goalType}>
-                {goal.goal_type.charAt(0).toUpperCase() + goal.goal_type.slice(1)}
+                Goal
               </ThemedText>
             </View>
             <View style={styles.timeframeContainer}>
