@@ -14,6 +14,7 @@ import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
 import ResetPasswordPage from './components/auth/ResetPasswordPage'; 
 import BlogPostPage from './components/blog/BlogPostPage';
 import GoalsPage from './components/goals/GoalsPage';
+import GithubCallback from './components/auth/GithubCallback';
 
 // Add debugging information for build and environment
 console.debug('App Initialization:', {
@@ -49,6 +50,7 @@ const App = () => {
                 
                 <Route path="/about" element={<About />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/github-callback" element={<GithubCallback />} />
                 <Route path="/" element={<Home />} /> {/* Redirect root to /home */}
             </Routes>
         </Router>
