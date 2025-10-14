@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom'; // Using NavLink for active class
+import { useTranslation } from 'react-i18next';
 import './AboutUsPage.css'; // New CSS file
+import Header from '../common/Header';
 
 // Team members - student names
 const teamMembersData = [
@@ -34,76 +36,46 @@ const AvatarPlaceholder = ({ name, seed }) => {
 };
 
 const AboutUsPage = () => {
+    // 3. Initialize the translation hook
+    const { t } = useTranslation();
+    const coreValues = t('about.values.list', { returnObjects: true });
+
     return (
-        <div className="page-wrapper about-us-page-wrapper"> {/* Added specific class for potential overrides */}
-            {/* --- Navigation Bar (from original login.js style) --- */}
-            <div className="nav-container">
-                <nav className="navbar">
-                <Link to="/" className="navbar-brand">
-                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
-                        <span className="navbar-app-name">GREENER</span>
-                    </Link>
-                    <ul className="main-nav">
-                        <li className="nav-item">
-                            <NavLink to="/" className={({isActive}) => isActive ? "active-link-class" : ""}>Home</NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink to="/about" className={({isActive}) => isActive ? "active-link-class" : ""}>About us</NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink to="/blog" className={({isActive}) => isActive ? "active-link-class" : ""}>Blog</NavLink>
-                        </li>
-                         <li className="nav-item">
-                            <NavLink to="/login" className={({isActive}) => isActive ? "active-link-class" : ""}>Login</NavLink>
-                        </li>
-                        <li className="nav-item">
-                        <Link to="/signup"className="nav-button-style signup-button-style">Sign Up</Link>
-            </li>
-                    </ul>
-                </nav>
-            </div>
+        <div className="page-wrapper about-us-page-wrapper">
+            {/* 4. Use the shared Header component */}
+            <Header />
             
             <div className="content-container">
+                {/* 5. Replace all static text with the t() function */}
                 <header className="page-header">
-                    <h1>Our Story & Mission</h1>
-                    <p>We are a group of students passionate about creating a sustainable future through technology.</p>
+                    <h1>{t('about.header.title')}</h1>
+                    <p>{t('about.header.subtitle')}</p>
                 </header>
 
                 <section className="about-content-section">
-                    <h2>Our Vision for GreenerLife</h2>
-                    <p>
-                        We envision a world where conscious consumption and effective waste management are second nature. "GreenerLife" is our student-driven initiative to build a platform that empowers individuals and communities to minimize waste, conserve resources, and actively participate in building a circular economy. We believe that with the right tools and insights, everyone can make a significant positive impact.
-                    </p>
+                    <h2>{t('about.vision.title')}</h2>
+                    <p>{t('about.vision.text')}</p>
                 </section>
 
                 <section className="about-content-section">
-                    <h2>Who We Are</h2>
-                    <p>
-                        We are a team of university students from various disciplines, united by our shared commitment to environmental sustainability and our enthusiasm for technology. This project began as a way to apply our learning to a real-world problem we care deeply about. As we develop GreenerLife, we aim to provide intuitive, impactful solutions for tracking waste and encouraging recycling.
-                    </p>
+                    <h2>{t('about.who_we_are.title')}</h2>
+                    <p>{t('about.who_we_are.text')}</p>
                 </section>
 
                 <section className="about-content-section">
-                    <h2>Our Core Values</h2>
+                    <h2>{t('about.values.title')}</h2>
                     <ul className="values-list">
-                        <li>
-                            <strong><span className="value-icon">🌿</span> Sustainability:</strong> Promoting eco-friendly practices in all aspects of our platform and encouraging users to do the same.
-                        </li>
-                        <li>
-                            <strong><span className="value-icon">💡</span> Innovation:</strong> Continuously exploring new technologies and approaches to make waste management simpler and more effective.
-                        </li>
-                        <li>
-                            <strong><span className="value-icon">🤝</span> Community:</strong> Fostering a supportive network where users can share ideas, motivate each other, and collectively work towards a greener planet.
-                        </li>
-                        <li>
-                            <strong><span className="value-icon">🎓</span> Learning & Growth:</strong> As students, this project is a journey of learning. We are committed to growing our skills and knowledge to improve GreenerLife.
-                        </li>
+                        {coreValues.map((value) => (
+                            <li key={value.name}>
+                                <strong><span className="value-icon">{value.icon}</span> {value.name}</strong> {value.description}
+                            </li>
+                        ))}
                     </ul>
                 </section>
 
                  <section className="about-content-section team-section-simple">
-                    <h2>Meet the Student Team</h2>
-                    <p className="team-intro">The GreenerLife project is brought to you by a dedicated group of students:</p>
+                    <h2>{t('about.team.title')}</h2>
+                    <p className="team-intro">{t('about.team.subtitle')}</p>
                     <div className="team-members-list-simple">
                         {teamMembersData.map((member) => (
                             <div key={member.name} className="team-member-item-simple">
@@ -114,10 +86,9 @@ const AboutUsPage = () => {
                     </div>
                 </section>
             </div>
-
-            {/* Optional Simple Footer */}
+            
             <footer className="simple-footer">
-                <p>© {new Date().getFullYear()} GreenerLife Student Project.</p>
+                <p>{t('about.simple_footer', { year: new Date().getFullYear() })}</p>
             </footer>
         </div>
     );

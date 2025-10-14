@@ -1,69 +1,101 @@
 {
-    "nav": {
-      "home": "Home",
-      "about": "About us",
-      "blog": "Blog",
-      "login": "Login",
-      "signup": "Sign Up"
-    },
-    "hero": {
-      "title": "Make Every Day a Zero Waste Day",
-      "subtitle": "Join our community to track waste, earn rewards, and live sustainably!",
-      "journey_button": "Start Your Journey",
-      "login_button": "Log In"
-    },
-    "mission": {
-      "title": "Why Zero Waste Challenge?",
-      "subtitle": "Empower yourself to reduce waste, set goals, and join a global movement for sustainability.",
-      "features": {
-        "log": {
-          "title": "Log Waste",
-          "description": "Track your waste reduction with detailed logs by category and quantity."
-        },
-        "join": {
-          "title": "Join Challenges",
-          "description": "Participate in fun community challenges to reduce waste together."
-        },
-        "earn": {
-          "title": "Earn Rewards",
-          "description": "Unlock badges and virtual eco-world achievements for your efforts."
-        }
+    "common": {
+      "nav": {
+        "home": "Home",
+        "about": "About us",
+        "blog": "Blog",
+        "login": "Login",
+        "signup": "Sign Up"
+      },
+      "footer": {
+        "rights": "All rights reserved."
       }
     },
-    "tips": {
-      "title": "Sustainability Tips",
-      "category_prefix": "Category",
-      "topic_prefix": "Topic"
-    },
-    "eco_tips": [
-      { "id": 1, "text": "Switch to reusable bags to cut plastic waste.", "related_category": "Plastic", "topic": "Waste Reduction" },
-      { "id": 2, "text": "Compost food scraps to enrich your garden soil.", "related_category": "Organic", "topic": "Waste Reduction" },
-      { "id": 3, "text": "Recycle old electronics at certified centers.", "related_category": "Electronic", "topic": "Waste Reduction" },
-      { "id": 4, "text": "Fix leaks to conserve water at home.", "related_category": null, "topic": "Water Conservation" }
-    ],
-    "rewards": {
-      "title": "Unlock Amazing Rewards",
-      "subtitle": "Earn badges and build your virtual eco-world as you reduce waste!"
-    },
-    "badges": [
-      { "name": "First Step", "description": "Log your first waste reduction", "icon": "/icons/first-step.png" },
-      { "name": "Plastic Buster", "description": "Reduce 10 kg of plastic waste", "icon": "/icons/plastic-buster.png" },
-      { "name": "Sustainability Streak", "description": "Log waste reduction for 7 days", "icon": "/icons/streak.png" }
-    ],
-    "testimonials": {
-      "title": "Our Community",
-      "quotes": [
-        {
-          "text": "\"Logging my waste helped me reduce plastic by 10 kg and earn my Plastic Buster badge!\"",
-          "author": "- Emma, Eco Explorer"
-        },
-        {
-          "text": "\"The challenges are so motivating! I love competing with my friends.\"",
-          "author": "- Liam, Green Starter"
+    "home": {
+      "hero": {
+        "title": "Make Every Day a Zero Waste Day",
+        "subtitle": "Join our community to track waste, earn rewards, and live sustainably!",
+        "journey_button": "Start Your Journey",
+        "login_button": "Log In"
+      },
+      "mission": {
+        "title": "Why Zero Waste Challenge?",
+        "subtitle": "Empower yourself to reduce waste, set goals, and join a global movement for sustainability.",
+        "features": {
+          "log": {
+            "title": "Log Waste",
+            "description": "Track your waste reduction with detailed logs by category and quantity."
+          },
+          "join": {
+            "title": "Join Challenges",
+            "description": "Participate in fun community challenges to reduce waste together."
+          },
+          "earn": {
+            "title": "Earn Rewards",
+            "description": "Unlock badges and virtual eco-world achievements for your efforts."
+          }
         }
-      ]
+      },
+      "tips": {
+        "title": "Sustainability Tips",
+        "category_prefix": "Category",
+        "topic_prefix": "Topic"
+      },
+      "eco_tips": [
+        { "id": 1, "text": "Switch to reusable bags to cut plastic waste.", "related_category": "Plastic", "topic": "Waste Reduction" },
+        { "id": 2, "text": "Compost food scraps to enrich your garden soil.", "related_category": "Organic", "topic": "Waste Reduction" },
+        { "id": 3, "text": "Recycle old electronics at certified centers.", "related_category": "Electronic", "topic": "Waste Reduction" },
+        { "id": 4, "text": "Fix leaks to conserve water at home.", "related_category": null, "topic": "Water Conservation" }
+      ],
+      "rewards": {
+        "title": "Unlock Amazing Rewards",
+        "subtitle": "Earn badges and build your virtual eco-world as you reduce waste!"
+      },
+      "badges": [
+        { "name": "First Step", "description": "Log your first waste reduction", "icon": "/icons/first-step.png" },
+        { "name": "Plastic Buster", "description": "Reduce 10 kg of plastic waste", "icon": "/icons/plastic-buster.png" },
+        { "name": "Sustainability Streak", "description": "Log waste reduction for 7 days", "icon": "/icons/streak.png" }
+      ],
+      "testimonials": {
+        "title": "Our Community",
+        "quotes": [
+          {
+            "text": "\"Logging my waste helped me reduce plastic by 10 kg and earn my Plastic Buster badge!\"",
+            "author": "- Emma, Eco Explorer"
+          },
+          {
+            "text": "\"The challenges are so motivating! I love competing with my friends.\"",
+            "author": "- Liam, Green Starter"
+          }
+        ]
+      }
     },
-    "footer": {
-      "rights": "All rights reserved."
+    "about": {
+      "header": {
+        "title": "Our Story & Mission",
+        "subtitle": "We are a group of students passionate about creating a sustainable future through technology."
+      },
+      "vision": {
+        "title": "Our Vision for GreenerLife",
+        "text": "We envision a world where conscious consumption and effective waste management are second nature. \"GreenerLife\" is our student-driven initiative to build a platform that empowers individuals and communities to minimize waste, conserve resources, and actively participate in building a circular economy. We believe that with the right tools and insights, everyone can make a significant positive impact."
+      },
+      "who_we_are": {
+        "title": "Who We Are",
+        "text": "We are a team of university students from various disciplines, united by our shared commitment to environmental sustainability and our enthusiasm for technology. This project began as a way to apply our learning to a real-world problem we care deeply about. As we develop GreenerLife, we aim to provide intuitive, impactful solutions for tracking waste and encouraging recycling."
+      },
+      "values": {
+        "title": "Our Core Values",
+        "list": [
+          { "icon": "🌿", "name": "Sustainability:", "description": "Promoting eco-friendly practices in all aspects of our platform and encouraging users to do the same." },
+          { "icon": "💡", "name": "Innovation:", "description": "Continuously exploring new technologies and approaches to make waste management simpler and more effective." },
+          { "icon": "🤝", "name": "Community:", "description": "Fostering a supportive network where users can share ideas, motivate each other, and collectively work towards a greener planet." },
+          { "icon": "🎓", "name": "Learning & Growth:", "description": "As students, this project is a journey of learning. We are committed to growing our skills and knowledge to improve GreenerLife." }
+        ]
+      },
+      "team": {
+        "title": "Meet the Student Team",
+        "subtitle": "The GreenerLife project is brought to you by a dedicated group of students:"
+      },
+      "simple_footer": "© {year} GreenerLife Student Project."
     }
   }
