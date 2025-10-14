@@ -1,0 +1,304 @@
+/* Profile.css */
+
+/* --- Import or define global variables and base styles --- */
+:root {
+    --primary-green: #2ecc71;
+    --primary-green-dark: #27ae60;
+    --primary-green-light: #abebc6;
+    --primary-green-extralight: #e6f7e6;
+    --primary-green-rgb: 46, 204, 113;
+    --secondary-green: #1abc9c;
+    --neutral-bg: #f4f7f6;
+    --content-bg: #ffffff;
+    --card-bg: #ffffff;
+    --text-dark: #34495e;
+    --text-medium: #7f8c8d;
+    --text-light: #95a5a6;
+    --text-on-primary: #ffffff;
+    --border-color: #e0e7e5;
+    --input-border-color: #ced4da;
+    --input-focus-border-color: var(--primary-green-dark);
+    --input-bg: #fdfdfd;
+    --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.07);
+    --error-bg: #f8d7da; /* Bootstrap danger background */
+    --error-text: #721c24; /* Bootstrap danger text */
+    --error-border: #f5c6cb; /* Bootstrap danger border */
+    --success-bg: #d4edda; /* Bootstrap success background */
+    --success-text: #155724; /* Bootstrap success text */
+    --success-border: #c3e6cb; /* Bootstrap success border */
+    --font-primary: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+  }
+  
+  /* --- Base Page Layout --- */
+  .profile-page-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--neutral-bg);
+    font-family: var(--font-primary);
+  }
+  
+  /* --- Top Navigation Bar Styles (Consistent with other pages) --- */
+  .dashboard-top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background-color: var(--content-bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 3px solid var(--primary-green);
+  }
+  .app-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-green-dark);
+    text-decoration: none;
+  }
+  .app-logo .icon { font-size: 1.5em; color: var(--primary-green); margin-right: 0.5em; }
+  .main-actions-nav { display: flex; gap: 0.5rem; }
+  .nav-action-item {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    color: var(--text-medium);
+    font-weight: 500;
+    transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-action-item .icon { color: var(--secondary-green); font-size: 1.2em; margin-right: 0.5em; }
+  .nav-action-item:hover {
+    background-color: var(--primary-green-light);
+    color: var(--primary-green-dark);
+    box-shadow: 0 2px 8px rgba(var(--primary-green-rgb), 0.15);
+  }
+  .nav-action-item.active {
+    background-color: var(--primary-green);
+    color: var(--text-on-primary);
+    box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
+  }
+  .nav-action-item.active .icon { color: var(--text-on-primary); }
+  
+  /* --- Main Profile Content Area --- */
+  .profile-main-content {
+    flex-grow: 1;
+    padding: 2rem 2.5rem;
+    max-width: 900px; /* Moderate width for a profile form */
+    margin: 0 auto; /* Center content */
+    width: 100%;
+  }
+  
+  .profile-header-section {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .profile-header-section h1 {
+    font-size: 2.5rem;
+    color: var(--primary-green-dark);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  .profile-header-section h1 .icon {
+    color: var(--primary-green);
+    font-size: 1.3em;
+    margin-right: 0.6rem;
+  }
+  .profile-header-section p {
+    font-size: 1.1rem;
+    color: var(--text-medium);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  /* Profile Form Card */
+  .profile-form-card {
+    background-color: var(--card-bg);
+    padding: 2.5rem; /* More padding for form */
+    border-radius: 16px;
+    box-shadow: var(--shadow-soft);
+  }
+  
+  /* Messages (Error/Success) */
+  .message-box {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    border: 1px solid transparent;
+  }
+  .message-box .icon { margin-right: 0.75em; font-size: 1.2em; }
+  
+  .error-box {
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    border-color: var(--error-border);
+  }
+  .error-box .icon { color: var(--error-text); }
+  
+  .success-box {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    border-color: var(--success-border);
+  }
+  .success-box .icon { color: var(--success-text); }
+  
+  
+  /* Profile Form Styling */
+  .profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Increased gap between form elements/rows */
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .form-row .form-field {
+    flex: 1; /* Each field in a row takes equal space */
+  }
+  
+  .form-field {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-field label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-medium);
+    margin-bottom: 0.5rem; /* Increased margin */
+    display: flex;
+    align-items: center;
+  }
+  .form-field label .icon {
+    margin-right: 0.5em;
+    font-size: 1.1em;
+    color: var(--secondary-green);
+  }
+  
+  .form-field input[type="text"],
+  .form-field input[type="email"], /* If email is editable */
+  .form-field textarea {
+    width: 100%;
+    padding: 0.85rem 1rem; /* Slightly more padding */
+    border: 1px solid var(--input-border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: var(--input-bg);
+    color: var(--text-dark);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .form-field input[type="text"]:focus,
+  .form-field input[type="email"]:focus,
+  .form-field textarea:focus {
+    outline: none;
+    border-color: var(--input-focus-border-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-green-rgb), 0.15);
+  }
+  .form-field textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  /* Checkbox Styling */
+  .form-field-checkbox {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem; /* Add some top margin if it's standalone */
+  }
+  .form-field-checkbox input[type="checkbox"] {
+    width: 1.25em; /* Custom size */
+    height: 1.25em;
+    margin-right: 0.75rem;
+    accent-color: var(--primary-green); /* Modern way to color checkbox */
+    cursor: pointer;
+    flex-shrink: 0; /* Prevent shrinking */
+  }
+  .form-field-checkbox .checkbox-label {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 0; /* Override default label margin */
+  }
+  .form-field-checkbox .checkbox-label .icon { color: var(--primary-green); font-size: 1.1em; }
+  
+  
+  /* Form Actions / Submit Button */
+  .form-actions {
+    margin-top: 1rem; /* Space above the button */
+    display: flex;
+    justify-content: flex-end; /* Align button to the right */
+  }
+  .submit-profile-button {
+    background-color: var(--primary-green);
+    color: var(--text-on-primary);
+    padding: 0.85rem 2rem; /* Generous padding */
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: inline-flex; /* For icon and text alignment */
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .submit-profile-button:hover:not(:disabled) {
+    background-color: var(--primary-green-dark);
+    transform: translateY(-2px);
+  }
+  .submit-profile-button:disabled {
+    background-color: var(--text-light);
+    cursor: not-allowed;
+  }
+  .button-spinner { /* Copied from WasteLog.css for consistency */
+    width: 1em; height: 1em;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--text-on-primary);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  
+  /* Loader (reusing from Dashboard if globally styled, or define here) */
+  .loader-container-main {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 3rem; text-align: center; color: var(--text-medium); font-size: 1rem;
+  }
+  .loader-spinner-main {
+    border: 5px solid var(--primary-green-light);
+    border-top: 5px solid var(--primary-green);
+    border-radius: 50%; width: 40px; height: 40px;
+    animation: spin 0.8s linear infinite; margin-bottom: 1rem;
+  }
+  
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .profile-main-content { padding: 1.5rem 1rem; }
+    .profile-header-section h1 { font-size: 2rem; }
+    .profile-header-section p { font-size: 1rem; }
+    .profile-form-card { padding: 1.5rem; }
+  
+    .form-row {
+      flex-direction: column;
+      gap: 1.5rem; /* Keep gap when stacked */
+    }
+    .form-actions {
+        justify-content: center; /* Center button on mobile */
+    }
+    .submit-profile-button {
+        width: 100%; /* Full width button on mobile */
+    }
+  }
