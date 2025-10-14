@@ -1,0 +1,13 @@
+{
+    "nav": {
+      "home": "Home",
+      "about": "About us",
+      "login": "Login",
+      "signup": "Sign Up"
+    },
+    "hero": {
+      "title": "Make Every Day a Zero Waste Day",
+      "subtitle": "Join our community to track waste, earn rewards, and live sustainably!",
+      "journey_button": "Start Your Journey"
+    }
+  }

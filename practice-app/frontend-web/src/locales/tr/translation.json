@@ -1,0 +1,13 @@
+{
+    "nav": {
+      "home": "Ana Sayfa",
+      "about": "Hakkımızda",
+      "login": "Giriş Yap",
+      "signup": "Kayıt Ol"
+    },
+    "hero": {
+      "title": "Her Günü Sıfır Atık Günü Yapın",
+      "subtitle": "Atıkları izlemek, ödüller kazanmak ve sürdürülebilir yaşamak için topluluğumuza katılın!",
+      "journey_button": "Yolculuğuna Başla"
+    }
+  }

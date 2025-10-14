@@ -3,6 +3,8 @@ import { Link, NavLink } from 'react-router-dom'; // Using NavLink for active cl
 import './Home.css';
 import InfoBox from './InfoBox';
 
+import { useTranslation } from 'react-i18next'; // 1. Import the hook
+
 // Mock eco-tips and badges (keeping these from your original code)
 const mockEcoTips = [
     { id: 1, text: 'Switch to reusable bags to cut plastic waste.', related_category: 'Plastic', topic: 'Waste Reduction' },
@@ -35,6 +37,13 @@ const Icon = ({ name, className = "" }) => {
 
 
 const Home = () => {
+    const { t, i18n } = useTranslation();
+
+    const toggleLanguage = () => {
+        const newLang = i18n.language === 'en' ? 'tr' : 'en';
+        i18n.changeLanguage(newLang);
+    };
+
     const [currentTip, setCurrentTip] = useState(0);
 
     useEffect(() => {
@@ -66,10 +75,10 @@ const Home = () => {
                     <ul className="main-nav">
                         {/* Using NavLink for active class styling */}
                         <li className="nav-item">
-                            <NavLink to="/" className={({isActive}) => isActive ? "active-link-class" : ""}>Home</NavLink>
+                            <NavLink to="/" className={({isActive}) => isActive ? "active-link-class" : ""}>{t('nav.home')}</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/about" className={({isActive}) => isActive ? "active-link-class" : ""}>About us</NavLink>
+                            <NavLink to="/about" className={({isActive}) => isActive ? "active-link-class" : ""}>{t('nav.about')}</NavLink>
                         </li>
                         <li className="nav-item">
                             <NavLink to="/blog" className={({isActive}) => isActive ? "active-link-class" : ""}>Blog</NavLink>
@@ -77,10 +86,15 @@ const Home = () => {
                         {/* Adding Pricing back as it's a common public page */}
                         
                         <li className="nav-item">
-                            <NavLink to="/login" className={({isActive}) => isActive ? "active-link-class" : ""}>Login</NavLink>
+                            <NavLink to="/login" className={({isActive}) => isActive ? "active-link-class" : ""}>{t('nav.login')}</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/signup" className="nav-button-style signup-button-style">Sign Up</NavLink>
+                            <NavLink to="/signup" className="nav-button-style signup-button-style">{t('nav.signup')}</NavLink>
+                        </li>
+                        <li className="nav-item">
+                       <button onClick={toggleLanguage} className="language-toggle-button">
+                            {i18n.language === 'en' ? 'TR' : 'EN'}
+                       </button>
                         </li>
                     </ul>
                 </nav>

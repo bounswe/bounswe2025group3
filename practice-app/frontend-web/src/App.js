@@ -16,6 +16,8 @@ import BlogPostPage from './components/blog/BlogPostPage';
 import GoalsPage from './components/goals/GoalsPage';
 import GithubCallback from './components/auth/GithubCallback';
 
+import './i18n';
+
 // Add debugging information for build and environment
 console.debug('App Initialization:', {
     NODE_ENV: process.env.NODE_ENV,
