@@ -2,12 +2,68 @@
     "nav": {
       "home": "Ana Sayfa",
       "about": "Hakkımızda",
+      "blog": "Blog",
       "login": "Giriş Yap",
       "signup": "Kayıt Ol"
     },
     "hero": {
       "title": "Her Günü Sıfır Atık Günü Yapın",
       "subtitle": "Atıkları izlemek, ödüller kazanmak ve sürdürülebilir yaşamak için topluluğumuza katılın!",
-      "journey_button": "Yolculuğuna Başla"
+      "journey_button": "Yolculuğuna Başla",
+      "login_button": "Giriş Yap"
+    },
+    "mission": {
+      "title": "Neden Sıfır Atık Mücadelesi?",
+      "subtitle": "Atıkları azaltmak, hedefler belirlemek ve sürdürülebilirlik için küresel bir harekete katılmak adına kendinizi güçlendirin.",
+      "features": {
+        "log": {
+          "title": "Atık Kaydet",
+          "description": "Atık azaltımınızı kategori ve miktara göre ayrıntılı günlüklerle takip edin."
+        },
+        "join": {
+          "title": "Meydan Okumalara Katıl",
+          "description": "Birlikte atıkları azaltmak için eğlenceli topluluk mücadelelerine katılın."
+        },
+        "earn": {
+          "title": "Ödüller Kazan",
+          "description": "Çabalarınız için rozetlerin ve sanal eko-dünya başarılarının kilidini açın."
+        }
+      }
+    },
+    "tips": {
+      "title": "Sürdürülebilirlik İpuçları",
+      "category_prefix": "Kategori",
+      "topic_prefix": "Konu"
+    },
+    "eco_tips": [
+      { "id": 1, "text": "Plastik atıkları azaltmak için yeniden kullanılabilir torbalara geçin.", "related_category": "Plastik", "topic": "Atık Azaltma" },
+      { "id": 2, "text": "Bahçe toprağınızı zenginleştirmek için yiyecek artıklarını kompostlayın.", "related_category": "Organik", "topic": "Atık Azaltma" },
+      { "id": 3, "text": "Eski elektronik cihazları sertifikalı merkezlerde geri dönüştürün.", "related_category": "Elektronik", "topic": "Atık Azaltma" },
+      { "id": 4, "text": "Evde su tasarrufu yapmak için sızıntıları onarın.", "related_category": null, "topic": "Su Tasarrufu" }
+    ],
+    "rewards": {
+      "title": "Harika Ödüllerin Kilidini Açın",
+      "subtitle": "Atıkları azalttıkça rozetler kazanın ve sanal eko-dünyanızı inşa edin!"
+    },
+    "badges": [
+      { "name": "İlk Adım", "description": "İlk atık azaltımını kaydet", "icon": "/icons/first-step.png" },
+      { "name": "Plastik Avcısı", "description": "10 kg plastik atığı azalt", "icon": "/icons/plastic-buster.png" },
+      { "name": "Sürdürülebilirlik Serisi", "description": "7 gün boyunca atık azaltımını kaydet", "icon": "/icons/streak.png" }
+    ],
+    "testimonials": {
+      "title": "Topluluğumuz",
+      "quotes": [
+        {
+          "text": "\"Atıklarımı kaydetmek 10 kg plastik azaltmama ve Plastik Avcısı rozetimi kazanmama yardımcı oldu!\"",
+          "author": "- Emma, Eko Kaşif"
+        },
+        {
+          "text": "\"Meydan okumalar çok motive edici! Arkadaşlarımla rekabet etmeyi seviyorum.\"",
+          "author": "- Liam, Yeşil Başlangıç"
+        }
+      ]
+    },
+    "footer": {
+      "rights": "Tüm hakları saklıdır."
     }
   }
