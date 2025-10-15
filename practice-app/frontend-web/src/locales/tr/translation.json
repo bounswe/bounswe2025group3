@@ -97,5 +97,107 @@
         "subtitle": "GreenerLife projesi size kendini adamış bir grup öğrenci tarafından sunulmaktadır:"
       },
       "simple_footer": "© {year} GreenerLife Öğrenci Projesi."
+    },
+    "blog": {
+      "header": {
+        "title": "Blogumuzdan Son Haberler",
+        "subtitle": "Atık yönetimi ve geri dönüşümle ilgili en son haberler, ipuçları ve görüşlerle güncel kalın."
+      },
+      "meta_prefix": "Yayınlanma tarihi:",
+      "read_more_button": "Devamını Oku",
+      "posts": [
+        {
+          "title": "Geri Dönüştürülebilir Atıkları Ayırmanın Önemi",
+          "date": "26 Ekim 2023",
+          "excerpt": "Geri dönüştürülebilir malzemelerin doğru şekilde ayrılmasının etkili bir geri dönüşüm süreci için neden çok önemli olduğunu ve nasıl katkıda bulunabileceğinizi öğrenin..."
+        },
+        {
+          "title": "Yaygın 5 Geri Dönüşüm Hatası ve Bunlardan Kaçınma Yolları",
+          "date": "15 Ekim 2023",
+          "excerpt": "İyi niyetli birçok geri dönüştürücü, partileri kirletebilecek yaygın hatalar yapar. İşte bunlardan nasıl kaçınılacağı..."
+        },
+        {
+          "title": "Atık Yönetimi Teknolojisindeki Yenilikler",
+          "date": "30 Eylül 2023",
+          "excerpt": "Dünya çapında atıkları yönetme ve azaltma şeklimizde devrim yaratan en son teknolojik gelişmeleri keşfedin..."
+        }
+      ]
+    },
+    "blog_post": {
+      "loading": "Blog gönderisi yükleniyor...",
+      "error_title": "Hata",
+      "error_not_found": "Blog gönderisi bulunamadı.",
+      "back_to_blog": "Bloğa Geri Dön",
+      "meta_published_on": "Yayınlanma tarihi:",
+      "meta_by": "",
+      "posts": [
+        {
+          "title": "Geri Dönüştürülebilir Atıkları Ayırmanın Önemi",
+          "date": "26 Ekim 2023",
+          "author": "GreenerLife Ekibi",
+          "fullContent": "<p>Geri dönüşüm, modern atık yönetiminin temel taşlarından biridir, ancak etkinliği kritik bir şekilde tek bir basit eyleme bağlıdır: doğru ayırma. Geri dönüştürülebilir atıklar, geri dönüştürülemeyen malzemelerle veya yanlış ayrılmış öğelerle kirlendiğinde, tüm partiler reddedilebilir ve yeniden kullanılmak yerine çöp sahalarına gönderilebilir.</p><h2>Ayırma Neden Önemlidir?</h2><p>Farklı malzemeler farklı geri dönüşüm süreçleri gerektirir. Malzemeleri karıştırmak şunlara neden olabilir:</p><ul><li><strong>Ekipmana Zarar Verme:</strong> Plastik poşetler gibi öğeler makineleri sıkıştırabilir.</li><li><strong>Düşük Kalite:</strong> Kirleticiler, nihai geri dönüştürülmüş malzemenin kalitesini düşürerek onu daha az değerli veya kullanılamaz hale getirir.</li><li><strong>Maliyetleri Artırma:</strong> Ayırma tesisleri, kirleticileri temizlemek için fazladan zaman ve kaynak harcar.</li></ul><h2>Yaygın Ayırma Hataları</h2><p>Bu yaygın hatalara dikkat edin:</p><ul><li><strong>Umutla Geri Dönüşüm (Wishcycling):</strong> Geri dönüştürülebilir olduğunu umarak öğeleri geri dönüşüm kutusuna atmak (örneğin, yağlı pizza kutuları, belirli plastikler). Her zaman yerel yönergeleri kontrol edin!</li><li><strong>Kapları Durulamamak:</strong> Yiyecek artıkları kağıt ve diğer malzemeleri kirletebilir. Hızlı bir durulama genellikle yeterlidir.</li><li><strong>Geri Dönüştürülebilirleri Poşetlemek:</strong> Yerel programınız aksini belirtmedikçe, geri dönüştürülebilirler genellikle kutuya gevşek bir şekilde yerleştirilmelidir. Plastik poşetlerin kendisi genellikle kaldırım kenarında geri dönüştürülemez.</li></ul><h2>Nasıl Yardımcı Olabilirsiniz?</h2><p>1. <strong>Yerel Kurallarınızı Bilin:</strong> Geri dönüşüm yönergeleri belediyelere göre önemli ölçüde farklılık gösterir. Yerel atık yönetimi web sitenizi kontrol edin.<br>2. <strong>Geri Dönüştürülebilirlerinizi Temizleyin:</strong> Kapları durulayın ve kağıdın kuru ve temiz olduğundan emin olun.<br>3. <strong>Şüpheye Düştüğünüzde Atın:</strong> Şüpheli bir öğeyi atmak, bütün bir partiyi kirletmekten daha iyidir.</p><p>Doğru ayırmak için birkaç dakika daha ayırarak, geri dönüşümü verimli ve çevre için gerçekten faydalı hale getirmede hayati bir rol oynarsınız. Daha temiz bir gelecek için birlikte çalışalım!</p>"
+        },
+        {
+          "title": "Yaygın 5 Geri Dönüşüm Hatası ve Bunlardan Kaçınma Yolları",
+          "date": "15 Ekim 2023",
+          "author": "Jane Doe",
+          "fullContent": "<p>Hepimiz çevre için üzerimize düşeni yapmak istiyoruz, ancak bazen geri dönüşümdeki en iyi niyetlerimiz aslında sorunlara neden olabilir. Kirlilik, geri dönüşüm tesisleri için büyük bir sorundur. İşte beş yaygın hata ve bunları nasıl düzelteceğiniz:</p><ol><li><strong>Yağlı Pizza Kutularını Geri Dönüştürmek:</strong> Yağ ve yiyecek artıkları karton liflerini kirleterek onları geri dönüştürülemez hale getirir. Mümkünse kutu kapağının temiz kısımlarını yırtın ve yağlı alt kısmı kompost yapın veya atın.</li><li><strong>Plastik Şişelerde/Kavanozlarda Kapak Bırakmak:</strong> Bu durum değişiklik gösterse de, birçok tesis kapakların çıkarılmasını tercih eder. Küçük kapaklar ayıklama makinelerinden düşebilir. Yerel kuralları kontrol edin, ancak genellikle en iyisi onları çıkarıp atmak (veya mümkünse ayrı olarak geri dönüştürmek).</li><li><strong>Kaldırım Kenarında Plastik Poşetleri Geri Dönüştürmek:</strong> Plastik poşetler ve filmler ayıklama makinelerine dolanarak kapanmalara neden olur. Temiz plastik poşetleri belirlenmiş mağaza bırakma noktalarına geri götürün.</li><li><strong>Kapları Boşaltmamak ve Durulamamak:</strong> Arta kalan yiyecek veya sıvı, diğer geri dönüştürülebilir malzemeleri, özellikle kağıdı kirletebilir. Kapları hızlıca durulayın.</li><li><strong>Kutuya Küçük Öğeler Koymak:</strong> Kredi kartından küçük öğeler (şişe kapakları, parçalanmış kağıt parçaları gibi) genellikle ayıklama eleklerinden düşer. Parçalanmış kağıdı bir kağıt torbada tutun (yerel olarak izin veriliyorsa) ve küçük plastik parçalarını atın.</li></ol><p>Bu hatalardan kaçınarak, daha fazla malzemenin başarılı bir şekilde geri dönüştürülmesini sağlar, kaynakları korur ve çöp sahası atıklarını azaltırsınız. En doğru bilgi için daima yerel belediyenizin yönergelerini kontrol edin!</p>"
+        },
+        {
+          "title": "Atık Yönetimi Teknolojisindeki Yenilikler",
+          "date": "30 Eylül 2023",
+          "author": "Eko İnovasyon A.Ş.",
+          "fullContent": "<p>Dünya büyüyen bir atık kriziyle karşı karşıya, ancak teknoloji yenilikçi çözümler sunmak için devreye giriyor. Akıllı çöp kutularından gelişmiş ayırma ve kimyasal geri dönüşüme kadar, atık yönetiminin geleceği umut verici görünüyor.</p><h2>Akıllı Çöp Kutuları ve Toplama</h2><p>Halka açık ve ticari çöp kutularındaki IoT destekli sensörler, doluluk seviyelerini tespit ederek toplama rotalarını optimize edebilir. Bu, yakıt tasarrufu sağlar, emisyonları azaltır ve taşan çöp kutularını önler. GPS takibi ve veri analitiği verimliliği daha da artırır.</p><h2>Gelişmiş Ayırma Teknolojileri</h2><p>Modern Malzeme Geri Kazanım Tesisleri (MGK'lar) sofistike teknolojiler kullanır:</p><ul><li><strong>Optik Ayırıcılar:</strong> Farklı plastik ve malzeme türlerini yüksek hızda tanımlamak için yakın kızılötesi (NIR) ışık kullanır.</li><li><strong>Robotik ve Yapay Zeka:</strong> Yapay zeka ile donatılmış robotlar, karışık bir akıştan belirli öğeleri artan bir doğrulukla tanımlayıp alabilir ve geleneksel makineler için zor olan malzemeleri işleyebilir.</li><li><strong>Yoğunluk Ayırıcılar:</strong> Cam kırıkları gibi malzemelerin yoğunluklarına göre ayrılmasına yardımcı olur.</li></ul><h2>Kimyasal Geri Dönüşüm</h2><p>Geleneksel mekanik geri dönüşümün ötesinde, kimyasal geri dönüşüm (veya ileri geri dönüşüm) teknolojileri ortaya çıkmaktadır. Bu süreçler, plastikleri temel kimyasal yapı taşlarına ayırır ve bunlar daha sonra yeni plastikler veya diğer kimyasal ürünler oluşturmak için kullanılabilir. Bu, geri dönüştürülmesi zor plastikler için potansiyel bir çözüm sunar.</p><h2>Atıktan Enerji (WtE)</h2><p>Modern WtE tesisleri, geri dönüştürülemeyen atıklardan elektrik veya ısı üretmek için kontrollü yakma yöntemini kullanır, bu da çöp sahası hacmini önemli ölçüde azaltırken enerji geri kazanımı sağlar. Bu tesisler, gelişmiş kirlilik kontrol sistemleri içerir.</p><p>Zorluklar devam etse de, bu teknolojik gelişmeler dünya çapında atık yönetimine daha sürdürülebilir ve döngüsel bir yaklaşım için umut vaat etmektedir.</p>"
+        }
+      ]
+    },
+    "login": {
+      "title_line2": "Atıklarınızı Kaydedin ve Geri Dönüştürün",
+      "title_line1": "Daha İyi Bir Doğa İçin",
+      "welcome": "Tekrar hoş geldiniz! Lütfen hesabınıza giriş yapın.",
+      "email_section_title": "E-posta Bölümü",
+      "email_label": "E-posta Adresi",
+      "password_label": "Şifre",
+      "remember_me": "Beni Hatırla",
+      "forgot_password": "Şifremi Unuttum",
+      "login_button": "Giriş Yap",
+      "signup_button": "Kayıt Ol",
+      "social_login_prompt": "Veya şununla giriş yapın",
+      "github_button": "GitHub",
+      "linkedin_button": "LinkedIn",
+      "error_enter_credentials": "Lütfen hem E-posta hem de Şifre giriniz.",
+      "error_invalid_credentials": "Geçersiz E-posta veya Şifre.",
+      "error_google_failed": "Google ile giriş başarısız oldu.",
+      "error_login_failed": "Giriş başarısız: {message}"
+    },
+    "signup": {
+      "title_part1": "Sıfır Atık",
+      "title_part2": "Hareketine",
+      "title_part3": "Katılın",
+      "subtitle": "Atıklarınızı kaydetmeye ve geri dönüştürmeye başlamak için bir hesap oluşturun.",
+      "mandatory_note": "* ile işaretlenmiş alanlar zorunludur.",
+      "username_label": "Kullanıcı Adı",
+      "email_label": "E-posta",
+      "password_label": "Şifre",
+      "confirm_password_label": "Şifreyi Onayla",
+      "first_name_label": "Ad",
+      "last_name_label": "Soyad",
+      "city_label": "Şehir",
+      "country_label": "Ülke",
+      "bio_label": "Biyografi",
+      "placeholder_username": "Kullanıcı Adınızı Girin",
+      "placeholder_email": "E-postanızı Girin",
+      "placeholder_password": "Şifrenizi Girin",
+      "placeholder_confirm_password": "Şifreyi Onaylayın",
+      "placeholder_first_name": "Adınızı Girin",
+      "placeholder_last_name": "Soyadınızı Girin",
+      "placeholder_city": "Şehrinizi Girin",
+      "placeholder_country": "Ülkenizi Girin",
+      "placeholder_bio": "Bize kendinizden bahsedin (isteğe bağlı)",
+      "signup_button": "Kayıt Ol",
+      "back_to_login_button": "Giriş Ekranına Dön",
+      "alternate_action_prompt": "Zaten bir hesabınız var mı?",
+      "alternate_action_login": "Giriş Yap",
+      "error_passwords_no_match": "Şifreler uyuşmuyor."
     }
   }

@@ -3,11 +3,14 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css'; // For shared base styles
 import './SignupPage.css'; // For signup-specific styles
+import { useTranslation } from 'react-i18next';
+import Header from '../common/Header'; // Shared header component
 
 // Use environment variable or default to localhost:10000
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
 
 const SignupPage = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -67,42 +70,24 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="login-page signup-page"> {/* Added signup-page for specific scoping if needed */}
-      <div className="nav-container">
-        <nav className="navbar">
-        <Link to="/" className="navbar-brand">
-                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
-                        <span className="navbar-app-name">GREENER</span>
-                    </Link>
-          <ul className="main-nav">
-            <li className="nav-item">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/about">About us</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/blog">Blog</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/login">Login</Link>
-            </li>
-            <li className="nav-item active"> {/* Sign Up is active */}
-              <Link to="/signup"className="nav-button-style signup-button-style">Sign Up</Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
+    <div className="login-page signup-page">
+      {/* 4. Use the shared Header component */}
+      <Header />
 
-      <div className="login-container"> {/* Reusing login-container for layout */}
+      <div className="login-container">
         <div className="main-content">
           <div className="form-section">
-            <h1 className="main-heading"> {/* Changed to h1 */}
-              Join the <span style={{ color: 'var(--accent)' }}>Zero Waste</span> Movement
+            {/* 5. Replace all static text with t() function */}
+            <h1 className="main-heading">
+              {t('signup.title_part1')}{' '}
+              <span style={{ color: 'var(--accent)' }}>{t('signup.title_part2')}</span>{' '}
+              {t('signup.title_part3')}
             </h1>
-            <p className="welcome-text">Create an account to start logging and recycling your waste.</p>
+            <p className="welcome-text">{t('signup.subtitle')}</p>
             <p className="mandatory-note">
-              Fields marked with <span className="asterisk">*</span> are mandatory.
+              {t('signup.mandatory_note').split('*')[0]}
+              <span className="asterisk">*</span>
+              {t('signup.mandatory_note').split('*')[1]}
             </p>
 
             <form onSubmit={handleSubmit}>
@@ -110,145 +95,72 @@ const SignupPage = () => {
                 <div className="form-col">
                   <div className="input-box">
                     <label htmlFor="username">
-                      Username<span className="asterisk">*</span>
+                      {t('signup.username_label')}<span className="asterisk">*</span>
                     </label>
-                    <input
-                      id="username"
-                      name="username"
-                      type="text"
-                      placeholder="Enter Username"
-                      value={formData.username}
-                      onChange={handleChange}
-                      required
-                    />
+                    <input id="username" name="username" type="text" placeholder={t('signup.placeholder_username')} value={formData.username} onChange={handleChange} required />
                   </div>
-
                   <div className="input-box">
                     <label htmlFor="email">
-                      Email<span className="asterisk">*</span>
+                      {t('signup.email_label')}<span className="asterisk">*</span>
                     </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="Enter Email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                    />
+                    <input id="email" name="email" type="email" placeholder={t('signup.placeholder_email')} value={formData.email} onChange={handleChange} required />
                   </div>
-
                   <div className="input-box">
                     <label htmlFor="password">
-                      Password<span className="asterisk">*</span>
+                      {t('signup.password_label')}<span className="asterisk">*</span>
                     </label>
-                    <input
-                      id="password"
-                      name="password" 
-                      type="password"
-                      placeholder="Enter Password"
-                      value={formData.password} 
-                      onChange={handleChange}
-                      required
-                    />
+                    <input id="password" name="password" type="password" placeholder={t('signup.placeholder_password')} value={formData.password} onChange={handleChange} required />
                   </div>
-
                   <div className="input-box">
                     <label htmlFor="password2">
-                      Confirm Password<span className="asterisk">*</span>
+                      {t('signup.confirm_password_label')}<span className="asterisk">*</span>
                     </label>
-                    <input
-                      id="password2"
-                      name="password2"
-                      type="password"
-                      placeholder="Confirm Password"
-                      value={formData.password2}
-                      onChange={handleChange}
-                      required
-                    />
+                    <input id="password2" name="password2" type="password" placeholder={t('signup.placeholder_confirm_password')} value={formData.password2} onChange={handleChange} required />
                   </div>
                 </div>
 
                 <div className="form-col">
                   <div className="input-box">
-                    <label htmlFor="first_name">First Name</label>
-                    <input
-                      id="first_name"
-                      name="first_name"
-                      type="text"
-                      placeholder="Enter First Name"
-                      value={formData.first_name}
-                      onChange={handleChange}
-                    />
+                    <label htmlFor="first_name">{t('signup.first_name_label')}</label>
+                    <input id="first_name" name="first_name" type="text" placeholder={t('signup.placeholder_first_name')} value={formData.first_name} onChange={handleChange} />
                   </div>
-
                   <div className="input-box">
-                    <label htmlFor="last_name">Last Name</label>
-                    <input
-                      id="last_name"
-                      name="last_name"
-                      type="text"
-                      placeholder="Enter Last Name"
-                      value={formData.last_name}
-                      onChange={handleChange}
-                    />
+                    <label htmlFor="last_name">{t('signup.last_name_label')}</label>
+                    <input id="last_name" name="last_name" type="text" placeholder={t('signup.placeholder_last_name')} value={formData.last_name} onChange={handleChange} />
                   </div>
-
                   <div className="input-box">
-                    <label htmlFor="city">City</label>
-                    <input
-                      id="city"
-                      name="city"
-                      type="text"
-                      placeholder="Enter City"
-                      value={formData.city}
-                      onChange={handleChange}
-                    />
+                    <label htmlFor="city">{t('signup.city_label')}</label>
+                    <input id="city" name="city" type="text" placeholder={t('signup.placeholder_city')} value={formData.city} onChange={handleChange} />
                   </div>
-
                   <div className="input-box">
-                    <label htmlFor="country">Country</label>
-                    <input
-                      id="country"
-                      name="country"
-                      type="text"
-                      placeholder="Enter Country"
-                      value={formData.country}
-                      onChange={handleChange}
-                    />
+                    <label htmlFor="country">{t('signup.country_label')}</label>
+                    <input id="country" name="country" type="text" placeholder={t('signup.placeholder_country')} value={formData.country} onChange={handleChange} />
                   </div>
                 </div>
               </div>
 
-              <div className="input-box bio-input-box"> {/* Added class for specific styling if needed */}
-                <label htmlFor="bio">Bio</label>
-                <textarea
-                  id="bio"
-                  name="bio"
-                  placeholder="Tell us about yourself (optional)"
-                  rows={4} // Reduced rows for a more compact default
-                  value={formData.bio}
-                  onChange={handleChange}
-                  className="bio-full" // This class will make it full width
-                />
+              <div className="input-box bio-input-box">
+                <label htmlFor="bio">{t('signup.bio_label')}</label>
+                <textarea id="bio" name="bio" placeholder={t('signup.placeholder_bio')} rows={4} value={formData.bio} onChange={handleChange} className="bio-full" />
               </div>
 
-              {error && <p className="error-message">{error}</p>} {/* Standardized error class */}
+              {error && <p className="error-message">{error}</p>}
 
-              <div className="action-buttons"> {/* Standardized button container class */}
-                <button type="submit" className="login-btn">Sign Up</button> {/* Reusing login-btn style */}
-                <button type="button" className="signup-btn" onClick={() => navigate('/login')}> {/* Reusing signup-btn style */}
-                  Back to Login
+              <div className="action-buttons">
+                <button type="submit" className="login-btn">{t('signup.signup_button')}</button>
+                <button type="button" className="signup-btn" onClick={() => navigate('/login')}>
+                  {t('signup.back_to_login_button')}
                 </button>
               </div>
             </form>
             <p className="alternate-action-text">
-                Already have an account? <Link to="/login">Log In</Link>
+              {t('signup.alternate_action_prompt')}{' '}
+              <Link to="/login">{t('signup.alternate_action_login')}</Link>
             </p>
           </div>
 
           <div className="image-section">
-            <img src="/wasteimage.png" alt="Recycling illustration" onError={(e) => { e.target.style.display='none'; e.target.parentElement.innerHTML+='<p>Image not found</p>' }} />
+            <img src="/wasteimage.png" alt="Recycling illustration" />
           </div>
         </div>
       </div>

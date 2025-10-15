@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
+import { useTranslation } from 'react-i18next';
+import Header from '../common/Header';
 //import jwt_decode from 'jwt-decode'; // Optional if you want to decode the token
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
@@ -24,6 +26,7 @@ const handleSocialLogin = (provider) => {
 
 
 const LoginPage = () => {
+    const { t } = useTranslation();
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
@@ -88,54 +91,30 @@ const LoginPage = () => {
 
     return (
         <div className="login-page">
-            <div className="nav-container">
-                <nav className="navbar">
-                <Link to="/" className="navbar-brand">
-                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
-                        <span className="navbar-app-name">GREENER</span>
-                    </Link>
-                    <ul className="main-nav">
-                        <li className="nav-item"> {/* Removed 'active' class from Home */}
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/about">About us</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/blog">Blog</Link>
-                        </li>
-                        <li className="nav-item active"> {/* Added 'active' class to Login */}
-                            <Link to="/login">Login</Link>
-                        </li>
-                        <li className="nav-item">
-                        <Link to="/signup"className="nav-button-style signup-button-style">Sign Up</Link>
-            </li>
-                    </ul>
-                </nav>
-            </div>
+            {/* 4. Use the shared Header component */}
+            <Header />
             
             <div className="login-container">
                 <div className="main-content">
                     <div className="form-section">
+                        {/* 5. Replace all static text with t() function */}
                         <h1 className="main-heading">
-                            Log Your Wastes And Recycle<br />
-                            For A Better Nature
+                            {t('login.title_line1')}<br />
+                            {t('login.title_line2')}
                         </h1>
-                        <p className="welcome-text">Welcome back! Please login to your account.</p>
+                        <p className="welcome-text">{t('login.welcome')}</p>
                         
                         <form onSubmit={handleSubmit}>
                             <div className="email-section">
                                 <div className="section-indicator">
                                     <div className="indicator-dot"></div>
-                                    <span>Email Section</span>
+                                    <span>{t('login.email_section_title')}</span>
                                 </div>
                                 
                                 <div className="input-box">
-                                    <label htmlFor="email">Email Address</label>
+                                    <label htmlFor="email">{t('login.email_label')}</label>
                                     <input
-                                        id="email"
-                                        type="email"
-                                        placeholder="test@example.com"
+                                        id="email" type="email" placeholder="test@example.com"
                                         value={credentials.email}
                                         onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
                                         required
@@ -143,11 +122,9 @@ const LoginPage = () => {
                                 </div>
                                 
                                 <div className="input-box">
-                                    <label htmlFor="password">Password</label>
+                                    <label htmlFor="password">{t('login.password_label')}</label>
                                     <input
-                                        id="password"
-                                        type="password"
-                                        placeholder="***************"
+                                        id="password" type="password" placeholder="***************"
                                         value={credentials.password}
                                         onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
                                         required
@@ -159,56 +136,42 @@ const LoginPage = () => {
                                 <div className="options">
                                     <label className="remember-me">
                                         <input 
-                                            type="checkbox" 
-                                            checked={rememberMe}
+                                            type="checkbox" checked={rememberMe}
                                             onChange={() => setRememberMe(!rememberMe)}
                                         />
-                                        <span>Remember Me</span>
+                                        <span>{t('login.remember_me')}</span>
                                     </label>
-                                    <Link to="/forgot-password" className="forgot-password">Forgot Password?</Link>
-
+                                    <Link to="/forgot-password" className="forgot-password">
+                                        {t('login.forgot_password')}
+                                    </Link>
                                 </div>
                                 
                                 <div className="action-buttons">
                                     <button type="submit" className="login-btn">
-                                        Login
+                                        {t('login.login_button')}
                                     </button>
-                                    <button
-                                        type="button"
-                                        className="signup-btn"
-                                        onClick={() => navigate('/signup')}
-                                    >
-                                        Sign Up
+                                    <button type="button" className="signup-btn" onClick={() => navigate('/signup')}>
+                                        {t('login.signup_button')}
                                     </button>
                                 </div>
                             </div>
                             
                             <div className="social-section">
-                                <p className="or-login">Or login with</p>
+                                <p className="or-login">{t('login.social_login_prompt')}</p>
                                 <div className="social-options">
-                                    <button 
-                                        type="button" 
-                                        className="social-button github"
-                                        onClick={() => handleSocialLogin('github')}
-                                    >
+                                    <button type="button" className="social-button github" onClick={() => handleSocialLogin('github')}>
                                         <i className="social-icon github-icon"></i>
-                                        <span>GitHub</span>
+                                        <span>{t('login.github_button')}</span>
                                     </button>
-                                    <button 
-                                        type="button" 
-                                        className="social-button linkedin"
-                                        onClick={() => handleSocialLogin('linkedin')}
-                                    >
+                                    <button type="button" className="social-button linkedin" onClick={() => handleSocialLogin('linkedin')}>
                                         <i className="social-icon linkedin-icon"></i>
-                                        <span>LinkedIn</span>
+                                        <span>{t('login.linkedin_button')}</span>
                                     </button>
                                     <div className="social-button google">
-                                    <GoogleLogin
-                                        onSuccess={handleGoogleLoginSuccess}
-                                        onError={() => {
-                                            setError("Google login failed.");
-                                        }}
-                                    />
+                                        <GoogleLogin
+                                            onSuccess={handleGoogleLoginSuccess}
+                                            onError={() => { setError(t('login.error_google_failed')); }}
+                                        />
                                     </div>
                                 </div>
                             </div>
