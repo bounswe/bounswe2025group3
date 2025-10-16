@@ -6,7 +6,9 @@ import './Header.css';
 const Header = () => {
     const { t, i18n } = useTranslation();
 
-    const toggleLanguage = () => {
+    // Updated to handle the click event from a link
+    const toggleLanguage = (e) => {
+        e.preventDefault(); // Prevents the link from navigating
         const newLang = i18n.language === 'en' ? 'tr' : 'en';
         i18n.changeLanguage(newLang);
         localStorage.setItem('language', newLang);
@@ -21,6 +23,12 @@ const Header = () => {
                 </Link>
                 <ul className="main-nav">
                     <li className="nav-item">
+                       {/* Changed button to NavLink to match other navigation items */}
+                       <NavLink to="#" onClick={toggleLanguage}>
+                            {i18n.language === 'en' ? 'TR' : 'EN'}
+                       </NavLink>
+                    </li>
+                    <li className="nav-item">
                         <NavLink to="/" className={({isActive}) => isActive ? "active-link-class" : ""}>{t('common.nav.home')}</NavLink>
                     </li>
                     <li className="nav-item">
@@ -34,11 +42,6 @@ const Header = () => {
                     </li>
                     <li className="nav-item">
                         <NavLink to="/signup" className="nav-button-style signup-button-style">{t('common.nav.signup')}</NavLink>
-                    </li>
-                    <li className="nav-item">
-                       <button onClick={toggleLanguage} className="language-toggle-button">
-                            {i18n.language === 'en' ? 'TR' : 'EN'}
-                       </button>
                     </li>
                 </ul>
             </nav>

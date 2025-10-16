@@ -1,79 +1,88 @@
-.navbar {
-    width: 100%;
-    background-color: rgba(199, 232, 202, 0.9);
-    padding: 10px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+:root {
+    --primary-green: #2ecc71;
+    --primary-green-dark: #27ae60;
+    --primary-green-light: #abebc6;
+    --primary-green-rgb: 46, 204, 113;
+    --secondary-green: #1abc9c;
+    --text-dark: #34495e;
+    --text-medium: #7f8c8d;
+    --text-on-primary: #ffffff;
+    --content-bg: #ffffff;
 }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #122e1a;
+/* ---------- Top Navigation ---------- */
+.dashboard-top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  background-color: var(--content-bg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 3px solid var(--primary-green);
+  font-family: 'Poppins', sans-serif; /* Added font for consistency */
 }
 
-.nav-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 15px;
+.app-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary-green-dark);
+  text-decoration: none;
 }
 
-.nav-link {
-    color: #333;
-    text-decoration: none;
-    font-size: 0.9rem;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+.app-logo .icon {
+  font-size: 1.5em;
+  color: var(--primary-green);
+  margin-right: 0.5em;
 }
 
-.nav-link:hover {
-    background-color: #56ea62;
-    color: white;
+.main-actions-nav {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  gap: 0.5rem;
 }
 
-.nav-link.active {
-    background-color: #56ea62;
-    color: white;
-    font-weight: bold;
+/* This class now styles NavLinks AND buttons */
+.nav-action-item {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  color: var(--text-medium);
+  font-weight: 500;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  
+  /* Style reset for buttons */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
 }
 
-.nav-button {
-    background: none;
-    border: none;
-    color: #333;
-    font-size: 0.9rem;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+.nav-action-item .icon {
+  color: var(--secondary-green);
+  font-size: 1.2em;
+  margin-right: 0.5em;
 }
 
-.nav-button:hover {
-    background-color: #56ea62;
-    color: white;
+.nav-action-item:hover {
+  background-color: var(--primary-green-light);
+  color: var(--primary-green-dark);
+  box-shadow: 0 2px 8px rgba(var(--primary-green-rgb), 0.15);
 }
 
-@media (max-width: 600px) {
-    .navbar {
-        flex-direction: column;
-        padding: 10px;
-    }
+.nav-action-item.active {
+  background-color: var(--primary-green);
+  color: var(--text-on-primary);
+  box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
+}
 
-    .nav-links {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-    }
-
-    .nav-link,
-    .nav-button {
-        width: 100%;
-        text-align: center;
-    }
+.nav-action-item.active .icon {
+  color: var(--text-on-primary);
 }

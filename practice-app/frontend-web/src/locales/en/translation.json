@@ -199,6 +199,208 @@
       "alternate_action_prompt": "Already have an account?",
       "alternate_action_login": "Log In",
       "error_passwords_no_match": "Passwords do not match."
+    },
+    "forgot_password": {
+      "title": "Forgot Your Password?",
+      "subtitle": "No worries! Enter your email address below, and we'll send you a link to reset your password.",
+      "email_label": "Email Address",
+      "placeholder_email": "Enter your registered email",
+      "button_send_link": "Send Reset Link",
+      "button_sending": "Sending...",
+      "alternate_action_prompt": "Remember your password?",
+      "success_message": "If an account with that email exists, a password reset link has been sent. Please check your inbox (and spam folder).",
+      "error_enter_email": "Please enter your email address."
+    },
+    "dashboard_nav": {
+      "dashboard": "Dashboard",
+      "waste_log": "Waste Log",
+      "goals": "Goals",
+      "leaderboard": "Leaderboard",
+      "challenges": "Challenges",
+      "logout": "Logout"
+    },
+    "dashboard": {
+      "profile_card": {
+        "role_prefix": "Role",
+        "member": "Member",
+        "view_profile_button": "View Full Profile",
+        "logout_button": "Logout"
+      },
+      "overview": {
+        "title": "Dashboard Overview",
+        "subtitle": "Your journey to a sustainable lifestyle starts here."
+      },
+      "loader": {
+        "message": "Fetching your eco-stats..."
+      },
+      "score_widget": {
+        "title": "Your Eco Score",
+        "unit": "points",
+        "not_available": "N/A",
+        "prompt": "Log waste to calculate your score!"
+      },
+      "quick_links_widget": {
+        "title": "Quick Links",
+        "log_waste": "Log Waste",
+        "log_waste_sub": "Track your impact",
+        "join_challenges": "Join Challenges",
+        "join_challenges_sub": "Compete & improve",
+        "view_leaderboard": "View Leaderboard",
+        "view_leaderboard_sub": "See top performers"
+      },
+      "eco_tip_widget": {
+        "title": "Today's Eco Tip",
+        "content": "\"Reduce your carbon footprint by choosing locally sourced and seasonal foods. It supports local farmers and reduces transportation emissions!\"",
+        "discover_more": "Discover more tips"
+      },
+      "error_fetch_score": "Failed to fetch your score. Please try again later."
+    },
+    "waste_log_page": {
+      "title": "Log Your Waste",
+      "subtitle": "Track your waste generation to understand and reduce your environmental impact.",
+      "error_no_categories": "No waste categories available to log. Please contact support or try again later.",
+      "error_fetch_failed": "Failed to fetch initial data. Please check your connection.",
+      "error_select_category_and_quantity": "Please select a category and enter a quantity.",
+      "error_quantity_positive": "Quantity must be a positive number.",
+      "error_add_log_failed": "Failed to add waste log.",
+      "retry_button": "Retry Fetching Categories",
+      "form": {
+        "title": "Add New Entry",
+        "category_label": "Category",
+        "category_placeholder": "Select a waste category...",
+        "quantity_label": "Quantity",
+        "quantity_placeholder": "e.g., 2.5",
+        "disposal_label": "Disposal Method (Optional)",
+        "disposal_placeholder": "Select if applicable...",
+        "disposal_options": {
+          "recycled": "Recycled",
+          "composted": "Composted",
+          "landfill": "Landfill",
+          "donated": "Donated/Reused",
+          "incinerated": "Incinerated (Energy Recovery)",
+          "other": "Other"
+        },
+        "notes_label": "Notes (Optional)",
+        "notes_placeholder": "Any details, e.g., specific items, source...",
+        "submit_button": "Add Log Entry",
+        "submit_button_adding": "Adding..."
+      },
+      "log_list": {
+        "title": "Your Recent Logs",
+        "loading": "Loading logs...",
+        "no_logs": "You haven't logged any waste yet. Use the form to start tracking!",
+        "unknown_category": "Unknown Category",
+        "score_prefix": "Score",
+        "score_na": "N/A",
+        "method_prefix": "Method",
+        "notes_prefix": "Notes",
+        "logged_prefix": "Logged",
+        "view_all_prompt": "View all logs in your profile (coming soon!)"
+      },
+      "back_to_dashboard_button": "Back to Dashboard"
+    },
+    "goals_page": {
+      "title": "Your Goals",
+      "subtitle": "Set targets and watch your progress.",
+      "form_title": "Add a New Goal",
+      "error_no_categories": "No waste categories available – cannot create goals.",
+      "form": {
+        "select_category": "Select Category…",
+        "timeframe_daily": "Daily",
+        "timeframe_weekly": "Weekly",
+        "timeframe_monthly": "Monthly",
+        "placeholder_target": "Target units",
+        "button_saving": "Saving…",
+        "button_create": "Create Goal"
+      },
+      "loading": "Loading…",
+      "error_load_failed": "Failed to load goals or categories.",
+      "error_form_required": "Category and target are required.",
+      "error_create_failed": "Unable to create goal: {apiMsg}",
+      "table": {
+        "header_category": "Category",
+        "header_timeframe": "Timeframe",
+        "header_target": "Target",
+        "header_progress": "Progress",
+        "unit": "units"
+      },
+      "no_goals_message": "No goals yet – add one above."
+    },
+    "leaderboard_page": {
+      "title": "Community Leaderboard",
+      "subtitle": "See who's leading the charge in making a positive environmental impact!",
+      "loading": "Loading champions...",
+      "error_load_failed": "Failed to load leaderboard data. Please try again later.",
+      "table": {
+        "rank": "Rank",
+        "player": "Player",
+        "score": "Score"
+      },
+      "you_badge": "You",
+      "score_suffix": "pts",
+      "empty_state": "The leaderboard is currently empty. Start logging your activities to get on the board!"
+    },
+    "profile_page": {
+      "title": "Your Profile",
+      "subtitle": "Manage your personal information and preferences.",
+      "loading": "Loading your profile...",
+      "success_update": "Profile updated successfully!",
+      "error_fetch": "Failed to fetch your profile. Please try again.",
+      "error_update_validation": "Failed to update profile. Please check your input.",
+      "error_update_generic": "Failed to update profile. An unknown error occurred.",
+      "form": {
+        "first_name_label": "First Name",
+        "last_name_label": "Last Name",
+        "bio_label": "Bio",
+        "city_label": "City",
+        "country_label": "Country",
+        "notifications_label": "Enable Email Notifications",
+        "first_name_placeholder": "Enter your first name",
+        "last_name_placeholder": "Enter your last name",
+        "bio_placeholder": "Tell us a bit about yourself and your eco-journey...",
+        "city_placeholder": "Your city",
+        "country_placeholder": "Your country",
+        "button_update": "Update Profile",
+        "button_updating": "Updating..."
+      }
+    },
+    "challenges_page": {
+      "title": "Eco Challenges",
+      "subtitle": "Join challenges, make an impact, and earn rewards!",
+      "loading": "Loading challenges...",
+      "error_load_failed": "Failed to load challenges. Please try again later.",
+      "filters": {
+        "all": "All Challenges",
+        "active": "Active",
+        "upcoming": "Upcoming",
+        "completed": "My Completed",
+        "expired": "Past Challenges"
+      },
+      "no_challenges": "No challenges found for the selected filter. Try another one!",
+      "join_success": "You've joined the challenge!",
+      "join_error": "Could not join challenge: {message}",
+      "challenges": [
+        { "title": "Plastic-Free Week", "description": "Commit to using no single-use plastics for 7 days. Track your progress and share tips!", "category": "Waste Reduction", "reward_badge": "Plastic Buster" },
+        { "title": "30-Day Composting Challenge", "description": "Start and maintain a compost bin for 30 days. Turn your organic waste into valuable soil.", "category": "Organic Waste", "reward_badge": "Compost King" },
+        { "title": "Meatless Monday Master", "description": "Go meat-free every Monday for a month to reduce your carbon footprint.", "category": "Dietary Impact", "reward_badge": null },
+        { "title": "Energy Saver Sprint", "description": "Reduce your household energy consumption by 10% this month.", "category": "Energy Conservation", "reward_badge": null },
+        { "title": "Local Commute Champion", "description": "Use public transport, bike, or walk for your daily commute for 5 consecutive days.", "category": "Transportation", "reward_badge": null }
+      ]
+    },
+    "challenge_card": {
+      "status_upcoming": "Upcoming",
+      "status_active": "Active",
+      "status_completed": "Completed!",
+      "status_expired": "Expired",
+      "status_view": "View",
+      "points_suffix": "pts",
+      "meta_ends_on": "Ends:",
+      "meta_starts_on": "Starts:",
+      "meta_participants": "participants",
+      "action_join": "Join Challenge",
+      "action_view_progress": "View Progress",
+      "action_completed": "Nicely Done!",
+      "action_ended": "Ended",
+      "action_view_details": "View Details"
     }
-  
   }

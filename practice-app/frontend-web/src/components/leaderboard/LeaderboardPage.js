@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 // import { getLeaderboard } from '../services/api'; // Assuming you have this API service
+import { useTranslation } from 'react-i18next'; // 1. Import hook
+import Navbar from '../common/Navbar'; // 2. Import shared Navbar
 import './LeaderboardPage.css'; // We'll create this
 
 // Re-usable Icon component (or import if you've centralized it)
@@ -46,6 +48,7 @@ const getLeaderboard = async () => {
 
 
 const LeaderboardPage = () => {
+    const { t } = useTranslation();
     const [leaderboardData, setLeaderboardData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -106,47 +109,25 @@ const LeaderboardPage = () => {
 
     return (
         <div className="leaderboard-page-layout">
-            {/* --- Top Navigation Bar (Same as Dashboard) --- */}
-            <header className="dashboard-top-nav"> {/* Reusing class for consistent styling */}
-                <Link to="/" className="app-logo">
-                    <Icon name="logo" />
-                    Greener
-                </Link>
-                <nav className="main-actions-nav">
-                <NavLink to="/dashboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="dashboard" /> Dashboard {/* Make sure 'dashboard' icon is in your Icon component */}
-                    </NavLink>
-                    <NavLink to="/waste" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="waste" /> Waste Log
-                    </NavLink>
-                    <NavLink to="/goals"  className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="goal" /> Goals
-                    </NavLink>
-                    <NavLink to="/leaderboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="leaderboard" /> Leaderboard
-                    </NavLink>
-                    <NavLink to="/challenges" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="challenges" /> Challenges
-                    </NavLink>
-                </nav>
-            </header>
+            {/* 4. Use the shared Navbar component */}
+            <Navbar isAuthenticated={true} />
 
-            {/* --- Main Content Area for Leaderboard --- */}
             <main className="leaderboard-main-content">
+                {/* 5. Replace all static text with the t() function */}
                 <div className="leaderboard-header-section">
-                    <h1><Icon name="trophy" /> Community Leaderboard</h1>
-                    <p>See who's leading the charge in making a positive environmental impact!</p>
+                    <h1><Icon name="trophy" /> {t('leaderboard_page.title')}</h1>
+                    <p>{t('leaderboard_page.subtitle')}</p>
                 </div>
 
                 {loading && (
-                    <div className="loader-container-main"> {/* Reusing loader style */}
+                    <div className="loader-container-main">
                         <div className="loader-spinner-main"></div>
-                        <p>Loading champions...</p>
+                        <p>{t('leaderboard_page.loading')}</p>
                     </div>
                 )}
                 {error && !loading && (
-                    <div className="error-message-box-main"> {/* Reusing error style */}
-                         <Icon name="alerts" className="error-icon" /> {error}
+                    <div className="error-message-box-main">
+                         <Icon name="alerts" className="error-icon" /> {t(error)} {/* Translate the key */}
                     </div>
                 )}
 
@@ -155,9 +136,9 @@ const LeaderboardPage = () => {
                         <table className="leaderboard-table">
                             <thead>
                                 <tr>
-                                    <th>Rank</th>
-                                    <th>Player</th>
-                                    <th>Score</th>
+                                    <th>{t('leaderboard_page.table.rank')}</th>
+                                    <th>{t('leaderboard_page.table.player')}</th>
+                                    <th>{t('leaderboard_page.table.score')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -167,9 +148,9 @@ const LeaderboardPage = () => {
                                         <td className="player-cell">
                                             <AvatarPlaceholder username={user.username} seed={user.avatarSeed || user.username} />
                                             <span className="player-name">{user.username}</span>
-                                            {user.isCurrentUser && <span className="you-badge">You</span>}
+                                            {user.isCurrentUser && <span className="you-badge">{t('leaderboard_page.you_badge')}</span>}
                                         </td>
-                                        <td className="score-cell">{user.score} pts</td>
+                                        <td className="score-cell">{user.score} {t('leaderboard_page.score_suffix')}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -180,7 +161,7 @@ const LeaderboardPage = () => {
                 {!loading && !error && leaderboardData.length === 0 && (
                      <div className="empty-leaderboard-message">
                         <Icon name="leaderboard" />
-                        <p>The leaderboard is currently empty. Start logging your activities to get on the board!</p>
+                        <p>{t('leaderboard_page.empty_state')}</p>
                     </div>
                 )}
             </main>

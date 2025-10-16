@@ -199,5 +199,208 @@
       "alternate_action_prompt": "Zaten bir hesabınız var mı?",
       "alternate_action_login": "Giriş Yap",
       "error_passwords_no_match": "Şifreler uyuşmuyor."
+    },
+    "forgot_password": {
+      "title": "Şifrenizi mi Unuttunuz?",
+      "subtitle": "Endişelenmeyin! Aşağıya e-posta adresinizi girin, size şifrenizi sıfırlamanız için bir bağlantı gönderelim.",
+      "email_label": "E-posta Adresi",
+      "placeholder_email": "Kayıtlı e-postanızı girin",
+      "button_send_link": "Sıfırlama Bağlantısı Gönder",
+      "button_sending": "Gönderiliyor...",
+      "alternate_action_prompt": "Şifrenizi hatırlıyor musunuz?",
+      "success_message": "Bu e-postaya sahip bir hesap varsa, bir şifre sıfırlama bağlantısı gönderilmiştir. Lütfen gelen kutunuzu (ve spam klasörünüzü) kontrol edin.",
+      "error_enter_email": "Lütfen e-posta adresinizi girin."
+    },
+    "dashboard_nav": {
+      "dashboard": "Kontrol Paneli",
+      "waste_log": "Atık Kaydı",
+      "goals": "Hedefler",
+      "leaderboard": "Lider Tablosu",
+      "challenges": "Meydan Okumalar",
+      "logout": "Çıkış Yap"
+    },
+    "dashboard": {
+      "profile_card": {
+        "role_prefix": "Rol",
+        "member": "Üye",
+        "view_profile_button": "Tüm Profili Görüntüle",
+        "logout_button": "Çıkış Yap"
+      },
+      "overview": {
+        "title": "Panele Genel Bakış",
+        "subtitle": "Sürdürülebilir bir yaşam tarzına yolculuğunuz burada başlıyor."
+      },
+      "loader": {
+        "message": "Eko-istatistikleriniz getiriliyor..."
+      },
+      "score_widget": {
+        "title": "Eko Puanınız",
+        "unit": "puan",
+        "not_available": "N/A",
+        "prompt": "Puanınızı hesaplamak için atık kaydedin!"
+      },
+      "quick_links_widget": {
+        "title": "Hızlı Bağlantılar",
+        "log_waste": "Atık Kaydet",
+        "log_waste_sub": "Etkinizi takip edin",
+        "join_challenges": "Meydan Okumalara Katıl",
+        "join_challenges_sub": "Yarışın ve geliştirin",
+        "view_leaderboard": "Lider Tablosunu Görüntüle",
+        "view_leaderboard_sub": "En iyi performans gösterenleri görün"
+      },
+      "eco_tip_widget": {
+        "title": "Günün Eko İpucu",
+        "content": "\"Yerel kaynaklı ve mevsimlik yiyecekleri seçerek karbon ayak izinizi azaltın. Bu, yerel çiftçileri destekler ve ulaşım emisyonlarını azaltır!\"",
+        "discover_more": "Daha fazla ipucu keşfedin"
+      },
+      "error_fetch_score": "Puanınız alınamadı. Lütfen daha sonra tekrar deneyin."
+    },
+    "waste_log_page": {
+      "title": "Atıklarınızı Kaydedin",
+      "subtitle": "Çevresel etkinizi anlamak ve azaltmak için atık üretiminizi takip edin.",
+      "error_no_categories": "Kaydedilecek atık kategorisi yok. Lütfen destekle iletişime geçin veya daha sonra tekrar deneyin.",
+      "error_fetch_failed": "İlk veriler alınamadı. Lütfen bağlantınızı kontrol edin.",
+      "error_select_category_and_quantity": "Lütfen bir kategori seçin ve bir miktar girin.",
+      "error_quantity_positive": "Miktar pozitif bir sayı olmalıdır.",
+      "error_add_log_failed": "Atık kaydı eklenemedi.",
+      "retry_button": "Kategorileri Tekrar Getir",
+      "form": {
+        "title": "Yeni Girdi Ekle",
+        "category_label": "Kategori",
+        "category_placeholder": "Bir atık kategorisi seçin...",
+        "quantity_label": "Miktar",
+        "quantity_placeholder": "örneğin, 2.5",
+        "disposal_label": "Bertaraf Yöntemi (İsteğe Bağlı)",
+        "disposal_placeholder": "Uygulanabilirse seçin...",
+        "disposal_options": {
+          "recycled": "Geri Dönüştürüldü",
+          "composted": "Kompostlandı",
+          "landfill": "Çöp Sahası",
+          "donated": "Bağışlandı/Yeniden Kullanıldı",
+          "incinerated": "Yakıldı (Enerji Geri Kazanımı)",
+          "other": "Diğer"
+        },
+        "notes_label": "Notlar (İsteğe Bağlı)",
+        "notes_placeholder": "Herhangi bir detay, örn. belirli ürünler, kaynak...",
+        "submit_button": "Kaydı Ekle",
+        "submit_button_adding": "Ekleniyor..."
+      },
+      "log_list": {
+        "title": "Son Kayıtlarınız",
+        "loading": "Kayıtlar yükleniyor...",
+        "no_logs": "Henüz hiç atık kaydetmediniz. Takip etmeye başlamak için formu kullanın!",
+        "unknown_category": "Bilinmeyen Kategori",
+        "score_prefix": "Puan",
+        "score_na": "N/A",
+        "method_prefix": "Yöntem",
+        "notes_prefix": "Notlar",
+        "logged_prefix": "Kaydedildi",
+        "view_all_prompt": "Tüm kayıtları profilinizde görüntüleyin (yakında!)."
+      },
+      "back_to_dashboard_button": "Kontrol Paneline Geri Dön"
+    },
+    "goals_page": {
+      "title": "Hedefleriniz",
+      "subtitle": "Hedefler belirleyin ve ilerlemenizi izleyin.",
+      "form_title": "Yeni Bir Hedef Ekle",
+      "error_no_categories": "Atık kategorisi bulunamadı – hedef oluşturulamaz.",
+      "form": {
+        "select_category": "Kategori Seçin…",
+        "timeframe_daily": "Günlük",
+        "timeframe_weekly": "Haftalık",
+        "timeframe_monthly": "Aylık",
+        "placeholder_target": "Hedef birim",
+        "button_saving": "Kaydediliyor…",
+        "button_create": "Hedef Oluştur"
+      },
+      "loading": "Yükleniyor…",
+      "error_load_failed": "Hedefler veya kategoriler yüklenemedi.",
+      "error_form_required": "Kategori ve hedef zorunludur.",
+      "error_create_failed": "Hedef oluşturulamadı: {apiMsg}",
+      "table": {
+        "header_category": "Kategori",
+        "header_timeframe": "Zaman Aralığı",
+        "header_target": "Hedef",
+        "header_progress": "İlerleme",
+        "unit": "birim"
+      },
+      "no_goals_message": "Henüz hedef yok – yukarıdan bir tane ekleyin."
+    },
+    "leaderboard_page": {
+      "title": "Topluluk Lider Tablosu",
+      "subtitle": "Çevreye olumlu etki yaratmada kimin başı çektiğini görün!",
+      "loading": "Şampiyonlar yükleniyor...",
+      "error_load_failed": "Lider tablosu verileri yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+      "table": {
+        "rank": "Sıra",
+        "player": "Oyuncu",
+        "score": "Puan"
+      },
+      "you_badge": "Siz",
+      "score_suffix": "puan",
+      "empty_state": "Lider tablosu şu anda boş. Tahtaya çıkmak için aktivitelerinizi kaydetmeye başlayın!"
+    },
+    "profile_page": {
+      "title": "Profiliniz",
+      "subtitle": "Kişisel bilgilerinizi ve tercihlerinizi yönetin.",
+      "loading": "Profiliniz yükleniyor...",
+      "success_update": "Profil başarıyla güncellendi!",
+      "error_fetch": "Profiliniz alınamadı. Lütfen tekrar deneyin.",
+      "error_update_validation": "Profil güncellenemedi. Lütfen girdilerinizi kontrol edin.",
+      "error_update_generic": "Profil güncellenemedi. Bilinmeyen bir hata oluştu.",
+      "form": {
+        "first_name_label": "Ad",
+        "last_name_label": "Soyad",
+        "bio_label": "Biyografi",
+        "city_label": "Şehir",
+        "country_label": "Ülke",
+        "notifications_label": "E-posta Bildirimlerini Etkinleştir",
+        "first_name_placeholder": "Adınızı girin",
+        "last_name_placeholder": "Soyadınızı girin",
+        "bio_placeholder": "Bize biraz kendinizden ve eko-yolculuğunuzdan bahsedin...",
+        "city_placeholder": "Şehriniz",
+        "country_placeholder": "Ülkeniz",
+        "button_update": "Profili Güncelle",
+        "button_updating": "Güncelleniyor..."
+      }
+    },
+    "challenges_page": {
+      "title": "Eko Meydan Okumalar",
+      "subtitle": "Meydan okumalara katılın, etki yaratın ve ödüller kazanın!",
+      "loading": "Meydan okumalar yükleniyor...",
+      "error_load_failed": "Meydan okumalar yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+      "filters": {
+        "all": "Tüm Meydan Okumalar",
+        "active": "Aktif",
+        "upcoming": "Yaklaşan",
+        "completed": "Tamamladıklarım",
+        "expired": "Geçmiş Meydan Okumalar"
+      },
+      "no_challenges": "Seçilen filtre için meydan okuma bulunamadı. Başka bir tane deneyin!",
+      "join_success": "Meydan okumaya katıldınız!",
+      "join_error": "Meydan okumaya katılamadınız: {message}",
+      "challenges": [
+        { "title": "Plastiksiz Hafta", "description": "7 gün boyunca tek kullanımlık plastik kullanmamayı taahhüt edin. İlerlemenizi takip edin ve ipuçları paylaşın!", "category": "Atık Azaltma", "reward_badge": "Plastik Avcısı" },
+        { "title": "30 Günlük Kompost Meydan Okuması", "description": "30 gün boyunca bir kompost kutusu başlatın ve sürdürün. Organik atıklarınızı değerli toprağa dönüştürün.", "category": "Organik Atık", "reward_badge": "Kompost Kralı" },
+        { "title": "Etsiz Pazartesi Ustası", "description": "Karbon ayak izinizi azaltmak için bir ay boyunca her pazartesi et yemeyin.", "category": "Beslenme Etkisi", "reward_badge": null },
+        { "title": "Enerji Tasarrufu Sprinti", "description": "Bu ay evdeki enerji tüketiminizi %10 azaltın.", "category": "Enerji Koruma", "reward_badge": null },
+        { "title": "Yerel Ulaşım Şampiyonu", "description": "Günlük ulaşımınız için 5 gün üst üste toplu taşıma, bisiklet kullanın veya yürüyün.", "category": "Ulaşım", "reward_badge": null }
+      ]
+    },
+    "challenge_card": {
+      "status_upcoming": "Yaklaşan",
+      "status_active": "Aktif",
+      "status_completed": "Tamamlandı!",
+      "status_expired": "Süresi Doldu",
+      "status_view": "Görüntüle",
+      "points_suffix": "puan",
+      "meta_ends_on": "Bitiş:",
+      "meta_starts_on": "Başlangıç:",
+      "meta_participants": "katılımcı",
+      "action_join": "Meydan Okumaya Katıl",
+      "action_view_progress": "İlerlemeyi Görüntüle",
+      "action_completed": "Harika İş!",
+      "action_ended": "Sona Erdi",
+      "action_view_details": "Detayları Görüntüle"
     }
   }
