@@ -1,0 +1,22 @@
+Django==4.2.20
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+django-allauth
+dj-rest-auth
+cryptography
+requests
+Pillow
+drf-spectacular
+psycopg2-binary==2.9.9
+python-dotenv
+gunicorn
+whitenoise
+dj-database-url
+# Testing dependencies
+pytest>=7.4.0
+pytest-django>=4.5.2
+factory-boy>=3.3.0
+pytest-factoryboy>=1.1.0
+pytest-cov>=4.1.0
+responses>=0.23.0
