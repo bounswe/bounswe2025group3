@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Protected Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #c82333;
+        }
+        .welcome-message {
+            font-size: 24px;
+            color: #28a745;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .user-details {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Protected Area</h2>
+        <div id="welcomeMessage" class="welcome-message">Welcome!</div>
+        <div id="userInfo" class="user-details">Loading user information...</div>
+        <button onclick="logout()">Logout</button>
+    </div>
+    <script>
+        async function checkAuth() {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                window.location.href = '/login/'; // Use trailing slash to match Django URL pattern
+                return;
+            }
+
+            try {
+                // Try to fetch user info from the profile endpoint
+                const response = await fetch('/api/user/me/', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Get the user's name or email
+                    const displayName = data.first_name || data.email.split('@')[0];
+                    
+                    // Update welcome message
+                    document.getElementById('welcomeMessage').textContent = `Welcome ${displayName}!`;
+                    
+                    // Update user details with more info
+                    document.getElementById('userInfo').innerHTML = `
+                        <strong>Email:</strong> ${data.email}<br>
+                        <strong>Role:</strong> ${data.role}<br>
+                        <strong>User ID:</strong> ${data.id}<br>
+                        ${data.first_name ? `<strong>Name:</strong> ${data.first_name} ${data.last_name}<br>` : ''}
+                        ${data.bio ? `<strong>Bio:</strong> ${data.bio}<br>` : ''}
+                        ${data.city ? `<strong>Location:</strong> ${data.city}, ${data.country}<br>` : ''}
+                    `;
+                } else if (response.status === 401) {
+                    // Token expired, try refresh
+                    await refreshToken();
+                } else {
+                    // Fallback to test-protected endpoint if profile endpoint fails
+                    const testResponse = await fetch('/api/auth/test-protected/', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (testResponse.ok) {
+                        const testData = await testResponse.json();
+                        document.getElementById('welcomeMessage').textContent = `Welcome ${testData.email || 'User'}!`;
+                        document.getElementById('userInfo').innerHTML = `
+                            <strong>Email:</strong> ${testData.email}<br>
+                            <strong>Role:</strong> ${testData.role}<br>
+                            <strong>User ID:</strong> ${testData.user_id}<br>
+                            <strong>Status:</strong> Successfully authenticated
+                        `;
+                    } else if (testResponse.status === 401) {
+                        // Token expired, try refresh
+                        await refreshToken();
+                    } else {
+                        // All attempts failed, redirect to login
+                        logout();
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking authentication:', error);
+                document.getElementById('userInfo').innerHTML = `
+                    <div style="color: red; margin-bottom: 15px;">
+                        Error: Could not verify authentication. Please try logging in again.
+                    </div>
+                `;
+                setTimeout(logout, 3000); // Logout after 3 seconds
+            }
+        }
+
+        async function refreshToken() {
+            const refresh = localStorage.getItem('refreshToken');
+            if (!refresh) {
+                logout();
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/token/refresh/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ refresh })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('accessToken', data.access);
+                    // Retry authentication check
+                    checkAuth();
+                } else {
+                    // Refresh token invalid, logout
+                    logout();
+                }
+            } catch (error) {
+                console.error('Error refreshing token:', error);
+                logout();
+            }
+        }
+
+        function logout() {
+            // Clear all tokens
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userId');
+            // Redirect to login
+            window.location.href = '/login/';
+        }
+
+        // Check authentication when page loads
+        checkAuth();
+    </script>
+</body>
+</html>
