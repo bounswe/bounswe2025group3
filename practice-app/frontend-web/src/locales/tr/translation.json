@@ -89,7 +89,7 @@
           { "icon": "🌿", "name": "Sürdürülebilirlik:", "description": "Platformumuzun her alanında çevre dostu uygulamaları teşvik etmek ve kullanıcıları da aynısını yapmaya teşvik etmek." },
           { "icon": "💡", "name": "İnovasyon:", "description": "Atık yönetimini daha basit ve daha etkili hale getirmek için sürekli olarak yeni teknolojileri ve yaklaşımları keşfetmek." },
           { "icon": "🤝", "name": "Topluluk:", "description": "Kullanıcıların fikir paylaşabileceği, birbirlerini motive edebileceği ve daha yeşil bir gezegen için toplu olarak çalışabileceği destekleyici bir ağ oluşturmak." },
-          { "icon": "🎓", "name": "Öğrenme ve Gelişim:", "description": "Öğrenciler olarak bu proje bir öğrenme yolculuğudur. GreenerLife'ı geliştirmek için becerilerimizi ve bilgimizi artırmaya kararlıyız." }
+          { "icon": "🎓", "name": "Öğrenme ve Gelişim:", "description": "Öğrenciler olarak bu projeyi bir öğrenme yolculuğu olarak görüyoruz. GreenerLife'ı geliştirmek için becerilerimizi ve bilgimizi artırmaya kararlıyız." }
         ]
       },
       "team": {
@@ -270,7 +270,7 @@
         "category_placeholder": "Bir atık kategorisi seçin...",
         "quantity_label": "Miktar",
         "quantity_placeholder": "örneğin, 2.5",
-        "disposal_label": "Bertaraf Yöntemi (İsteğe Bağlı)",
+        "disposal_label": "Yok Etme Yöntemi (İsteğe Bağlı)",
         "disposal_placeholder": "Uygulanabilirse seçin...",
         "disposal_options": {
           "recycled": "Geri Dönüştürüldü",
