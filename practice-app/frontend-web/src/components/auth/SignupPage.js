@@ -22,6 +22,9 @@ const SignupPage = () => {
     city: '',
     country: '',
   });
+
+const [termsAccepted, setTermsAccepted] = useState(false);
+
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -35,6 +38,11 @@ const SignupPage = () => {
 
     if (formData.password !== formData.password2) {
       setError('Passwords do not match.');
+      return;
+    }
+
+    if (!termsAccepted) {
+      setError('You must accept the Terms and Conditions to register.');
       return;
     }
 
@@ -142,6 +150,27 @@ const SignupPage = () => {
               <div className="input-box bio-input-box">
                 <label htmlFor="bio">{t('signup.bio_label')}</label>
                 <textarea id="bio" name="bio" placeholder={t('signup.placeholder_bio')} rows={4} value={formData.bio} onChange={handleChange} className="bio-full" />
+              </div>
+              
+              <div className="terms-box">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  name="terms"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                  required 
+                />
+                <label htmlFor="terms">
+                  {t('signup.accept_terms_prefix', 'I accept the ')} 
+                  
+                  {/* CHANGE THIS: From <span> to <Link> */}
+                  <Link to="/terms" target="_blank" rel="noopener noreferrer">
+                    {t('signup.accept_terms_link', 'Terms and Conditions')}
+                  </Link>
+                  {/* END CHANGE */}
+
+                </label>
               </div>
 
               {error && <p className="error-message">{error}</p>}
