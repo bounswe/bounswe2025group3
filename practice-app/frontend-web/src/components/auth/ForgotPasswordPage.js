@@ -6,8 +6,8 @@ import './LoginPage.css'; // Reusing styles
 // You might want a specific CSS for minor adjustments:
 // import './ForgotPasswordPage.css'; 
 
-// Use environment variable or default to localhost:10000
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');

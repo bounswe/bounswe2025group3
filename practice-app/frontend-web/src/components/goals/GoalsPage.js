@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import './GoalsPage.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 const Icon = ({ name, className = '' }) => {
   const icons = {
