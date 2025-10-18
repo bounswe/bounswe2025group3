@@ -1,0 +1,237 @@
+/* EventsPage.css — Styles for the Events feature */
+/* This file uses the same variables and base styles from GoalsPage.css for consistency. */
+
+:root {
+  --primary-green: #2ecc71;
+  --primary-green-dark: #27ae60;
+  --primary-green-light: #abebc6;
+  --primary-green-rgb: 46, 204, 113;
+  --secondary-green: #1abc9c;
+  --neutral-bg: #f4f7f6;
+  --content-bg: #ffffff;
+  --card-bg: #ffffff;
+  --text-dark: #34495e;
+  --text-medium: #7f8c8d;
+  --text-light: #95a5a6;
+  --text-on-primary: #ffffff;
+  --border-color: #e0e7e5;
+  --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.07);
+  --font-primary: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* ---------- Base Layout (reused from GoalsPage) ---------- */
+.events-page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--neutral-bg);
+  font-family: var(--font-primary);
+}
+
+/* ---------- Top Navigation (identical to GoalsPage for consistency) ---------- */
+.dashboard-top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  background-color: var(--content-bg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 3px solid var(--primary-green);
+}
+.app-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary-green-dark);
+  text-decoration: none;
+}
+.app-logo .icon { font-size: 1.5em; color: var(--primary-green); margin-right: 0.5em; }
+.main-actions-nav { display: flex; gap: 0.5rem; }
+.nav-action-item {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  color: var(--text-medium);
+  font-weight: 500;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+.nav-action-item .icon {
+  color: var(--secondary-green);
+  font-size: 1.2em;
+  margin-right: 0.5em;
+}
+.nav-action-item:hover {
+  background-color: var(--primary-green-light);
+  color: var(--primary-green-dark);
+  box-shadow: 0 2px 8px rgba(var(--primary-green-rgb), 0.15);
+}
+.nav-action-item.active {
+  background-color: var(--primary-green);
+  color: var(--text-on-primary);
+  box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
+}
+.nav-action-item.active .icon { color: var(--text-on-primary); }
+
+/* ---------- Main Content ---------- */
+.events-main-content {
+  flex-grow: 1;
+  padding: 2rem 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.events-header-section {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.events-header-section h1 {
+  font-size: 2.5rem;
+  color: var(--primary-green-dark);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+.events-header-section h1 .icon {
+  color: var(--primary-green);
+  font-size: 1.3em;
+  margin-right: 0.6rem;
+}
+.events-header-section p {
+  font-size: 1.1rem;
+  color: var(--text-medium);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ---------- Events Grid & Cards (New Styles) ---------- */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.event-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.event-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.event-card-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.event-card-content h2 {
+  font-size: 1.3rem;
+  color: var(--text-dark);
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.event-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--text-medium);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.event-card-info span {
+  display: flex;
+  align-items: center;
+}
+.event-card-info .icon {
+  font-size: 1.2em;
+  margin-right: 0.5rem;
+  color: var(--secondary-green);
+}
+
+.event-card-description {
+  color: var(--text-dark);
+  line-height: 1.6;
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+}
+
+.event-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* Pushes actions to the bottom */
+}
+
+.participate-btn {
+  background-color: var(--primary-green);
+  color: var(--text-on-primary);
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.participate-btn:hover {
+  background-color: var(--primary-green-dark);
+  box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
+}
+
+.participate-btn.participating {
+  background-color: var(--secondary-green);
+}
+
+.like-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-medium);
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+.like-btn .icon { color: #e74c3c; }
+
+.like-btn:hover {
+  background-color: #e74c3c1a;
+  border-color: #e74c3c;
+  color: #c0392b;
+}
+
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 768px) {
+  .events-main-content { padding: 1.5rem 1rem; }
+  .events-header-section h1 { font-size: 2rem; }
+  .events-header-section p { font-size: 1rem; }
+  .events-grid { grid-template-columns: 1fr; }
+}

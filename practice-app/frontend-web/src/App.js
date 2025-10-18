@@ -15,6 +15,7 @@ import ResetPasswordPage from './components/auth/ResetPasswordPage';
 import BlogPostPage from './components/blog/BlogPostPage';
 import GoalsPage from './components/goals/GoalsPage';
 import GithubCallback from './components/auth/GithubCallback';
+import EventsPage from './components/events/EventsPage';
 
 import './i18n';
 
@@ -42,6 +43,7 @@ const App = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/challenges" element={<Challanges />} />
+                <Route path="/events" element={<EventsPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
                 {/* Assuming slug is passed as URL parameter */}

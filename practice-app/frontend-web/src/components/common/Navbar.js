@@ -9,7 +9,7 @@ import './Navbar.css'; // Import the new CSS
 const Icon = ({ name, className = '' }) => {
   const icons = {
     logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆', 
-    dashboard: '🏠', goal: '🎯', language: '🌐', logout: '🚪'
+    dashboard: '🏠', goal: '🎯', language: '🌐', logout: '🚪', events: '📅',
   };
   return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
@@ -59,6 +59,9 @@ const Navbar = ({ isAuthenticated }) => {
                 </NavLink>
                 <NavLink to="/challenges" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
                     <Icon name="challenges" /> {t('dashboard_nav.challenges')}
+                </NavLink>
+                <NavLink to="/events" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
+                    <Icon name="events" /> Events
                 </NavLink>
                 <button onClick={handleLogout} className="nav-action-item">
                     <Icon name="logout" /> {t('dashboard_nav.logout')}
