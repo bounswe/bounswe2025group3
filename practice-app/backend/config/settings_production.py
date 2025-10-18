@@ -25,7 +25,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://ecochallenge-frontend.onrender.com',
     'https://ecochallenge-backend.onrender.com',
     'http://localhost:3000',
-    'http://localhost:10000',
+    'http://localhost:8000',
 ]
 
 # Ensure CSRF is properly configured
