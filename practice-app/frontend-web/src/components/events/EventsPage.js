@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next'; // 1. Import useTranslation
 import Navbar from '../common/Navbar'; // Import the shared Navbar
 import './EventsPage.css';
 
 // --- Mock Data for Events ---
-// In a real application, you would fetch this from your API services.
+// This data is not translated, as it would come from an API
 const mockEvents = [
   {
     id: 1,
@@ -56,9 +57,12 @@ const Icon = ({ name, className = '' }) => {
 };
 
 const EventsPage = () => {
+  // 2. Setup the translation hook
+  const { t, i18n } = useTranslation(); 
+  
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(''); // Stores a regular string now
+  const [error, setError] = useState('');
 
   useEffect(() => {
     // Simulate fetching data from an API
@@ -66,51 +70,49 @@ const EventsPage = () => {
     setError('');
     setTimeout(() => {
       try {
-        // In a real app, you would call a service like `getEvents()`
         setEvents(mockEvents);
       } catch (err) {
-        setError('Failed to load events. Please try again later.'); // Set a direct error string
+        // Use the translation key for the error
+        setError(t('eventsPage.error'));
       } finally {
         setLoading(false);
       }
     }, 1000); // 1-second delay to show loader
-  }, []);
+  }, [t]); // Add 't' as a dependency in case the language changes
 
   const handleParticipate = (eventId) => {
     setEvents(events.map(event =>
       event.id === eventId ? { ...event, participating: !event.participating } : event
     ));
-    // In a real app, you would also call an API service to update participation status
   };
 
   const handleLike = (eventId) => {
     setEvents(events.map(event =>
       event.id === eventId ? { ...event, likes: event.likes + 1 } : event
     ));
-    // In a real app, you would also call an API service to update the like count
   };
 
   return (
     <div className="events-page-layout">
-      {/* Use the shared Navbar component */}
       <Navbar isAuthenticated={true} />
 
       <main className="events-main-content">
         <div className="events-header-section">
-          <h1><Icon name="events" /> Upcoming Events</h1>
-          <p>Get involved, meet like-minded people, and make a difference.</p>
+          {/* 3. Use t() for all static text */}
+          <h1><Icon name="events" /> {t('eventsPage.title')}</h1>
+          <p>{t('eventsPage.subtitle')}</p>
         </div>
 
         {loading && (
           <div className="loader-container-main">
             <div className="loader-spinner-main" />
-            <p>Loading Events…</p>
+            <p>{t('eventsPage.loading')}</p>
           </div>
         )}
         
         {error && !loading && (
           <div className="error-message-box-main">
-            <Icon name="alerts" /> {error} {/* Display the error string directly */}
+            <Icon name="alerts" /> {error} {/* Error message is now set from state */}
           </div>
         )}
 
@@ -120,10 +122,16 @@ const EventsPage = () => {
               <div key={event.id} className="event-card">
                 <img src={event.imageUrl} alt={event.title} className="event-card-image" />
                 <div className="event-card-content">
-                  {/* Event titles and descriptions from API don't need translation */}
+                  {/* API content remains untranslated */}
                   <h2>{event.title}</h2>
                   <div className="event-card-info">
-                    <span><Icon name="date" /> {new Date(event.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    <span>
+                      <Icon name="date" /> 
+                      {/* 3. Use i18n.language for dynamic date formatting */}
+                      {new Date(event.date).toLocaleDateString(i18n.language, { 
+                        year: 'numeric', month: 'long', day: 'numeric' 
+                      })}
+                    </span>
                     <span><Icon name="location" /> {event.location}</span>
                   </div>
                   <p className="event-card-description">{event.description}</p>
@@ -132,7 +140,8 @@ const EventsPage = () => {
                       className={`participate-btn ${event.participating ? 'participating' : ''}`}
                       onClick={() => handleParticipate(event.id)}
                     >
-                      {event.participating ? 'You are going!' : 'Participate'}
+                      {/* 3. Use t() for button text */}
+                      {event.participating ? t('eventsPage.participating') : t('eventsPage.participate')}
                     </button>
                     <button className="like-btn" onClick={() => handleLike(event.id)}>
                       <Icon name="like" /> {event.likes}

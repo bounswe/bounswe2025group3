@@ -217,6 +217,7 @@
       "goals": "Hedefler",
       "leaderboard": "Lider Tablosu",
       "challenges": "Meydan Okumalar",
+      "events": "Etkinlikler",
       "logout": "Çıkış Yap"
     },
     "dashboard": {
@@ -402,5 +403,13 @@
       "action_completed": "Harika İş!",
       "action_ended": "Sona Erdi",
       "action_view_details": "Detayları Görüntüle"
+    },
+    "eventsPage": {
+      "title": "Yaklaşan Etkinlikler",
+      "subtitle": "Katılın, benzer düşünen insanlarla tanışın ve bir fark yaratın.",
+      "loading": "Etkinlikler Yükleniyor…",
+      "error": "Etkinlikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+      "participate": "Katıl",
+      "participating": "Katılıyorsunuz!"
     }
   }
