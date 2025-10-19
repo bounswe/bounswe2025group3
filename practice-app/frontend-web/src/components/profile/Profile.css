@@ -1,10 +1,5 @@
 /* Profile.css - Refactored, Scoped, and Themed */
 
-/* --- REMOVED STYLES ---
-  :root and all .dashboard-top-nav rules have been removed.
-  They are handled by themes.css and Navbar.css respectively.
-*/
-
 /* --- Base Page Layout (Scoped) --- */
 .profile-page-scoped.profile-page-layout {
   display: flex;
@@ -118,6 +113,7 @@
 .profile-page-scoped .form-field input[type="text"],
 .profile-page-scoped .form-field input[type="email"],
 .profile-page-scoped .form-field textarea {
+  box-sizing: border-box; /* FIX: Include padding and border in the element's total width */
   width: 100%;
   padding: 0.85rem 1rem;
   border: 1px solid var(--wastelog-input-border);
