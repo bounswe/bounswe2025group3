@@ -1,8 +1,11 @@
 /* src/styles/themes.css */
-/* This is your new "single source of truth" for all colors.
-   It contains all the hardcoded colors from Home.css as variables.
+/* This file contains all theme definitions.
+   - :root is the default "Eco Green" theme.
+   - body.blue-high-contrast is the new accessible theme.
 */
 :root {
+    /* --- Eco Green Theme (Default) --- */
+  
     /* Brand Greens (from gradients/footer) */
     --brand-dark-green: #122e1a;
     --brand-light-green: #88eb9a;
@@ -43,6 +46,54 @@
     --shadow-dark: rgba(0, 0, 0, 0.2);
   
     /* Navbar Semantic Aliases (from original :root for cohesion) */
+    --brand-text-color: var(--accent-navbar);
+    --nav-link-color: var(--text-primary);
+    --nav-link-hover-color: var(--accent-navbar);
+    --nav-link-active-color: var(--accent-navbar);
+  }
+  
+  /* --- NEW: Accessible Blue/High-Contrast Theme --- */
+  body.blue-high-contrast {
+    /* Brand Blues (replaces greens) */
+    --brand-dark-green: #001f3f; /* Deep Navy */
+    --brand-light-green: #7FDBFF; /* Aqua */
+  
+    /* Content Accents (Blue/Orange for accessibility) */
+    --accent-primary: #FF851B; /* Bright Orange */
+    --accent-primary-hover: #FFa04d;
+  
+    /* Navbar Accents (Bright Blue) */
+    --accent-navbar: #0074D9; /* Bright Blue */
+    --accent-navbar-hover: #3498DB;
+  
+    /* Text Colors */
+    --text-primary: #F0F0F0;
+    --text-secondary: #AAAAAA;
+    --text-on-dark: #FFFFFF;
+    --text-on-accent: #000000; /* Black text on bright orange = high contrast */
+  
+    /* Backgrounds */
+    --background-primary: #0a0a0a; /* Near Black */
+    --background-secondary: #1a1a1a;
+    --background-tertiary: #2a2a2a;
+    --background-subtle: #1a222f; /* Dark blue-gray */
+    --background-card-translucent: rgba(30, 30, 30, 0.9);
+    --footer-background: var(--brand-dark-green);
+  
+    /* Gradients & Overlays */
+    --gradient-primary: linear-gradient(to right, var(--brand-dark-green), var(--accent-navbar));
+    --gradient-secondary: linear-gradient(to bottom, var(--brand-light-green), var(--brand-dark-green));
+    --gradient-tertiary: linear-gradient(to right, var(--brand-light-green), var(--brand-dark-green));
+    --overlay-dark: rgba(0, 0, 0, 0.6);
+  
+    /* Borders & Shadows */
+    --border-color: #444444;
+    --shadow-subtle: rgba(0, 0, 0, 0.2);
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --shadow-dark: rgba(0, 0, 0, 0.5);
+  
+    /* Navbar Semantic Aliases */
     --brand-text-color: var(--accent-navbar);
     --nav-link-color: var(--text-primary);
     --nav-link-hover-color: var(--accent-navbar);
