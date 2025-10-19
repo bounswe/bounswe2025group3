@@ -107,7 +107,7 @@ const Profile = () => {
     };
 
     return (
-        <div className="profile-page-layout">
+        <div className="profile-page-scoped profile-page-layout">
             {/* 4. Use the shared Navbar component */}
             <Navbar isAuthenticated={true} />
 

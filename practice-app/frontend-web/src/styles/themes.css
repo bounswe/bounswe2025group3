@@ -111,6 +111,14 @@
     --challenge-progress-bar-bg: #e9ecef;
     --challenge-progress-bar-gradient: linear-gradient(90deg, var(--nav-dashboard-link-hover-bg), var(--nav-dashboard-link-active-bg));
     --challenge-action-area-bg: #f9fafb;
+
+    /* --- NEW: Profile Page Variables (Green Theme) --- */
+    --profile-error-bg: #f8d7da;
+    --profile-error-text: #721c24;
+    --profile-error-border: #f5c6cb;
+    --profile-success-bg: #d4edda;
+    --profile-success-text: #155724;
+    --profile-success-border: #c3e6cb;
   }
   
   
@@ -223,4 +231,12 @@
     --challenge-progress-bar-bg: var(--background-subtle);
     --challenge-progress-bar-gradient: linear-gradient(90deg, var(--accent-navbar), var(--brand-light-green));
     --challenge-action-area-bg: var(--background-subtle);
+
+    /* --- NEW: Profile Page Variables (Blue Theme) --- */
+    --profile-error-bg: #4d1f1f;
+    --profile-error-text: #ff8c8c;
+    --profile-error-border: #c82333;
+    --profile-success-bg: #1a3b32;
+    --profile-success-text: #a6ffcb;
+    --profile-success-border: #52c41a;
   }
