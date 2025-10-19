@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'http://192.168.111.11:8000/api';
+export const API_BASE_URL = 'http://192.168.1.3:8000/api';
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -48,5 +48,12 @@ export const API_ENDPOINTS = {
     CREATE_FROM_TEMPLATE: (templateId: number) => 
       `/api/v1/goals/goals/api-template/${templateId}/`,
     TEMPLATES: '/api/v1/goals/templates/',
+  },
+
+  CHALLENGES: {
+    LIST: '/v1/challenges/api/v1/challenges/',
+    DETAIL: (id: number) => `/v1/challenges/api/v1/challenges/${id}/`,
+    JOIN: (id: number) => `/v1/challenges/api/v1/challenges/${id}/join/`,
+    LEAVE: (id: number) => `/v1/challenges/api/v1/challenges/${id}/leave/`,
   },
 };
