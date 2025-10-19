@@ -2,9 +2,11 @@ import { login } from "@/api/auth";
 import { useColors } from "@/constants/colors";
 import { useSession } from "@/hooks/authContext";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, useColorScheme } from "react-native";
+import * as NavigationBar from 'expo-navigation-bar';
+import { useTheme } from "@/hooks/themeContext";
 
 export default function LoginScreen() {
   const { signIn } = useSession();
@@ -16,6 +18,19 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const colors = useColors();
+  const {isDark} = useTheme();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isDark) {
+        console.log("dasdas");
+        NavigationBar.setButtonStyleAsync('light');
+      } else {
+        console.log("a");
+        NavigationBar.setButtonStyleAsync('dark');
+      }
+    }, [isDark])
+  );
 
   const styles = StyleSheet.create({
     container: {width:"100%", height:"80%", justifyContent:'flex-start', alignItems:'center', backgroundColor:colors.white, borderTopLeftRadius:80},

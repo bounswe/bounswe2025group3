@@ -1,12 +1,10 @@
 import { useColors } from '@/constants/colors';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getSubcategories, getWasteLogs,Subcategory, WasteLog, getMyScore} from '@/api/functions';
-
-
+import { getSubcategories, getWasteLogs, Subcategory, WasteLog, getMyScore } from '@/api/functions';
 
 export default function WasteLogsScreen() {
   const [logs, setLogs] = useState<WasteLog[]>([]);
@@ -16,13 +14,14 @@ export default function WasteLogsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
   const colors = useColors();
+  const isInitialLoad = useRef(true);
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
     headerBar: { height: "7%", paddingHorizontal: "4%", paddingTop: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: colors.background, borderBottomWidth: 1, borderBottomColor: colors.borders },
     headerBarLogo: { width: 52, height: 52 },
-    headerTitle: { fontSize: 24, fontWeight: 600, color: colors.primary, marginLeft: "5%" },
+    headerTitle: { fontSize: 24, fontWeight: '600', color: colors.primary, marginLeft: "5%" },
     headerSpacer: { flex: 1 },
     content: { flex: 1, backgroundColor: colors.background },
     scrollContent: { padding: 10, paddingBottom: 40 },
@@ -31,7 +30,7 @@ export default function WasteLogsScreen() {
     statIcon: { marginBottom: 8 },
     statValue: { fontSize: 24, fontWeight: '600', color: colors.primary, marginBottom: 4 },
     statLabel: { fontSize: 14, color: colors.textSecondary },
-    sectionTitle: { fontSize: 20, fontWeight: '600', color: colors.primary, marginBottom: "4%", marginLeft: "2%"},
+    sectionTitle: { fontSize: 20, fontWeight: '600', color: colors.primary, marginBottom: "4%", marginLeft: "2%" },
     logsContainer: { gap: 12 },
     logCard: { backgroundColor: colors.cb1, borderRadius: 12, padding: 16, marginBottom: "1%", shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 2, borderWidth: 1, borderColor: colors.borders },
     logHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
@@ -53,57 +52,41 @@ export default function WasteLogsScreen() {
     emptyStateText: { fontSize: 16, color: colors.textSecondary, textAlign: 'center', marginTop: 16 },
   });
 
-  const fetchData = async () => {
+  const fetchData = async (showLoader = true) => {
+    if (showLoader) setIsLoading(true);
     try {
-      await Promise.all([
-        fetchSubCategories(),
-        fetchLogs(),
-        fetchScore()
+      const [subcategoriesData, logsData, scoreData] = await Promise.all([
+        getSubcategories(),
+        getWasteLogs(),
+        getMyScore()
       ]);
+      setSubCategories(subcategoriesData);
+      setLogs(logsData);
+      setScore(scoreData);
+    } catch (error) {
+        console.error('Failed to fetch screen data:', error);
     } finally {
-      setIsLoading(false);
+      if (showLoader) setIsLoading(false);
       setRefreshing(false);
     }
   };
 
-  const fetchSubCategories = async () => {
-    try {
-      const data = await getSubcategories();
-      setSubCategories(data);
-    } catch (error) {
-      console.error('Error fetching subcategories:', error);
-    }
-  };
-
-  const fetchLogs = async () => {
-    try {
-      const data = await getWasteLogs();
-      setLogs(data);
-    } catch (error) {
-      console.error('Error fetching waste logs:', error);
-    }
-  };
-
-  const fetchScore = async () => {
-    try {
-      const data = await getMyScore();
-      setScore(data);
-    } catch (error) {
-      console.error('Error fetching score:', error);
-    }
-
-  };
-
-
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    fetchData();
+    fetchData(false);
   }, []);
 
-  // Refresh data when screen comes into focus
+  useEffect(() => {
+    fetchData(true);
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
-      fetchData();
+      if (!isInitialLoad.current) {
+        fetchData(false);
+      } else {
+        isInitialLoad.current = false;
+      }
     }, [])
   );
 
@@ -123,17 +106,17 @@ export default function WasteLogsScreen() {
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <View style={styles.headerBar}>
-        <Image 
-          source={require('@/assets/images/reversed-icon.png')} 
-          style={styles.headerBarLogo} 
+        <Image
+          source={require('@/assets/images/reversed-icon.png')}
+          style={styles.headerBarLogo}
           resizeMode="contain"
         />
         <Text style={styles.headerTitle}>Log Your Waste</Text>
         <View style={styles.headerSpacer} />
       </View>
 
-      <ScrollView 
-        style={styles.content} 
+      <ScrollView
+        style={styles.content}
         contentContainerStyle={styles.scrollContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.primary]} />

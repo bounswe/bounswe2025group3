@@ -1,9 +1,11 @@
 import { register } from "@/api/auth";
 import { useColors } from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect} from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useTheme } from "@/hooks/themeContext";
+import * as NavigationBar from 'expo-navigation-bar';
 
 
 export default function RegisterScreen() {
@@ -15,6 +17,7 @@ export default function RegisterScreen() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const colors = useColors();
+  const {isDark} = useTheme();
 
   const styles = StyleSheet.create({
     container: {width:"100%", height:"80%", justifyContent:'flex-start', alignItems:'center', backgroundColor:colors.white, borderTopLeftRadius:80},
@@ -32,6 +35,18 @@ export default function RegisterScreen() {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(text);
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isDark) {
+        console.log("dasdas");
+        NavigationBar.setButtonStyleAsync('light');
+      } else {
+        console.log("a");
+        NavigationBar.setButtonStyleAsync('dark');
+      }
+    }, [isDark])
+  );
 
 
   const handleRegisterPress = async () => {
