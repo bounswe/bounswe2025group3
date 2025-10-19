@@ -17,7 +17,7 @@ import GoalsPage from './components/goals/GoalsPage';
 import GithubCallback from './components/auth/GithubCallback';
 import EventsPage from './components/events/EventsPage';
 import TermsPage from './components/auth/TermsPage';
-
+import ChallengeDetailPage from './components/challenges/ChallengeDetail';
 import './i18n';
 
 // Add debugging information for build and environment
@@ -54,6 +54,8 @@ const App = () => {
                 
                 {/* Assuming these components exist */}
                 
+                <Route path="/challenges/:id" element={<ChallengeDetailPage />} />
+
                 <Route path="/about" element={<About />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/github-callback" element={<GithubCallback />} />
