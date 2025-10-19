@@ -77,7 +77,7 @@ class Goal(models.Model):
 
     def update_progress(self):
         """Updates the goal's progress, completion, and status fields in the database."""
-        today = timezone.now().date()
+        now = timezone.now()
         self.progress = self.calculate_current_progress()
         
         _, effective_end_date = self.get_timeframe_dates()
@@ -88,7 +88,7 @@ class Goal(models.Model):
         else:
             self.is_complete = False
             # Check if the timeframe has passed without achieving the goal
-            if effective_end_date and today > effective_end_date:
+            if effective_end_date and now > effective_end_date:
                 self.status = 'failed'
             else:
                 self.status = 'active'
