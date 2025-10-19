@@ -1,29 +1,16 @@
-/* BlogPage.css - Corrected and Refined */
-
-/* --- Assumed :root variables --- */
-:root {
-  --accent: #008000;
-  --accent-dark: #006400;
-  --bg: #E7E4DF;
-  --content-bg: #fff; /* Added for clarity if needed */
-  --text: #333;
-  --light-text: #666;
-  --border-color: #eee; /* Added for consistency */
-  --shadow-color-light: rgba(0, 0, 0, 0.1);
-  --shadow-color-medium: rgba(0, 0, 0, 0.15);
-  --font-primary: 'Segoe UI', 'Roboto', sans-serif; /* Added for consistency */
-}
+/* BlogPage.css - Refactored, Scoped, and Themed */
 
 /* --- Base Page Structure --- */
-.page-wrapper {
+/* This rule is now scoped to the blog page */
+.blog-page.page-wrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg, #E7E4DF);
-  font-family: var(--font-primary);
+  background-color: var(--background-page-wrapper);
+  font-family: var(--font-primary, 'Segoe UI', 'Roboto', sans-serif);
 }
 
-.content-container {
+.blog-page .content-container {
   flex: 1;
   max-width: 1200px;
   margin: 2rem auto;
@@ -32,138 +19,138 @@
 }
 
 /* --- Page Header --- */
-.page-header {
+.blog-page .page-header {
   text-align: center;
   margin-bottom: 3rem;
 }
-.page-header h1 {
+.blog-page .page-header h1 {
   font-size: 2.8rem;
-  color: var(--accent, #008000);
+  color: var(--accent-navbar);
   margin-bottom: 0.5rem;
-  font-weight: 600; /* Added */
+  font-weight: 600;
 }
-.page-header p {
+.blog-page .page-header p {
   font-size: 1.1rem;
-  color: var(--light-text, #666);
+  color: var(--text-secondary);
 }
 
 /* --- Blog Grid --- */
-.blog-posts-grid {
+.blog-page .blog-posts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2.5rem; /* Slightly increased gap */
+  gap: 2.5rem;
 }
 
 /* --- Blog Card --- */
-.blog-post-card {
-  background-color: var(--content-bg, #fff);
-  border-radius: 12px; /* More rounded */
-  box-shadow: 0 4px 12px var(--shadow-color-light);
-  overflow: hidden; /* Crucial for image container */
+.blog-page .blog-post-card {
+  background-color: var(--background-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-light);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  border: 1px solid var(--border-color); /* Subtle border */
+  border: 1px solid var(--border-color-light);
 }
 
-.blog-post-card:hover {
-  transform: translateY(-6px); /* Slightly more lift */
-  box-shadow: 0 8px 20px var(--shadow-color-medium);
+.blog-page .blog-post-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px var(--shadow-hover);
 }
 
-/* --- Blog Card Image Area (Corrected) --- */
-.post-image-container {
+/* --- Blog Card Image Area --- */
+.blog-page .post-image-container {
   width: 100%;
-  height: 200px; /* *** CORRECTED: Fixed height for the image area *** */
-  background-color: #f0f0f0; /* Placeholder background */
-  overflow: hidden; /* Clip the image if it overflows */
+  height: 200px;
+  background-color: var(--background-subtle);
+  overflow: hidden;
   position: relative;
 }
 
-.post-image { /* The actual <img> tag */
-  display: block; /* Removes bottom space */
+.blog-page .post-image {
+  display: block;
   width: 100%;
-  height: 100%; /* Make image fill the container */
-  object-fit: cover; /* *** Scale while preserving aspect ratio, crop to fit *** */
-  object-position: center center; /* Center the image focus */
-  transition: transform 0.3s ease; /* Zoom effect transition */
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform 0.3s ease;
 }
 
-.blog-post-card:hover .post-image { /* Zoom effect on card hover */
+.blog-page .blog-post-card:hover .post-image {
   transform: scale(1.05);
 }
 
 /* --- Blog Card Content --- */
-.post-content {
+.blog-page .post-content {
   padding: 1.5rem;
-  flex-grow: 1; /* Take remaining space */
+  flex-grow: 1;
   display: flex;
-  flex-direction: column; /* Stack content vertically */
+  flex-direction: column;
 }
 
-.post-title {
-  font-size: 1.4rem; /* Slightly adjusted */
+.blog-page .post-title {
+  font-size: 1.4rem;
   margin-bottom: 0.5rem;
-  font-weight: 600; /* Added */
-  color: var(--text, #333); /* Title color */
-  line-height: 1.3; /* Added */
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
 }
 
-.post-title a {
+.blog-page .post-title a {
   text-decoration: none;
-  color: inherit; /* Inherit color from h2 */
+  color: inherit;
   transition: color 0.2s ease;
 }
 
-.post-title a:hover {
-  color: var(--accent, #008000); /* Change color on hover */
+.blog-page .post-title a:hover {
+  color: var(--accent-navbar);
 }
 
-.post-meta {
-  font-size: 0.8rem; /* Smaller meta text */
-  color: var(--light-text, #666);
+.blog-page .post-meta {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
   margin-bottom: 1rem;
-  text-transform: uppercase; /* Optional: Style meta text */
-  letter-spacing: 0.5px; /* Optional */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.post-excerpt {
+.blog-page .post-excerpt {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--text-body, #555); /* Use body text color */
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
-  flex-grow: 1; /* Allow excerpt to push button down */
+  flex-grow: 1;
 }
 
-.read-more-btn {
+.blog-page .read-more-btn {
   display: inline-block;
   padding: 0.6rem 1.2rem;
-  background-color: var(--accent, #008000);
-  color: white;
+  background-color: var(--accent-navbar);
+  color: var(--text-on-accent);
   text-decoration: none;
-  border-radius: 20px; /* Pill shape */
+  border-radius: 20px;
   font-weight: 500;
   text-align: center;
   transition: background-color 0.2s ease, transform 0.2s ease;
-  align-self: flex-start; /* Button aligns to the left */
-  margin-top: auto; /* Push button to bottom if content is short */
+  align-self: flex-start;
+  margin-top: auto;
 }
 
-.read-more-btn:hover {
-  background-color: var(--accent-dark, #006400);
+.blog-page .read-more-btn:hover {
+  background-color: var(--accent-navbar-darker);
   transform: translateY(-2px);
 }
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
-  .page-header h1 {
+  .blog-page .page-header h1 {
     font-size: 2.2rem;
   }
-  .blog-posts-grid {
-    grid-template-columns: 1fr; /* Stack cards */
-    gap: 1.5rem; /* Adjust gap */
+  .blog-page .blog-posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-   .content-container {
-    padding: 1.5rem; /* Adjust padding */
+   .blog-page .content-container {
+    padding: 1.5rem;
   }
 }

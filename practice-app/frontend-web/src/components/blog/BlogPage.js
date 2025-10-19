@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom'; // Using NavLink now
+import { Link, NavLink } from 'react-router-dom';
 import './BlogPage.css';
-import firstimage from './BlogComponents/first.png'; // Adjust path as needed
-import secondimage from './BlogComponents/second.png'; // Adjust path as needed
-import thirdimage from './BlogComponents/third.png'; // Adjust path as needed
+import firstimage from './BlogComponents/first.png';
+import secondimage from './BlogComponents/second.png';
+import thirdimage from './BlogComponents/third.png';
 import { useTranslation } from 'react-i18next';
-import Header from '../common/Header'; // Shared header component
+import Header from '../common/Header';
 
 const postStaticData = [
     { id: 1, image: firstimage, slug: "importance-of-sorting" },
@@ -17,16 +17,16 @@ const BlogPage = () => {
     const { t } = useTranslation();
     const translatedPosts = t('blog.posts', { returnObjects: true });
     const blogPosts = postStaticData.map((post, index) => ({
-        ...post, // id, image, slug
-        ...translatedPosts[index] // title, date, excerpt
+        ...post,
+        ...translatedPosts[index]
     }));
+
     return (
-        <div className="page-wrapper">
-            {/* 7. Use the shared Header component */}
+        // *** THE FIX IS HERE: Add the 'blog-page' class for scoping ***
+        <div className="blog-page page-wrapper">
             <Header />
 
             <div className="content-container">
-                {/* 8. Replace all static text with the t() function */}
                 <header className="page-header">
                     <h1>{t('blog.header.title')}</h1>
                     <p>{t('blog.header.subtitle')}</p>
@@ -38,7 +38,7 @@ const BlogPage = () => {
                             <div className="post-image-container">
                                 <img
                                     src={post.image}
-                                    alt={post.title} // Alt text is now translated
+                                    alt={post.title}
                                     className="post-image"
                                 />
                             </div>
