@@ -18,13 +18,13 @@ export default function LoginScreen() {
   const colors = useColors();
 
   const styles = StyleSheet.create({
-    container: {width:"100%", height:"80%", justifyContent:'flex-start', alignItems:'center', backgroundColor:colors.background, borderTopLeftRadius:80},
+    container: {width:"100%", height:"80%", justifyContent:'flex-start', alignItems:'center', backgroundColor:colors.white, borderTopLeftRadius:80},
     backButton: {width:"14%", marginBottom:"14%", marginLeft:"4%", backgroundColor:"transparent"},
     title: {fontSize:32, fontWeight:"bold", marginTop:"8%", marginBottom:"6%", alignSelf:"center", color:colors.primary},
     forgot_text: {fontSize:15, color: colors.blue, marginLeft:"5%", alignSelf:"flex-start"},
-    input: {width:'90%', height:"6%", backgroundColor:colors.cb1, borderRadius:8, paddingHorizontal:12, fontSize:16, color:'#000', marginBottom:"6%"},
-    passwordContainer: {flexDirection:'row', alignItems:'center', width:'90%', backgroundColor:colors.cb1, borderRadius:8, marginBottom:"6%", paddingHorizontal:12},
-    passwordInput: {flexGrow:1, height:45, fontSize:16, color:'#000'},
+    input: {width:'90%', height:"6%", backgroundColor:colors.cb3, borderRadius:8, paddingHorizontal:12, fontSize:16, color:'#000', marginBottom:"6%"},
+    passwordContainer: {flexDirection:'row', height: "6%", alignItems:'center', width:'90%', backgroundColor:colors.cb3, borderRadius:8, marginBottom:"6%", paddingHorizontal:12},
+    passwordInput: {flexGrow:1, fontSize:16, color:'#000'},
     eyeIcon: {paddingHorizontal:4},
     loginButton: {width:"90%", height:"6%", borderRadius:24, justifyContent:"center", alignItems:"center", marginTop:"2%"},
     otherButton: {width:"90%", borderWidth:1, borderColor:"#ccc", borderRadius:24, paddingVertical:10, paddingHorizontal:20, alignItems:"center", justifyContent:"center", marginTop:"3%"},
@@ -98,7 +98,7 @@ export default function LoginScreen() {
         </Text>
 
         <TouchableOpacity
-          style={[styles.loginButton, {backgroundColor:isLoginEnabled ? colors.primary : colors.cb1}]}
+          style={[styles.loginButton, {backgroundColor:isLoginEnabled ? colors.primary : colors.cb3}]}
           disabled={!isLoginEnabled}
           onPress={handleLoginPress}
         >

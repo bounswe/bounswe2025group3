@@ -56,7 +56,7 @@ export interface ChallengeParticipation {
   exited_at: string | null;
 }
 
-const CHALLENGES_ENDPOINT = "/v1/challenges/api/v1/challenges/";
+const CHALLENGES_ENDPOINT = "/api/v1/challenges/api/v1/challenges/";
 
 const parseJson = async <T>(response: Response, fallbackMessage: string): Promise<T> => {
   let data: any = null;
@@ -89,7 +89,7 @@ export const getChallengeById = async (id: number): Promise<Challenge> => {
 
 export const joinChallenge = async (id: number): Promise<ChallengeParticipation> => {
   const response = await tokenManager.authenticatedFetch(
-    `/v1/challenges/api/v1/challenges/${id}/join/`,
+    `/api/v1/challenges/api/v1/challenges/${id}/join/`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -101,7 +101,7 @@ export const joinChallenge = async (id: number): Promise<ChallengeParticipation>
 
 export const leaveChallenge = async (id: number): Promise<void> => {
   const response = await tokenManager.authenticatedFetch(
-    `/v1/challenges/api/v1/challenges/${id}/leave/`,
+    `/api/v1/challenges/api/v1/challenges/${id}/leave/`,
     {
       method: "DELETE",
     }

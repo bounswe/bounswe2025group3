@@ -1,39 +1,17 @@
 import { useColors } from '@/constants/colors';
-import tokenManager from '@/services/tokenManager';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-interface SubCategory {
-  id: number;
-  name: string;
-  unit: string;
-  score_per_unit: string;
-}
+import { getSubcategories, getWasteLogs,Subcategory, WasteLog, getMyScore} from '@/api/functions';
 
-interface WasteLog {
-  id: number;
-  sub_category_name: string;
-  quantity: string;
-  date_logged: string;
-  score: number;
-  disposal_location: string | null;
-  sub_category: number;
-}
 
-interface Stats {
-  total_score: number;
-  total_logs: number;
-}
 
 export default function WasteLogsScreen() {
   const [logs, setLogs] = useState<WasteLog[]>([]);
-  const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
-  const [stats, setStats] = useState<Stats>({
-    total_score: 0,
-    total_logs: 0,
-  });
+  const [subCategories, setSubCategories] = useState<Subcategory[]>([]);
+  const [score, setScore] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
@@ -47,16 +25,15 @@ export default function WasteLogsScreen() {
     headerTitle: { fontSize: 24, fontWeight: 600, color: colors.primary, marginLeft: "5%" },
     headerSpacer: { flex: 1 },
     content: { flex: 1, backgroundColor: colors.background },
-    scrollContent: { padding: 20, paddingBottom: 40 },
+    scrollContent: { padding: 10, paddingBottom: 40 },
     statsContainer: { flexDirection: 'row', gap: 12, marginBottom: 24 },
     statCard: { flex: 1, backgroundColor: colors.cb1, borderRadius: 12, padding: 16, alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 2, borderWidth: 1, borderColor: colors.borders },
     statIcon: { marginBottom: 8 },
     statValue: { fontSize: 24, fontWeight: '600', color: colors.primary, marginBottom: 4 },
     statLabel: { fontSize: 14, color: colors.textSecondary },
-    sectionTitleContainer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-    sectionTitle: { fontSize: 20, fontWeight: '600', color: colors.primary },
+    sectionTitle: { fontSize: 20, fontWeight: '600', color: colors.primary, marginBottom: "4%", marginLeft: "2%"},
     logsContainer: { gap: 12 },
-    logCard: { backgroundColor: colors.cb1, borderRadius: 12, padding: 16, marginBottom: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 2, borderWidth: 1, borderColor: colors.borders },
+    logCard: { backgroundColor: colors.cb1, borderRadius: 12, padding: 16, marginBottom: "1%", shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 2, borderWidth: 1, borderColor: colors.borders },
     logHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
     logTitleContainer: { flexDirection: 'row', alignItems: 'center' },
     logIcon: { marginRight: 8 },
@@ -68,8 +45,6 @@ export default function WasteLogsScreen() {
     logDate: { fontSize: 14, color: colors.textSecondary },
     addButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primary, padding: 16, borderRadius: 8, marginBottom: 24, gap: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 3, elevation: 3 },
     addButtonText: { color: colors.background, fontSize: 16, fontWeight: '500' },
-    requestButton: { paddingVertical: 6, paddingHorizontal: 12, backgroundColor: colors.cb2, borderRadius: 8 },
-    requestButtonText: { fontSize: 14, color: colors.primary, fontWeight: '500' },
     locationContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 4, marginBottom: 12, gap: 4 },
     locationText: { fontSize: 14, color: colors.textSecondary },
     viewDetailsButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.borders },
@@ -83,7 +58,7 @@ export default function WasteLogsScreen() {
       await Promise.all([
         fetchSubCategories(),
         fetchLogs(),
-        fetchStats()
+        fetchScore()
       ]);
     } finally {
       setIsLoading(false);
@@ -93,12 +68,8 @@ export default function WasteLogsScreen() {
 
   const fetchSubCategories = async () => {
     try {
-      const response = await tokenManager.authenticatedFetch("/v1/waste/subcategories/");
-      
-      if (response.ok) {
-        const data = await response.json();
-        setSubCategories(data.results || []);
-      }
+      const data = await getSubcategories();
+      setSubCategories(data);
     } catch (error) {
       console.error('Error fetching subcategories:', error);
     }
@@ -106,32 +77,23 @@ export default function WasteLogsScreen() {
 
   const fetchLogs = async () => {
     try {
-      const response = await tokenManager.authenticatedFetch("/v1/waste/logs/");
-      
-      if (response.ok) {
-        const data = await response.json();
-        setLogs(data.results || []);
-      }
+      const data = await getWasteLogs();
+      setLogs(data);
     } catch (error) {
       console.error('Error fetching waste logs:', error);
     }
   };
 
-  const fetchStats = async () => {
+  const fetchScore = async () => {
     try {
-      const response = await tokenManager.authenticatedFetch("/v1/waste/scores/me/");
-      
-      if (response.ok) {
-        const data = await response.json();
-        setStats({
-          total_score: data.total_score || 0,
-          total_logs: data.total_logs || 0
-        });
-      }
+      const data = await getMyScore();
+      setScore(data);
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error('Error fetching score:', error);
     }
+
   };
+
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -177,12 +139,11 @@ export default function WasteLogsScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.primary]} />
         }
       >
-        {/* Stats Cards */}
         <View style={styles.statsContainer}>
           <View style={styles.statCard}>
             <Ionicons name="trophy-outline" size={32} color={colors.primary} style={styles.statIcon} />
             <Text style={styles.statValue}>
-              {stats.total_score?.toFixed(1) || '0.0'}
+              {score?.toFixed(1) || '0.0'}
             </Text>
             <Text style={styles.statLabel}>Total Score</Text>
           </View>
@@ -204,17 +165,8 @@ export default function WasteLogsScreen() {
           <Text style={styles.addButtonText}>Add Waste Log</Text>
         </TouchableOpacity>
 
-        <View style={styles.sectionTitleContainer}>
-          <Text style={styles.sectionTitle}>Your Logs</Text>
-          <TouchableOpacity
-            style={styles.requestButton}
-            onPress={() => router.push('/waste/custom_category_request')}
-          >
-            <Text style={styles.requestButtonText}>Request Category</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.sectionTitle}>Log History</Text>
 
-        {/* Waste Logs List */}
         <View style={styles.logsContainer}>
           {logs.length > 0 ? (
             logs.map((log) => (
@@ -230,7 +182,7 @@ export default function WasteLogsScreen() {
                     <Text style={styles.logTitle}>{log.sub_category_name}</Text>
                   </View>
                   <View style={styles.scoreContainer}>
-                    <Text style={styles.logScore}>+{log.score.toFixed(1)}</Text>
+                    <Text style={styles.logScore}>+{log.score.toFixed(1)} <MaterialCommunityIcons name="star-four-points-outline" size={16} color={colors.primary} /></Text>
                   </View>
                 </View>
                 <View style={styles.logDetails}>
@@ -238,7 +190,7 @@ export default function WasteLogsScreen() {
                     Quantity: {log.quantity} {getSubCategoryUnit(log.sub_category)}
                   </Text>
                   <Text style={styles.logDate}>
-                    {new Date(log.date_logged).toLocaleDateString('en-US', {
+                    {new Date(log.disposal_date).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'short',
                       day: 'numeric'

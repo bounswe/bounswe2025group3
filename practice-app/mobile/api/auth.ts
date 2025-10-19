@@ -1,10 +1,9 @@
 import tokenManager from "@/services/tokenManager";
-import { API_BASE_URL } from "@/constants/api";
+import { API_BASE_URL, API_ENDPOINTS } from "@/constants/api";
 
 
 export const login = async (email: string, password: string) => {
-  console.log(`${API_BASE_URL}/auth/login/`);
-  const response = await fetch(`${API_BASE_URL}/auth/login/`, {
+  const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGIN}`, {
     method: 'POST',
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
@@ -21,7 +20,7 @@ export const login = async (email: string, password: string) => {
 };
 
 export const register = async (username: string, email: string, password: string, password2: string) => {
-  const response = await fetch(`${API_BASE_URL}/auth/register/`, {
+  const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`, {
     method: 'POST',
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, email, password, password2 }),
@@ -36,7 +35,7 @@ export const register = async (username: string, email: string, password: string
 };
 
 export const reset_password = async (email: string) => {
-  const response = await fetch(`${API_BASE_URL}/auth/password/reset/`, {
+  const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.PASSWORD_RESET}`, {
     method: 'POST',
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),

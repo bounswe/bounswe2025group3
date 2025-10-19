@@ -17,9 +17,6 @@ export default function WasteLayout() {
         <Stack.Screen
           name="[id]"
         />
-        <Stack.Screen
-          name="custom_category_request"
-        />
       </Stack>
   );
 }

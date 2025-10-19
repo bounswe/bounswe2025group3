@@ -1,5 +1,5 @@
 import { useColors } from '@/constants/colors';
-import tokenManager from '@/services/tokenManager';
+import { getUserProfile, getMyScore } from '@/api/functions';
 import { Feather } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
@@ -30,7 +30,7 @@ export default function ProfileScreen() {
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
-    header: { height: "7%", paddingHorizontal: "4%", paddingTop: "4%", flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: "colors.background"},
+    header: { height: "7%", paddingHorizontal: "4%", paddingTop: "4%", flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: colors.background},
     backButton: { alignSelf: 'flex-start' },
     contentContainer: { paddingHorizontal: 20, paddingBottom: 20 },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
@@ -54,22 +54,13 @@ export default function ProfileScreen() {
 
   const fetchProfile = async () => {
     try {
-      const [profileResponse, scoreResponse] = await Promise.all([
-        tokenManager.authenticatedFetch("/user/me/"),
-        tokenManager.authenticatedFetch("/v1/waste/scores/me/")
+      const [profileData, scoreData] = await Promise.all([
+        getUserProfile(),
+        getMyScore()
       ]);
 
-      let profileData = null;
-      let scoreData = { total_score: 0 };
-
-      if (profileResponse.ok) { profileData = await profileResponse.json(); }
-      else { console.error("Failed to fetch profile data"); }
-
-      if (scoreResponse.ok) { scoreData = await scoreResponse.json(); }
-      else { console.error("Failed to fetch score data"); }
-
-      if (profileData) {
-        setProfile({ ...profileData, score: scoreData.total_score });
+      if (profileData && scoreData !== undefined) {
+        setProfile({ ...profileData, score: scoreData });
       }
 
     } catch (error) {
@@ -109,7 +100,7 @@ export default function ProfileScreen() {
 
         <View style={styles.statsContainer}>
           <View style={styles.statBox}>
-            <Text style={styles.statValue}>{profile.score}</Text>
+            <Text style={styles.statValue}>{profile.score.toFixed(1)}</Text>
             <Text style={styles.statLabel}>Total Points</Text>
           </View>
           <View style={styles.separator} />

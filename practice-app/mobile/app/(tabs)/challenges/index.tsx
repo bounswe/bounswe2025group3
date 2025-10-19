@@ -159,8 +159,8 @@ export default function ChallengesScreen() {
       try {
         const [challengeData, categoriesResponse, subCategoriesResponse] = await Promise.all([
           getChallenges(),
-          tokenManager.authenticatedFetch("/v1/waste/categories/"),
-          tokenManager.authenticatedFetch("/v1/waste/subcategories/"),
+          tokenManager.authenticatedFetch("/api/v1/waste/categories/"),
+          tokenManager.authenticatedFetch("/api/v1/waste/subcategories/"),
         ]);
 
         let categoryMap: Record<number, string> = {};
