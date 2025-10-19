@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // 1. Import useEffect
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './SignupPage.css';
@@ -7,7 +7,6 @@ import Header from '../common/Header';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
 
-// 2. Add the helper function to get the current theme
 const getCurrentTheme = () => {
   return localStorage.getItem('theme') || 'green';
 };
@@ -22,7 +21,6 @@ const SignupPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // 3. Add state and an effect to listen for theme changes
   const [currentTheme, setCurrentTheme] = useState(getCurrentTheme());
 
   useEffect(() => {
@@ -79,7 +77,6 @@ const SignupPage = () => {
     }
   };
 
-  // 4. Determine the image source based on the theme state
   const imageSrc = currentTheme === 'blue' ? '/wasteimage-blue.png' : '/wasteimage.png';
 
   return (
@@ -103,13 +100,8 @@ const SignupPage = () => {
 
             <form onSubmit={handleSubmit}>
               <div className="form-columns">
+                {/* --- UPDATED ORDER: LEFT COLUMN --- */}
                 <div className="form-col">
-                  <div className="input-box">
-                    <label htmlFor="username">
-                      {t('signup.username_label')}<span className="asterisk">*</span>
-                    </label>
-                    <input id="username" name="username" type="text" placeholder={t('signup.placeholder_username')} value={formData.username} onChange={handleChange} required />
-                  </div>
                   <div className="input-box">
                     <label htmlFor="email">
                       {t('signup.email_label')}<span className="asterisk">*</span>
@@ -117,31 +109,38 @@ const SignupPage = () => {
                     <input id="email" name="email" type="email" placeholder={t('signup.placeholder_email')} value={formData.email} onChange={handleChange} required />
                   </div>
                   <div className="input-box">
+                    <label htmlFor="first_name">{t('signup.first_name_label')}</label>
+                    <input id="first_name" name="first_name" type="text" placeholder={t('signup.placeholder_first_name')} value={formData.first_name} onChange={handleChange} />
+                  </div>
+                  <div className="input-box">
                     <label htmlFor="password">
                       {t('signup.password_label')}<span className="asterisk">*</span>
                     </label>
                     <input id="password" name="password" type="password" placeholder={t('signup.placeholder_password')} value={formData.password} onChange={handleChange} required />
                   </div>
-                  <div className="input-box">
-                    <label htmlFor="password2">
-                      {t('signup.confirm_password_label')}<span className="asterisk">*</span>
-                    </label>
-                    <input id="password2" name="password2" type="password" placeholder={t('signup.placeholder_confirm_password')} value={formData.password2} onChange={handleChange} required />
+                   <div className="input-box">
+                    <label htmlFor="city">{t('signup.city_label')}</label>
+                    <input id="city" name="city" type="text" placeholder={t('signup.placeholder_city')} value={formData.city} onChange={handleChange} />
                   </div>
                 </div>
 
+                {/* --- UPDATED ORDER: RIGHT COLUMN --- */}
                 <div className="form-col">
-                  <div className="input-box">
-                    <label htmlFor="first_name">{t('signup.first_name_label')}</label>
-                    <input id="first_name" name="first_name" type="text" placeholder={t('signup.placeholder_first_name')} value={formData.first_name} onChange={handleChange} />
+                   <div className="input-box">
+                    <label htmlFor="username">
+                      {t('signup.username_label')}<span className="asterisk">*</span>
+                    </label>
+                    <input id="username" name="username" type="text" placeholder={t('signup.placeholder_username')} value={formData.username} onChange={handleChange} required />
                   </div>
                   <div className="input-box">
                     <label htmlFor="last_name">{t('signup.last_name_label')}</label>
                     <input id="last_name" name="last_name" type="text" placeholder={t('signup.placeholder_last_name')} value={formData.last_name} onChange={handleChange} />
                   </div>
                   <div className="input-box">
-                    <label htmlFor="city">{t('signup.city_label')}</label>
-                    <input id="city" name="city" type="text" placeholder={t('signup.placeholder_city')} value={formData.city} onChange={handleChange} />
+                    <label htmlFor="password2">
+                      {t('signup.confirm_password_label')}<span className="asterisk">*</span>
+                    </label>
+                    <input id="password2" name="password2" type="password" placeholder={t('signup.placeholder_confirm_password')} value={formData.password2} onChange={handleChange} required />
                   </div>
                   <div className="input-box">
                     <label htmlFor="country">{t('signup.country_label')}</label>
@@ -188,7 +187,6 @@ const SignupPage = () => {
           </div>
 
           <div className="image-section">
-            {/* 5. Use the dynamic imageSrc variable */}
             <img src={imageSrc} alt="Recycling illustration" />
           </div>
         </div>
