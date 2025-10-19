@@ -1,32 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // 1. Import useEffect
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-//import './LoginPage.css'; // For shared base styles
-import './SignupPage.css'; // For signup-specific styles
+import './SignupPage.css';
 import { useTranslation } from 'react-i18next';
-import Header from '../common/Header'; // Shared header component
+import Header from '../common/Header';
 
-// Use environment variable or default to localhost:10000
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+
+// 2. Add the helper function to get the current theme
+const getCurrentTheme = () => {
+  return localStorage.getItem('theme') || 'green';
+};
 
 const SignupPage = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '', // Changed from password1 to password to match backend
-    password2: '',
-    first_name: '',
-    last_name: '',
-    bio: '',
-    city: '',
-    country: '',
+    username: '', email: '', password: '', password2: '',
+    first_name: '', last_name: '', bio: '', city: '', country: '',
   });
-
-const [termsAccepted, setTermsAccepted] = useState(false);
-
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  // 3. Add state and an effect to listen for theme changes
+  const [currentTheme, setCurrentTheme] = useState(getCurrentTheme());
+
+  useEffect(() => {
+    const handleThemeChange = () => {
+      setCurrentTheme(getCurrentTheme());
+    };
+    document.addEventListener('themeChanged', handleThemeChange);
+    return () => {
+      document.removeEventListener('themeChanged', handleThemeChange);
+    };
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,9 +53,7 @@ const [termsAccepted, setTermsAccepted] = useState(false);
       return;
     }
 
-    // Prepare data for submission, backend might expect 'password' not 'password1'
     const submissionData = { ...formData };
-    //delete submissionData.password2; // Don't send password2 to backend
 
     try {
       console.debug('Registration attempt:', { 
@@ -56,9 +61,6 @@ const [termsAccepted, setTermsAccepted] = useState(false);
         username: formData.username,
         apiUrl: API_URL 
       });
-      // Ensure your backend endpoint for registration is correct
-      // and it expects 'password' field not 'password1'.
-      // If it expects 'password1', change 'password' back to 'password1' in state and here.
       await axios.post(`${API_URL}/api/auth/register/`, submissionData);
       alert('Registration successful! Please log in.');
       navigate('/login');
@@ -67,7 +69,7 @@ const [termsAccepted, setTermsAccepted] = useState(false);
       const msg = data
         ? Object.entries(data)
             .map(([k, v]) => {
-              const fieldName = k.replace('_', ' '); // Make field names more readable
+              const fieldName = k.replace('_', ' ');
               return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}: ${Array.isArray(v) ? v.join(', ') : v}`;
             })
             .join('; ')
@@ -77,13 +79,13 @@ const [termsAccepted, setTermsAccepted] = useState(false);
     }
   };
 
+  // 4. Determine the image source based on the theme state
+  const imageSrc = currentTheme === 'blue' ? '/wasteimage-blue.png' : '/wasteimage.png';
+
   return (
-    // *** THE FIX IS HERE: Add the 'signup-page-scoped' class for scoping ***
     <div className="signup-page-scoped signup-page">
       <Header />
 
-      {/* --- RE-USING LOGIN CONTAINER STRUCTURE --- */}
-      {/* We scope the inner elements with .signup-page-scoped */}
       <div className="login-container">
         <div className="main-content">
           <div className="form-section">
@@ -102,8 +104,7 @@ const [termsAccepted, setTermsAccepted] = useState(false);
             <form onSubmit={handleSubmit}>
               <div className="form-columns">
                 <div className="form-col">
-                  {/* Username, Email, Password, Confirm Password Inputs */}
-                   <div className="input-box">
+                  <div className="input-box">
                     <label htmlFor="username">
                       {t('signup.username_label')}<span className="asterisk">*</span>
                     </label>
@@ -130,8 +131,7 @@ const [termsAccepted, setTermsAccepted] = useState(false);
                 </div>
 
                 <div className="form-col">
-                  {/* First Name, Last Name, City, Country Inputs */}
-                   <div className="input-box">
+                  <div className="input-box">
                     <label htmlFor="first_name">{t('signup.first_name_label')}</label>
                     <input id="first_name" name="first_name" type="text" placeholder={t('signup.placeholder_first_name')} value={formData.first_name} onChange={handleChange} />
                   </div>
@@ -154,15 +154,18 @@ const [termsAccepted, setTermsAccepted] = useState(false);
                 <label htmlFor="bio">{t('signup.bio_label')}</label>
                 <textarea id="bio" name="bio" placeholder={t('signup.placeholder_bio')} rows={4} value={formData.bio} onChange={handleChange} className="bio-full" />
               </div>
-
+              
               <div className="terms-box">
                 <input
-                  type="checkbox" id="terms" name="terms"
-                  checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)}
-                  required
+                  type="checkbox"
+                  id="terms"
+                  name="terms"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                  required 
                 />
                 <label htmlFor="terms">
-                  {t('signup.accept_terms_prefix', 'I accept the ')}
+                  {t('signup.accept_terms_prefix', 'I accept the ')} 
                   <Link to="/terms" target="_blank" rel="noopener noreferrer">
                     {t('signup.accept_terms_link', 'Terms and Conditions')}
                   </Link>
@@ -171,7 +174,6 @@ const [termsAccepted, setTermsAccepted] = useState(false);
 
               {error && <p className="error-message">{error}</p>}
 
-              {/* --- Re-using action-buttons structure from login --- */}
               <div className="action-buttons">
                 <button type="submit" className="login-btn">{t('signup.signup_button')}</button>
                 <button type="button" className="signup-btn" onClick={() => navigate('/login')}>
@@ -186,7 +188,8 @@ const [termsAccepted, setTermsAccepted] = useState(false);
           </div>
 
           <div className="image-section">
-            <img src="/wasteimage.png" alt="Recycling illustration" />
+            {/* 5. Use the dynamic imageSrc variable */}
+            <img src={imageSrc} alt="Recycling illustration" />
           </div>
         </div>
       </div>
