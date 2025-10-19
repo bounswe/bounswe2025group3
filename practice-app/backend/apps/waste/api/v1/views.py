@@ -11,8 +11,11 @@ from apps.waste.models import (
 from .serializers import (
     WasteCategorySerializer, SubCategorySerializer, WasteLogSerializer,
     CustomCategoryRequestSerializer, WasteSuggestionSerializer, SustainableActionSerializer,
-    AdminActionResponseSerializer, UserScoreSerializer
+    AdminActionResponseSerializer, UserScoreSerializer,
+    UserRankingSerializer
 )
+from django.db.models import Sum
+from django.contrib.auth import get_user_model
 
 # WasteCategory Views
 class WasteCategoryListView(generics.ListAPIView):
@@ -289,3 +292,25 @@ class UserWasteScoreView(APIView):
     def get(self, request):
         total_score = request.user.total_score
         return Response({'user_id': request.user.id, 'total_score': total_score})
+
+
+class UserRankingView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        tags=['User Stats'],
+        summary='Get user leaderboard ranking',
+        description='Returns a list of users ranked by their total waste quantity logged.',
+        responses={200: UserRankingSerializer(many=True)}
+    )
+    def get(self, request):
+        user = get_user_model()
+        ranking_data = user.objects.annotate(
+            total_waste_quantity=Sum('wastelog__quantity')
+        ).filter(
+            total_waste_quantity__isnull=False
+        ).order_by(
+            '-total_waste_quantity'
+        )
+        serializer = UserRankingSerializer(ranking_data, many=True)
+        return Response(serializer.data)
