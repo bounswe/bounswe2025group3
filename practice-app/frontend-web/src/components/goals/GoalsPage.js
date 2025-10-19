@@ -63,7 +63,7 @@ const GoalsPage = () => {
   };
 
   return (
-    <div className="goals-page-layout">
+    <div className="goals-page-scoped goals-page-layout">
       {/* 4. Use the shared Navbar component */}
       <Navbar isAuthenticated={true} />
 

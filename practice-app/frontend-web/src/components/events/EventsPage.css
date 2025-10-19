@@ -1,85 +1,21 @@
-/* EventsPage.css — Styles for the Events feature */
-/* This file uses the same variables and base styles from GoalsPage.css for consistency. */
+/* EventsPage.css - Refactored, Scoped, and Themed */
 
-:root {
-  --primary-green: #2ecc71;
-  --primary-green-dark: #27ae60;
-  --primary-green-light: #abebc6;
-  --primary-green-rgb: 46, 204, 113;
-  --secondary-green: #1abc9c;
-  --neutral-bg: #f4f7f6;
-  --content-bg: #ffffff;
-  --card-bg: #ffffff;
-  --text-dark: #34495e;
-  --text-medium: #7f8c8d;
-  --text-light: #95a5a6;
-  --text-on-primary: #ffffff;
-  --border-color: #e0e7e5;
-  --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.07);
-  --font-primary: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
-}
+/* --- REMOVED STYLES ---
+  :root and all .dashboard-top-nav, .app-logo, .main-actions-nav rules
+  have been removed. They are now handled by themes.css and Navbar.css respectively.
+*/
 
-/* ---------- Base Layout (reused from GoalsPage) ---------- */
-.events-page-layout {
+/* --- Base Layout (Scoped) --- */
+.events-page-scoped.events-page-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--neutral-bg);
-  font-family: var(--font-primary);
+  background-color: var(--dashboard-page-bg); /* Reuse dashboard variable */
+  font-family: var(--font-primary, 'Poppins', sans-serif);
 }
 
-/* ---------- Top Navigation (identical to GoalsPage for consistency) ---------- */
-.dashboard-top-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 2rem;
-  background-color: var(--content-bg);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  border-bottom: 3px solid var(--primary-green);
-}
-.app-logo {
-  display: flex;
-  align-items: center;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--primary-green-dark);
-  text-decoration: none;
-}
-.app-logo .icon { font-size: 1.5em; color: var(--primary-green); margin-right: 0.5em; }
-.main-actions-nav { display: flex; gap: 0.5rem; }
-.nav-action-item {
-  display: flex;
-  align-items: center;
-  padding: 0.6rem 1.2rem;
-  border-radius: 25px;
-  text-decoration: none;
-  color: var(--text-medium);
-  font-weight: 500;
-  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
-}
-.nav-action-item .icon {
-  color: var(--secondary-green);
-  font-size: 1.2em;
-  margin-right: 0.5em;
-}
-.nav-action-item:hover {
-  background-color: var(--primary-green-light);
-  color: var(--primary-green-dark);
-  box-shadow: 0 2px 8px rgba(var(--primary-green-rgb), 0.15);
-}
-.nav-action-item.active {
-  background-color: var(--primary-green);
-  color: var(--text-on-primary);
-  box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
-}
-.nav-action-item.active .icon { color: var(--text-on-primary); }
-
-/* ---------- Main Content ---------- */
-.events-main-content {
+/* --- Main Content (Scoped) --- */
+.events-page-scoped .events-main-content {
   flex-grow: 1;
   padding: 2rem 2.5rem;
   max-width: 1200px;
@@ -87,108 +23,108 @@
   width: 100%;
 }
 
-.events-header-section {
+.events-page-scoped .events-header-section {
   text-align: center;
   margin-bottom: 2.5rem;
 }
-.events-header-section h1 {
+.events-page-scoped .events-header-section h1 {
   font-size: 2.5rem;
-  color: var(--primary-green-dark);
+  color: var(--nav-dashboard-logo-color);
   font-weight: 700;
   margin-bottom: 0.5rem;
   display: inline-flex;
   align-items: center;
 }
-.events-header-section h1 .icon {
-  color: var(--primary-green);
+.events-page-scoped .events-header-section h1 .icon {
+  color: var(--nav-dashboard-bottom-border);
   font-size: 1.3em;
   margin-right: 0.6rem;
 }
-.events-header-section p {
+.events-page-scoped .events-header-section p {
   font-size: 1.1rem;
-  color: var(--text-medium);
+  color: var(--dashboard-text-medium);
   max-width: 600px;
   margin: 0 auto;
 }
 
-/* ---------- Events Grid & Cards (New Styles) ---------- */
-.events-grid {
+/* --- Events Grid & Cards (Scoped) --- */
+.events-page-scoped .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
 }
 
-.event-card {
-  background-color: var(--card-bg);
+.events-page-scoped .event-card {
+  background-color: var(--background-primary);
   border-radius: 12px;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-light);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.event-card:hover {
+.events-page-scoped .event-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--events-shadow-hover);
 }
 
-.event-card-image {
+.events-page-scoped .event-card-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
 }
 
-.event-card-content {
+.events-page-scoped .event-card-content {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.event-card-content h2 {
+.events-page-scoped .event-card-content h2 {
   font-size: 1.3rem;
-  color: var(--text-dark);
+  color: var(--dashboard-text-dark);
   font-weight: 600;
   margin: 0 0 0.75rem 0;
 }
 
-.event-card-info {
+.events-page-scoped .event-card-info {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  color: var(--text-medium);
+  color: var(--dashboard-text-medium);
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
-.event-card-info span {
+.events-page-scoped .event-card-info span {
   display: flex;
   align-items: center;
 }
-.event-card-info .icon {
+.events-page-scoped .event-card-info .icon {
   font-size: 1.2em;
   margin-right: 0.5rem;
-  color: var(--secondary-green);
+  color: var(--nav-dashboard-icon-color);
 }
 
-.event-card-description {
-  color: var(--text-dark);
+.events-page-scoped .event-card-description {
+  color: var(--dashboard-text-dark);
   line-height: 1.6;
   flex-grow: 1;
   margin-bottom: 1.5rem;
 }
 
-.event-card-actions {
+.events-page-scoped .event-card-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto; /* Pushes actions to the bottom */
+  margin-top: auto;
 }
 
-.participate-btn {
-  background-color: var(--primary-green);
-  color: var(--text-on-primary);
+.events-page-scoped .participate-btn {
+  background-color: var(--nav-dashboard-link-active-bg);
+  color: var(--text-on-accent);
   border: none;
   padding: 0.7rem 1.4rem;
   border-radius: 25px;
@@ -197,19 +133,19 @@
   transition: all 0.25s ease;
 }
 
-.participate-btn:hover {
-  background-color: var(--primary-green-dark);
-  box-shadow: 0 4px 12px rgba(var(--primary-green-rgb), 0.3);
+.events-page-scoped .participate-btn:hover {
+  background-color: var(--nav-dashboard-logo-color);
+  box-shadow: 0 4px 12px var(--nav-dashboard-active-shadow);
 }
 
-.participate-btn.participating {
-  background-color: var(--secondary-green);
+.events-page-scoped .participate-btn.participating {
+  background-color: var(--events-participating-bg);
 }
 
-.like-btn {
+.events-page-scoped .like-btn {
   background: transparent;
-  border: 1px solid var(--border-color);
-  color: var(--text-medium);
+  border: 1px solid var(--events-border-color);
+  color: var(--dashboard-text-medium);
   padding: 0.6rem 1.2rem;
   border-radius: 25px;
   cursor: pointer;
@@ -219,19 +155,37 @@
   font-weight: 500;
   transition: all 0.25s ease;
 }
-.like-btn .icon { color: #e74c3c; }
+.events-page-scoped .like-btn .icon { color: var(--events-like-btn-icon-color); }
 
-.like-btn:hover {
-  background-color: #e74c3c1a;
-  border-color: #e74c3c;
-  color: #c0392b;
+.events-page-scoped .like-btn:hover {
+  background-color: var(--events-like-btn-hover-bg);
+  border-color: var(--events-like-btn-hover-border);
+  color: var(--events-like-btn-hover-text);
 }
 
+/* --- Loader and Error (Scoped) --- */
+.events-page-scoped .loader-container-main {
+  /* Assumes styles are defined globally or in Dashboard.css and just need scoping */
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 3rem; text-align: center; color: var(--dashboard-text-medium); font-size: 1rem;
+}
+.events-page-scoped .loader-spinner-main {
+  border: 5px solid var(--nav-dashboard-link-hover-bg);
+  border-top: 5px solid var(--nav-dashboard-bottom-border);
+  border-radius: 50%; width: 40px; height: 40px;
+  animation: spin 0.8s linear infinite; margin-bottom: 1rem;
+}
+.events-page-scoped .error-message-box-main {
+  background-color: var(--dashboard-error-bg); color: var(--dashboard-error-text);
+  padding: 1rem 1.5rem; border: 1px solid var(--dashboard-error-border);
+  border-left: 5px solid var(--dashboard-error-text);
+  border-radius: 8px; font-weight: 500;
+}
 
-/* ---------- Responsive tweaks ---------- */
+/* ---------- Responsive tweaks (Scoped) ---------- */
 @media (max-width: 768px) {
-  .events-main-content { padding: 1.5rem 1rem; }
-  .events-header-section h1 { font-size: 2rem; }
-  .events-header-section p { font-size: 1rem; }
-  .events-grid { grid-template-columns: 1fr; }
+  .events-page-scoped .events-main-content { padding: 1.5rem 1rem; }
+  .events-page-scoped .events-header-section h1 { font-size: 2rem; }
+  .events-page-scoped .events-header-section p { font-size: 1rem; }
+  .events-page-scoped .events-grid { grid-template-columns: 1fr; }
 }

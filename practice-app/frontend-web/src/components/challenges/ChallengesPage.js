@@ -97,7 +97,7 @@ const ChallengesPage = () => {
     ];
 
     return (
-        <div className="challenges-page-layout">
+        <div className="challenges-page-scoped challenges-page-layout">
             <Navbar isAuthenticated={true} />
 
             <main className="challenges-main-content">

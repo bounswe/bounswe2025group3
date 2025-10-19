@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom'; // Using NavLink for active class
 import { useTranslation } from 'react-i18next';
-import './AboutUsPage.css'; // New CSS file
+import './AboutUsPage.css'; // Your specific CSS for this page
 import Header from '../common/Header';
 
 // Team members - student names
@@ -26,8 +26,7 @@ const AvatarPlaceholder = ({ name, seed }) => {
     for (let i = 0; i < (seed?.length || 0); i++) {
         hash = seed.charCodeAt(i) + ((hash << 5) - hash);
     }
-    // Consistent color generation with a fixed saturation and lightness for this style
-    const color = `hsl(${hash % 360}, 75%, 60%)`; // Brighter avatar color
+    const color = `hsl(${hash % 360}, 75%, 60%)`;
     return (
         <div className="team-avatar-simple" style={{ backgroundColor: color }}>
             {initial}
@@ -36,17 +35,16 @@ const AvatarPlaceholder = ({ name, seed }) => {
 };
 
 const AboutUsPage = () => {
-    // 3. Initialize the translation hook
     const { t } = useTranslation();
     const coreValues = t('about.values.list', { returnObjects: true });
 
     return (
-        <div className="page-wrapper about-us-page-wrapper">
-            {/* 4. Use the shared Header component */}
+        // *** THE FIX IS HERE ***
+        // Add the 'about-us-page' class to the main wrapper
+        <div className="about-us-page page-wrapper about-us-page-wrapper">
             <Header />
-            
+
             <div className="content-container">
-                {/* 5. Replace all static text with the t() function */}
                 <header className="page-header">
                     <h1>{t('about.header.title')}</h1>
                     <p>{t('about.header.subtitle')}</p>
@@ -86,7 +84,7 @@ const AboutUsPage = () => {
                     </div>
                 </section>
             </div>
-            
+
             <footer className="simple-footer">
                 <p>{t('about.simple_footer', { year: new Date().getFullYear() })}</p>
             </footer>

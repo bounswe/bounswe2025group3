@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css';
@@ -23,7 +23,10 @@ const handleSocialLogin = (provider) => {
     // You can handle other providers similarly
 };
 
-
+// 2. Add the same helper function to get the theme
+const getCurrentTheme = () => {
+    return localStorage.getItem('theme') || 'green';
+};
 
 const LoginPage = () => {
     const { t } = useTranslation();
@@ -31,6 +34,22 @@ const LoginPage = () => {
     const [error, setError] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
+
+    // 3. Add state and effect for theme switching
+    const [currentTheme, setCurrentTheme] = useState(getCurrentTheme());
+
+    useEffect(() => {
+        const handleThemeChange = () => {
+            setCurrentTheme(getCurrentTheme());
+        };
+        // Listen for the custom event dispatched by the ThemeSwitcher
+        document.addEventListener('themeChanged', handleThemeChange);
+
+        // Clean up the listener when the component unmounts
+        return () => {
+            document.removeEventListener('themeChanged', handleThemeChange);
+        };
+    }, []); // Empty dependency array means this effect runs only once on mount
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -89,15 +108,16 @@ const LoginPage = () => {
         }
     };
 
+    // 4. Determine the image source based on the current theme state
+    const imageSrc = currentTheme === 'blue' ? '/wasteimage-blue.png' : '/wasteimage.png';
+
     return (
-        <div className="login-page">
-            {/* 4. Use the shared Header component */}
+        <div className="login-page-scoped login-page">
             <Header />
             
             <div className="login-container">
                 <div className="main-content">
                     <div className="form-section">
-                        {/* 5. Replace all static text with t() function */}
                         <h1 className="main-heading">
                             {t('login.title_line1')}<br />
                             {t('login.title_line2')}
@@ -105,6 +125,7 @@ const LoginPage = () => {
                         <p className="welcome-text">{t('login.welcome')}</p>
                         
                         <form onSubmit={handleSubmit}>
+                            {/* Form content remains the same */}
                             <div className="email-section">
                                 <div className="section-indicator">
                                     <div className="indicator-dot"></div>
@@ -179,7 +200,8 @@ const LoginPage = () => {
                     </div>
                     
                     <div className="image-section">
-                        <img src="/wasteimage.png" alt="Recycling bin character" />
+                        {/* 5. Use the dynamic imageSrc variable here */}
+                        <img src={imageSrc} alt="Recycling bin character" />
                     </div>
                 </div>
             </div>

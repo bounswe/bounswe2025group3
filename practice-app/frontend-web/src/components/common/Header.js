@@ -2,13 +2,14 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './Header.css';
+import ThemeSwitcher from './ThemeSwitcher'; // 1. Import the new component
+import './ThemeSwitcher.css'; // 2. Import its styles
 
 const Header = () => {
     const { t, i18n } = useTranslation();
 
-    // Updated to handle the click event from a link
     const toggleLanguage = (e) => {
-        e.preventDefault(); // Prevents the link from navigating
+        e.preventDefault();
         const newLang = i18n.language === 'en' ? 'tr' : 'en';
         i18n.changeLanguage(newLang);
         localStorage.setItem('language', newLang);
@@ -23,11 +24,16 @@ const Header = () => {
                 </Link>
                 <ul className="main-nav">
                     <li className="nav-item">
-                       {/* Changed button to NavLink to match other navigation items */}
                        <NavLink to="#" onClick={toggleLanguage}>
                             {i18n.language === 'en' ? 'TR' : 'EN'}
                        </NavLink>
                     </li>
+                    
+                    {/* 3. Add the ThemeSwitcher component as a new list item */}
+                    <li className="nav-item theme-switcher-li">
+                        <ThemeSwitcher />
+                    </li>
+                    
                     <li className="nav-item">
                         <NavLink to="/" className={({isActive}) => isActive ? "active-link-class" : ""}>{t('common.nav.home')}</NavLink>
                     </li>

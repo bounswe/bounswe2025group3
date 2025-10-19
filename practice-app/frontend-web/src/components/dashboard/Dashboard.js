@@ -57,7 +57,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="dashboard-layout">
+        <div className="dashboard-scoped dashboard-layout">
             {/* The old <header> is replaced with the shared Navbar */}
             <Navbar isAuthenticated={true} />
 

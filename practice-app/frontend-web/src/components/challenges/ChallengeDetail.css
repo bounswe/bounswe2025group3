@@ -1,0 +1,138 @@
+/* src/pages/Challenges/ChallengeDetailPage.css */
+
+/* --- Base Page Layout (Scoped) --- */
+.challenge-detail-page-scoped.challenge-detail-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--dashboard-page-bg);
+    font-family: var(--font-primary, 'Poppins', sans-serif);
+  }
+  
+  /* --- Main Content Area (Scoped) --- */
+  .challenge-detail-page-scoped .challenge-detail-main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    max-width: 800px; /* Optimal width for reading */
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  /* --- The Main Card that Makes Content Visible --- */
+  .challenge-detail-page-scoped .challenge-detail-card {
+    background-color: var(--background-primary);
+    border-radius: 16px;
+    box-shadow: var(--shadow-light);
+    padding: 2rem 2.5rem;
+  }
+  
+  /* --- Header Section --- */
+  .challenge-detail-page-scoped .challenge-detail-header {
+    text-align: center;
+    border-bottom: 1px solid var(--events-border-color);
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .challenge-detail-page-scoped .challenge-detail-category {
+    display: inline-block;
+    background-color: var(--heading-underline-color);
+    color: var(--nav-dashboard-logo-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  
+  .challenge-detail-page-scoped .challenge-detail-header h1 {
+    font-size: 2.2rem;
+    color: var(--dashboard-text-dark);
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .challenge-detail-page-scoped .challenge-detail-header p {
+    font-size: 1.1rem;
+    color: var(--dashboard-text-medium);
+    line-height: 1.7;
+  }
+  
+  /* --- Progress Section --- */
+  .challenge-detail-page-scoped .challenge-progress-section {
+    margin-bottom: 2rem;
+  }
+  .challenge-detail-page-scoped .challenge-progress-section h3 {
+    font-size: 1.2rem;
+    color: var(--dashboard-text-dark);
+    margin-bottom: 0.75rem;
+  }
+  /* Re-using progress bar styles from ChallengeCard.css */
+  .challenge-detail-page-scoped .challenge-progress-bar-container {
+    background-color: var(--challenge-progress-bar-bg);
+    border-radius: 20px;
+    height: 24px; /* Slightly taller */
+    overflow: hidden;
+  }
+  .challenge-detail-page-scoped .challenge-progress-bar {
+    background: var(--challenge-progress-bar-gradient);
+    height: 100%;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-on-accent);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+  }
+  
+  /* --- Meta Details --- */
+  .challenge-detail-page-scoped .challenge-detail-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--events-border-color);
+    border-bottom: 1px solid var(--events-border-color);
+    margin-bottom: 2rem;
+  }
+  .challenge-detail-page-scoped .meta-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: var(--dashboard-text-medium);
+  }
+  .challenge-detail-page-scoped .meta-item .icon {
+    font-size: 1.4em;
+    margin-right: 0.6em;
+    color: var(--nav-dashboard-icon-color);
+  }
+  .challenge-detail-page-scoped .meta-item strong {
+    color: var(--dashboard-text-dark);
+    font-weight: 600;
+  }
+  
+  /* --- Footer and Back Button --- */
+  .challenge-detail-page-scoped .challenge-detail-footer {
+    text-align: center;
+  }
+  .challenge-detail-page-scoped .back-to-challenges-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.5rem;
+    background-color: var(--background-secondary);
+    color: var(--dashboard-text-medium);
+    border: 1px solid var(--events-border-color);
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .challenge-detail-page-scoped .back-to-challenges-btn:hover {
+    background-color: var(--nav-dashboard-link-hover-bg);
+    color: var(--nav-dashboard-link-hover-color);
+    border-color: var(--nav-dashboard-link-hover-bg);
+  }
+  

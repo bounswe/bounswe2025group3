@@ -108,7 +108,7 @@ const LeaderboardPage = () => {
 
 
     return (
-        <div className="leaderboard-page-layout">
+        <div className="leaderboard-page-scoped leaderboard-page-layout">
             {/* 4. Use the shared Navbar component */}
             <Navbar isAuthenticated={true} />
 

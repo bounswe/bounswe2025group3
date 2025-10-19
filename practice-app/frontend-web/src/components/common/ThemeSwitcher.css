@@ -1,0 +1,33 @@
+/* Styling for the circular theme switcher button */
+.theme-switcher-button {
+    background-color: var(--background-subtle);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 50%; /* Makes it a circle */
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .theme-switcher-button:hover {
+    background-color: var(--accent-navbar);
+    color: var(--text-on-accent);
+    transform: scale(1.1);
+  }
+  
+  /* This class is added to the <li> in Header.js
+    to ensure the button sits correctly within the nav list.
+  */
+  .theme-switcher-li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Override default nav-item padding */
+  }
