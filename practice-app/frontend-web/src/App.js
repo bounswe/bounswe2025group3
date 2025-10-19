@@ -16,6 +16,7 @@ import BlogPostPage from './components/blog/BlogPostPage';
 import GoalsPage from './components/goals/GoalsPage';
 import GithubCallback from './components/auth/GithubCallback';
 import EventsPage from './components/events/EventsPage';
+import TermsPage from './components/auth/TermsPage';
 
 import './i18n';
 
@@ -37,6 +38,7 @@ const App = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/terms" element={<TermsPage />} />
                 <Route path="/waste" element={<WasteLog />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/goals" element={<GoalsPage />} />

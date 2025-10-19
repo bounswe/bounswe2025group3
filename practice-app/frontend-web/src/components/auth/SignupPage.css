@@ -89,6 +89,43 @@
   .signup-page .alternate-action-text a:hover {
     text-decoration: underline;
   }
+
+  .signup-page .terms-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; 
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.signup-page .terms-box input[type="checkbox"] {
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0; 
+  cursor: pointer;
+  margin-top: -2px; 
+}
+
+.signup-page .terms-box label {
+  font-size: 0.9rem;
+  color: var(--light-text, #555);
+  cursor: pointer;
+  margin-bottom: 0; 
+  line-height: 1.4;
+}
+
+
+.signup-page .terms-box label a {
+  color: var(--accent, #008000);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.signup-page .terms-box label a:hover {
+  text-decoration: none;
+}
   
   
   /* --- Responsive Adjustments for Form Columns --- */

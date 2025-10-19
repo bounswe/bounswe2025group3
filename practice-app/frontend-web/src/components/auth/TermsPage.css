@@ -1,0 +1,53 @@
+/* TermsPage.css */
+
+.terms-page .login-container {
+  /* Make it wider than the login form to fit the text */
+  max-width: 900px; 
+  
+  /* Remove the flex layout from LoginPage.css */
+  display: block; 
+  
+  /* Adjust margins and padding */
+  margin: 2rem auto 4rem auto; /* Add space from header and bottom */
+  padding: 2.5rem 3rem;
+  
+  /* Keep the white box look */
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure headings inside your HTML don't have weird default margins */
+.terms-page [data-custom-class='title'] h1 {
+  margin-top: 0;
+}
+
+/* Make sure links from your HTML are styled correctly */
+.terms-page a {
+  color: #3030F1 !important; /* Use color from your HTML */
+  text-decoration: underline;
+}
+.terms-page a:hover {
+  text-decoration: none;
+}
+
+.terms-container-no-header {
+  margin-top: 4rem; /* Adjust this value as needed */
+  margin-bottom: 4rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .terms-page .login-container {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .terms-page .login-container {
+    padding: 1.5rem;
+  }
+}
