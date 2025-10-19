@@ -217,6 +217,7 @@
       "goals": "Goals",
       "leaderboard": "Leaderboard",
       "challenges": "Challenges",
+      "events": "Events",
       "logout": "Logout"
     },
     "dashboard": {
@@ -402,5 +403,13 @@
       "action_completed": "Nicely Done!",
       "action_ended": "Ended",
       "action_view_details": "View Details"
+    },
+    "eventsPage": {
+      "title": "Upcoming Events",
+      "subtitle": "Get involved, meet like-minded people, and make a difference.",
+      "loading": "Loading Events…",
+      "error": "Failed to load events. Please try again later.",
+      "participate": "Participate",
+      "participating": "You are going!"
     }
   }

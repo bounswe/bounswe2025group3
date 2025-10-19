@@ -43,7 +43,7 @@ const Navbar = ({ isAuthenticated }) => {
 
             <nav className="main-actions-nav">
                 <button onClick={toggleLanguage} className="nav-action-item">
-                    <Icon name="language" /> {i18n.language.toUpperCase()}
+                    <Icon name="language" /> {i18n.language === 'en' ? 'TR' : 'EN'}
                 </button>
                 <NavLink to="/dashboard" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
                     <Icon name="dashboard" /> {t('dashboard_nav.dashboard')}
@@ -61,7 +61,7 @@ const Navbar = ({ isAuthenticated }) => {
                     <Icon name="challenges" /> {t('dashboard_nav.challenges')}
                 </NavLink>
                 <NavLink to="/events" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
-                    <Icon name="events" /> Events
+                    <Icon name="events" /> {t('dashboard_nav.events')}
                 </NavLink>
                 <button onClick={handleLogout} className="nav-action-item">
                     <Icon name="logout" /> {t('dashboard_nav.logout')}
