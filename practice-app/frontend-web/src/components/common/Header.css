@@ -1,0 +1,164 @@
+/*
+ * This is the refactored Header.css file.
+ * It contains all styles for your Header component and uses variables from themes.css
+ */
+
+ .nav-container {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--background-primary);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px var(--shadow-subtle);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* --- BRAND (Logo + Name) --- */
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-right: auto;
+  }
+  
+  /*
+   * THIS IS THE FIX FOR THE LOGO:
+   * It sets a specific height, and the width will adjust automatically.
+   */
+  .navbar-logo-image {
+    height: 35px;
+    width: auto;
+    margin-right: 0.5rem;
+  }
+  
+  .navbar-app-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--brand-text-color); /* Uses var */
+    text-transform: uppercase;
+  }
+  
+  /* --- Main Nav Links --- */
+  .main-nav {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center; /* Ensures switcher button aligns */
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-item {
+    padding: 0.5rem 0;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  /* Base link styling */
+  .nav-item a {
+    text-decoration: none;
+    color: var(--nav-link-color);
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    display: block; /* Ensures proper alignment */
+  }
+  
+  /* Active/hover styles for nav links */
+  .nav-item a:hover,
+  .nav-item a.active-link-class {
+    color: var(--nav-link-hover-color);
+  }
+  
+  .nav-item a.active-link-class {
+    font-weight: 600;
+  }
+  
+  .nav-item a.active-link-class::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent-navbar); /* Uses var */
+  }
+  
+  /* --- Nav Button (Signup) --- */
+  .nav-item a.nav-button-style {
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-weight: 500;
+    margin-left: 0.5rem;
+    color: var(--text-on-accent);
+    background-color: var(--accent-navbar); /* Uses var */
+    border: 2px solid var(--accent-navbar); /* Uses var */
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  
+  .nav-item a.nav-button-style.signup-button-style:hover {
+    background-color: var(--accent-navbar-hover); /* Uses var */
+    border-color: var(--accent-navbar-hover); /* Uses var */
+    color: var(--text-on-accent);
+  }
+  
+  /* --- Responsive Design --- */
+  @media (max-width: 850px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .navbar-brand {
+      margin-bottom: 0.75rem;
+      margin-right: 0;
+    }
+    .main-nav {
+      width: 100%;
+      justify-content: flex-start;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
+    }
+    .nav-item {
+      width: 100%;
+    }
+    .nav-item a {
+      display: block;
+      padding: 0.8rem 0.5rem;
+    }
+    .nav-item a.active-link-class::after {
+      left: 0.5rem;
+      width: 30px;
+      transform: none;
+    }
+    .nav-item a.nav-button-style {
+      margin-left: 0;
+      margin-top: 0.5rem;
+      text-align: center;
+      display: inline-block;
+      width: auto;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .navbar-logo-image {
+      height: 30px;
+      margin-right: 0.4rem;
+    }
+    .navbar-app-name {
+      font-size: 1.2rem;
+    }
+    .nav-container {
+      padding: 0.8rem 1rem;
+    }
+  }
