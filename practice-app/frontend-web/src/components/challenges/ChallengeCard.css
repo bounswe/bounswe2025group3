@@ -1,202 +1,184 @@
-/* src/components/ChallengeCard.css */
-:root { /* Ensure these are available or define them again */
-    --primary-green: #2ecc71;
-    --primary-green-dark: #27ae60;
-    --primary-green-light: #abebc6;
-    --primary-green-extralight: #e6f7e6; /* Even lighter for backgrounds */
-    --secondary-green: #1abc9c;
-    --text-dark: #34495e;
-    --text-medium: #7f8c8d;
-    --text-on-primary: #ffffff;
-    --card-bg: #ffffff;
-    --border-color: #e0e7e5;
-    --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.07);
-    --font-primary: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
-  
-    /* Status Colors */
-    --status-active-bg: var(--primary-green-light);
-    --status-active-text: var(--primary-green-dark);
-    --status-upcoming-bg: #e0f2fe; /* Light Blue */
-    --status-upcoming-text: #0ea5e9; /* Sky Blue */
-    --status-completed-bg: var(--primary-green-extralight);
-    --status-completed-text: var(--primary-green-dark);
-    --status-expired-bg: #f1f5f9; /* Light Gray */
-    --status-expired-text: #64748b; /* Slate Gray */
-  }
-  
-  .challenge-card {
-    background-color: var(--card-bg);
-    border-radius: 16px;
-    box-shadow: var(--shadow-soft);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    border: 1px solid var(--border-color);
-    position: relative; /* For status banner */
-  }
-  
-  .challenge-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 20px rgba(var(--primary-green-rgb, 46, 204, 113), 0.15);
-  }
-  
-  .challenge-card-status-banner {
-    padding: 0.3rem 0.8rem;
-    font-size: 0.8rem;
+/* src/components/ChallengeCard.css - Refactored, Scoped, and Themed */
+
+/* --- REMOVED STYLES ---
+  :root block has been removed. Variables are now global in themes.css.
+*/
+
+/* --- Scoped Challenge Card --- */
+.challenges-page-scoped .challenge-card {
+  background-color: var(--background-primary);
+  border-radius: 16px;
+  box-shadow: var(--shadow-light);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid var(--events-border-color);
+  position: relative;
+}
+
+.challenges-page-scoped .challenge-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px var(--nav-dashboard-hover-shadow);
+}
+
+.challenges-page-scoped .challenge-card-status-banner {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  z-index: 1;
+}
+.challenges-page-scoped .challenge-card-status-banner .icon { margin-right: 0.3em; }
+
+/* Status specific banner styles */
+.challenges-page-scoped .challenge-card-status-banner[data-status="Active"] { background-color: var(--nav-dashboard-link-hover-bg); color: var(--nav-dashboard-link-hover-color); }
+.challenges-page-scoped .challenge-card-status-banner[data-status="Upcoming"] { background-color: var(--challenge-status-upcoming-bg); color: var(--challenge-status-upcoming-text); }
+.challenges-page-scoped .challenge-card-status-banner[data-status="Completed!"] { background-color: var(--heading-underline-color); color: var(--nav-dashboard-logo-color); }
+.challenges-page-scoped .challenge-card-status-banner[data-status="Expired"] { background-color: var(--challenge-status-expired-bg); color: var(--challenge-status-expired-text); }
+
+
+.challenges-page-scoped .challenge-card-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.challenges-page-scoped .challenge-card-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+}
+
+.challenges-page-scoped .challenge-card-category {
+  display: inline-block;
+  background-color: var(--heading-underline-color);
+  color: var(--nav-dashboard-logo-color);
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.challenges-page-scoped .challenge-card-title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--dashboard-text-dark);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.challenges-page-scoped .challenge-card-description {
+  font-size: 0.9rem;
+  color: var(--dashboard-text-medium);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  min-height: 4.8em;
+}
+
+.challenges-page-scoped .challenge-progress-bar-container {
+  background-color: var(--challenge-progress-bar-bg);
+  border-radius: 20px;
+  height: 18px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.challenges-page-scoped .challenge-progress-bar {
+  background: var(--challenge-progress-bar-gradient);
+  height: 100%;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-on-accent);
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+  transition: width 0.5s ease-in-out;
+}
+
+.challenges-page-scoped .challenge-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.85rem;
+  color: var(--dashboard-text-medium);
+  padding-top: 1rem;
+  border-top: 1px solid var(--events-border-color);
+}
+.challenges-page-scoped .meta-item {
+  display: flex;
+  align-items: center;
+}
+.challenges-page-scoped .meta-item .icon {
+  margin-right: 0.4em;
+  color: var(--nav-dashboard-icon-color);
+}
+.challenges-page-scoped .reward-meta .icon { color: var(--challenge-reward-icon-color); }
+
+
+.challenges-page-scoped .challenge-card-actions {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--events-border-color);
+  background-color: var(--challenge-action-area-bg);
+}
+
+.challenges-page-scoped .action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+.challenges-page-scoped .action-button .icon { margin-right: 0.5em; }
+
+.challenges-page-scoped .join-button {
+  background-color: var(--nav-dashboard-link-active-bg);
+  color: var(--text-on-accent);
+}
+.challenges-page-scoped .join-button:hover {
+  background-color: var(--nav-dashboard-logo-color);
+  transform: scale(1.02);
+}
+
+.challenges-page-scoped .view-button {
+  background-color: transparent;
+  color: var(--nav-dashboard-logo-color);
+  border: 2px solid var(--nav-dashboard-link-hover-bg);
+}
+.challenges-page-scoped .view-button:hover {
+  background-color: var(--heading-underline-color);
+  border-color: var(--nav-dashboard-link-active-bg);
+}
+
+.challenges-page-scoped .completed-button-display, 
+.challenges-page-scoped .expired-button-display {
+    text-align: center;
     font-weight: 600;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    border-radius: 20px;
-    display: inline-flex;
-    align-items: center;
-    z-index: 1;
-  }
-  .challenge-card-status-banner .icon { margin-right: 0.3em; }
-  
-  /* Status specific banner styles */
-  .challenge-card-status-banner[data-status="Active"] { background-color: var(--status-active-bg); color: var(--status-active-text); }
-  .challenge-card-status-banner[data-status="Upcoming"] { background-color: var(--status-upcoming-bg); color: var(--status-upcoming-text); }
-  .challenge-card-status-banner[data-status="Completed!"] { background-color: var(--status-completed-bg); color: var(--status-completed-text); }
-  .challenge-card-status-banner[data-status="Expired"] { background-color: var(--status-expired-bg); color: var(--status-expired-text); }
-  
-  
-  .challenge-card-image { /* Optional image styling */
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-  }
-  
-  .challenge-card-content {
-    padding: 1.5rem;
-    flex-grow: 1; /* Allows content to fill space before actions */
-  }
-  
-  .challenge-card-category {
-    display: inline-block;
-    background-color: var(--primary-green-extralight);
-    color: var(--primary-green-dark);
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  
-  .challenge-card-title {
-    font-size: 1.35rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
-  }
-  
-  .challenge-card-description {
-    font-size: 0.9rem;
-    color: var(--text-medium);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    min-height: 4.8em; /* Approx 3 lines of text */
-  }
-  
-  .challenge-progress-bar-container {
-    background-color: #e9ecef;
-    border-radius: 20px;
-    height: 18px;
-    margin-bottom: 1rem;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .challenge-progress-bar {
-    background: linear-gradient(90deg, var(--primary-green-light), var(--primary-green));
-    height: 100%;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-on-primary);
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-    transition: width 0.5s ease-in-out;
-  }
-  
-  .challenge-card-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem; /* Row and column gap */
-    font-size: 0.85rem;
-    color: var(--text-medium);
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-  }
-  .meta-item {
-    display: flex;
-    align-items: center;
-  }
-  .meta-item .icon {
-    margin-right: 0.4em;
-    color: var(--secondary-green);
-  }
-  .reward-meta .icon { color: #f39c12; } /* Gold for points/badge icon */
-  
-  
-  .challenge-card-actions {
-    padding: 1rem 1.5rem;
-    border-top: 1px solid var(--border-color);
-    background-color: var(--neutral-bg, #f9fafb); /* Slightly different bg for action area */
-  }
-  
-  .action-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
     padding: 0.75rem 1rem;
     border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
-    border: none;
-    cursor: pointer;
-    font-size: 0.95rem;
-  }
-  .action-button .icon { margin-right: 0.5em; }
-  
-  .join-button {
-    background-color: var(--primary-green);
-    color: var(--text-on-primary);
-  }
-  .join-button:hover {
-    background-color: var(--primary-green-dark);
-    transform: scale(1.02);
-  }
-  
-  .view-button {
-    background-color: transparent;
-    color: var(--primary-green-dark);
-    border: 2px solid var(--primary-green-light);
-  }
-  .view-button:hover {
-    background-color: var(--primary-green-extralight);
-    border-color: var(--primary-green);
-  }
-  
-  .completed-button-display, .expired-button-display {
-      text-align: center;
-      font-weight: 600;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-  }
-  .completed-button-display {
-      background-color: var(--status-completed-bg);
-      color: var(--status-completed-text);
-  }
-  .expired-button-display {
-      background-color: var(--status-expired-bg);
-      color: var(--status-expired-text);
-  }
+}
+.challenges-page-scoped .completed-button-display {
+    background-color: var(--heading-underline-color);
+    color: var(--nav-dashboard-logo-color);
+}
+.challenges-page-scoped .expired-button-display {
+    background-color: var(--challenge-status-expired-bg);
+    color: var(--challenge-status-expired-text);
+}

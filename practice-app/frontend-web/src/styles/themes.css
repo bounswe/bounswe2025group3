@@ -4,70 +4,48 @@
 :root {
     /* --- Eco Green Theme (Default) --- */
   
-    /* Brand Greens */
+    /* ... (All previous variables for global, pages, etc.) ... */
     --brand-dark-green: #122e1a;
     --brand-light-green: #88eb9a;
-  
-    /* Content Accent Greens */
     --accent-primary: #56ea62;
     --accent-primary-hover: #64d49a;
-  
-    /* Navbar Accent Greens */
     --accent-navbar: #008000;
     --accent-navbar-hover: #549d54; 
-  
-    /* Text Colors */
     --text-primary: #333;
     --text-secondary: #555;
     --text-on-dark: white;
     --text-on-accent: white;
-  
-    /* Backgrounds */
     --background-primary: #ffffff;
     --background-secondary: #f5f5f5;
     --background-tertiary: #eee;
     --background-subtle: rgba(199, 232, 202, 0.9);
     --background-card-translucent: rgba(255, 255, 255, 0.9);
     --footer-background: var(--brand-dark-green);
-  
-    /* Gradients & Overlays */
     --gradient-primary: linear-gradient(to right, var(--brand-dark-green), var(--brand-light-green));
     --gradient-secondary: linear-gradient(to bottom, var(--brand-light-green), var(--brand-dark-green));
     --gradient-tertiary: linear-gradient(to right, var(--brand-light-green), var(--brand-dark-green));
     --overlay-dark: rgba(0, 0, 0, 0.5);
-  
-    /* Borders & Shadows */
     --border-color: #ddd;
     --shadow-subtle: rgba(0, 0, 0, 0.05);
     --shadow-light: rgba(0, 0, 0, 0.08);
     --shadow-medium: rgba(0, 0, 0, 0.1);
     --shadow-dark: rgba(0, 0, 0, 0.2);
-  
-    /* Navbar Semantic Aliases */
     --brand-text-color: var(--accent-navbar);
     --nav-link-color: var(--text-primary);
     --nav-link-hover-color: var(--accent-navbar);
     --nav-link-active-color: var(--accent-navbar);
-  
-    /* About Us Page Variables */
     --background-page-wrapper: #E7E4DF;
     --heading-underline-color: #e6f7e6;
     --team-member-bg: #f0f9f4;
     --team-member-border: #abebc6;
     --team-avatar-bg: var(--accent-navbar);
-    
-    /* Blog Page Variables */
     --accent-navbar-darker: #006400;
     --border-color-light: #eee;
     --shadow-hover: rgba(0, 0, 0, 0.15);
-    
-    /* Blog Post Page Variables */
     --text-body: #444;
     --blockquote-border: #abebc6;
     --blockquote-bg: #f0f9f4;
     --code-block-bg: #f0f0f0;
-  
-    /* Login Page Variables */
     --login-indicator-color: #7c4dff;
     --login-error-text: #d32f2f;
     --login-social-btn-bg: #ffffff;
@@ -78,8 +56,6 @@
     --success-message-bg: #e6f7e6;
     --success-message-text: #27ae60;
     --success-message-border: #abebc6;
-  
-    /* Dashboard Navbar Variables */
     --nav-dashboard-bottom-border: #2ecc71;
     --nav-dashboard-logo-color: #27ae60;
     --nav-dashboard-logo-icon-color: #2ecc71;
@@ -90,8 +66,6 @@
     --nav-dashboard-link-active-bg: #2ecc71;
     --nav-dashboard-hover-shadow: rgba(46, 204, 113, 0.15);
     --nav-dashboard-active-shadow: rgba(46, 204, 113, 0.3);
-  
-    /* Dashboard Page Variables */
     --dashboard-page-bg: #f4f7f6;
     --dashboard-text-dark: #34495e;
     --dashboard-text-medium: #7f8c8d;
@@ -107,8 +81,6 @@
     --dashboard-error-bg: #fff0f1;
     --dashboard-error-text: #c82333;
     --dashboard-error-border: #f5c6cb;
-  
-    /* Events Page Variables */
     --events-border-color: #e0e7e5;
     --events-shadow-hover: rgba(0, 0, 0, 0.1);
     --events-like-btn-icon-color: #e74c3c;
@@ -116,81 +88,76 @@
     --events-like-btn-hover-border: #e74c3c;
     --events-like-btn-hover-text: #c0392b;
     --events-participating-bg: #1abc9c;
-  
-    /* Goals Page Variables */
     --goals-table-border: #e0e7e5;
     --goals-form-focus-shadow: rgba(46, 204, 113, 0.25);
+    --leaderboard-rank-gold: #ffd700;
+    --leaderboard-rank-silver: #c0c0c0;
+    --leaderboard-rank-bronze: #cd7f32;
+    --leaderboard-current-user-border: var(--nav-dashboard-logo-color);
+    --wastelog-input-border: #ced4da;
+    --wastelog-input-bg: #fdfdfd;
+    --wastelog-input-disabled-bg: #e9ecef;
     --goals-form-button-bg: var(--nav-dashboard-link-active-bg);
     --goals-form-button-hover-bg: var(--nav-dashboard-logo-color);
+    --goals-form-button-disabled-bg: var(--nav-dashboard-link-hover-bg);
+    --goals-form-button-disabled-text: var(--text-secondary);
+  
+    /* --- NEW: Challenge Card Variables (Green Theme) --- */
+    --challenge-status-upcoming-bg: #e0f2fe;
+    --challenge-status-upcoming-text: #0ea5e9;
+    --challenge-status-expired-bg: #f1f5f9;
+    --challenge-status-expired-text: #64748b;
+    --challenge-reward-icon-color: #f39c12;
+    --challenge-progress-bar-bg: #e9ecef;
+    --challenge-progress-bar-gradient: linear-gradient(90deg, var(--nav-dashboard-link-hover-bg), var(--nav-dashboard-link-active-bg));
+    --challenge-action-area-bg: #f9fafb;
   }
   
   
   /* --- Accessible Blue/High-Contrast Theme --- */
   body.blue-high-contrast {
-    /* Brand Blues */
+    /* ... (All previous variables) ... */
     --brand-dark-green: #001f3f;
     --brand-light-green: #7FDBFF;
-  
-    /* Content Accents (Blue/Orange) */
     --accent-primary: #FF851B;
     --accent-primary-hover: #FFa04d;
-  
-    /* Navbar Accents (Bright Blue) */
     --accent-navbar: #0074D9;
     --accent-navbar-hover: #3498DB;
-  
-    /* Text Colors */
     --text-primary: #F0F0F0;
     --text-secondary: #AAAAAA;
     --text-on-dark: #FFFFFF;
     --text-on-accent: #000000;
-  
-    /* Backgrounds */
     --background-primary: #0a0a0a;
     --background-secondary: #1a1a1a;
     --background-tertiary: #2a2a2a;
     --background-subtle: #1a222f;
     --background-card-translucent: rgba(30, 30, 30, 0.9);
     --footer-background: var(--brand-dark-green);
-  
-    /* Gradients & Overlays */
     --gradient-primary: linear-gradient(to right, var(--brand-dark-green), var(--accent-navbar));
     --gradient-secondary: linear-gradient(to bottom, var(--brand-light-green), var(--brand-dark-green));
     --gradient-tertiary: linear-gradient(to right, var(--brand-light-green), var(--brand-dark-green));
     --overlay-dark: rgba(0, 0, 0, 0.6);
-  
-    /* Borders & Shadows */
     --border-color: #444444;
     --shadow-subtle: rgba(0, 0, 0, 0.2);
     --shadow-light: rgba(0, 0, 0, 0.3);
     --shadow-medium: rgba(0, 0, 0, 0.4);
     --shadow-dark: rgba(0, 0, 0, 0.5);
-  
-    /* Navbar Semantic Aliases */
     --brand-text-color: var(--accent-navbar);
     --nav-link-color: var(--text-primary);
     --nav-link-hover-color: var(--accent-navbar);
     --nav-link-active-color: var(--accent-navbar);
-    
-    /* About Us Page Variables (Blue Theme) */
     --background-page-wrapper: var(--background-secondary);
     --heading-underline-color: var(--border-color);
     --team-member-bg: #1a222f;
     --team-member-border: var(--border-color);
     --team-avatar-bg: var(--accent-navbar);
-  
-    /* Blog Page Variables (Blue Theme) */
     --accent-navbar-darker: #005ea6;
     --border-color-light: #333333;
     --shadow-hover: rgba(0, 0, 0, 0.5);
-  
-    /* Blog Post Page Variables (Blue Theme) */
     --text-body: var(--text-secondary);
     --blockquote-border: var(--accent-navbar);
     --blockquote-bg: var(--background-subtle);
     --code-block-bg: var(--background-tertiary);
-  
-    /* Login Page Variables (Blue Theme) */
     --login-indicator-color: #90b8f8;
     --login-error-text: #ff8c8c;
     --login-social-btn-bg: var(--background-tertiary);
@@ -201,8 +168,6 @@
     --success-message-bg: #1a3b32;
     --success-message-text: #a6ffcb;
     --success-message-border: #52c41a;
-  
-    /* Dashboard Navbar Variables (Blue Theme) */
     --nav-dashboard-bottom-border: var(--accent-navbar);
     --nav-dashboard-logo-color: var(--accent-navbar-hover);
     --nav-dashboard-logo-icon-color: var(--accent-navbar);
@@ -213,8 +178,6 @@
     --nav-dashboard-link-active-bg: var(--accent-navbar);
     --nav-dashboard-hover-shadow: rgba(0, 116, 217, 0.2);
     --nav-dashboard-active-shadow: rgba(0, 116, 217, 0.4);
-  
-    /* Dashboard Page Variables (Blue Theme) */
     --dashboard-page-bg: var(--background-secondary);
     --dashboard-text-dark: var(--text-primary);
     --dashboard-text-medium: var(--text-secondary);
@@ -230,8 +193,6 @@
     --dashboard-error-bg: #4d1f1f;
     --dashboard-error-text: #ff8c8c;
     --dashboard-error-border: #c82333;
-  
-    /* Events Page Variables (Blue Theme) */
     --events-border-color: var(--border-color);
     --events-shadow-hover: var(--shadow-medium);
     --events-like-btn-icon-color: #ff8c8c;
@@ -239,8 +200,27 @@
     --events-like-btn-hover-border: #ff8c8c;
     --events-like-btn-hover-text: #ff8c8c;
     --events-participating-bg: var(--accent-primary);
-  
-    /* Goals Page Variables (Blue Theme) */
     --goals-table-border: var(--border-color);
     --goals-form-focus-shadow: rgba(0, 116, 217, 0.25);
+    --leaderboard-rank-gold: #FFD700;
+    --leaderboard-rank-silver: #C0C0C0;
+    --leaderboard-rank-bronze: #CD7F32;
+    --leaderboard-current-user-border: var(--accent-primary);
+    --wastelog-input-border: var(--border-color);
+    --wastelog-input-bg: var(--background-secondary);
+    --wastelog-input-disabled-bg: var(--background-subtle);
+    --goals-form-button-bg: var(--accent-primary);
+    --goals-form-button-hover-bg: var(--accent-primary-hover);
+    --goals-form-button-disabled-bg: var(--accent-primary);
+    --goals-form-button-disabled-text: var(--text-secondary);
+  
+    /* --- NEW: Challenge Card Variables (Blue Theme) --- */
+    --challenge-status-upcoming-bg: #1e3a5f;
+    --challenge-status-upcoming-text: #7FDBFF;
+    --challenge-status-expired-bg: var(--background-tertiary);
+    --challenge-status-expired-text: var(--text-secondary);
+    --challenge-reward-icon-color: #FFD700;
+    --challenge-progress-bar-bg: var(--background-subtle);
+    --challenge-progress-bar-gradient: linear-gradient(90deg, var(--accent-navbar), var(--brand-light-green));
+    --challenge-action-area-bg: var(--background-subtle);
   }

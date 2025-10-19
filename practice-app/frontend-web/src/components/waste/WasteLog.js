@@ -86,7 +86,7 @@ const WasteLog = () => {
     };
 
     return (
-        <div className="wastelog-page-layout">
+        <div className="wastelog-page-scoped wastelog-page-layout">
             <Navbar isAuthenticated={true} />
 
             <main className="wastelog-main-content">
