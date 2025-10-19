@@ -1,193 +1,234 @@
+/* SignupPage.css - Refactored, Scoped, and Themed */
+/* This file no longer conflicts with LoginPage.css */
 
-/* SignupPage.css */
-
-/* --- Form Layout --- */
-.signup-page .form-columns {
-    display: flex;
-    gap: 1.5rem; /* Space between columns */
-    margin-bottom: 1rem; /* Space before the bio section or buttons */
-  }
-  
-  .signup-page .form-col {
-    flex: 1; /* Each column takes equal space */
-    display: flex;
-    flex-direction: column;
-    gap: 1rem; /* Space between input boxes within a column */
-  }
-  
-  /* --- Bio Textarea --- */
-  .signup-page .bio-full {
-    width: 100%;
-    padding: 0.7rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    resize: vertical; /* Allow vertical resizing */
-    min-height: 80px; /* Minimum height for the bio */
-  }
-  
-  .signup-page .bio-full:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
-  
-  /* --- Mandatory Field Note & Asterisk --- */
-  .signup-page .mandatory-note {
-    font-size: 0.85rem;
-    color: var(--light-text, #666);
-    margin-bottom: 1.5rem; /* Increased margin */
-  }
-  
-  .signup-page .asterisk {
-    color: var(--accent, #008000);
-    margin-left: 2px;
-    font-weight: bold;
-  }
-  
-  /* --- Error Message (already styled by LoginPage.css if .error-message is used) --- */
-  /* .signup-page .error-message {
-    color: #d32f2f;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    border: 1px solid #d32f2f;
-    border-radius: 4px;
-    background-color: #ffebee;
-  } */
-  
-  
-  /* --- Action Buttons (already styled by LoginPage.css if .action-buttons, .login-btn, .signup-btn are used) --- */
-  /* .signup-page .action-buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  } */
-  
-  /* Specific adjustment for signup page main heading if needed */
-  .signup-page .main-heading {
-    margin-bottom: 0.75rem; /* Slightly less margin than login if needed */
-  }
-  
-  .signup-page .welcome-text { /* Using .welcome-text class from login for consistency */
-    color: var(--light-text);
-    margin-bottom: 0.5rem; /* Adjust as needed */
-  }
-  
-  .signup-page .alternate-action-text {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    color: var(--light-text);
-  }
-  
-  .signup-page .alternate-action-text a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  .signup-page .alternate-action-text a:hover {
-    text-decoration: underline;
-  }
-
-  .signup-page .terms-box {
+/* --- Base Page Layout --- */
+.signup-page-scoped.signup-page {
+  background-color: var(--background-page-wrapper);
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
+}
+
+/* --- Container Styles (reusing class names from login, but scoped) --- */
+.signup-page-scoped .login-container {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2rem;
+  background-color: var(--background-primary);
+}
+
+.signup-page-scoped .main-content {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.75rem; 
-  margin-top: 1rem;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.signup-page-scoped .form-section {
+  flex: 1;
+  max-width: 100%; /* Allow form to be wider for two columns */
+}
+
+.signup-page-scoped .image-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.signup-page-scoped .image-section img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- Heading and Text Styles --- */
+.signup-page-scoped .main-heading {
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.signup-page-scoped .welcome-text {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.signup-page-scoped .mandatory-note {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.signup-page-scoped .asterisk {
+  color: var(--accent-navbar);
+  margin-left: 2px;
+  font-weight: bold;
+}
+
+/* --- Form Layout & Inputs --- */
+.signup-page-scoped .form-columns {
+  display: flex;
+  gap: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.signup-page .terms-box input[type="checkbox"] {
-  width: 1.2em;
-  height: 1.2em;
-  flex-shrink: 0; 
-  cursor: pointer;
-  margin-top: -2px; 
+.signup-page-scoped .form-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.signup-page .terms-box label {
+.signup-page-scoped .input-box {
+  margin-bottom: 0; /* Gaps are handled by form-col */
+}
+
+.signup-page-scoped .input-box label {
+  display: block;
   font-size: 0.9rem;
-  color: var(--light-text, #555);
+  margin-bottom: 0.3rem;
+  color: var(--text-primary);
+}
+
+.signup-page-scoped .input-box input,
+.signup-page-scoped .bio-full {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.signup-page-scoped .input-box input:focus,
+.signup-page-scoped .bio-full:focus {
+  outline: none;
+  border-color: var(--accent-navbar);
+}
+
+.signup-page-scoped .bio-full {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* --- Terms Box --- */
+.signup-page-scoped .terms-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.signup-page-scoped .terms-box input[type="checkbox"] {
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
   cursor: pointer;
-  margin-bottom: 0; 
+  margin-top: 2px;
+}
+
+.signup-page-scoped .terms-box label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  cursor: pointer;
   line-height: 1.4;
 }
 
-
-.signup-page .terms-box label a {
-  color: var(--accent, #008000);
-  font-weight: 500;
+.signup-page-scoped .terms-box label a {
+  color: var(--accent-navbar);
   text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
 }
 
-.signup-page .terms-box label a:hover {
+.signup-page-scoped .terms-box label a:hover {
   text-decoration: none;
 }
+
+/* --- Error & Actions --- */
+.signup-page-scoped .error-message {
+  color: var(--login-error-text);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--login-error-text);
+  border-radius: 4px;
+  background-color: var(--signup-error-bg);
+}
+
+.signup-page-scoped .action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Using login button styles for consistency */
+.signup-page-scoped .login-btn,
+.signup-page-scoped .signup-btn {
+  padding: 0.7rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  flex: 1;
+}
+
+.signup-page-scoped .login-btn {
+  background-color: var(--accent-navbar);
+  color: var(--text-on-accent);
+  border: 1px solid var(--accent-navbar);
+}
+.signup-page-scoped .login-btn:hover {
+  background-color: var(--accent-navbar-hover);
+  border-color: var(--accent-navbar-hover);
+}
+
+.signup-page-scoped .signup-btn {
+  background-color: var(--background-primary);
+  color: var(--accent-navbar);
+  border: 1px solid var(--accent-navbar);
+}
+.signup-page-scoped .signup-btn:hover {
+  background-color: var(--accent-navbar);
+  color: var(--text-on-accent);
+}
+
+.signup-page-scoped .alternate-action-text {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.signup-page-scoped .alternate-action-text a {
+  color: var(--accent-navbar);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-page-scoped .alternate-action-text a:hover {
+  text-decoration: underline;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .signup-page-scoped .main-content,
+  .signup-page-scoped .form-columns {
+    flex-direction: column;
+  }
   
-  
-  /* --- Responsive Adjustments for Form Columns --- */
-  @media (max-width: 768px) {
-    .signup-page .form-columns {
-      flex-direction: column; /* Stack columns on smaller screens */
-      gap: 0; /* Remove gap when stacked, .form-col will handle internal gap */
-    }
-  
-    .signup-page .form-col {
-      gap: 1rem; /* Ensure gap between inputs when stacked */
-      margin-bottom: 1rem; /* Add margin between stacked "columns" if needed, or rely on last input-box margin */
-    }
-    .signup-page .form-col:last-child {
-      margin-bottom: 0; /* Prevent double margin at the end if bio is next */
-    }
-  
-    .signup-page .main-content {
-      /* Ensure image-section is handled correctly on mobile, similar to LoginPage */
-      flex-direction: column;
-    }
-    
-    .signup-page .image-section {
-      order: -1; /* Image on top on mobile */
-      margin-bottom: 2rem;
-    }
+  .signup-page-scoped .image-section {
+    order: -1;
+    margin-bottom: 2rem;
   }
 
-  /* ---------- Nav “Sign Up” pill – fix for SignupPage ---------- */
+  .signup-page-scoped .form-columns {
+    gap: 1rem; /* Adjust gap for stacked columns */
+  }
 
-/* 1. Base look: full-width pill with white text */
-.nav-button-style,
-.signup-button-style {
-  display: inline-block;
-  padding: 0.55rem 1.6rem;
-  background: var(--accent, #2f7e21);
-  color: #fff !important;           /* keep text visible */
-  font-weight: 600;
-  border: 2px solid var(--accent, #2f7e21);
-  border-radius: 9999px;            /* pill */
-  text-decoration: none;            /* no underline */
-  line-height: 1;                   /* reset zero-height issue */
-  transition: background 0.25s, color 0.25s;
-}
-
-.nav-button-style:hover,
-.signup-button-style:hover {
-  background: #fff;
-  color: var(--accent, #2f7e21) !important;
-}
-
-/* 2. When the li has .active, kill the green underline             */
-/*    (otherwise you see the skinny stripe below the pill)          */
-.nav-item.active .nav-button-style,
-.nav-item.active .signup-button-style {
-  border-bottom: none !important;
-}
-
-/* 3. Optional – tighter on mobile */
-@media (max-width: 768px) {
-  .nav-button-style,
-  .signup-button-style {
-    padding: 0.45rem 1.2rem;
+  .signup-page-scoped .form-col {
+    gap: 1rem;
   }
 }

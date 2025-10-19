@@ -61,11 +61,25 @@
     --border-color-light: #eee;
     --shadow-hover: rgba(0, 0, 0, 0.15);
     
-    /* --- NEW: Blog Post Page Variables (Green Theme) --- */
+    /* Blog Post Page Variables */
     --text-body: #444;
     --blockquote-border: #abebc6;
     --blockquote-bg: #f0f9f4;
     --code-block-bg: #f0f0f0;
+  
+    /* --- NEW: Login Page Variables (Green Theme) --- */
+    --login-indicator-color: #7c4dff;
+    --login-error-text: #d32f2f;
+    --login-social-btn-bg: #ffffff;
+    --login-social-btn-bg-hover: #f5f5f5;
+    --login-social-btn-border: #e0e0e0;
+    --login-social-btn-text: #444;
+
+    --signup-error-bg: #ffebee;
+
+    --success-message-bg: #e6f7e6;
+    --success-message-text: #27ae60;
+    --success-message-border: #abebc6;
   }
   
   
@@ -128,9 +142,23 @@
     --border-color-light: #333333;
     --shadow-hover: rgba(0, 0, 0, 0.5);
   
-    /* --- NEW: Blog Post Page Variables (Blue Theme) --- */
-    --text-body: var(--text-secondary); /* Remap to theme's secondary text color */
+    /* Blog Post Page Variables (Blue Theme) */
+    --text-body: var(--text-secondary);
     --blockquote-border: var(--accent-navbar);
     --blockquote-bg: var(--background-subtle);
     --code-block-bg: var(--background-tertiary);
-  }
+  
+    /* --- NEW: Login Page Variables (Blue Theme) --- */
+    --login-indicator-color: #90b8f8;
+    --login-error-text: #ff8c8c;
+    --login-social-btn-bg: var(--background-tertiary);
+    --login-social-btn-bg-hover: var(--background-subtle);
+    --login-social-btn-border: var(--border-color);
+    --login-social-btn-text: var(--text-primary);
+
+    --signup-error-bg: #4d1f1f; /* Dark red background */
+
+    --success-message-bg: #1a3b32;
+    --success-message-text: #a6ffcb;
+    --success-message-border: #52c41a;
+  }  

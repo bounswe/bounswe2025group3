@@ -90,14 +90,13 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="login-page">
-            {/* 4. Use the shared Header component */}
+        // *** THE FIX IS HERE: Add the 'login-page-scoped' class for scoping ***
+        <div className="login-page-scoped login-page">
             <Header />
             
             <div className="login-container">
                 <div className="main-content">
                     <div className="form-section">
-                        {/* 5. Replace all static text with t() function */}
                         <h1 className="main-heading">
                             {t('login.title_line1')}<br />
                             {t('login.title_line2')}

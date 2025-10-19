@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import './LoginPage.css'; // Reusing styles
 import Header from '../common/Header';
-// You might want a specific CSS for minor adjustments:
-// import './ForgotPasswordPage.css'; 
+import './ForgotPasswordPage.css'; 
 
 // Use environment variable or default to localhost:10000
 const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
@@ -46,14 +44,14 @@ const ForgotPasswordPage = () => {
     };
 
     return (
-        <div className="login-page forgot-password-page">
-            {/* 4. Use the shared Header component */}
+        // 3. ADD THE 'forgot-password-page-scoped' CLASS and REMOVE 'login-page'
+        <div className="forgot-password-page-scoped forgot-password-page">
             <Header />
             
+            {/* Reusing login-container structure for layout consistency */}
             <div className="login-container">
                 <div className="main-content">
                     <div className="form-section">
-                        {/* 5. Replace all static text with t() function */}
                         <h1 className="main-heading">{t('forgot_password.title')}</h1>
                         <p className="welcome-text">{t('forgot_password.subtitle')}</p>
                         

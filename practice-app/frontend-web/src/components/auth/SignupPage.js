@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import './LoginPage.css'; // For shared base styles
+//import './LoginPage.css'; // For shared base styles
 import './SignupPage.css'; // For signup-specific styles
 import { useTranslation } from 'react-i18next';
 import Header from '../common/Header'; // Shared header component
@@ -78,17 +78,18 @@ const [termsAccepted, setTermsAccepted] = useState(false);
   };
 
   return (
-    <div className="login-page signup-page">
-      {/* 4. Use the shared Header component */}
+    // *** THE FIX IS HERE: Add the 'signup-page-scoped' class for scoping ***
+    <div className="signup-page-scoped signup-page">
       <Header />
 
+      {/* --- RE-USING LOGIN CONTAINER STRUCTURE --- */}
+      {/* We scope the inner elements with .signup-page-scoped */}
       <div className="login-container">
         <div className="main-content">
           <div className="form-section">
-            {/* 5. Replace all static text with t() function */}
             <h1 className="main-heading">
               {t('signup.title_part1')}{' '}
-              <span style={{ color: 'var(--accent)' }}>{t('signup.title_part2')}</span>{' '}
+              <span style={{ color: 'var(--accent-navbar)' }}>{t('signup.title_part2')}</span>{' '}
               {t('signup.title_part3')}
             </h1>
             <p className="welcome-text">{t('signup.subtitle')}</p>
@@ -101,7 +102,8 @@ const [termsAccepted, setTermsAccepted] = useState(false);
             <form onSubmit={handleSubmit}>
               <div className="form-columns">
                 <div className="form-col">
-                  <div className="input-box">
+                  {/* Username, Email, Password, Confirm Password Inputs */}
+                   <div className="input-box">
                     <label htmlFor="username">
                       {t('signup.username_label')}<span className="asterisk">*</span>
                     </label>
@@ -128,7 +130,8 @@ const [termsAccepted, setTermsAccepted] = useState(false);
                 </div>
 
                 <div className="form-col">
-                  <div className="input-box">
+                  {/* First Name, Last Name, City, Country Inputs */}
+                   <div className="input-box">
                     <label htmlFor="first_name">{t('signup.first_name_label')}</label>
                     <input id="first_name" name="first_name" type="text" placeholder={t('signup.placeholder_first_name')} value={formData.first_name} onChange={handleChange} />
                   </div>
@@ -151,30 +154,24 @@ const [termsAccepted, setTermsAccepted] = useState(false);
                 <label htmlFor="bio">{t('signup.bio_label')}</label>
                 <textarea id="bio" name="bio" placeholder={t('signup.placeholder_bio')} rows={4} value={formData.bio} onChange={handleChange} className="bio-full" />
               </div>
-              
+
               <div className="terms-box">
                 <input
-                  type="checkbox"
-                  id="terms"
-                  name="terms"
-                  checked={termsAccepted}
-                  onChange={(e) => setTermsAccepted(e.target.checked)}
-                  required 
+                  type="checkbox" id="terms" name="terms"
+                  checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)}
+                  required
                 />
                 <label htmlFor="terms">
-                  {t('signup.accept_terms_prefix', 'I accept the ')} 
-                  
-                  {/* CHANGE THIS: From <span> to <Link> */}
+                  {t('signup.accept_terms_prefix', 'I accept the ')}
                   <Link to="/terms" target="_blank" rel="noopener noreferrer">
                     {t('signup.accept_terms_link', 'Terms and Conditions')}
                   </Link>
-                  {/* END CHANGE */}
-
                 </label>
               </div>
 
               {error && <p className="error-message">{error}</p>}
 
+              {/* --- Re-using action-buttons structure from login --- */}
               <div className="action-buttons">
                 <button type="submit" className="login-btn">{t('signup.signup_button')}</button>
                 <button type="button" className="signup-btn" onClick={() => navigate('/login')}>
