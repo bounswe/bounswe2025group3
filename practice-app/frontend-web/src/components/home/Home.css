@@ -322,108 +322,6 @@
     font-size: 0.9rem;
 }
 
-/* --- Navigation Bar Styles (Refactored) --- */
-.nav-container {
-  padding: 1rem 2rem;
-  border-bottom: 1px solid var(--border-color);
-  background-color: var(--background-primary);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 4px var(--shadow-subtle);
-}
-
-.navbar {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-}
-
-/* --- BRAND (Logo + Name) --- */
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  margin-right: auto;
-}
-
-.navbar-logo-image {
-  height: 35px;
-  width: auto;
-  margin-right: 0.5rem;
-}
-
-.navbar-app-name {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--brand-text-color); /* Correctly uses darker green */
-  text-transform: uppercase;
-}
-
-/* --- Main Nav Links --- */
-.main-nav {
-  display: flex;
-  list-style: none;
-  gap: 2rem;
-  justify-content: center;
-  padding: 0;
-  margin: 0;
-}
-
-.nav-item {
-  padding: 0.5rem 0;
-  cursor: pointer;
-  color: var(--text-primary);
-  position: relative;
-}
-
-.nav-item a {
-  text-decoration: none;
-  color: var(--nav-link-color);
-  font-weight: 500;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.nav-item a:hover,
-.nav-item a.active-link-class {
-  color: var(--nav-link-hover-color); /* Correctly uses darker green */
-}
-
-.nav-item a.active-link-class {
-    font-weight: 600;
-}
-
-.nav-item a.active-link-class::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--accent-navbar); /* Correctly uses darker green */
-}
-
-/* --- Nav Button --- */
-.nav-item a.nav-button-style {
-  padding: 0.5rem 1.2rem;
-  border-radius: 20px;
-  font-weight: 500;
-  margin-left: 0.5rem;
-  color: var(--text-on-accent);
-  background-color: var(--accent-navbar); /* Correctly uses darker green */
-  border: 2px solid var(--accent-navbar); /* Correctly uses darker green */
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-.nav-item a.nav-button-style.signup-button-style:hover {
-  background-color: var(--accent-navbar-hover);
-  border-color: var(--accent-navbar-hover);
-  color: var(--text-on-accent);
-}
-
-
 /* --- Info Box Section (Refactored) --- */
 .info-box-section {
     padding: 40px 20px;
@@ -459,7 +357,7 @@
 .icon-fallback-badge {
     display: inline-flex; align-items: center; justify-content: center;
     width: 50px; height: 50px; border-radius: 50%; 
-    background-color: var(--accent-navbar); /* Correctly uses darker green */
+    background-color: var(--accent-navbar); /* Uses darker green from theme */
     color: var(--text-on-accent); 
     font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;
 }
@@ -541,43 +439,7 @@
     }
 }
 
-@media (max-width: 850px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .navbar-brand {
-    margin-bottom: 0.75rem;
-    margin-right: 0;
-  }
-  .main-nav {
-    width: 100%;
-    justify-content: flex-start;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.2rem;
-  }
-  .nav-item {
-    width: 100%;
-  }
-  .nav-item a {
-      display: block;
-      padding: 0.8rem 0.5rem;
-  }
-  .nav-item a.active-link-class::after {
-    left: 0.5rem; width: 30px; transform: none;
-  }
-  .nav-item a.nav-button-style {
-      margin-left: 0;
-      margin-top: 0.5rem;
-      text-align: center;
-      display: inline-block;
-      width: auto;
-  }
-}
-
-@media (max-width: 480px) {
-    .navbar-logo-image { height: 30px; margin-right: 0.4rem;}
-    .navbar-app-name { font-size: 1.2rem; }
-    .nav-container { padding: 0.8rem 1rem; }
-}
+/*
+  ALL NAVBAR STYLES HAVE BEEN REMOVED FROM THIS FILE.
+  They now live exclusively in src/components/common/Header.css
+*/
