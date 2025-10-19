@@ -93,7 +93,7 @@ const EventsPage = () => {
   };
 
   return (
-    <div className="events-page-layout">
+    <div className="events-page-scoped events-page-layout">
       <Navbar isAuthenticated={true} />
 
       <main className="events-main-content">

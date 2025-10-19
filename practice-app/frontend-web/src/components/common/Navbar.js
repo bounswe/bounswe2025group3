@@ -1,11 +1,10 @@
-// src/components/common/Navbar.js
 import React from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import './Navbar.css'; // Import the new CSS
+import './Navbar.css';
+import ThemeSwitcher from './ThemeSwitcher'; // 1. Import the ThemeSwitcher
+import './ThemeSwitcher.css'; // 2. Import its styles
 
-// NOTE: It's best to move this Icon component to its own file 
-// (e.g., src/components/common/Icon.js) and import it where needed.
 const Icon = ({ name, className = '' }) => {
   const icons = {
     logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆', 
@@ -13,7 +12,6 @@ const Icon = ({ name, className = '' }) => {
   };
   return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
-
 
 const Navbar = ({ isAuthenticated }) => {
     const { t, i18n } = useTranslation();
@@ -30,7 +28,6 @@ const Navbar = ({ isAuthenticated }) => {
         localStorage.setItem('language', newLang);
     };
 
-    // Render nothing if not authenticated
     if (!isAuthenticated) {
         return null; 
     }
@@ -45,6 +42,12 @@ const Navbar = ({ isAuthenticated }) => {
                 <button onClick={toggleLanguage} className="nav-action-item">
                     <Icon name="language" /> {i18n.language === 'en' ? 'TR' : 'EN'}
                 </button>
+
+                {/* 3. Add the ThemeSwitcher component here */}
+                <div className="nav-action-item theme-switcher-li">
+                    <ThemeSwitcher />
+                </div>
+
                 <NavLink to="/dashboard" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
                     <Icon name="dashboard" /> {t('dashboard_nav.dashboard')}
                 </NavLink>
