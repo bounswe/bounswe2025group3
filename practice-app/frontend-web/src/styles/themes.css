@@ -1,0 +1,50 @@
+/* src/styles/themes.css */
+/* This is your new "single source of truth" for all colors.
+   It contains all the hardcoded colors from Home.css as variables.
+*/
+:root {
+    /* Brand Greens (from gradients/footer) */
+    --brand-dark-green: #122e1a;
+    --brand-light-green: #88eb9a;
+  
+    /* Content Accent Greens (Bright, from hero buttons) */
+    --accent-primary: #56ea62;
+    --accent-primary-hover: #64d49a;
+  
+    /* Navbar Accent Greens (Darker, from original :root) */
+    --accent-navbar: #008000;
+    --accent-navbar-hover: #549d54; 
+  
+    /* Text Colors */
+    --text-primary: #333;
+    --text-secondary: #555;
+    --text-on-dark: white;   /* e.g., on footer */
+    --text-on-accent: white; /* e.g., on primary CTA */
+  
+    /* Backgrounds */
+    --background-primary: #ffffff;
+    --background-secondary: #f5f5f5;
+    --background-tertiary: #eee;
+    --background-subtle: rgba(199, 232, 202, 0.9);
+    --background-card-translucent: rgba(255, 255, 255, 0.9);
+    --footer-background: var(--brand-dark-green);
+  
+    /* Gradients & Overlays */
+    --gradient-primary: linear-gradient(to right, var(--brand-dark-green), var(--brand-light-green));
+    --gradient-secondary: linear-gradient(to bottom, var(--brand-light-green), var(--brand-dark-green));
+    --gradient-tertiary: linear-gradient(to right, var(--brand-light-green), var(--brand-dark-green));
+    --overlay-dark: rgba(0, 0, 0, 0.5);
+  
+    /* Borders & Shadows */
+    --border-color: #ddd;
+    --shadow-subtle: rgba(0, 0, 0, 0.05);
+    --shadow-light: rgba(0, 0, 0, 0.08);
+    --shadow-medium: rgba(0, 0, 0, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.2);
+  
+    /* Navbar Semantic Aliases (from original :root for cohesion) */
+    --brand-text-color: var(--accent-navbar);
+    --nav-link-color: var(--text-primary);
+    --nav-link-hover-color: var(--accent-navbar);
+    --nav-link-active-color: var(--accent-navbar);
+  }
