@@ -1,7 +1,5 @@
 /* src/styles/themes.css */
-/* This file contains all theme definitions.
-   - :root is the default "Eco Green" theme.
-   - body.blue-high-contrast is the new accessible theme.
+/* This file contains all theme definitions for the entire site.
 */
 :root {
     /* --- Eco Green Theme (Default) --- */
@@ -14,15 +12,15 @@
     --accent-primary: #56ea62;
     --accent-primary-hover: #64d49a;
   
-    /* Navbar Accent Greens (Darker, from original :root) */
+    /* Navbar Accent Greens (Darker) */
     --accent-navbar: #008000;
     --accent-navbar-hover: #549d54; 
   
     /* Text Colors */
     --text-primary: #333;
     --text-secondary: #555;
-    --text-on-dark: white;   /* e.g., on footer */
-    --text-on-accent: white; /* e.g., on primary CTA */
+    --text-on-dark: white;
+    --text-on-accent: white;
   
     /* Backgrounds */
     --background-primary: #ffffff;
@@ -45,12 +43,20 @@
     --shadow-medium: rgba(0, 0, 0, 0.1);
     --shadow-dark: rgba(0, 0, 0, 0.2);
   
-    /* Navbar Semantic Aliases (from original :root for cohesion) */
+    /* Navbar Semantic Aliases */
     --brand-text-color: var(--accent-navbar);
     --nav-link-color: var(--text-primary);
     --nav-link-hover-color: var(--accent-navbar);
     --nav-link-active-color: var(--accent-navbar);
+  
+    /* --- NEW: About Us Page Variables --- */
+    --background-page-wrapper: #E7E4DF;
+    --heading-underline-color: #e6f7e6;
+    --team-member-bg: #f0f9f4;
+    --team-member-border: #abebc6;
+    --team-avatar-bg: var(--accent-navbar);
   }
+  
   
   /* --- NEW: Accessible Blue/High-Contrast Theme --- */
   body.blue-high-contrast {
@@ -70,7 +76,7 @@
     --text-primary: #F0F0F0;
     --text-secondary: #AAAAAA;
     --text-on-dark: #FFFFFF;
-    --text-on-accent: #000000; /* Black text on bright orange = high contrast */
+    --text-on-accent: #000000; /* Black text on bright orange */
   
     /* Backgrounds */
     --background-primary: #0a0a0a; /* Near Black */
@@ -98,4 +104,11 @@
     --nav-link-color: var(--text-primary);
     --nav-link-hover-color: var(--accent-navbar);
     --nav-link-active-color: var(--accent-navbar);
+    
+    /* --- NEW: About Us Page Variables (Blue Theme) --- */
+    --background-page-wrapper: var(--background-secondary); /* Use the dark secondary bg */
+    --heading-underline-color: var(--border-color); /* Use the theme's border color */
+    --team-member-bg: #1a222f; /* Dark blue-gray */
+    --team-member-border: var(--border-color);
+    --team-avatar-bg: var(--accent-navbar);
   }
