@@ -36,41 +36,46 @@ function RootLayout() {
     }
   }, [isDark, pathname, session]);
 
+  if (isLoading) return null;
+
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack screenOptions={{ headerShown: false}}>
       <Stack.Protected guard={!!session}>
-        <Stack.Screen name="(tabs)" options={{ animation: 'none' }} />
+        <Stack.Screen name="(tabs)" options={{ animation: 'none', statusBarStyle: "dark"}} />
         <Stack.Screen
           name="menu_drawer"
           options={{
             presentation: 'transparentModal',
             headerShown: false,
             animation: 'none',
+            statusBarStyle: "dark",
           }}
         />
         <Stack.Screen
           name="custom_category_request"
-          options={{animation: "slide_from_bottom"}}
+          options={{animation: "slide_from_bottom", statusBarStyle: "dark"}}
         />
         <Stack.Screen
           name="edit_profile"
-          options={{ animation: 'slide_from_bottom' }}
+          options={{ animation: 'slide_from_bottom', statusBarStyle: "dark"}}
         />
         <Stack.Screen
           name="settings"
           options={{
             animation: 'none',
+            statusBarStyle: "dark",
           }}
         />
       </Stack.Protected>
 
       <Stack.Protected guard={!session}>
-        <Stack.Screen name="index" options={{ animation: 'none' }} />
+        <Stack.Screen name="index" options={{ animation: 'none', statusBarStyle: "light"}} />
         <Stack.Screen
           name="login"
           options={{
             presentation: 'transparentModal',
             animation: 'none',
+            statusBarStyle: "light",
           }}
         />
         <Stack.Screen
@@ -78,6 +83,7 @@ function RootLayout() {
           options={{
             presentation: 'transparentModal',
             animation: 'none',
+            statusBarStyle: "light",
           }}
         />
         <Stack.Screen
@@ -85,6 +91,15 @@ function RootLayout() {
           options={{
             presentation: 'transparentModal',
             animation: 'none',
+            statusBarStyle: "light",
+          }}
+        />
+        <Stack.Screen
+          name="term_condition"
+          options={{
+            statusBarStyle: "dark",
+            presentation: 'transparentModal',
+            animation: "simple_push",
           }}
         />
       </Stack.Protected>

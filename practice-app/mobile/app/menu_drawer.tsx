@@ -15,7 +15,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
 const { width } = Dimensions.get("window");
@@ -33,6 +33,26 @@ interface UserProfile {
   date_joined: string;
   notifications_enabled: boolean;
 }
+
+interface LeaderboardUser {
+  id: number;
+  username: string;
+  total_waste_quantity: string;
+}
+
+const getLeaderboard = async (): Promise<LeaderboardUser[]> => {
+  try {
+    const response = await tokenManager.authenticatedFetch(`/api/v1/waste/leaderboard/`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch leaderboard data.');
+    }
+    const data: LeaderboardUser[] = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+    return [];
+  }
+};
 
 const calculateAccountAge = (dateJoined: string) => {
   const joinDate = new Date(dateJoined);
@@ -57,6 +77,7 @@ export default function MenuDrawerScreen() {
   const overlayOpacity = useRef(new Animated.Value(0)).current;
   const isClosing = useRef(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userRank, setUserRank] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [AlertVisible, setAlertVisible] = useState(false);
   const { userRole, signOut } = useSession();
@@ -78,33 +99,24 @@ export default function MenuDrawerScreen() {
     menuText: { fontSize: 16, color: colors.black, fontWeight: "400", marginLeft: 12 },
   });
 
-  const getOrdinal = (n: number) => {
-    const suffixes = ["th", "st", "nd", "rd"];
-    const v = n % 100;
-    return n + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
-  };
-
   const RoleBadge = ({
     role,
     accountAge,
     userId,
+    userRank,
   }: {
     role: "USER" | "MODERATOR" | "ADMIN";
     accountAge?: string;
     userId?: number;
+    userRank?: number | null;
   }) => {
     const getRoleColors = (roleName: string) => {
       switch (roleName) {
-        case "USER":
-          return ["#1B3F17", "#23E925"];
-        case "MODERATOR":
-          return ["#1A273F", "#8A88EA"];
-        case "ADMIN":
-          return ["#5E1B07", "#F89707"];
-        case "ECO-WARRIOR":
-          return ["#B7E3FA", "#61B2FA"];
-        default:
-          return ["#1B3F17", "#23E925"];
+        case "USER": return ["#1B3F17", "#23E925"];
+        case "MODERATOR": return ["#1A273F", "#8A88EA"];
+        case "ADMIN": return ["#5E1B07", "#F89707"];
+        case "ECO-WARRIOR": return ["#B7E3FA", "#61B2FA"];
+        default: return ["#1B3F17", "#23E925"];
       }
     };
 
@@ -114,15 +126,10 @@ export default function MenuDrawerScreen() {
         <Text
           key={roleName}
           style={{
-            paddingVertical: 4,
-            paddingHorizontal: 10,
-            color: tColor,
-            backgroundColor: bColor,
-            borderColor: tColor,
-            borderWidth: 1,
-            borderRadius: 16,
-            fontWeight: "600",
-            marginRight: 6,
+            paddingVertical: 4, paddingHorizontal: 10, color: tColor,
+            backgroundColor: bColor, borderColor: tColor, borderWidth: 1,
+            borderRadius: 16, fontWeight: "600", marginRight: 6, marginBottom: 6,
+            fontSize: 13,
           }}
         >
           {roleName}
@@ -130,25 +137,42 @@ export default function MenuDrawerScreen() {
       );
     };
 
-    const renderUserIdPill = (id: number) => {
-      if (id >= 10) return null;
+    const renderOriginPill = (id: number) => {
+      if (id >= 21) return null;
       return (
         <LinearGradient
-          key="userIdPill"
+          key="originPill"
           colors={["#DB48FA", "#4673F9"]}
           start={[0, 0]}
           end={[1, 1]}
           style={{
-            paddingVertical: 4,
-            paddingHorizontal: 10,
-            borderRadius: 16,
-            marginRight: 6,
-            borderWidth: 1,
-            borderColor: "#7C57FA",
+            paddingVertical: 4, paddingHorizontal: 10, borderRadius: 16,
+            marginRight: 6, borderWidth: 1, borderColor: "#7C57FA", marginBottom: 6,
           }}
         >
-          <Text style={{ color: "white", fontWeight: "600" }}>
-            {getOrdinal(id)} USER
+          <Text style={{ color: "white", fontWeight: "600", fontSize: 13 }}>
+            ORIGINS
+          </Text>
+        </LinearGradient>
+      );
+    };
+
+    const renderRankPill = (rank: number) => {
+      return (
+        <LinearGradient
+          key="rankPill"
+          colors={["#FFD700", "#FFA500"]}
+          start={[0, 0]}
+          end={[1, 1]}
+          style={{
+            paddingVertical: 4, paddingHorizontal: 10, borderRadius: 16,
+            marginRight: 6, flexDirection: 'row', alignItems: 'center',
+            borderWidth: 1, borderColor: "#FFC400", marginBottom: 6,
+          }}
+        >
+          <Ionicons name="trophy" size={12} color="white" style={{ marginRight: 5 }} />
+          <Text style={{ color: "white", fontWeight: "600", fontSize: 13 }}>
+            RANK #{rank}
           </Text>
         </LinearGradient>
       );
@@ -158,9 +182,10 @@ export default function MenuDrawerScreen() {
 
     return (
       <View style={{ alignItems: "center", marginTop: 8 }}>
-        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: 'center', paddingHorizontal: 10 }}>
+          {userRank && renderRankPill(userRank)}
           {pills.map(renderPill)}
-          {userId && renderUserIdPill(userId)}
+          {userId && renderOriginPill(userId)}
         </View>
 
         {accountAge && (
@@ -181,30 +206,38 @@ export default function MenuDrawerScreen() {
   useEffect(() => {
     Animated.parallel([
       Animated.timing(translateX, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
+        toValue: 0, duration: 300, useNativeDriver: true,
       }),
       Animated.timing(overlayOpacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
+        toValue: 1, duration: 300, useNativeDriver: true,
       }),
     ]).start();
   }, []);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchUserData = async () => {
       try {
-        const profile = await getUserProfile();
-        if (profile) setUserProfile(profile);
+        const [profile, leaderboardData] = await Promise.all([
+            getUserProfile(),
+            getLeaderboard()
+        ]);
+
+        if (profile) {
+            setUserProfile(profile);
+            if (leaderboardData && leaderboardData.length > 0) {
+                const userIndex = leaderboardData.findIndex(user => user.id === profile.id);
+                if (userIndex !== -1) {
+                    setUserRank(userIndex + 1);
+                }
+            }
+        }
       } catch (error) {
-        console.error("Failed to fetch user profile:", error);
+        console.error("Failed to fetch user data:", error);
       } finally {
         setIsLoading(false);
       }
     };
-    fetchUserProfile();
+    fetchUserData();
   }, []);
 
   useEffect(() => {
@@ -226,14 +259,10 @@ export default function MenuDrawerScreen() {
 
     Animated.parallel([
       Animated.timing(translateX, {
-        toValue: width,
-        duration: 250,
-        useNativeDriver: true,
+        toValue: width, duration: 250, useNativeDriver: true,
       }),
       Animated.timing(overlayOpacity, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
+        toValue: 0, duration: 250, useNativeDriver: true,
       }),
     ]).start(() => {
       router.back();
@@ -255,6 +284,7 @@ export default function MenuDrawerScreen() {
               role={userProfile.role}
               accountAge={userProfile.date_joined ? calculateAccountAge(userProfile.date_joined) : undefined}
               userId={userProfile.id}
+              userRank={userRank}
             />
           )}
         </View>
@@ -294,7 +324,7 @@ export default function MenuDrawerScreen() {
           </TouchableOpacity>
         )}
 
-        <TouchableOpacity style={[styles.menuButton, { marginTop: "85%" }]} onPress={() => setAlertVisible(true)}>
+        <TouchableOpacity style={[styles.menuButton, { marginTop: "auto", marginBottom: "25%" }]} onPress={() => setAlertVisible(true)}>
           <View style={styles.menuButtonContent}>
             <Ionicons name="log-out" size={20} color={colors.error} />
             <Text style={[styles.menuText, { color: colors.error }]}>Logout</Text>

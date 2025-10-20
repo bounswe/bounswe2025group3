@@ -3,7 +3,6 @@ import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { ActivityIndicator, Dimensions, Image, ImageSourcePropType, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from 'expo-status-bar';
 
 import { useColors } from '@/constants/colors';
 import { getGoals, getMyScore, Goal } from "@/api/functions";
@@ -81,6 +80,26 @@ export default function HomeScreen() {
   const colors = useColors();
   const isInitialLoad = useRef(true);
 
+  const [posts, setPosts] = useState(dummyPosts.map(post => ({
+    ...post,
+    isLiked: false,
+  })));
+
+  const handleLike = (postId: string) => {
+    setPosts(currentPosts =>
+      currentPosts.map(post => {
+        if (post.id === postId) {
+          return {
+            ...post,
+            isLiked: !post.isLiked,
+            likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+          };
+        }
+        return post;
+      })
+    );
+  };
+
   const fetchData = async (showLoader = true) => {
     if (showLoader) setIsLoading(true);
     try {
@@ -139,11 +158,11 @@ export default function HomeScreen() {
     scoreValueContainer: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'center', backgroundColor: colors.cb1, paddingHorizontal: 16, borderRadius: 16 },
     scoreValue: { fontSize: 32, fontWeight: '700', color: colors.primary, marginRight: 8 },
     scoreUnitLabel: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },
-    sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: '4%', marginTop: '5%' },
+    sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: '4%', marginTop: '4%' },
     sectionTitle: { fontSize: 18, fontWeight: '600', color: colors.text },
     seeAllText: { color: colors.primary, fontSize: 14, fontWeight: '500' },
     horizontalScrollContent: { paddingHorizontal: HORIZONTAL_PADDING, paddingVertical: 8 },
-    goalScrollItem: { width: GOAL_CARD_WIDTH, backgroundColor: colors.cb1, borderRadius: 16, padding: 16, marginHorizontal: HORIZONTAL_PADDING / 3, borderWidth: 1, borderColor: colors.borders, justifyContent: 'space-between', minHeight: 140 },
+    goalScrollItem: { width: GOAL_CARD_WIDTH, backgroundColor: colors.cb1, borderRadius: 16, padding: 16, marginHorizontal: HORIZONTAL_PADDING / 3, borderWidth: 1, borderColor: colors.borders, justifyContent: 'space-between', minHeight: 60 },
     goalTitle: { fontSize: 16, fontWeight: '600', color: colors.text, flex: 1, marginBottom: 8 },
     progressContainer: { marginVertical: 6 },
     progressBar: { height: 6, backgroundColor: colors.background, borderRadius: 3, overflow: 'hidden', marginBottom: 4 },
@@ -249,7 +268,7 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>Discover</Text>
         </View>
 
-        {dummyPosts.map(post => (
+        {posts.map(post => (
           <View key={post.id} style={styles.postCard}>
             <View style={styles.postHeader}>
               <View style={styles.postHeaderLeft}>
@@ -264,9 +283,15 @@ export default function HomeScreen() {
             {post.postImage && <PostImage source={post.postImage} width={width - (width*0.02) - 24} />}
             <View style={styles.postActions}>
               <View style={styles.postActionGroup}>
-                <TouchableOpacity style={styles.postActionButton}>
-                  <MaterialCommunityIcons name="star-four-points-outline" size={22} color={colors.primary} />
-                  <Text style={styles.postLikeText}>{post.likes}</Text>
+                <TouchableOpacity style={styles.postActionButton} onPress={() => handleLike(post.id)}>
+                  <MaterialCommunityIcons
+                    name={post.isLiked ? "star-four-points" : "star-four-points-outline"}
+                    size={22}
+                    color={colors.primary}
+                  />
+                  <Text style={post.isLiked ? styles.postLikeText : styles.postActionText}>
+                    {post.likes}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.postActionButton}>
                   <Ionicons name="chatbubble-outline" size={22} color={colors.textSecondary} />
@@ -285,7 +310,6 @@ export default function HomeScreen() {
           </View>
         ))}
       </ScrollView>
-      <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
