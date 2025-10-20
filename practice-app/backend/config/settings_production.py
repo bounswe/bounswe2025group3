@@ -20,20 +20,6 @@ DATABASES = {
     )
 }
 
-# CORS settings for frontend
-CORS_ALLOWED_ORIGINS = [
-    'https://ecochallenge-frontend.onrender.com',
-    'https://ecochallenge-backend.onrender.com',
-    'http://localhost:3000',
-    'http://localhost:8000',
-]
-
-# Ensure CSRF is properly configured
-CSRF_TRUSTED_ORIGINS = [
-    'https://ecochallenge-frontend.onrender.com',
-    'https://ecochallenge-backend.onrender.com',
-]
-
 # Static files configuration
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -53,6 +39,14 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+# Cross-Origin-Opener-Policy settings for OAuth compatibility
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+
+# Additional security headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
 
 # Log settings
 LOGGING = {

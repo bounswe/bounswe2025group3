@@ -318,18 +318,44 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',  # Backend itself
     'http://localhost:8000',   # Backend alternative
     'http://localhost:3000',   # Frontend origin
+    'https://ecochallenge-frontend.onrender.com',  # Production frontend
+    'https://ecochallenge-backend.onrender.com',   # Production backend
     'null',                    # For local testing
 ]
 
 # Allow credentials (cookies, authorization headers) to be sent with requests
 CORS_ALLOW_CREDENTIALS = True
 
-# Optional: Allow specific headers if needed beyond defaults
-# CORS_ALLOW_HEADERS = list(default_headers) + [
-#     'my-custom-header',
-# ]
+# CORS headers and methods
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
-# Optional: Allow specific methods if needed beyond defaults (GET, POST, PUT, PATCH, DELETE, OPTIONS)
-# CORS_ALLOW_METHODS = list(default_methods) + [
-#     'CUSTOM',
-# ]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+# Cross-Origin-Opener-Policy for OAuth
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None  # Allow OAuth popups
+
+# CSRF trusted origins for production
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+    'https://ecochallenge-frontend.onrender.com',
+    'https://ecochallenge-backend.onrender.com',
+]
