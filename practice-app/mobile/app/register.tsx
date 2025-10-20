@@ -1,9 +1,11 @@
 import { register } from "@/api/auth";
 import { useColors } from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect} from "expo-router";
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useTheme } from "@/hooks/themeContext";
+import * as NavigationBar from 'expo-navigation-bar';
 
 
 export default function RegisterScreen() {
@@ -15,14 +17,15 @@ export default function RegisterScreen() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const colors = useColors();
+  const {isDark} = useTheme();
 
   const styles = StyleSheet.create({
-    container: {width:"100%", height:"80%", justifyContent:'flex-start', alignItems:'center', backgroundColor:colors.background, borderTopLeftRadius:80},
+    container: {width:"100%", height:"80%", justifyContent:'flex-start', alignItems:'center', backgroundColor:colors.white, borderTopLeftRadius:80},
     backButton: {width:"14%", marginBottom:"14%", marginLeft:"4%", backgroundColor:"transparent"},
     title: {fontSize:24, color:colors.primary, fontWeight:"bold", marginTop:"8%", marginBottom:"9%", alignSelf:"center", marginLeft:"5%"},
-    passwordContainer: {flexDirection:'row', alignItems:'center', width:'90%', backgroundColor:colors.cb1, borderRadius:8, marginBottom:"6%", paddingHorizontal:12},
-    passwordInput: {flexGrow:1, height:45, fontSize:16, color:'#000'},
-    input: {width:'90%', height:"6%", backgroundColor:colors.cb1, borderRadius:8, paddingHorizontal:12, fontSize:16, color:'#000', marginBottom:"5%"},
+    passwordContainer: {flexDirection:'row', height: "6%", alignItems:'center', width:'90%', backgroundColor:colors.cb3, borderRadius:8, marginBottom:"6%", paddingHorizontal:12},
+    passwordInput: {flexGrow:1, fontSize:16, color:'#000'},
+    input: {width:'90%', height:"6%", backgroundColor:colors.cb3, borderRadius:8, paddingHorizontal:12, fontSize:16, color:'#000', marginBottom:"5%"},
     SignupButton: {width:"90%", height:"6%", borderRadius:24, justifyContent:"center", alignItems:"center", marginTop:"3%"},
     errorText: {color:colors.error, textAlign:'center', fontSize:14, marginTop: "9%"},
     eyeIcon: {paddingHorizontal:4},
@@ -32,6 +35,18 @@ export default function RegisterScreen() {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(text);
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isDark) {
+        console.log("dasdas");
+        NavigationBar.setButtonStyleAsync('light');
+      } else {
+        console.log("a");
+        NavigationBar.setButtonStyleAsync('dark');
+      }
+    }, [isDark])
+  );
 
 
   const handleRegisterPress = async () => {
@@ -130,7 +145,7 @@ export default function RegisterScreen() {
         <TouchableOpacity
           style={[
             styles.SignupButton,
-            { backgroundColor: isRegisterEnabled ? colors.primary : colors.cb1}
+            { backgroundColor: isRegisterEnabled ? colors.primary : colors.cb3}
           ]}
           disabled={!isRegisterEnabled}
           onPress={handleRegisterPress}
@@ -144,16 +159,9 @@ export default function RegisterScreen() {
           <Text style={{ color: "black" }}>I agree to Greener's </Text>
           <Text
             style={{ fontWeight: "bold", color: colors.blue}}
-            onPress={handleLoginPress}
+            onPress={() => router.push("/term_condition")}
           >
-            Terms of Service
-          </Text>
-          <Text style={{ color: "black" }}> and </Text>
-          <Text
-            style={{ fontWeight: "bold", color: colors.blue}}
-            onPress={handleLoginPress}
-          >
-            Privacy Policy
+            Terms and Conditions
           </Text>
         </View>
 

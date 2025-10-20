@@ -10,6 +10,8 @@ export interface ColorPalette {
 
   cb1: string;
   cb2: string;
+  cb3: string;
+  cb4: string;
 
   inactive_button: string;
   inactive_text: string;
@@ -23,6 +25,7 @@ export interface ColorPalette {
   error: string;
   sun: string;
   black: string;
+  white: string;
 }
 
 const lightColors: ColorPalette = {
@@ -34,10 +37,12 @@ const lightColors: ColorPalette = {
   inactive_button: '#E9F5E9', // when buttons are inactive, its primary when active
   inactive_text: '#595C5C',  // the color of the text when the button is inactive
 
-  background: '#ffffff',        // Ana sayfa arka planı
+  background: '#F4F7F6',        // Ana sayfa arka planı
   borders: '#E8F5E9',  // Çok açık yeşil (Kenarlıklar, ikon arka planları)
-  cb1: "#F0F9F0",  // section, card area first layer color
-  cb2: "#E1F5E1", // section card area second layer color.
+  cb1: "#FFFFFF",  // section, card area first layer color
+  cb2: "#F3FAF3", // section card area second layer color.
+  cb3: "#E9F5E9",
+  cb4: "#E1EEE1",
 
   // === Metin Renkleri ===
   text: '#333333',         // Ana metin rengi (Koyu Gri)
@@ -51,6 +56,7 @@ const lightColors: ColorPalette = {
   error: '#D32F2F',   // Hata bildirimleri için
   sun: "#ffc107",
   black: "#000000",
+  white: "#FFFFFF",
 
 };
   
@@ -68,6 +74,8 @@ const darkColors: ColorPalette = {
   borders: '#E8F5E9',  // Çok açık yeşil (Kenarlıklar, ikon arka planları)
   cb1: "#F0F9F0",  // section, card area first layer color
   cb2: "#E1F5E1", // section card area second layer color.
+  cb3: "#E5F4E5",
+  cb4: "#E1EEE1",
 
   // === Metin Renkleri ===
   text: '#C8C9CA',         // Ana metin rengi (Koyu Gri)
@@ -81,6 +89,7 @@ const darkColors: ColorPalette = {
   error: 'red',   // Hata bildirimleri için
   sun: "#ffc107",
   black: "#FFFFFF",
+  white: "#FFFFFF",
 };
 
 // Red-Green color blindness 
@@ -93,10 +102,12 @@ const colorBlindColors: ColorPalette = {
   inactive_button: '#E9F5E9',
   inactive_text: '#595C5C',
 
-  background: '#ffffff',
+  background: '#F4F7F6',
   borders: '#E8F5E9',
-  cb1: "#F0F9F0", 
-  cb2: "#E1F5E1",
+  cb1: "#FFFFFF",
+  cb2: "#F3FAF3",
+  cb3: "#E9F5E9",
+  cb4: "#E1EEE1",
 
   text: '#333333',
   textSecondary: '#666666',
@@ -107,6 +118,7 @@ const colorBlindColors: ColorPalette = {
   error: '#7500FA',   // Purple
   sun: "#ffc107",
   black: "#000000",
+  white: "#FFFFFF",
 };
 
 

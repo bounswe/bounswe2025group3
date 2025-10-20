@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { API_ENDPOINTS } from '@/constants/api';
 
 const CustomAlert = ({ visible, title, message, type, onClose }: any) => {
     if (!visible) return null;
@@ -15,12 +16,6 @@ const CustomAlert = ({ visible, title, message, type, onClose }: any) => {
             <TouchableOpacity onPress={onClose}><Text style={{ color: 'white', marginTop: 10 }}>Close</Text></TouchableOpacity>
         </View>
     );
-};
-
-const API_ENDPOINTS = {
-    WASTE: {
-        CATEGORY_REQUEST: "/v1/waste/category-requests/"
-    }
 };
 
 export default function CustomCategoryRequestScreen() {
@@ -39,7 +34,7 @@ export default function CustomCategoryRequestScreen() {
     container: { flex: 1, backgroundColor: colors.background },
     headerBar: { height: "7%", paddingHorizontal: "4%", paddingTop: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: colors.background, borderBottomWidth: 1, borderBottomColor: colors.borders },
     backButton: { padding: 4 },
-    headerTitle: { fontSize: 22, fontWeight: 'bold', color: colors.text, marginLeft: 12 },
+    headerTitle: { fontSize: 20, fontWeight: 600, color: colors.text, marginLeft: 12 },
     headerSpacer: { flex: 1 },
     content: { flex: 1, padding: 20 },
     form: { gap: 24 },
@@ -47,10 +42,10 @@ export default function CustomCategoryRequestScreen() {
     infoText: { flex: 1, color: colors.primary, fontSize: 14, lineHeight: 20 },
     inputGroup: { gap: 8 },
     label: { fontSize: 16, fontWeight: '500', color: colors.text },
-    input: { backgroundColor: colors.cb2, borderWidth: 1, borderColor: colors.borders, borderRadius: 8, padding: 12, fontSize: 16, color: colors.text },
+    input: { backgroundColor: colors.cb1, borderWidth: 1, borderColor: colors.borders, borderRadius: 8, padding: 12, fontSize: 16, color: colors.text },
     textArea: { height: 100, textAlignVertical: 'top' },
     submitButton: { backgroundColor: colors.primary, padding: 16, borderRadius: 12, alignItems: 'center', marginTop: 8 },
-    submitButtonDisabled: { backgroundColor: colors.borders },
+    submitButtonDisabled: { backgroundColor: colors.cb4 },
     submitButtonText: { color: colors.background, fontSize: 16, fontWeight: '600' },
   });
 
@@ -114,14 +109,12 @@ export default function CustomCategoryRequestScreen() {
           <View style={styles.form}>
             <View style={styles.infoBox}>
               <Ionicons name="information-circle-outline" size={24} color={colors.primary} />
-              {/* ThemedText -> Text */}
               <Text style={styles.infoText}>
                 Can't find the waste category you're looking for? Request a new one and our team will review it.
               </Text>
             </View>
 
             <View style={styles.inputGroup}>
-              {/* ThemedText -> Text */}
               <Text style={styles.label}>Category Name *</Text>
               <TextInput
                 style={styles.input}
@@ -133,7 +126,6 @@ export default function CustomCategoryRequestScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-              {/* ThemedText -> Text */}
               <Text style={styles.label}>Description (Optional)</Text>
               <TextInput
                 style={[styles.input, styles.textArea]}
@@ -148,7 +140,6 @@ export default function CustomCategoryRequestScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-              {/* ThemedText -> Text */}
               <Text style={styles.label}>Unit of Measurement *</Text>
               <TextInput
                 style={styles.input}
@@ -167,7 +158,6 @@ export default function CustomCategoryRequestScreen() {
               onPress={handleSubmit}
               disabled={!name || !unit || isLoading}
             >
-              {/* ThemedText -> Text */}
               <Text style={styles.submitButtonText}>
                 {isLoading ? 'Submitting...' : 'Submit Request'}
               </Text>

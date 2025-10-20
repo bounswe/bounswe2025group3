@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getSubcategories,getUserProfile } from '@/api/functions';
 
 interface SubCategory {
   id: number;
@@ -19,28 +20,11 @@ interface UserProfile {
   id: number;
 }
 
-const fetchAllPages = async <T,>(initialUrl: string): Promise<T[]> => {
-    let results: T[] = [];
-    let nextUrl: string | null = initialUrl;
-    while (nextUrl) {
-        try {
-            const response = await tokenManager.authenticatedFetch(nextUrl);
-            if (!response.ok) { break; }
-            const data = await response.json();
-            results = results.concat(data.results);
-            if (data.next) {
-                const nextURLObject = new URL(data.next);
-                const relativePath = nextURLObject.pathname.startsWith('/api') ? nextURLObject.pathname.substring(4) : nextURLObject.pathname;
-                nextUrl = relativePath + nextURLObject.search;
-            } else {
-                nextUrl = null;
-            }
-        } catch (error) {
-            console.error('Error during pagination fetch:', error);
-            break; 
-        }
-    }
-    return results;
+const formatDateToLocal = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 export default function AddGoalScreen() {
@@ -67,25 +51,27 @@ export default function AddGoalScreen() {
     formGroup: { marginBottom: 36 },
     label: { fontSize: 16, fontWeight: '600', marginBottom: 12, color: colors.text },
     chipList: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, },
-    chipButton: { paddingHorizontal: 14, paddingVertical: 10, borderWidth: 1, borderColor: colors.primary, borderRadius: 20, backgroundColor: colors.background},
+    chipButton: { paddingHorizontal: 14, paddingVertical: 10, borderWidth: 1, borderColor: colors.primary, borderRadius: 20, backgroundColor: colors.cb1},
     chipButtonActive: { backgroundColor: colors.primary, borderColor: colors.primary, },
     chipButtonText: { color: colors.text, fontWeight: '500' },
     chipButtonTextActive: { color: 'white' },
     descriptionBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginTop: 12, padding: 12, backgroundColor: colors.cb1, borderRadius: 8, borderLeftWidth: 4, borderLeftColor: colors.primary, },
     descriptionText: { flex: 1, fontSize: 14, color: colors.textSecondary, lineHeight: 20, },
     buttonGroup: { flexDirection: 'row', gap: 0, borderWidth: 1, borderColor: colors.primary, borderRadius: 12, overflow: 'hidden' },
-    segmentedButton: { flex: 1, alignItems: 'center', paddingVertical: 14, backgroundColor: colors.background, borderRightWidth: 1, borderRightColor: colors.primary, },
+    segmentedButton: { flex: 1, alignItems: 'center', paddingVertical: 14, backgroundColor: colors.cb1, borderRightWidth: 1, borderRightColor: colors.primary, },
     segmentedButtonActive: { backgroundColor: colors.primary },
     segmentedButtonText: { color: colors.text, fontWeight: '500' },
     segmentedButtonTextActive: { color: 'white' },
-    inputContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.background, borderWidth: 1, borderColor: colors.primary, borderRadius: 12, paddingHorizontal: 12, height: 50, gap: 10, },
+    inputContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.cb1, borderWidth: 1, borderColor: colors.primary, borderRadius: 12, paddingHorizontal: 12, height: 50, gap: 10, },
     inputText: { fontSize: 16, color: colors.text },
     input: { flex: 1, fontSize: 16, color: colors.text, height: '100%', },
-    infoBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.background, padding: 12, borderRadius: 12, gap: 10, marginTop: -12, marginBottom: 24, },
+    infoBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.cb1, padding: 12, borderRadius: 12, gap: 10, marginTop: -12, marginBottom: 24, },
     infoText: { flex: 1, fontSize: 14, color: colors.textSecondary, lineHeight: 20, },
     submitButton: { backgroundColor: colors.primary, padding: 16, borderRadius: 16, alignItems: 'center', justifyContent: 'center', height: 52, marginTop: 16, marginBottom: "55%" },
-    submitButtonDisabled: { backgroundColor: colors.borders, },
+    submitButtonDisabled: { backgroundColor: colors.cb4, },
     submitButtonText: { color: 'white', fontSize: 16, fontWeight: 'bold', },
+    requestCategoryButton: { backgroundColor: colors.cb1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 12, borderRadius: 12, gap: 8, marginTop: 20, borderWidth: 1, borderColor: colors.primary, borderStyle: 'dashed', },
+    requestCategoryText: { color: colors.primary, fontSize: 14, fontWeight: '600' },
   });
 
   useEffect(() => {
@@ -93,8 +79,8 @@ export default function AddGoalScreen() {
       setIsDataLoading(true);
       try {
         const [subCatData, userData] = await Promise.all([
-          fetchAllPages<SubCategory>("/v1/waste/subcategories/"),
-          tokenManager.authenticatedFetch("/user/me").then(res => res.ok ? res.json() : null)
+          getSubcategories(),
+          getUserProfile()
         ]);
         setSubcategories(subCatData);
         if(userData) setUserProfile(userData);
@@ -134,7 +120,7 @@ export default function AddGoalScreen() {
     }
     setIsLoading(true);
     try {
-      const response = await tokenManager.authenticatedFetch("/v1/goals/goals/", {
+      const response = await tokenManager.authenticatedFetch("/api/v1/goals/goals/", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -142,7 +128,7 @@ export default function AddGoalScreen() {
           category_id: selectedSubCategory.id,
           timeframe,
           target: parseFloat(target),
-          start_date: startDate.toISOString().split('T')[0],
+          start_date: formatDateToLocal(startDate),
           status: 'pending',
         }),
       });
@@ -197,6 +183,11 @@ export default function AddGoalScreen() {
               <Text style={styles.descriptionText}>{selectedSubCategory.description}</Text>
             </View>
           )}
+
+          <TouchableOpacity style={styles.requestCategoryButton} onPress={() => router.push("/custom_category_request")}>
+            <Ionicons name="add-circle-outline" size={20} color={colors.primary} />
+            <Text style={styles.requestCategoryText}>Can't find your item? Request a new one</Text>
+          </TouchableOpacity>
         </View>
         
         {selectedSubCategory && (

@@ -1,48 +1,23 @@
 import { useColors } from '@/constants/colors';
-import tokenManager from '@/services/tokenManager';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getSubcategories, Subcategory, createWasteLog } from '@/api/functions';
 
-interface SubCategory {
-  id: number;
-  name: string;
-  unit: string;
-  score_per_unit: string;
-  category: number;
-  description: string;
-}
-
-const fetchAllPages = async <T,>(initialUrl: string): Promise<T[]> => {
-    let results: T[] = [];
-    let nextUrl: string | null = initialUrl;
-    while (nextUrl) {
-        try {
-            const response = await tokenManager.authenticatedFetch(nextUrl);
-            if (!response.ok) { break; }
-            const data = await response.json();
-            results = results.concat(data.results);
-            if (data.next) {
-                const nextURLObject = new URL(data.next);
-                const relativePath = nextURLObject.pathname.startsWith('/api') ? nextURLObject.pathname.substring(4) : nextURLObject.pathname;
-                nextUrl = relativePath + nextURLObject.search;
-            } else {
-                nextUrl = null;
-            }
-        } catch (error) {
-            console.error('Error during pagination fetch:', error);
-            break; 
-        }
-    }
-    return results;
+const formatDateToLocal = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
+
 export default function AddWasteLogScreen() {
-  const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
-  const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategory | null>(null);
+  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<Subcategory | null>(null);
   const [quantity, setQuantity] = useState('');
   const [disposalDate, setDisposalDate] = useState(new Date());
   const [disposalLocation, setDisposalLocation] = useState('');
@@ -64,21 +39,21 @@ export default function AddWasteLogScreen() {
       formGroup: { marginBottom: 36 },
       label: { fontSize: 16, fontWeight: '600', marginBottom: 12, color: colors.text },
       chipList: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, },
-      chipButton: { paddingHorizontal: 14, paddingVertical: 10, borderWidth: 1, borderColor: colors.primary, borderRadius: 20, backgroundColor: colors.background},
+      chipButton: { paddingHorizontal: 14, paddingVertical: 10, borderWidth: 1, borderColor: colors.primary, borderRadius: 20, backgroundColor: colors.cb1},
       chipButtonActive: { backgroundColor: colors.primary, borderColor: colors.primary, },
       chipButtonText: { color: colors.text, fontWeight: '500' },
       chipButtonTextActive: { color: 'white' },
       descriptionBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginTop: 16, padding: 12, backgroundColor: colors.cb1, borderRadius: 8, borderLeftWidth: 4, borderLeftColor: colors.primary, },
       descriptionText: { flex: 1, fontSize: 14, color: colors.textSecondary, lineHeight: 20, },
-      inputContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.background, borderWidth: 1, borderColor: colors.primary, borderRadius: 12, paddingHorizontal: 12, height: 50, gap: 10, },
+      inputContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.cb1, borderWidth: 1, borderColor: colors.primary, borderRadius: 12, paddingHorizontal: 12, height: 50, gap: 10, },
       inputText: { fontSize: 16, color: colors.text },
       input: { flex: 1, fontSize: 16, color: colors.text, height: '100%', },
       infoBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.cb1, padding: 12, borderRadius: 12, gap: 10, borderWidth: 1, borderColor: colors.borders, marginTop: 12, marginBottom: 24,},
       infoText: { flex: 1, fontSize: 14, color: colors.text, lineHeight: 20, },
-      requestCategoryButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 12, borderRadius: 12, gap: 8, marginTop: 20, borderWidth: 1, borderColor: colors.primary, borderStyle: 'dashed', },
+      requestCategoryButton: { backgroundColor: colors.cb1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 12, borderRadius: 12, gap: 8, marginTop: 20, borderWidth: 1, borderColor: colors.primary, borderStyle: 'dashed', },
       requestCategoryText: { color: colors.primary, fontSize: 14, fontWeight: '600' },
       submitButton: { backgroundColor: colors.primary, padding: 16, borderRadius: 16, alignItems: 'center', justifyContent: 'center', height: 52, marginTop: 16, marginBottom: "20%" },
-      submitButtonDisabled: { backgroundColor: colors.borders, },
+      submitButtonDisabled: { backgroundColor: colors.cb4, },
       submitButtonText: { color: 'white', fontSize: 16, fontWeight: 'bold', },
   });
 
@@ -86,7 +61,7 @@ export default function AddWasteLogScreen() {
     const fetchData = async () => {
       setIsDataLoading(true);
       try {
-        const subCatData = await fetchAllPages<SubCategory>("/v1/waste/subcategories/");
+        const subCatData = await getSubcategories();
         setSubcategories(subCatData);
       } catch (error) {
         console.error('Error fetching subcategories:', error);
@@ -97,7 +72,7 @@ export default function AddWasteLogScreen() {
     fetchData();
   }, []);
 
-  const handleSubCategorySelect = (subcategory: SubCategory) => {
+  const handleSubCategorySelect = (subcategory: Subcategory) => {
     setSelectedSubCategory(subcategory);
     setQuantity(''); 
   };
@@ -115,26 +90,17 @@ export default function AddWasteLogScreen() {
     }
     setIsSubmitting(true);
     try {
-        const response = await tokenManager.authenticatedFetch("/v1/waste/logs/", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                sub_category: selectedSubCategory.id,
-                quantity: parseFloat(quantity),
-                date_logged: new Date().toISOString().split('T')[0],
-                disposal_date: disposalDate.toISOString().split('T')[0],
-                disposal_location: disposalLocation || undefined,
-            }),
+        await createWasteLog({
+            sub_category: selectedSubCategory.id,
+            quantity: parseFloat(quantity),
+            disposal_date: formatDateToLocal(disposalDate),
+            disposal_location: disposalLocation || undefined,
         });
-        if (response.ok) {
-            Alert.alert('Success', 'Waste log added successfully!');
-            router.back();
-        } else {
-            const errorData = await response.json();
-            Alert.alert('Error', errorData.detail || 'Failed to add waste log');
-        }
+        Alert.alert('Success', 'Waste log added successfully!');
+        router.back();
     } catch (error) {
         console.error('Error adding waste log:', error);
+        Alert.alert('Error', 'Failed to add waste log');
     } finally {
         setIsSubmitting(false);
     }
@@ -181,7 +147,7 @@ export default function AddWasteLogScreen() {
             </View>
           )}
 
-          <TouchableOpacity style={styles.requestCategoryButton} onPress={() => router.push('/waste/custom_category_request')}>
+          <TouchableOpacity style={styles.requestCategoryButton} onPress={() => router.push("/custom_category_request")}>
             <Ionicons name="add-circle-outline" size={20} color={colors.primary} />
             <Text style={styles.requestCategoryText}>Can't find your item? Request a new one</Text>
           </TouchableOpacity>
@@ -189,57 +155,56 @@ export default function AddWasteLogScreen() {
 
         {selectedSubCategory && (
             <>
-                {/* --- Miktar Girişi --- */}
-                <View style={styles.formGroup}>
-                    <Text style={styles.label}>Enter Amount {quantityUnit}</Text>
-                    <View style={styles.inputContainer}>
-                        <Ionicons name="scale-outline" size={20} color={colors.primary} />
-                        <TextInput 
-                            style={styles.input} 
-                            value={quantity} 
-                            onChangeText={setQuantity} 
-                            keyboardType="decimal-pad" 
-                            placeholder={`e.g., 5`} 
-                            placeholderTextColor={colors.textSecondary} 
-                        />
-                    </View>
-                </View>
+              <View style={styles.formGroup}>
+                  <Text style={styles.label}>Enter Amount {quantityUnit}</Text>
+                  <View style={styles.inputContainer}>
+                      <Ionicons name="scale-outline" size={20} color={colors.primary} />
+                      <TextInput 
+                          style={styles.input} 
+                          value={quantity} 
+                          onChangeText={setQuantity} 
+                          keyboardType="decimal-pad" 
+                          placeholder={`e.g., 5`} 
+                          placeholderTextColor={colors.textSecondary} 
+                      />
+                  </View>
+              </View>
 
-                <View style={styles.formGroup}>
-                    <Text style={styles.label}>Disposal Date</Text>
-                    <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
-                        <Ionicons name="calendar-outline" size={20} color={colors.primary} />
-                        <Text style={styles.inputText}>{disposalDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</Text>
-                    </TouchableOpacity>
-                </View>
+              <View style={styles.formGroup}>
+                  <Text style={styles.label}>Disposal Date</Text>
+                  <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
+                      <Ionicons name="calendar-outline" size={20} color={colors.primary} />
+                      <Text style={styles.inputText}>{disposalDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</Text>
+                  </TouchableOpacity>
+              </View>
 
-                {showDatePicker && (
-                    <DateTimePicker
-                        value={disposalDate} mode="date" display="spinner" onChange={handleDateChange} maximumDate={new Date()}
-                    />
-                )}
-                
-                <View style={[styles.formGroup, {marginBottom: 16}]}>
-                    <Text style={styles.label}>Disposal Location (Optional)</Text>
-                    <View style={styles.inputContainer}>
-                        <Ionicons name="location-outline" size={20} color={colors.primary} />
-                        <TextInput 
-                            style={styles.input} 
-                            value={disposalLocation} 
-                            onChangeText={setDisposalLocation} 
-                            placeholder="e.g., Recycling Center" 
-                            placeholderTextColor={colors.textSecondary} 
-                        />
-                    </View>
-                </View>
+              {showDatePicker && (
+                  <DateTimePicker
+                      value={disposalDate} mode="date" display="spinner" onChange={handleDateChange} maximumDate={new Date()}
+                  />
+              )}
+              
+              <View style={[styles.formGroup, {marginBottom: 16}]}>
+                  <Text style={styles.label}>Disposal Location (Optional)</Text>
+                  <View style={styles.inputContainer}>
+                      <Ionicons name="location-outline" size={20} color={colors.primary} />
+                      <TextInput 
+                          style={styles.input} 
+                          value={disposalLocation} 
+                          onChangeText={setDisposalLocation} 
+                          placeholder="e.g., Recycling Center" 
+                          placeholderTextColor={colors.textSecondary} 
+                      />
+                  </View>
+              </View>
 
-                {quantity && (
-                    <View style={styles.infoBox}>
-                        <Ionicons name="star-outline" size={20} color={colors.primary} />
-                        <Text style={styles.infoText}>
-                            You will get : <Text style={{fontWeight: 'bold'}}>+{calculateEstimatedScore()} pts</Text>
-                        </Text>
-                    </View>
+              {quantity && (
+                  <View style={styles.infoBox}>
+                      <MaterialCommunityIcons name="star-four-points-outline" size={20} color={colors.primary} />
+                      <Text style={styles.infoText}>
+                          You will get : <Text style={{fontWeight: 'bold'}}>+{calculateEstimatedScore()} pts</Text>
+                      </Text>
+                  </View>
                 )}
             </>
         )}

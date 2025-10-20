@@ -1,10 +1,10 @@
 import { useColors } from '@/constants/colors';
-import tokenManager from '@/services/tokenManager';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getUserProfile, updateUserProfile } from '@/api/functions';
 
 const FormInput = ({ label, value, onChangeText, ...props }: any) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -13,7 +13,7 @@ const FormInput = ({ label, value, onChangeText, ...props }: any) => {
   const styles = StyleSheet.create({
     inputGroup: { marginBottom: 16 },
     label: { fontSize: 16, color: colors.textSecondary, marginBottom: 8 },
-    input: { backgroundColor: colors.cb1, padding: 12, borderRadius: 8, fontSize: 16, borderWidth: 1, borderColor: colors.borders, color: colors.text },
+    input: { backgroundColor: colors.cb4, padding: 12, borderRadius: 12, fontSize: 16, borderWidth: 1, borderColor: colors.borders, color: colors.text },
     inputFocused: {
       borderColor: colors.primary,
       borderWidth: 1,
@@ -66,9 +66,8 @@ export default function EditProfileScreen() {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await tokenManager.authenticatedFetch("/user/me/");
-        if (response.ok) {
-          const data = await response.json();
+        const data = await getUserProfile();
+        if (data) {
           setFirstName(data.first_name || '');
           setLastName(data.last_name || '');
           setBio(data.bio || '');
@@ -77,6 +76,7 @@ export default function EditProfileScreen() {
         }
       } catch (error) {
         console.error("Failed to fetch profile data", error);
+        Alert.alert("Error", "Failed to load profile data.");
       } finally {
         setIsLoading(false);
       }
@@ -86,7 +86,7 @@ export default function EditProfileScreen() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    const body = {
+    const profileData = {
       first_name: firstName,
       last_name: lastName,
       bio,
@@ -94,20 +94,12 @@ export default function EditProfileScreen() {
       country,
     };
     try {
-      const response = await tokenManager.authenticatedFetch("/user/me/", {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (response.ok) {
-        Alert.alert("Success", "Profile updated successfully!");
-        router.back();
-      } else {
-        Alert.alert("Error", "Failed to update profile.");
-      }
+      await updateUserProfile(profileData);
+      Alert.alert("Success", "Profile updated successfully!");
+      router.back();
     } catch (error) {
       console.error("Failed to save profile", error);
-      Alert.alert("Error", "An unexpected error occurred.");
+      Alert.alert("Error", "Failed to update profile. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -122,7 +114,7 @@ export default function EditProfileScreen() {
       <View>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.headerButton}>
-              <Ionicons name="chevron-back" size={26} color={colors.primary} />
+              <Ionicons name="chevron-back" size={26} color={colors.black} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Edit Profile</Text>
           <TouchableOpacity onPress={handleSave} style={styles.headerButton} disabled={isSaving}>

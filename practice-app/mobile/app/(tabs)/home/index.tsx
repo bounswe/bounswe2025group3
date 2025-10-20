@@ -1,308 +1,291 @@
-import tokenManager from "@/services/tokenManager";
-import { Fontisto, Ionicons } from '@expo/vector-icons';
+import { Fontisto, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from "expo-router";
-import React, { useCallback, useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useState, useEffect, useRef } from "react";
+import { ActivityIndicator, Dimensions, Image, ImageSourcePropType, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from 'expo-status-bar';
 
 import { useColors } from '@/constants/colors';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from "react-native-safe-area-context";
+import { getGoals, getMyScore, Goal } from "@/api/functions";
 
+const { width } = Dimensions.get('window');
+const GOAL_CARD_WIDTH = width * 0.45;
+const HORIZONTAL_PADDING = width * 0.03;
 
-interface UserScore {
-    user_id: number;
-    total_score: number;
-}
+const calculateEndDate = (start: Date, time: 'daily' | 'weekly' | 'monthly'): Date => {
+  const end = new Date(start);
+  switch (time) {
+    case 'daily': end.setDate(end.getDate() + 1); break;
+    case 'weekly': end.setDate(end.getDate() + 7); break;
+    case 'monthly': end.setMonth(end.getMonth() + 1); break;
+  }
+  return end;
+};
 
-interface WasteLog {
-    id: number;
-    sub_category_name: string;
-    quantity: string;
-    date_logged: string;
-    score: number;
-}
+const dummyPosts = [
+  {
+    id: '1',
+    username: 'Beatrice',
+    userImage: require("@/assets/images/beatrice.jpg"),
+    postAge: '8h ago',
+    caption: 'Took a big step this weekend by using cloth bags instead of plastic! Guess we all need to start somewhere. 🌿 #ZeroWaste',
+    postImage: null,
+    likes: 124,
+    comments: 42,
+  },
+  {
+    id: '2',
+    username: 'Klein',
+    userImage: require("@/assets/images/klein.jpg"),
+    postAge: '1d ago',
+    caption: 'My compost pile is finally thriving! What are your best tips for a beginner composter? Looking for advice on what to add (and what to avoid).',
+    postImage: require("@/assets/images/compost.jpg"),
+    likes: 258,
+    comments: 112,
+  },
+  {
+    id: '3',
+    username: 'Magsarion',
+    userImage: require("@/assets/images/magsarion.jpg"),
+    postAge: '5h ago',
+    caption: 'Just repaired my old lamp instead of buying a new one.',
+    postImage: require("@/assets/images/lamp.jpg"),
+    likes: 60,
+    comments: 10,
+  },
+];
 
-interface Goal {
-    id: number;
-    category: {
-        name: string;
-    };
-    goal_type: 'reduction' | 'recycling';
-    timeframe: 'daily' | 'weekly' | 'monthly';
-    target: number;
-    progress: number;
-    is_complete: boolean;
-    created_at: string;
-    start_date: string;
-    end_date: string;
-    status: string;
-}
+const PostImage = ({ source, width }: { source: ImageSourcePropType, width: number }) => {
+  const [height, setHeight] = useState<number>(0);
+
+  useEffect(() => {
+    if (typeof source === "number") {
+      const { width: w, height: h } = Image.resolveAssetSource(source);
+      if (w > 0) setHeight(width * (h / w));
+    } else if (typeof source === "string") {
+      Image.getSize(source, (w, h) => { if (w > 0) setHeight(width * (h / w)) }, console.error);
+    }
+  }, [source, width]);
+
+  if (!height) return null;
+
+  return <Image source={source} style={{ width, height, borderRadius: 12, marginBottom: 12 }} resizeMode="cover" />;
+};
 
 export default function HomeScreen() {
-  const [userScore, setUserScore] = useState<UserScore | null>(null);
-  const [recentLogs, setRecentLogs] = useState<WasteLog[]>([]);
+  const [userScore, setUserScore] = useState<number | null>(null);
   const [activeGoals, setActiveGoals] = useState<Goal[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
   const colors = useColors();
+  const isInitialLoad = useRef(true);
 
-
-  const fetchData = async() => {
+  const fetchData = async (showLoader = true) => {
+    if (showLoader) setIsLoading(true);
     try {
-      const scoreResponse = await tokenManager.authenticatedFetch("/v1/waste/scores/me/");
-      if (scoreResponse.ok) {
-        const scoreData = await scoreResponse.json();
-        setUserScore(scoreData);
-      }
-      
-      // Fetch recent waste logs
-      const logsResponse = await tokenManager.authenticatedFetch("/v1/waste/logs");
-      if (logsResponse.ok) {
-        const logsData = await logsResponse.json();
-        setRecentLogs(logsData.results.slice(0, 5)); // Get only 5 most recent logs
-      }
+      const [scoreData, allGoals] = await Promise.all([getMyScore(), getGoals()]);
+      setUserScore(scoreData);
 
-      // Fetch active goals
-      const goalsResponse = await tokenManager.authenticatedFetch("/v1/goals/goals/");
-      if (goalsResponse.ok) {
-        const goalsData = await goalsResponse.json();
-        // Filter active goals and sort by end date
-        const active = goalsData.results
-          .filter((goal: Goal) => !goal.is_complete)
-          .sort((a: Goal, b: Goal) => new Date(a.end_date).getTime() - new Date(b.end_date).getTime());
-        setActiveGoals(active.slice(0, 3)); // Show top 3 active goals
-      } 
+      const now = new Date();
+      const active = allGoals
+        .filter((goal: Goal) => {
+          const endDate = calculateEndDate(new Date(goal.start_date), goal.timeframe);
+          return !goal.is_complete && endDate.getTime() >= now.getTime();
+        })
+        .sort((a: Goal, b: Goal) => {
+          const endDateA = calculateEndDate(new Date(a.start_date), a.timeframe);
+          const endDateB = calculateEndDate(new Date(b.start_date), b.timeframe);
+          return endDateA.getTime() - endDateB.getTime();
+        });
+      setActiveGoals(active);
     } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      if (showLoader) setIsLoading(false);
+      setRefreshing(false);
     }
   };
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData(false);
+  }, []);
+
+  useEffect(() => {
+    fetchData(true);
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
-      fetchData();
+      if (!isInitialLoad.current) {
+        fetchData(false);
+      } else {
+        isInitialLoad.current = false;
+      }
     }, [])
   );
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
-    headerBar: { height: "7%", paddingHorizontal: "4%", paddingTop: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: colors.background, borderBottomWidth: 1, borderBottomColor: colors.borders },
-    headerBarLogo: { width: 52, height:52},
-    content: { flex: 1},
-    scrollContent: { paddingBottom: "1%" },
-    statsCard: { margin: "2%", paddingHorizontal: "5%", paddingVertical: "4%", backgroundColor: colors.cb1, borderRadius: 16},
-    statsHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
-    statsTitle: { fontSize: 20, fontWeight: '700', marginLeft: 12, color: colors.primary },
-    scoreContainer: { alignItems: 'center', marginBottom: "3%", paddingVertical: 6 },
-    scoreValueContainer: { padding: 16, minWidth: 120, minHeight: 60, justifyContent: 'center', alignItems: 'center', borderRadius: 16, backgroundColor: colors.cb1 },
-    scoreValue: { fontSize: 32, fontWeight: '700', color: colors.primary, textAlign: 'center', lineHeight: 36 },
-    scoreLabel: { fontSize: 16, color: "000000", marginTop: 8, fontWeight: '500' },
-    viewAllButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 16, backgroundColor: colors.primary, borderRadius: 12 },
-    viewAllText: { color: colors.background, fontSize: 16, fontWeight: '600', marginRight: 8 },
-    goalsCard: { margin: "2%", marginTop: "5%", paddingHorizontal: 20, paddingVertical: 15, backgroundColor: colors.cb1, borderRadius: 16 },
-    goalsHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
-    goalsTitle: { fontSize: 18, fontWeight: '600', marginLeft: 8, color: colors.primary, flex: 1 },
-    activityCard: { margin: "2%", marginTop: "5%", paddingHorizontal: 20, paddingVertical: 15, backgroundColor: colors.cb1, borderRadius: 16 },
-    activityHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
-    activityTitle: { fontSize: 18, fontWeight: '600', marginLeft: 8, color: colors.primary, flex: 1 },
+    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
+    headerBar: { height: "7%", paddingHorizontal: "4%", flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: colors.background, borderBottomWidth: 1, borderBottomColor: colors.borders },
+    headerBarLogo: { width: 52, height: 52 },
+    content: { flex: 1 },
+    scrollContent: { paddingBottom: 40 },
+    statsCard: { marginHorizontal: "2%", marginTop: "4%", paddingHorizontal: "5%", paddingVertical: "3%", backgroundColor: colors.cb1, borderRadius: 16 },
+    statsHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
+    statsTitle: { fontSize: 16, fontWeight: '600', marginLeft: 12, color: colors.primary },
+    scoreValueContainer: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'center', backgroundColor: colors.cb1, paddingHorizontal: 16, borderRadius: 16 },
+    scoreValue: { fontSize: 32, fontWeight: '700', color: colors.primary, marginRight: 8 },
+    scoreUnitLabel: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },
+    sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: '4%', marginTop: '5%' },
+    sectionTitle: { fontSize: 18, fontWeight: '600', color: colors.text },
     seeAllText: { color: colors.primary, fontSize: 14, fontWeight: '500' },
-    activityList: { gap: 12 },
-    activityItem: { flexDirection: 'row', alignItems: 'center', padding: 16, backgroundColor: colors.cb2, borderRadius: 12, marginBottom: 12, borderWidth: 1, borderColor: colors.borders },
-    activityIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center', marginRight: 12 },
-    activityContent: { flex: 1 },
-    activityItemTitle: { fontSize: 16, fontWeight: '500', color: colors.text },
-    activitySubtitle: { fontSize: 14, color: colors.textSecondary },
-    activityScore: { backgroundColor: colors.background, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16 },
-    scoreText: { color: colors.primary, fontWeight: '600' },
-    emptyState: { alignItems: 'center', padding: 32, backgroundColor: colors.cb2, borderRadius: 12, borderWidth: 1, borderColor: colors.borders },
-    emptyStateText: { fontSize: 16, color: colors.textSecondary, textAlign: 'center', marginVertical: 16 },
-    addButton: { backgroundColor: colors.primary, paddingHorizontal: 24, paddingVertical: 12, borderRadius: 8 },
-    addButtonText: { color: colors.background, fontSize: 16, fontWeight: '500' },
-    goalsList: { gap: 12 },
-    goalItem: { backgroundColor: colors.cb2, borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: colors.borders },
-    goalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-    goalTitle: { fontSize: 16, fontWeight: '600', color: colors.text },
-    goalType: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.background, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, gap: 4 },
-    goalTypeText: { fontSize: 12, color: colors.primary, fontWeight: '500' },
-    progressContainer: { marginVertical: 12 },
-    progressBar: { height: 8, backgroundColor: colors.borders, borderRadius: 4, overflow: 'hidden', marginBottom: 8 },
-    progressFill: { height: '100%', backgroundColor: colors.primary, borderRadius: 4 },
-    progressText: { fontSize: 14, color: colors.textSecondary, textAlign: 'right' },
-    goalFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-    deadlineContainer: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-    deadlineText: { fontSize: 12, color: colors.textSecondary },
-    timeframeText: { fontSize: 12, color: colors.primary, fontWeight: '500' },
+    horizontalScrollContent: { paddingHorizontal: HORIZONTAL_PADDING, paddingVertical: 8 },
+    goalScrollItem: { width: GOAL_CARD_WIDTH, backgroundColor: colors.cb1, borderRadius: 16, padding: 16, marginHorizontal: HORIZONTAL_PADDING / 3, borderWidth: 1, borderColor: colors.borders, justifyContent: 'space-between', minHeight: 140 },
+    goalTitle: { fontSize: 16, fontWeight: '600', color: colors.text, flex: 1, marginBottom: 8 },
+    progressContainer: { marginVertical: 6 },
+    progressBar: { height: 6, backgroundColor: colors.background, borderRadius: 3, overflow: 'hidden', marginBottom: 4 },
+    progressFill: { height: '100%', backgroundColor: colors.primary, borderRadius: 3 },
+    progressText: { fontSize: 12, color: colors.textSecondary, textAlign: 'right' },
+    deadlineContainer: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 8 },
+    deadlineText: { fontSize: 12, color: colors.error },
+    emptyStateContainer: { marginHorizontal: '4%', alignItems: 'center', justifyContent: 'center', padding: 20, backgroundColor: colors.cb1, borderRadius: 16, minHeight: 150 },
+    emptyStateText: { fontSize: 14, color: colors.textSecondary, textAlign: 'center', marginVertical: 12 },
+    addButton: { backgroundColor: colors.primary, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8 },
+    addButtonText: { color: colors.background, fontSize: 14, fontWeight: '500' },
+    postCard: { backgroundColor: colors.cb1, marginHorizontal: '1%', borderRadius: 16, marginBottom: "1%", padding: 12, borderWidth: 1, borderColor: colors.borders },
+    postHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: "1%" },
+    postHeaderLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+    postUserImage: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
+    postUserInfo: { flex: 1 },
+    postUsername: { color: colors.text, fontWeight: '600', fontSize: 15 },
+    postAge: { color: colors.textSecondary, fontSize: 13 },
+    postCaption: { color: colors.text, fontSize: 15, lineHeight: 22, marginBottom: 12 },
+    postActions: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+    postActionGroup: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+    postActionButton: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+    postActionText: { color: colors.textSecondary, fontWeight: '500', fontSize: 14 },
+    postLikeText: { color: colors.primary, fontWeight: '600', fontSize: 14 }
   });
 
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
   return (
-    <SafeAreaView
-      style={styles.container}
-      edges={["top"]}
-    >
+    <SafeAreaView style={styles.container} edges={["top"]}>
       <View style={styles.headerBar}>
-        <Image 
-          source={require('@/assets/images/reversed-icon.png')} 
-          style={styles.headerBarLogo} 
-          resizeMode="contain"
-        />
-        <TouchableOpacity style={{marginLeft: "auto"}} onPress={() => router.push('/menu_drawer')}>
-          <Fontisto name="nav-icon-grid-a" size={24} style={{paddingRight: "2%"}} color={colors.primary} />
+        <Image source={require('@/assets/images/reversed-icon.png')} style={styles.headerBarLogo} resizeMode="contain" />
+        <Text style={{ color: colors.primary, fontSize: 28, fontWeight: '700' }}>GREENER</Text>
+        <TouchableOpacity style={{ marginLeft: "auto" }} onPress={() => router.push('/menu_drawer')}>
+          <Fontisto name="nav-icon-grid-a" size={24} style={{ paddingRight: "2%" }} color={colors.primary} />
         </TouchableOpacity>
       </View>
-  
-      <ScrollView 
+
+      <ScrollView
         style={styles.content}
         contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={[colors.primary]} />
+        }
       >
         <View style={styles.statsCard}>
           <View style={styles.statsHeader}>
-            <Ionicons name="leaf" size={24} color={colors.primary} />
-            <Text style={styles.statsTitle}>Your Eco Score 🌟</Text>
+            <MaterialCommunityIcons name="star-four-points-outline" size={24} color={colors.primary} />
+            <Text style={styles.statsTitle}>Your Eco Score</Text>
           </View>
-          <View style={styles.scoreContainer}>
-            <View style={styles.scoreValueContainer}>
-              <Text style={styles.scoreValue}>
-                {userScore?.total_score ? Number(userScore.total_score).toFixed(1) : '0.0'}
-              </Text>
-            </View>
-            <Text style={styles.scoreLabel}>Environmental Impact Points</Text>
+          <View style={styles.scoreValueContainer}>
+            <Text style={styles.scoreValue}>{userScore ? Number(userScore).toFixed(1) : '0.0'}</Text>
+            <Text style={styles.scoreUnitLabel}>Points</Text>
           </View>
-          <TouchableOpacity
-            style={styles.viewAllButton}
-            onPress={() => router.push('/waste')}
-          >
-            <Text style={styles.viewAllText}>View Waste Log</Text>
-            <Ionicons name="arrow-forward" size={20} color={colors.primary} />
+        </View>
+
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Upcoming Goal Deadlines</Text>
+          <TouchableOpacity onPress={() => router.push('/goals')}>
+            <Text style={styles.seeAllText}>See All</Text>
           </TouchableOpacity>
         </View>
-  
-        <View style={styles.goalsCard}>
-          <View style={styles.goalsHeader}>
-            <Ionicons name="flag" size={24} color={colors.primary} />
-            <Text style={styles.goalsTitle}>Active Goals</Text>
-            <TouchableOpacity onPress={() => router.push('/goals')}>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-  
-          {activeGoals.length > 0 ? (
-            <View style={styles.goalsList}>
-              {activeGoals.map((goal) => (
-                <TouchableOpacity
-                  key={goal.id}
-                  style={styles.goalItem}
-                  onPress={() => router.push({
-                    pathname: "/goals/[id]",
-                    params: { id: goal.id }
-                  })}
-                >
-                  <View style={styles.goalHeader}>
-                    <Text style={styles.goalTitle}>{goal.category.name}</Text>
-                    <View style={styles.goalType}>
-                      <Ionicons name="leaf" size={16} color={colors.primary} />
-                      <Text style={styles.goalTypeText}>Goal</Text>
-                    </View>
-                  </View>
-  
+
+        {activeGoals.length > 0 ? (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalScrollContent}>
+            {activeGoals.map(goal => (
+              <TouchableOpacity activeOpacity={0.8} key={goal.id} style={styles.goalScrollItem} onPress={() => router.push({ pathname: "/goals/[id]", params: { id: goal.id } })}>
+                <Text style={styles.goalTitle} numberOfLines={2}>{goal.category.name}</Text>
+                <View>
                   <View style={styles.progressContainer}>
                     <View style={styles.progressBar}>
-                      <View
-                        style={[
-                          styles.progressFill,
-                          { width: `${(goal.progress / goal.target) * 100}%` },
-                        ]}
-                      />
+                      <View style={[styles.progressFill, { width: `${(goal.progress / goal.target) * 100}%` }]} />
                     </View>
-                    <Text style={styles.progressText}>
-                      {goal.progress.toFixed(1)} / {goal.target.toFixed(1)} kg
-                    </Text>
+                    <Text style={styles.progressText}>{goal.progress.toFixed(1)}/{goal.target.toFixed(1)} {goal.category.unit}</Text>
                   </View>
-  
-                  <View style={styles.goalFooter}>
-                    <View style={styles.deadlineContainer}>
-                      <Ionicons name="time-outline" size={16} color={colors.textSecondary} />
-                      <Text style={styles.deadlineText}>
-                        Due: {new Date(goal.end_date).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
-                      </Text>
-                    </View>
-                    <Text style={styles.timeframeText}>
-                      {goal.timeframe.charAt(0).toUpperCase() + goal.timeframe.slice(1)}
+                  <View style={styles.deadlineContainer}>
+                    <Ionicons name="time-outline" size={14} color={colors.error} />
+                    <Text style={styles.deadlineText}>
+                      Due: {calculateEndDate(new Date(goal.start_date), goal.timeframe).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
                     </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          ) : (
-            <View style={styles.emptyState}>
-              <Ionicons name="flag-outline" size={48} color={colors.primary} />
-              <Text style={styles.emptyStateText}>
-                No active goals. Set your first sustainability goal!
-              </Text>
-              <TouchableOpacity
-                style={styles.addButton}
-                onPress={() => router.push('/goals/add')}
-              >
-                <Text style={styles.addButtonText}>Create Goal</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-  
-        <View style={styles.activityCard}>
-          <View style={styles.activityHeader}>
-            <Ionicons name="time" size={24} color={colors.primary} />
-            <Text style={styles.activityTitle}>Recent Activity</Text>
-            <TouchableOpacity onPress={() => router.push('/waste')}>
-              <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity>
-          </View>
-  
-          {recentLogs.length > 0 ? (
-            <View style={styles.activityList}>
-              {recentLogs.map((log) => (
-                <View key={log.id} style={styles.activityItem}>
-                  <View style={styles.activityIcon}>
-                    <Ionicons name="leaf-outline" size={24} color={colors.primary} />
-                  </View>
-                  <View style={styles.activityContent}>
-                    <Text style={styles.activityItemTitle}>
-                      {log.sub_category_name}
-                    </Text>
-                    <Text style={styles.activitySubtitle}>
-                      {new Date(log.date_logged).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </Text>
-                  </View>
-                  <View style={styles.activityScore}>
-                    <Text style={styles.scoreText}>+{log.score.toFixed(1)}</Text>
                   </View>
                 </View>
-              ))}
-            </View>
-          ) : (
-            <View style={styles.emptyState}>
-              <Ionicons name="leaf-outline" size={48} color={colors.primary} />
-              <Text style={styles.emptyStateText}>
-                No recent waste logs. Start tracking your waste!
-              </Text>
-              <TouchableOpacity
-                style={styles.addButton}
-                onPress={() => router.push('/waste/add')}
-              >
-                <Text style={styles.addButtonText}>Add Waste Log</Text>
               </TouchableOpacity>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+            ))}
+          </ScrollView>
+        ) : (
+          <View style={styles.emptyStateContainer}>
+            <Ionicons name="flag-outline" size={32} color={colors.primary} />
+            <Text style={styles.emptyStateText}>You have no upcoming goals.</Text>
+            <TouchableOpacity style={styles.addButton} onPress={() => router.push('/goals/add')}>
+              <Text style={styles.addButtonText}>Create New Goal</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
-      <StatusBar style="auto"/>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Discover</Text>
+        </View>
+
+        {dummyPosts.map(post => (
+          <View key={post.id} style={styles.postCard}>
+            <View style={styles.postHeader}>
+              <View style={styles.postHeaderLeft}>
+                <Image source={post.userImage} style={styles.postUserImage} />
+                <View style={styles.postUserInfo}>
+                  <Text style={styles.postUsername}>{post.username}</Text>
+                  <Text style={styles.postAge}>{post.postAge}</Text>
+                </View>
+              </View>
+            </View>
+            <Text style={styles.postCaption}>{post.caption}</Text>
+            {post.postImage && <PostImage source={post.postImage} width={width - (width*0.02) - 24} />}
+            <View style={styles.postActions}>
+              <View style={styles.postActionGroup}>
+                <TouchableOpacity style={styles.postActionButton}>
+                  <MaterialCommunityIcons name="star-four-points-outline" size={22} color={colors.primary} />
+                  <Text style={styles.postLikeText}>{post.likes}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.postActionButton}>
+                  <Ionicons name="chatbubble-outline" size={22} color={colors.textSecondary} />
+                  <Text style={styles.postActionText}>{post.comments}</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.postActionGroup}>
+                <TouchableOpacity style={styles.postActionButton}>
+                  <Ionicons name="paper-plane-outline" size={22} color={colors.textSecondary} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.postActionButton}>
+                  <Ionicons name="bookmark-outline" size={22} color={colors.textSecondary} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+      <StatusBar style="auto" />
     </SafeAreaView>
   );
 }

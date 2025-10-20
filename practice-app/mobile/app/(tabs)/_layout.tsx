@@ -40,6 +40,13 @@ export default function TabLayout() {
             title: "Goals", tabBarIcon: ({ color }) => <Octicons name="goal" size={28} color={color} />, 
           }} 
         />
+        <Tabs.Screen
+          name="challenges"
+          options={{
+            title: "Challenges",
+            tabBarIcon: ({ color }) => <Ionicons name="trophy" size={26} color={color} />,
+          }}
+        />
         <Tabs.Screen 
           name="leaderboard" 
           options={{ 

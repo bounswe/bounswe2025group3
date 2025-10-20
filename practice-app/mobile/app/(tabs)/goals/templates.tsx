@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getSubcategories,getUserProfile, getGoalTemplates } from '@/api/functions';
 
 interface UserProfile {
   id: number;
@@ -22,25 +23,6 @@ interface GoalTemplate {
   target: number; 
   timeframe: string; 
 }
-
-const fetchAllPages = async <T,>(initialUrl: string): Promise<T[]> => {
-    let results: T[] = [];
-    let nextUrl: string | null = initialUrl;
-    while (nextUrl) {
-        try {
-            const response = await tokenManager.authenticatedFetch(nextUrl);
-            if (!response.ok) { break; }
-            const data = await response.json();
-            results = results.concat(data.results);
-            if (data.next) {
-                const nextURLObject = new URL(data.next);
-                const relativePath = nextURLObject.pathname.startsWith('/api') ? nextURLObject.pathname.substring(4) : nextURLObject.pathname;
-                nextUrl = relativePath + nextURLObject.search;
-            } else { nextUrl = null; }
-        } catch (error) { console.error('Error during pagination fetch:', error); break; }
-    }
-    return results;
-};
 
 export default function GoalTemplatesScreen() {
   const [templates, setTemplates] = useState<GoalTemplate[]>([]);
@@ -79,9 +61,9 @@ export default function GoalTemplatesScreen() {
   const fetchData = async () => {
     try {
       const [templateData, subCatData, userData] = await Promise.all([
-        fetchAllPages<GoalTemplate>("/v1/goals/templates/"),
-        fetchAllPages<SubCategory>("/v1/waste/subcategories/"),
-        tokenManager.authenticatedFetch("/v1/auth/user/").then(res => res.ok ? res.json() : null)
+        getGoalTemplates(),
+        getSubcategories(),
+        getUserProfile()
       ]);
       setTemplates(templateData);
       setSubcategories(subCatData);
@@ -113,7 +95,7 @@ export default function GoalTemplatesScreen() {
     };
 
     try {
-      const response = await tokenManager.authenticatedFetch(`/v1/goals/templates/${template.id}/create/`, {
+      const response = await tokenManager.authenticatedFetch(`/api/v1/goals/goals/api-template/${template.id}/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
