@@ -1,7 +1,7 @@
 import { SessionProvider, useSession } from '@/hooks/authContext';
 import { SplashScreenController } from '@/hooks/splash';
 import { ThemeProvider, useTheme } from '@/hooks/themeContext';
-import { Stack } from 'expo-router';
+import { Stack, usePathname } from 'expo-router';
 import React, { useEffect } from 'react';
 import * as NavigationBar from 'expo-navigation-bar';
 import { AlertProvider } from '@/hooks/alertContext';
@@ -22,16 +22,19 @@ export default function Root() {
 function RootLayout() {
   const { session, isLoading } = useSession();
   const { isDark } = useTheme();
+  const pathname = usePathname();
 
   useEffect(() => {
+    if (!session && pathname === "/") {
+      NavigationBar.setButtonStyleAsync('light');
+      return;
+    }
     if (isDark) {
       NavigationBar.setButtonStyleAsync('light');
     } else {
       NavigationBar.setButtonStyleAsync('dark');
     }
-  }, [isDark]);
-
-  if (isLoading) return null;
+  }, [isDark, pathname, session]);
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
