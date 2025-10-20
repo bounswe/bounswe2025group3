@@ -411,5 +411,10 @@
       "error": "Etkinlikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
       "participate": "Katıl",
       "participating": "Katılıyorsunuz!"
+    },
+    "challenge_detail": {
+      "not_found": "Meydan Okuma Bulunamadı",
+      "back_button": "Meydan Okumalara Geri Dön",
+      "your_progress": "İlerlemeniz"
     }
   }

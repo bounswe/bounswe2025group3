@@ -411,5 +411,10 @@
       "error": "Failed to load events. Please try again later.",
       "participate": "Participate",
       "participating": "You are going!"
+    },
+    "challenge_detail": {
+      "not_found": "Challenge Not Found",
+      "back_button": "Back to Challenges",
+      "your_progress": "Your Progress"
     }
   }

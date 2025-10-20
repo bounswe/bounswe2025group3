@@ -96,6 +96,7 @@
 
 .signup-page-scoped .input-box input,
 .signup-page-scoped .bio-full {
+  box-sizing: border-box; /* FIX: Include padding and border in width calculation */
   width: 100%;
   padding: 0.7rem;
   border: 1px solid var(--border-color);

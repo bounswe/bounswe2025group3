@@ -1,9 +1,5 @@
 /* src/components/ChallengeCard.css - Refactored, Scoped, and Themed */
 
-/* --- REMOVED STYLES ---
-  :root block has been removed. Variables are now global in themes.css.
-*/
-
 /* --- Scoped Challenge Card --- */
 .challenges-page-scoped .challenge-card {
   background-color: var(--background-primary);
@@ -133,6 +129,7 @@
 }
 
 .challenges-page-scoped .action-button {
+  box-sizing: border-box; /* FIX: Include padding in width calculation */
   display: flex;
   align-items: center;
   justify-content: center;
