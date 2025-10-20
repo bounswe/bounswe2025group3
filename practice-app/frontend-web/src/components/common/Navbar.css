@@ -14,6 +14,28 @@
   border-bottom: 3px solid var(--nav-dashboard-bottom-border);
   font-family: 'Poppins', sans-serif;
 }
+.navbar-logo-text {
+  font-family: 'Poppins', sans-serif; /* Home.css ile aynı font */
+  font-size: 3.5rem; /* Home.css hero h1 ile aynı */
+  font-weight: 700;
+  color: var(--nav-dashboard-logo-color); /* Temaya uygun renk */
+  margin: 0;
+  line-height: 1.1;
+  transition: color 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .navbar-logo-text {
+      font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar-logo-text {
+      font-size: 2rem;
+  }
+}
 
 .app-logo {
   display: flex;
@@ -80,4 +102,89 @@
 /* Ensure the ThemeSwitcher sits correctly inside the nav item */
 .nav-action-item.theme-switcher-li {
     padding: 0.4rem; /* Adjust padding to fit the circular button nicely */
+}
+
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.5rem;
+}
+
+/* iOS small switches reused from previous */
+.ios-switch {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.ios-switch.small {
+  transform: scale(0.9);
+}
+
+.ios-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ios-slider {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background-color: #ccc;
+  border-radius: 30px;
+  transition: background-color 0.3s ease;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.ios-slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  top: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ios-switch input:checked + .ios-slider {
+  background-color: var(--accent-navbar, #34c759);
+}
+
+.ios-switch input:checked + .ios-slider::before {
+  transform: translateX(18px);
+}
+
+.ios-label {
+  opacity: 0.8;
+  letter-spacing: 0.3px;
+  margin-left: 4px;
+  font-weight: 500;
+  width: 30px; /* fixed width to prevent layout shift */
+  text-align: center;
+}
+.app-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--nav-dashboard-logo-color);
+  text-decoration: none;
+  gap: 0.5rem;
+}
+
+.logo-image {
+  width: 36px;   /* adjust size as needed */
+  height: 36px;  /* keep aspect ratio if possible */
+  object-fit: contain;
 }
