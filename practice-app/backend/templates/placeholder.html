@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Zero Waste{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>{{ title }}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <p>{{ message|default:"This feature is not implemented yet. It will be available in a future update." }}</p>
+                    </div>
+                    <a href="{{ back_url|default:'/' }}" class="btn btn-secondary">Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

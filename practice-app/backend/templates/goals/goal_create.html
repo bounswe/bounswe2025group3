@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Create New Goal{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col">
+    <h1>Create New Goal</h1>
+    <p class="lead">Set a personal waste reduction or recycling goal</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <form method="post" id="goalForm">
+          {% csrf_token %}
+          
+          <div class="mb-3">
+            <label for="category" class="form-label">Waste Category</label>
+            <select name="category" id="category" class="form-select" required>
+              <option value="">Select a category</option>
+              {% for category in waste_categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
+            <div class="form-text">Choose the waste category you want to track</div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="goal_type" class="form-label">Goal Type</label>
+            <select name="goal_type" id="goal_type" class="form-select" required>
+              <option value="">Select a goal type</option>
+              <option value="reduction">Waste Reduction</option>
+              <option value="recycling">Recycling</option>
+            </select>
+            <div class="form-text">Choose whether you want to reduce waste or increase recycling</div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="timeframe" class="form-label">Timeframe</label>
+            <select name="timeframe" id="timeframe" class="form-select" required>
+              <option value="">Select a timeframe</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+            <div class="form-text">Choose how long you want to track this goal</div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="target" class="form-label">Target (kg)</label>
+            <input type="number" class="form-control" id="target" name="target" min="0.1" step="0.1" required>
+            <div class="form-text">
+              Set your target amount in kilograms. 
+              {% if goal_type == 'reduction' %}
+                For reduction goals, this is how much you want to reduce.
+              {% else %}
+                For recycling goals, this is how much you want to recycle.
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="{% url 'goals_list' %}" class="btn btn-outline-secondary me-md-2">Cancel</a>
+            <button type="submit" class="btn btn-primary">Create Goal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Goal Setting Tips</h5>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <strong>Be Specific</strong>: Choose a specific waste category to focus on.
+          </li>
+          <li class="list-group-item">
+            <strong>Be Realistic</strong>: Start with achievable targets and gradually increase them.
+          </li>
+          <li class="list-group-item">
+            <strong>Track Regularly</strong>: Log your waste consistently to see your progress.
+          </li>
+          <li class="list-group-item">
+            <strong>Get Inspired</strong>: Check out the templates tab for pre-defined goals.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Update the help text when goal type changes
+    const goalTypeSelect = document.getElementById('goal_type');
+    const targetHelpText = document.querySelector('#target + .form-text');
+    
+    goalTypeSelect.addEventListener('change', function() {
+      const goalType = this.value;
+      if (goalType === 'reduction') {
+        targetHelpText.textContent = 'Set your target amount in kilograms. For reduction goals, this is how much you want to reduce.';
+      } else if (goalType === 'recycling') {
+        targetHelpText.textContent = 'Set your target amount in kilograms. For recycling goals, this is how much you want to recycle.';
+      } else {
+        targetHelpText.textContent = 'Set your target amount in kilograms.';
+      }
+    });
+  });
+</script>
+{% endblock %} 
