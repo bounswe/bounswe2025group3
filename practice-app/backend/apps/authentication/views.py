@@ -11,10 +11,10 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 def login_view(request):
     """Render the login page with Google OAuth credentials."""
     # Get Google client ID from settings
-    google_client_id = settings.SOCIALACCOUNT_PROVIDERS.get('google', {}).get('APP', {}).get('client_id', '')
+    GCP_CLIENT_ID = settings.SOCIALACCOUNT_PROVIDERS.get('google', {}).get('APP', {}).get('client_id', '')
     
     context = {
-        'google_client_id': google_client_id
+        'GCP_CLIENT_ID': GCP_CLIENT_ID
     }
     return render(request, 'auth/login.html', context)
 

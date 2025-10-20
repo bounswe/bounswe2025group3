@@ -5,7 +5,7 @@ import './SignupPage.css';
 import { useTranslation } from 'react-i18next';
 import Header from '../common/Header';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
 
 const getCurrentTheme = () => {
   return localStorage.getItem('theme') || 'green';
@@ -57,9 +57,9 @@ const SignupPage = () => {
       console.debug('Registration attempt:', { 
         email: formData.email, 
         username: formData.username,
-        apiUrl: API_URL 
+        apiUrl: apiUrl 
       });
-      await axios.post(`${API_URL}/api/auth/register/`, submissionData);
+      await axios.post(`${apiUrl}/api/auth/register/`, submissionData);
       alert('Registration successful! Please log in.');
       navigate('/login');
     } catch (err) {
