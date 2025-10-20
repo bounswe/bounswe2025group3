@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Goals{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col">
+    <h1>Goals</h1>
+    <p class="lead">Track your waste reduction and recycling goals</p>
+  </div>
+  <div class="col-auto">
+    <a href="{% url 'goal_create' %}" class="btn btn-primary">Create New Goal</a>
+  </div>
+</div>
+
+<ul class="nav nav-tabs mb-4" id="goalsTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="my-goals-tab" data-bs-toggle="tab" data-bs-target="#my-goals" type="button" role="tab" aria-controls="my-goals" aria-selected="true">My Goals</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="templates-tab" data-bs-toggle="tab" data-bs-target="#templates" type="button" role="tab" aria-controls="templates" aria-selected="false">Goal Templates</button>
+  </li>
+</ul>
+
+<div class="tab-content" id="goalsTabContent">
+  <!-- My Goals Tab -->
+  <div class="tab-pane fade show active" id="my-goals" role="tabpanel" aria-labelledby="my-goals-tab">
+    {% if goals %}
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for goal in goals %}
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">{{ goal.category.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ goal.get_goal_type_display }} - {{ goal.get_timeframe_display }}</h6>
+                
+                <p class="card-text">Target: {{ goal.target }} kg</p>
+                
+                <div class="progress mb-3">
+                  <div class="progress-bar" role="progressbar" 
+                       style="width: {{ goal.progress_percentage|floatformat:0 }}%;" 
+                       aria-valuenow="{{ goal.progress_percentage|floatformat:0 }}" 
+                       aria-valuemin="0" 
+                       aria-valuemax="100">
+                    {{ goal.progress_percentage|floatformat:0 }}%
+                  </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                  <span class="badge {% if goal.is_complete %}bg-success{% else %}bg-primary{% endif %}">
+                    {% if goal.is_complete %}Completed{% else %}In Progress{% endif %}
+                  </span>
+                  <small class="text-muted">Started: {{ goal.created_at|date:"M d, Y" }}</small>
+                </div>
+              </div>
+              <div class="card-footer">
+                <a href="{% url 'goal_detail' goal.id %}" class="btn btn-sm btn-outline-primary">View Details</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info">
+        You don't have any goals yet. Create a new goal or use one of our templates to get started!
+      </div>
+    {% endif %}
+  </div>
+  
+  <!-- Goal Templates Tab -->
+  <div class="tab-pane fade" id="templates" role="tabpanel" aria-labelledby="templates-tab">
+    {% if goal_templates %}
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for template in goal_templates %}
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">{{ template.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ template.category.name }}</h6>
+                <p class="card-text">{{ template.description }}</p>
+                <ul class="list-group list-group-flush mb-3">
+                  <li class="list-group-item">Target: {{ template.target }} kg</li>
+                  <li class="list-group-item">Timeframe: {{ template.timeframe }}</li>
+                </ul>
+              </div>
+              <div class="card-footer">
+                <a href="{% url 'create_from_template' template.id %}" class="btn btn-sm btn-primary">Use This Template</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert alert-info">
+        No goal templates are available right now.
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Initialize the tabs
+  document.addEventListener('DOMContentLoaded', function() {
+    const triggerTabList = [].slice.call(document.querySelectorAll('#goalsTabs button'))
+    triggerTabList.forEach(function(triggerEl) {
+      const tabTrigger = new bootstrap.Tab(triggerEl)
+      triggerEl.addEventListener('click', function(event) {
+        event.preventDefault()
+        tabTrigger.show()
+      })
+    })
+  })
+</script>
+{% endblock %} 

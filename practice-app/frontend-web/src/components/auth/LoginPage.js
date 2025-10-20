@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import Header from '../common/Header';
 //import jwt_decode from 'jwt-decode'; // Optional if you want to decode the token
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const GITHUB_REDIRECT_URI = process.env.REACT_APP_GITHUB_REDIRECT_URI || 'http://localhost:3000/github-callback';
 

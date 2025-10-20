@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign In with Google</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .login-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 1.75rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        p {
+            margin-bottom: 1.5rem;
+            color: #555;
+            line-height: 1.5;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .google-logo {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .menu {
+            margin-bottom: 1.5rem;
+        }
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .menu li {
+            margin-bottom: 0.5rem;
+        }
+        .menu li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .menu li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        {% if process == "connect" %}
+            <h1>Connect {{ provider.name }}</h1>
+            <p>You are about to connect your account to a third-party account from {{ provider.name }}.</p>
+        {% else %}
+            <h1>Sign In with {{ provider.name }}</h1>
+            <p>You are about to sign in using a third-party account from {{ provider.name }}.</p>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit">Continue</button>
+        </form>
+        
+        <a href="{% url 'account_login' %}" class="back-link">Back to Login</a>
+        
+        {% if cancel_url %}
+        <hr>
+        <div class="menu">
+            <ul>
+                <li><a href="{{ cancel_url }}">Cancel</a></li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html> 

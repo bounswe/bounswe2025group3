@@ -4,7 +4,7 @@ import axios from 'axios';
 import Navbar from '../common/Navbar'; // 2. Import shared Navbar
 import './GoalsPage.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 const Icon = ({ name, className = '' }) => {
   const icons = {

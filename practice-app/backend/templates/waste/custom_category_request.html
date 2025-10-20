@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Request New Waste Category</h1>
+  <p class="lead">Can't find a category that matches your waste? Request a new one here.</p>
+  
+  <form method="post">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      <label for="name" class="form-label">Category Name</label>
+      <input type="text" class="form-control" id="name" name="name" required>
+      <div class="form-text">Provide a clear, descriptive name for the waste category you'd like to add.</div>
+    </div>
+    
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+      <div class="form-text">Explain what this category includes and why it should be added.</div>
+    </div>
+    
+    <div class="mb-3">
+      <label for="suggested_category" class="form-label">Parent Category (if applicable)</label>
+      <select id="suggested_category" class="form-select" name="suggested_category">
+        <option value="">-- None --</option>
+        {% for category in categories %}
+          <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+      </select>
+      <div class="form-text">If this should be a subcategory of an existing category, select it here.</div>
+    </div>
+    
+    <div class="mb-3">
+      <label for="unit" class="form-label">Measurement Unit</label>
+      <select id="unit" class="form-select" name="unit" required>
+        <option value="">-- Select Unit --</option>
+        <option value="kg">Kilogram (kg)</option>
+        <option value="g">Gram (g)</option>
+        <option value="mg">Milligram (mg)</option>
+        <option value="l">Liter (l)</option>
+        <option value="ml">Milliliter (ml)</option>
+        <option value="pcs">Piece (pcs)</option>
+      </select>
+      <div class="form-text">How should this waste type be measured?</div>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit Request</button>
+    <a href="{% url 'waste_index' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+  
+  <div class="mt-5">
+    <h3>Your Previous Requests</h3>
+    
+    {% if user_requests %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Date Submitted</th>
+            <th>Category Name</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for request in user_requests %}
+          <tr>
+            <td>{{ request.created_at|date:"M d, Y" }}</td>
+            <td>{{ request.name }}</td>
+            <td>
+              {% if request.status == 'pending' %}
+                <span class="badge bg-warning">Pending</span>
+              {% elif request.status == 'approved' %}
+                <span class="badge bg-success">Approved</span>
+              {% else %}
+                <span class="badge bg-danger">Rejected</span>
+                {% if request.admin_notes %}
+                  <i class="bi bi-info-circle" data-bs-toggle="tooltip" title="{{ request.admin_notes }}"></i>
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="alert alert-info">
+        You haven't made any category requests yet.
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  // Initialize tooltips
+  document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  });
+</script>
+{% endblock %}

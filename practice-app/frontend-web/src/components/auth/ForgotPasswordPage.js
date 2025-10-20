@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Header from '../common/Header';
 import './ForgotPasswordPage.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 // Helper function to get the current theme from local storage
 const getCurrentTheme = () => {
