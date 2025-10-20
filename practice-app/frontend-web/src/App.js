@@ -15,6 +15,10 @@ import ResetPasswordPage from './components/auth/ResetPasswordPage';
 import BlogPostPage from './components/blog/BlogPostPage';
 import GoalsPage from './components/goals/GoalsPage';
 import GithubCallback from './components/auth/GithubCallback';
+import EventsPage from './components/events/EventsPage';
+import TermsPage from './components/auth/TermsPage';
+import ChallengeDetailPage from './components/challenges/ChallengeDetail';
+import './i18n';
 
 // Add debugging information for build and environment
 console.debug('App Initialization:', {
@@ -34,12 +38,14 @@ const App = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/terms" element={<TermsPage />} />
                 <Route path="/waste" element={<WasteLog />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/goals" element={<GoalsPage />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/challenges" element={<Challanges />} />
+                <Route path="/events" element={<EventsPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
                 {/* Assuming slug is passed as URL parameter */}
@@ -48,6 +54,8 @@ const App = () => {
                 
                 {/* Assuming these components exist */}
                 
+                <Route path="/challenges/:id" element={<ChallengeDetailPage />} />
+
                 <Route path="/about" element={<About />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/github-callback" element={<GithubCallback />} />

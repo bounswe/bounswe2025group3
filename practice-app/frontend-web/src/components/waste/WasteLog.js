@@ -1,73 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom'; // Added Link, NavLink
-import { getWasteLogs, addWasteLog, getSubCategories } from '../../services/api'; // Assuming path is correct
-// Removed: import Navbar from '../common/Navbar';
-import './WasteLog.css'; // We will heavily update this
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { getWasteLogs, addWasteLog, getSubCategories } from '../../services/api';
+import Navbar from '../common/Navbar';
+import './WasteLog.css';
 
-// Re-usable Icon component (or import if you've centralized it)
 const Icon = ({ name, className = "" }) => {
     const icons = {
-        logo: '🌿',
-        waste: '🗑️',
-        leaderboard: '📊',
-        challenges: '🏆',
-        logNew: '➕',
-        list: '📋',
-        alerts: '⚠️',
-        dashboard: '🏠',
-        back: '↩️', // Or a left arrow icon
-        category: '🏷️',
-        quantity: '⚖️',
-        disposal: '♻️',
-        notes: '📝',
-        retry: '🔄',
-        goal: '🎯',
-        submit: '✔️'
+        logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆',
+        logNew: '➕', list: '📋', alerts: '⚠️', dashboard: '🏠',
+        back: '↩️', category: '🏷️', quantity: '⚖️', disposal: '♻️',
+        notes: '📝', retry: '🔄', goal: '🎯', submit: '✔️'
     };
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
-
 const WasteLog = () => {
+    const { t } = useTranslation();
     const [logs, setLogs] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
-    const [form, setForm] = useState({
-        subcategory: '', // Changed from sub_category for consistency with label
-        quantity: '',
-        disposal_method: '',
-        notes: '',
-    });
+    const [form, setForm] = useState({ subcategory: '', quantity: '', disposal_method: '', notes: '' });
     const [loading, setLoading] = useState(false);
-    const [loadingSubmit, setLoadingSubmit] = useState(false); // Separate loading for submit
-    const [error, setError] = useState(null);
+    const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const [error, setError] = useState(null); // Will store the translation KEY
     const navigate = useNavigate();
 
     const fetchData = async () => {
         setLoading(true);
         setError(null);
         try {
-            const [logsData, subCategoriesData] = await Promise.all([
-                getWasteLogs(),
-                getSubCategories(),
-            ]);
+            const [logsData, subCategoriesData] = await Promise.all([ getWasteLogs(), getSubCategories() ]);
             setLogs(Array.isArray(logsData) ? logsData : []);
             setSubCategories(Array.isArray(subCategoriesData) ? subCategoriesData : []);
             if (!Array.isArray(subCategoriesData) || subCategoriesData.length === 0) {
-                setError('No waste categories available to log. Please contact support or try again later.');
+                setError('waste_log_page.error_no_categories'); // Store the key
             }
         } catch (err) {
-            setError('Failed to fetch initial data. Please check your connection.');
-            console.error('Error fetching data:', err.response?.data || err.message);
+            setError('waste_log_page.error_fetch_failed'); // Store the key
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        const token = localStorage.getItem('access_token');
-     
         fetchData();
-    }, [navigate]); // Added navigate to dependency array
+    }, []); 
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -77,12 +54,12 @@ const WasteLog = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.subcategory || !form.quantity) {
-            setError('Please select a category and enter a quantity.');
+            setError('waste_log_page.error_select_category_and_quantity'); // Store the key
             return;
         }
         const quantity = parseFloat(form.quantity);
         if (isNaN(quantity) || quantity <= 0) {
-            setError('Quantity must be a positive number.');
+            setError('waste_log_page.error_quantity_positive'); // Store the key
             return;
         }
 
@@ -90,24 +67,18 @@ const WasteLog = () => {
         setError(null);
         try {
             const payload = {
-                sub_category: parseInt(form.subcategory), // API expects sub_category
+                sub_category: parseInt(form.subcategory),
                 quantity,
                 disposal_method: form.disposal_method || undefined,
                 notes: form.notes || undefined,
             };
             await addWasteLog(payload);
-            // Refetch logs to include the new one
             const updatedLogsData = await getWasteLogs();
             setLogs(Array.isArray(updatedLogsData) ? updatedLogsData : []);
-            setForm({ subcategory: '', quantity: '', disposal_method: '', notes: '' }); // Reset form
+            setForm({ subcategory: '', quantity: '', disposal_method: '', notes: '' });
             alert('Waste log added successfully!');
         } catch (err) {
-            const errorMessage = err.response?.data
-                ? Object.entries(err.response.data)
-                      .map(([key, value]) => `${key.replace(/_/g, ' ')}: ${Array.isArray(value) ? value.join(', ') : value}`)
-                      .join('; ') || 'Failed to add waste log.'
-                : 'Failed to add waste log. Please check your connection or try again.';
-            setError(errorMessage);
+            setError('waste_log_page.error_add_log_failed'); // Store a generic key
             console.error('Error adding log:', err.response?.data || err.message);
         } finally {
             setLoadingSubmit(false);
@@ -115,188 +86,99 @@ const WasteLog = () => {
     };
 
     return (
-        <div className="wastelog-page-layout">
-            {/* --- Top Navigation Bar --- */}
-           
-            {/* --- Top Navigation Bar --- */}
-            <header className="dashboard-top-nav">
-                <Link to="/" className="app-logo">
-                    <Icon name="logo" /> Greener
-                </Link>
-                <nav className="main-actions-nav">
-                    {/* Add Dashboard link here */}
-                    <NavLink to="/dashboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="dashboard" /> Dashboard {/* Make sure 'dashboard' icon is in your Icon component */}
-                    </NavLink>
-                    <NavLink to="/waste" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="waste" /> Waste Log
-                    </NavLink>
-                    <NavLink to="/goals"  className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="goal" /> Goals
-                    </NavLink>
-                    <NavLink to="/leaderboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="leaderboard" /> Leaderboard
-                    </NavLink>
-                    <NavLink to="/challenges" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="challenges" /> Challenges
-                    </NavLink>
-                </nav>
-            </header>
-            {/* --- Main Content Area for Waste Log --- */}
+        <div className="wastelog-page-scoped wastelog-page-layout">
+            <Navbar isAuthenticated={true} />
+
             <main className="wastelog-main-content">
                 <div className="wastelog-header-section">
-                    <h1><Icon name="waste" /> Log Your Waste</h1>
-                    <p>Track your waste generation to understand and reduce your environmental impact.</p>
+                    <h1><Icon name="waste" /> {t('waste_log_page.title')}</h1>
+                    <p>{t('waste_log_page.subtitle')}</p>
                 </div>
 
                 {error && (
-                    <div className="error-message-box-main wastelog-error"> {/* Reusing error style */}
-                        <Icon name="alerts" className="error-icon"/> {error}
-                        {error.includes('No waste categories available') && (
+                    <div className="error-message-box-main wastelog-error">
+                        <Icon name="alerts" className="error-icon"/> {t(error)} {/* Translate the key here */}
+                        {error === 'waste_log_page.error_no_categories' && (
                             <button onClick={fetchData} disabled={loading} className="retry-button">
-                                <Icon name="retry"/> Retry Fetching Categories
+                                <Icon name="retry"/> {t('waste_log_page.retry_button')}
                             </button>
                         )}
                     </div>
                 )}
 
+                {/* THE MISSING JSX IS NOW RESTORED */}
                 <div className="wastelog-form-and-list-container">
-                    {/* Form Section */}
                     <section className="wastelog-form-card">
-                        <h3 className="form-card-title"><Icon name="logNew"/> Add New Entry</h3>
+                        <h3 className="form-card-title"><Icon name="logNew"/> {t('waste_log_page.form.title')}</h3>
                         <form onSubmit={handleSubmit} className="wastelog-form">
                             <div className="form-field">
-                                <label htmlFor="subcategory"><Icon name="category"/> Category</label>
-                                <select
-                                    id="subcategory"
-                                    name="subcategory" // Name attribute for controlled component
-                                    value={form.subcategory}
-                                    onChange={handleInputChange}
-                                    disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0}
-                                    required
-                                >
-                                    <option value="">Select a waste category...</option>
-                                    {Array.isArray(subCategories) && subCategories.map((sc) => (
-                                        <option key={sc.id} value={sc.id}>
-                                            {sc.name} ({sc.unit})
-                                        </option>
-                                    ))}
+                                <label htmlFor="subcategory"><Icon name="category"/> {t('waste_log_page.form.category_label')}</label>
+                                <select id="subcategory" name="subcategory" value={form.subcategory} onChange={handleInputChange} disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0} required>
+                                    <option value="">{t('waste_log_page.form.category_placeholder')}</option>
+                                    {subCategories.map((sc) => <option key={sc.id} value={sc.id}>{sc.name} ({sc.unit})</option>)}
                                 </select>
                             </div>
-
                             <div className="form-field">
-                                <label htmlFor="quantity"><Icon name="quantity"/> Quantity</label>
-                                <input
-                                    id="quantity"
-                                    name="quantity" // Name attribute
-                                    type="number"
-                                    placeholder="e.g., 2.5"
-                                    value={form.quantity}
-                                    onChange={handleInputChange}
-                                    min="0.01"
-                                    step="any" // Allow more flexible decimal input
-                                    disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0}
-                                    required
-                                />
+                                <label htmlFor="quantity"><Icon name="quantity"/> {t('waste_log_page.form.quantity_label')}</label>
+                                <input id="quantity" name="quantity" type="number" placeholder={t('waste_log_page.form.quantity_placeholder')} value={form.quantity} onChange={handleInputChange} min="0.01" step="any" disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0} required />
                             </div>
-
                             <div className="form-field">
-                                <label htmlFor="disposal_method"><Icon name="disposal"/> Disposal Method (Optional)</label>
-                                <select
-                                    id="disposal_method"
-                                    name="disposal_method" // Name attribute
-                                    value={form.disposal_method}
-                                    onChange={handleInputChange}
-                                    disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0}
-                                >
-                                    <option value="">Select if applicable...</option>
-                                    <option value="recycled">Recycled</option>
-                                    <option value="composted">Composted</option>
-                                    <option value="landfill">Landfill</option>
-                                    <option value="donated">Donated/Reused</option>
-                                    <option value="incinerated">Incinerated (Energy Recovery)</option>
-                                    <option value="other">Other</option>
+                                <label htmlFor="disposal_method"><Icon name="disposal"/> {t('waste_log_page.form.disposal_label')}</label>
+                                <select id="disposal_method" name="disposal_method" value={form.disposal_method} onChange={handleInputChange} disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0}>
+                                    <option value="">{t('waste_log_page.form.disposal_placeholder')}</option>
+                                    <option value="recycled">{t('waste_log_page.form.disposal_options.recycled')}</option>
+                                    <option value="composted">{t('waste_log_page.form.disposal_options.composted')}</option>
+                                    <option value="landfill">{t('waste_log_page.form.disposal_options.landfill')}</option>
+                                    <option value="donated">{t('waste_log_page.form.disposal_options.donated')}</option>
+                                    <option value="incinerated">{t('waste_log_page.form.disposal_options.incinerated')}</option>
+                                    <option value="other">{t('waste_log_page.form.disposal_options.other')}</option>
                                 </select>
                             </div>
-
                             <div className="form-field">
-                                <label htmlFor="notes"><Icon name="notes"/> Notes (Optional)</label>
-                                <textarea
-                                    id="notes"
-                                    name="notes" // Name attribute
-                                    placeholder="Any details, e.g., specific items, source..."
-                                    value={form.notes}
-                                    onChange={handleInputChange}
-                                    rows="3"
-                                    disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0}
-                                />
+                                <label htmlFor="notes"><Icon name="notes"/> {t('waste_log_page.form.notes_label')}</label>
+                                <textarea id="notes" name="notes" placeholder={t('waste_log_page.form.notes_placeholder')} value={form.notes} onChange={handleInputChange} rows="3" disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0} />
                             </div>
-
-                            <button
-                                type="submit"
-                                className="submit-log-button"
-                                disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0}
-                            >
+                            <button type="submit" className="submit-log-button" disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0}>
                                 {loadingSubmit ? (
-                                    <>
-                                        <span className="button-spinner"></span> Adding...
-                                    </>
+                                    <>{t('waste_log_page.form.submit_button_adding')}</>
                                 ) : (
-                                    <><Icon name="submit"/> Add Log Entry</>
+                                    <><Icon name="submit"/> {t('waste_log_page.form.submit_button')}</>
                                 )}
                             </button>
                         </form>
                     </section>
-
-                    {/* Log List Section */}
                     <section className="wastelog-list-card">
-                        <h3 className="list-card-title"><Icon name="list"/> Your Recent Logs</h3>
-                        {loading && !loadingSubmit && <p className="loading-text">Loading logs...</p>}
-                        {!loading && logs.length === 0 && (
-                            <p className="no-logs-message">You haven't logged any waste yet. Use the form to start tracking!</p>
-                        )}
+                        <h3 className="list-card-title"><Icon name="list"/> {t('waste_log_page.log_list.title')}</h3>
+                        {loading && !loadingSubmit && <p className="loading-text">{t('waste_log_page.log_list.loading')}</p>}
+                        {!loading && logs.length === 0 && <p className="no-logs-message">{t('waste_log_page.log_list.no_logs')}</p>}
                         {!loading && logs.length > 0 && (
                             <ul className="wastelog-items-list">
-                                {logs
-                                    .sort((a, b) => new Date(b.date_logged) - new Date(a.date_logged)) // Ensure sorting
-                                    .slice(0, 10) // Show recent 10, for example
-                                    .map((log) => {
-                                        const subCategoryDetails = subCategories.find(sc => sc.id === log.sub_category);
-                                        return (
-                                            <li key={log.id} className="wastelog-item">
-                                                <div className="item-main-info">
-                                                    <span className="item-category">
-                                                        <Icon name="category" /> {log.sub_category_name || subCategoryDetails?.name || 'Unknown Category'}
-                                                    </span>
-                                                    <span className="item-quantity">
-                                                        {Number(log.quantity).toFixed(2)} {subCategoryDetails?.unit || 'units'}
-                                                    </span>
-                                                </div>
-                                                <div className="item-meta-info">
-                                                    <span className="item-score">Score: {log.score || 'N/A'}</span>
-                                                    {log.disposal_method && <span className="item-disposal">Method: {log.disposal_method}</span>}
-                                                </div>
-                                                {log.notes && <p className="item-notes">Notes: {log.notes}</p>}
-                                                <span className="item-date">
-                                                    Logged: {new Date(log.date_logged).toLocaleDateString()}
-                                                    {/* {new Date(log.date_logged).toLocaleString()} */}
-                                                </span>
-                                            </li>
-                                        );
+                                {logs.slice(0, 10).map((log) => {
+                                    const subCategoryDetails = subCategories.find(sc => sc.id === log.sub_category);
+                                    return (
+                                        <li key={log.id} className="wastelog-item">
+                                            <div className="item-main-info">
+                                                <span className="item-category"><Icon name="category" /> {log.sub_category_name || subCategoryDetails?.name || t('waste_log_page.log_list.unknown_category')}</span>
+                                                <span className="item-quantity">{Number(log.quantity).toFixed(2)} {subCategoryDetails?.unit || 'units'}</span>
+                                            </div>
+                                            <div className="item-meta-info">
+                                                <span className="item-score">{t('waste_log_page.log_list.score_prefix')}: {log.score || t('waste_log_page.log_list.score_na')}</span>
+                                                {log.disposal_method && <span className="item-disposal">{t('waste_log_page.log_list.method_prefix')}: {log.disposal_method}</span>}
+                                            </div>
+                                            {log.notes && <p className="item-notes">{t('waste_log_page.log_list.notes_prefix')}: {log.notes}</p>}
+                                            <span className="item-date">{t('waste_log_page.log_list.logged_prefix')}: {new Date(log.date_logged).toLocaleDateString()}</span>
+                                        </li>
+                                    );
                                 })}
                             </ul>
                         )}
-                         {!loading && logs.length > 10 && (
-                            <p className="view-all-logs-link">View all logs in your profile (coming soon!)</p>
-                        )}
+                         {!loading && logs.length > 10 && <p className="view-all-logs-link">{t('waste_log_page.log_list.view_all_prompt')}</p>}
                     </section>
                 </div>
+
                 <div className="page-actions">
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="back-to-dashboard-button"
-                    >
-                        <Icon name="back"/> Back to Dashboard
+                    <button onClick={() => navigate('/dashboard')} className="back-to-dashboard-button">
+                        <Icon name="back"/> {t('waste_log_page.back_to_dashboard_button')}
                     </button>
                 </div>
             </main>

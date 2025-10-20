@@ -1,79 +1,83 @@
-.navbar {
-    width: 100%;
-    background-color: rgba(199, 232, 202, 0.9);
-    padding: 10px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Navbar.css - Refactored and Themed */
+
+/* ---------- Top Navigation ---------- */
+.dashboard-top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  background-color: var(--background-primary);
+  box-shadow: 0 2px 10px var(--shadow-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 3px solid var(--nav-dashboard-bottom-border);
+  font-family: 'Poppins', sans-serif;
 }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #122e1a;
+.app-logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--nav-dashboard-logo-color);
+  text-decoration: none;
 }
 
-.nav-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 15px;
+.app-logo .icon {
+  font-size: 1.5em;
+  color: var(--nav-dashboard-logo-icon-color);
+  margin-right: 0.5em;
 }
 
-.nav-link {
-    color: #333;
-    text-decoration: none;
-    font-size: 0.9rem;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+.main-actions-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.nav-link:hover {
-    background-color: #56ea62;
-    color: white;
+/* This class now styles NavLinks AND buttons */
+.nav-action-item {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  color: var(--nav-dashboard-link-color);
+  font-weight: 500;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  
+  /* Style reset for buttons */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
 }
 
-.nav-link.active {
-    background-color: #56ea62;
-    color: white;
-    font-weight: bold;
+.nav-action-item .icon {
+  color: var(--nav-dashboard-icon-color);
+  font-size: 1.2em;
+  margin-right: 0.5em;
 }
 
-.nav-button {
-    background: none;
-    border: none;
-    color: #333;
-    font-size: 0.9rem;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+.nav-action-item:hover {
+  background-color: var(--nav-dashboard-link-hover-bg);
+  color: var(--nav-dashboard-link-hover-color);
+  box-shadow: 0 2px 8px var(--nav-dashboard-hover-shadow);
 }
 
-.nav-button:hover {
-    background-color: #56ea62;
-    color: white;
+.nav-action-item.active {
+  background-color: var(--nav-dashboard-link-active-bg);
+  color: var(--text-on-accent);
+  box-shadow: 0 4px 12px var(--nav-dashboard-active-shadow);
 }
 
-@media (max-width: 600px) {
-    .navbar {
-        flex-direction: column;
-        padding: 10px;
-    }
+.nav-action-item.active .icon {
+  color: var(--text-on-accent);
+}
 
-    .nav-links {
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-    }
-
-    .nav-link,
-    .nav-button {
-        width: 100%;
-        text-align: center;
-    }
+/* Ensure the ThemeSwitcher sits correctly inside the nav item */
+.nav-action-item.theme-switcher-li {
+    padding: 0.4rem; /* Adjust padding to fit the circular button nicely */
 }

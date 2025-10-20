@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // If details link to a separate page
 import './ChallengeCard.css'; // We'll create this CSS file
+import { useTranslation } from 'react-i18next'; // 1. Import hook
 
 // Re-usable Icon component (or import if you've centralized it)
 const Icon = ({ name, className = "" }) => {
@@ -21,6 +22,7 @@ const Icon = ({ name, className = "" }) => {
 };
 
 const ChallengeCard = ({ challenge, onJoinChallenge }) => {
+    const { t } = useTranslation();
     const {
         id,
         title,
@@ -38,25 +40,25 @@ const ChallengeCard = ({ challenge, onJoinChallenge }) => {
     const getStatusInfo = () => {
         switch (status) {
             case 'upcoming':
-                return { text: 'Upcoming', icon: 'upcoming', className: 'status-upcoming' };
+                return { key: 'upcoming', icon: 'upcoming' };
             case 'active':
-                return { text: 'Active', icon: 'progress', className: 'status-active' };
+                return { key: 'active', icon: 'progress' };
             case 'completed_by_user':
-                return { text: 'Completed!', icon: 'completed', className: 'status-completed' };
+                return { key: 'completed', icon: 'completed' };
             case 'expired':
-                return { text: 'Expired', icon: 'expired', className: 'status-expired' };
+                return { key: 'expired', icon: 'expired' };
             default:
-                return { text: 'View', icon: 'view', className: 'status-default' };
+                return { key: 'view', icon: 'view' };
         }
     };
 
     const statusInfo = getStatusInfo();
+    const statusText = t(`challenge_card.status_${statusInfo.key}`);
 
     return (
         <div className={`challenge-card status-${status}`}>
-            {/* Optional: challenge.image && <img src={challenge.image} alt={title} className="challenge-card-image" /> */}
-            <div className="challenge-card-status-banner" data-status={statusInfo.text}>
-                <Icon name={statusInfo.icon} /> {statusInfo.text}
+            <div className="challenge-card-status-banner" data-status={statusText}>
+                <Icon name={statusInfo.icon} /> {statusText}
             </div>
             <div className="challenge-card-content">
                 <span className="challenge-card-category">{category}</span>
@@ -65,10 +67,7 @@ const ChallengeCard = ({ challenge, onJoinChallenge }) => {
 
                 {status === 'active' && userProgress !== undefined && (
                     <div className="challenge-progress-bar-container">
-                        <div
-                            className="challenge-progress-bar"
-                            style={{ width: `${userProgress}%` }}
-                        >
+                        <div className="challenge-progress-bar" style={{ width: `${userProgress}%` }}>
                             {userProgress}%
                         </div>
                     </div>
@@ -77,22 +76,22 @@ const ChallengeCard = ({ challenge, onJoinChallenge }) => {
                 <div className="challenge-card-meta">
                     {reward && (
                         <div className="meta-item reward-meta">
-                            <Icon name="points" /> {reward.points} pts
+                            <Icon name="points" /> {reward.points} {t('challenge_card.points_suffix')}
                             {reward.badge && <> + <Icon name="badge" /> {reward.badge}</>}
                         </div>
                     )}
                     {endDate && status !== 'upcoming' && (
                         <div className="meta-item">
-                            <Icon name="time" /> Ends: {new Date(endDate).toLocaleDateString()}
+                            <Icon name="time" /> {t('challenge_card.meta_ends_on')} {new Date(endDate).toLocaleDateString()}
                         </div>
                     )}
                     {startDate && status === 'upcoming' && (
                         <div className="meta-item">
-                            <Icon name="time" /> Starts: {new Date(startDate).toLocaleDateString()}
+                            <Icon name="time" /> {t('challenge_card.meta_starts_on')} {new Date(startDate).toLocaleDateString()}
                         </div>
                     )}
                      <div className="meta-item">
-                        <Icon name="users" /> {participants || 0} participants
+                        <Icon name="users" /> {participants || 0} {t('challenge_card.meta_participants')}
                     </div>
                 </div>
             </div>
@@ -100,29 +99,28 @@ const ChallengeCard = ({ challenge, onJoinChallenge }) => {
             <div className="challenge-card-actions">
                 {status === 'upcoming' && (
                     <button onClick={() => onJoinChallenge(id, 'join')} className="action-button join-button">
-                        <Icon name="join" /> Join Challenge
+                        <Icon name="join" /> {t('challenge_card.action_join')}
                     </button>
                 )}
                 {status === 'active' && (
-                     // Could link to a detailed challenge page or show progress
                     <Link to={`/challenges/${id}`} className="action-button view-button">
-                        <Icon name="view" /> View Progress
+                        <Icon name="view" /> {t('challenge_card.action_view_progress')}
                     </Link>
                 )}
                  {status === 'completed_by_user' && (
                     <div className="action-button completed-button-display">
-                        <Icon name="completed" /> Nicely Done!
+                        <Icon name="completed" /> {t('challenge_card.action_completed')}
                     </div>
                 )}
                 {status === 'expired' && (
                     <div className="action-button expired-button-display">
-                        <Icon name="expired" /> Ended
+                        <Icon name="expired" /> {t('challenge_card.action_ended')}
                     </div>
                 )}
-                {/* Fallback or for general view */}
+                {/* Fallback */}
                 {!(status === 'upcoming' || status === 'active' || status === 'completed_by_user' || status === 'expired') && (
                      <Link to={`/challenges/${id}`} className="action-button view-button">
-                        <Icon name="view" /> View Details
+                        <Icon name="view" /> {t('challenge_card.action_view_details')}
                     </Link>
                 )}
             </div>

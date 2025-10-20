@@ -86,3 +86,9 @@ class AdminActionResponseSerializer(serializers.Serializer):
 class UserScoreSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     total_score = serializers.FloatField()
+
+
+class UserRankingSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    username = serializers.CharField()
+    total_waste_quantity = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)

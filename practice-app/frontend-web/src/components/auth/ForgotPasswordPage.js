@@ -1,20 +1,52 @@
-// src/pages/auth/ForgotPasswordPage.js (or your preferred path)
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import './LoginPage.css'; // Reusing styles
-// You might want a specific CSS for minor adjustments:
-// import './ForgotPasswordPage.css'; 
+import { useTranslation } from 'react-i18next';
+import Header from '../common/Header';
+import './ForgotPasswordPage.css';
 
-// Use environment variable or default to localhost:10000
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+
+// Helper function to get the current theme from local storage
+const getCurrentTheme = () => {
+    // *** FIX 1: Default to 'green' to match the ThemeSwitcher's default state ***
+    return localStorage.getItem('theme') || 'green';
+};
 
 const ForgotPasswordPage = () => {
+    const { t } = useTranslation();
+
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [currentTheme, setCurrentTheme] = useState(getCurrentTheme());
     const navigate = useNavigate();
+
+    // Use useEffect to listen for theme changes
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setCurrentTheme(getCurrentTheme());
+        };
+
+        // This event fires when localStorage is changed in ANOTHER tab.
+        // For same-tab updates, we also need a custom event.
+        window.addEventListener('storage', handleStorageChange);
+
+        // Your ThemeSwitcher likely updates state, but doesn't notify other components.
+        // A custom event is a good way to solve this globally.
+        // Let's assume the switcher will dispatch this event.
+        const handleThemeChange = () => {
+            setCurrentTheme(getCurrentTheme());
+        }
+        document.addEventListener('themeChanged', handleThemeChange);
+
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            document.removeEventListener('themeChanged', handleThemeChange);
+        };
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,68 +55,47 @@ const ForgotPasswordPage = () => {
         setLoading(true);
 
         if (!email) {
-            setError('Please enter your email address.');
+            setError(t('forgot_password.error_enter_email'));
             setLoading(false);
             return;
         }
 
         try {
-            console.debug('Password reset request:', { email, apiUrl: API_URL });
-            // Replace with your backend endpoint for initiating password reset
-            await axios.post(`${API_URL}/api/auth/password_reset/`, { email });
-            setMessage('If an account with that email exists, a password reset link has been sent. Please check your inbox (and spam folder).');
-            setEmail(''); // Clear the form
+            await axios.post(`${apiUrl}/auth/password_reset/`, { email });
+            setMessage(t('forgot_password.success_message'));
+            setEmail('');
         } catch (err) {
-            // Even if the email doesn't exist, it's good practice for security
-            // to show a generic success message to prevent email enumeration.
-            // However, for user feedback during development, you might show more specific errors.
-            // For production, always show a generic success message.
-            setMessage('If an account with that email exists, a password reset link has been sent.');
+            setMessage(t('forgot_password.success_message'));
             console.error('Forgot password error:', err.response?.data || err.message);
-            // setError('Failed to send reset link. Please try again.');
         } finally {
             setLoading(false);
         }
     };
 
+    // *** FIX 2: Check for 'blue' to match the value set by the ThemeSwitcher ***
+    const imageSrc = currentTheme === 'blue' ? '/wasteimage-blue.png' : '/wasteimage.png';
+
     return (
-        <div className="login-page forgot-password-page"> {/* Reusing login-page structure */}
-            <div className="nav-container">
-                <nav className="navbar">
-                <Link to="/" className="navbar-brand">
-                        <img src="/icon.png" alt="Greener Logo" className="navbar-logo-image" />
-                        <span className="navbar-app-name">GREENER</span>
-                    </Link>
-                    <ul className="main-nav">
-                        <li className="nav-item"><Link to="/">Home</Link></li>
-                        <li className="nav-item"><Link to="/about">About us</Link></li>
-                        <li className="nav-item"><Link to="/blog">Blog</Link></li>
-                        <li className="nav-item"><Link to="/login">Login</Link></li>
-                        <li className="nav-item"><Link to="/signup">Sign Up</Link></li>
-                    </ul>
-                </nav>
-            </div>
+        <div className="forgot-password-page-scoped forgot-password-page">
+            <Header />
             
             <div className="login-container">
-                <div className="main-content"> {/* You might want to simplify this if no image */}
+                <div className="main-content">
                     <div className="form-section">
-                        <h1 className="main-heading">Forgot Your Password?</h1>
-                        <p className="welcome-text">
-                            No worries! Enter your email address below, and we'll send you a link to reset your password.
-                        </p>
+                        <h1 className="main-heading">{t('forgot_password.title')}</h1>
+                        <p className="welcome-text">{t('forgot_password.subtitle')}</p>
                         
                         <form onSubmit={handleSubmit}>
-                            {/* Can reuse .email-section or create a new wrapper */}
                             <div className="email-section">
                                 {message && <p className="success-message">{message}</p>}
                                 {error && <p className="error-message">{error}</p>}
 
                                 <div className="input-box">
-                                    <label htmlFor="email">Email Address</label>
+                                    <label htmlFor="email">{t('forgot_password.email_label')}</label>
                                     <input
                                         id="email"
                                         type="email"
-                                        placeholder="Enter your registered email"
+                                        placeholder={t('forgot_password.placeholder_email')}
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
@@ -94,18 +105,18 @@ const ForgotPasswordPage = () => {
                                 
                                 <div className="action-buttons">
                                     <button type="submit" className="login-btn" disabled={loading}>
-                                        {loading ? 'Sending...' : 'Send Reset Link'}
+                                        {loading ? t('forgot_password.button_sending') : t('forgot_password.button_send_link')}
                                     </button>
                                 </div>
                                 <p className="alternate-action-text" style={{ marginTop: '1.5rem' }}>
-                                    Remember your password? <Link to="/login">Log In</Link>
+                                    {t('forgot_password.alternate_action_prompt')}{' '}
+                                    <Link to="/login">{t('common.nav.login')}</Link>
                                 </p>
                             </div>
                         </form>
                     </div>
-                    {/* Optional: You can remove the image-section or keep it */}
                     <div className="image-section">
-                        <img src="/wasteimage.png" alt="Illustration" />
+                        <img src={imageSrc} alt="Illustration" />
                     </div>
                 </div>
             </div>

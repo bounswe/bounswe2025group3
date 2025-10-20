@@ -5,8 +5,8 @@ import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
 import './LoginPage.css'; // Reusing styles
 // import './ResetPasswordPage.css'; // For specific styles
 
-// Use environment variable or default to localhost:10000
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 const ResetPasswordPage = () => {
     const [password, setPassword] = useState('');
@@ -52,12 +52,12 @@ const ResetPasswordPage = () => {
 
         setLoading(true);
         try {
-            console.debug('Password reset confirmation:', { uid, token, apiUrl: API_URL });
+            console.debug('Password reset confirmation:', { uid, token, apiUrl: apiUrl });
             // Replace with your backend endpoint for confirming password reset
             // The backend will use the uid and token to verify the request
-            await axios.post(`${API_URL}/api/auth/password_reset_confirm/${uid}/${token}/`, {
+            await axios.post(`${apiUrl}/auth/password_reset_confirm/${uid}/${token}/`, {
             // Or if sending uid/token in body:
-            // await axios.post(`${API_URL}/api/auth/password_reset_confirm/`, {
+            // await axios.post(`${REACT_APP_API_URL}/api/auth/password_reset_confirm/`, {
                 // uid: uid, // uidFromQuery
                 // token: token, // tokenFromQuery
                 new_password1: password,

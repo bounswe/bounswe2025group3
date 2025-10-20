@@ -1,17 +1,14 @@
 from .settings import *
 import os
+import dj_database_url
 
-# Override the default SQLite database with PostgreSQL
+# Override the default SQLite database with PostgreSQL using DATABASE_URL
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'ecochallenge'),
-        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
-        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
-        'CONN_MAX_AGE': 60,  # Keep connections alive for 60 seconds
-    }
+    'default': dj_database_url.config(
+        default='postgresql://postgres:postgres@db:5432/ecochallenge',
+        conn_max_age=60,
+        conn_health_checks=True,
+    )
 }
 
 # Allow all hosts in Docker environment

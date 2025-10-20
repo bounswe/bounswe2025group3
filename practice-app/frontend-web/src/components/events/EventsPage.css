@@ -1,0 +1,191 @@
+/* EventsPage.css - Refactored, Scoped, and Themed */
+
+/* --- REMOVED STYLES ---
+  :root and all .dashboard-top-nav, .app-logo, .main-actions-nav rules
+  have been removed. They are now handled by themes.css and Navbar.css respectively.
+*/
+
+/* --- Base Layout (Scoped) --- */
+.events-page-scoped.events-page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--dashboard-page-bg); /* Reuse dashboard variable */
+  font-family: var(--font-primary, 'Poppins', sans-serif);
+}
+
+/* --- Main Content (Scoped) --- */
+.events-page-scoped .events-main-content {
+  flex-grow: 1;
+  padding: 2rem 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.events-page-scoped .events-header-section {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.events-page-scoped .events-header-section h1 {
+  font-size: 2.5rem;
+  color: var(--nav-dashboard-logo-color);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+.events-page-scoped .events-header-section h1 .icon {
+  color: var(--nav-dashboard-bottom-border);
+  font-size: 1.3em;
+  margin-right: 0.6rem;
+}
+.events-page-scoped .events-header-section p {
+  font-size: 1.1rem;
+  color: var(--dashboard-text-medium);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- Events Grid & Cards (Scoped) --- */
+.events-page-scoped .events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.events-page-scoped .event-card {
+  background-color: var(--background-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow-light);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.events-page-scoped .event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--events-shadow-hover);
+}
+
+.events-page-scoped .event-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.events-page-scoped .event-card-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.events-page-scoped .event-card-content h2 {
+  font-size: 1.3rem;
+  color: var(--dashboard-text-dark);
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+.events-page-scoped .event-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--dashboard-text-medium);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.events-page-scoped .event-card-info span {
+  display: flex;
+  align-items: center;
+}
+.events-page-scoped .event-card-info .icon {
+  font-size: 1.2em;
+  margin-right: 0.5rem;
+  color: var(--nav-dashboard-icon-color);
+}
+
+.events-page-scoped .event-card-description {
+  color: var(--dashboard-text-dark);
+  line-height: 1.6;
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+}
+
+.events-page-scoped .event-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.events-page-scoped .participate-btn {
+  background-color: var(--nav-dashboard-link-active-bg);
+  color: var(--text-on-accent);
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.events-page-scoped .participate-btn:hover {
+  background-color: var(--nav-dashboard-logo-color);
+  box-shadow: 0 4px 12px var(--nav-dashboard-active-shadow);
+}
+
+.events-page-scoped .participate-btn.participating {
+  background-color: var(--events-participating-bg);
+}
+
+.events-page-scoped .like-btn {
+  background: transparent;
+  border: 1px solid var(--events-border-color);
+  color: var(--dashboard-text-medium);
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+.events-page-scoped .like-btn .icon { color: var(--events-like-btn-icon-color); }
+
+.events-page-scoped .like-btn:hover {
+  background-color: var(--events-like-btn-hover-bg);
+  border-color: var(--events-like-btn-hover-border);
+  color: var(--events-like-btn-hover-text);
+}
+
+/* --- Loader and Error (Scoped) --- */
+.events-page-scoped .loader-container-main {
+  /* Assumes styles are defined globally or in Dashboard.css and just need scoping */
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 3rem; text-align: center; color: var(--dashboard-text-medium); font-size: 1rem;
+}
+.events-page-scoped .loader-spinner-main {
+  border: 5px solid var(--nav-dashboard-link-hover-bg);
+  border-top: 5px solid var(--nav-dashboard-bottom-border);
+  border-radius: 50%; width: 40px; height: 40px;
+  animation: spin 0.8s linear infinite; margin-bottom: 1rem;
+}
+.events-page-scoped .error-message-box-main {
+  background-color: var(--dashboard-error-bg); color: var(--dashboard-error-text);
+  padding: 1rem 1.5rem; border: 1px solid var(--dashboard-error-border);
+  border-left: 5px solid var(--dashboard-error-text);
+  border-radius: 8px; font-weight: 500;
+}
+
+/* ---------- Responsive tweaks (Scoped) ---------- */
+@media (max-width: 768px) {
+  .events-page-scoped .events-main-content { padding: 1.5rem 1rem; }
+  .events-page-scoped .events-header-section h1 { font-size: 2rem; }
+  .events-page-scoped .events-header-section p { font-size: 1rem; }
+  .events-page-scoped .events-grid { grid-template-columns: 1fr; }
+}

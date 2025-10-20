@@ -1,15 +1,9 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
-
-console.debug('API Configuration:', { 
-    API_URL,
-    REACT_APP_API_URL: process.env.REACT_APP_API_URL,
-    NODE_ENV: process.env.NODE_ENV 
-});
+const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
 const api = axios.create({
-    baseURL: `${API_URL}/api/`,
+    baseURL: `${apiUrl}`,
 });
 
 api.interceptors.request.use(
@@ -41,6 +35,12 @@ export const getSubCategories = async () => {
 
 export const getUserScore = async () => {
     const response = await api.get('v1/waste/scores/me/');
+    return response.data;
+};
+
+export const getLeaderboard = async () => {
+    // This matches the new endpoint: /api/v1/waste/leaderboard/
+    const response = await api.get('v1/waste/leaderboard/');
     return response.data;
 };
 

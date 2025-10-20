@@ -1,265 +1,206 @@
-/* BlogPostPage.css */
+/* BlogPostPage.css - Refactored, Scoped, and Themed */
 
-/* Base styles might come from BlogPage.css or global styles */
-
-.blog-post-container {
-    max-width: 800px; /* Narrower content width for readability */
-    background-color: #fff; /* White background for the article */
-    padding: 2.5rem 3rem; /* More padding */
-    margin: 2rem auto; /* Center it */
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+/* --- Page Layout & Container --- */
+.blog-post-page.page-wrapper {
+  /* This inherits the background from the blog page wrapper for consistency */
+  background-color: var(--background-page-wrapper);
 }
 
-.blog-post-full {
-    /* Layout for the article content */
+.blog-post-page .content-container.blog-post-container {
+  max-width: 850px;
+  background-color: var(--background-primary);
+  padding: 2.5rem 3rem;
+  margin: 2.5rem auto;
+  border-radius: 8px;
+  box-shadow: var(--shadow-light);
+  width: 90%;
 }
 
-.blog-post-header {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #eee;
-    text-align: center;
+/* --- Post Header --- */
+.blog-post-page .blog-post-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color-light);
+  text-align: center;
 }
-/* BlogPostPage.css */
 
-/* --- Inherited/Assumed Styles --- */
-/* Assuming .page-wrapper, .nav-container, .navbar, .main-nav, .nav-item, */
-/* and :root variables are globally available or defined elsewhere. */
-/* Also assumes basic body font-family and background from other pages. */
+.blog-post-page .post-full-title {
+  font-size: 2.4rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+}
 
-:root { /* Define again if not global */
-    --accent: #008000;
-    --accent-dark: #006400;
-    --bg: #E7E4DF;
-    --content-bg: #fff;
-    --text: #333;
-    --text-light: #666;
-    --text-body: #444; /* Slightly different for body text */
-    --border-color: #eee;
-    --shadow-soft: 0 5px 15px rgba(0, 0, 0, 0.08);
-    --font-primary: 'Segoe UI', 'Roboto', sans-serif; /* Consistent font */
-  }
-  
-  
-  /* --- Page Layout & Container --- */
-  .blog-post-page .content-container.blog-post-container {
-    max-width: 850px; /* Readable width for blog posts */
-    background-color: var(--content-bg);
-    padding: 2.5rem 3rem; /* Generous padding */
-    margin: 2.5rem auto;
-    border-radius: 8px;
-    box-shadow: var(--shadow-soft);
-    width: 90%; /* Ensure it doesn't touch edges on slightly smaller screens */
-  }
-  
-  
-.post-image-container { /* Optional: Add a container if needed */
-    width: 100%;
-    height: 200px; /* Or your desired fixed height for cards */
-    background-color: #eee; /* Placeholder bg while image loads */
-    overflow: hidden; /* Ensure image stays within bounds */
-    position: relative; /* If adding overlays or loaders */
-  }
-  
-  .post-image { /* The actual <img> tag */
-    display: block; /* Remove extra space below image */
-    width: 100%;
-    height: 100%; /* Make image fill the container height */
-    object-fit: cover; /* Scale while preserving aspect ratio, crop to fit */
-    object-position: center center; /* Center the image within its frame */
-    transition: transform 0.3s ease; /* Optional: Subtle zoom on hover */
-  }
-  
-  .blog-post-card:hover .post-image { /* Optional: Zoom effect */
-    transform: scale(1.05);
-  }
-  
-  
-  /* --- Post Header --- */
-  .blog-post-header {
-    margin-bottom: 2.5rem; /* More space after header */
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
-    text-align: center;
-  }
-  
-  .post-full-title {
-    font-size: 2.4rem; /* Large, impactful title */
-    color: var(--text, #333);
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: 0.75rem;
-  }
-  
-  .post-full-meta {
-    font-size: 0.9rem;
-    color: var(--text-light, #666);
-    margin-top: 0;
-    font-style: italic;
-  }
-  .post-full-meta span { /* If you add specific spans for date/author */
-      margin: 0 0.5em;
-  }
-  
-  
-  /* --- Post Featured Image --- */
-  .post-full-image {
-    width: 100%;
-    max-height: 450px; /* Limit height */
-    object-fit: cover;
-    border-radius: 8px; /* Rounded corners */
-    margin-bottom: 2.5rem; /* Space after image */
-    display: block; /* Remove extra space below image */
-  }
-  
-  /* --- Post Content Area --- */
-  .post-full-content {
-    font-size: 1.05rem; /* Slightly larger for readability */
-    line-height: 1.8;
-    color: var(--text-body, #444);
-  }
-  
-  /* Styling for common HTML elements within the content */
-  .post-full-content p {
-    margin-bottom: 1.5em;
-  }
-  
-  .post-full-content h2 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--text, #333);
-    margin-top: 2.5em;
-    margin-bottom: 1em;
-    padding-bottom: 0.3em;
-    border-bottom: 2px solid var(--accent-extralight, #e6f7e6); /* Subtle separator */
-  }
-  
-  .post-full-content h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text, #333);
-    margin-top: 2em;
-    margin-bottom: 0.8em;
-  }
-  
-  .post-full-content ul,
-  .post-full-content ol {
-    margin-bottom: 1.5em;
-    padding-left: 2em; /* Standard indentation */
-  }
-  
-  .post-full-content ul li,
-  .post-full-content ol li {
-    margin-bottom: 0.75em;
-  }
-  
-  .post-full-content strong {
-    font-weight: 600;
-    color: var(--text-dark, #333); /* Or use accent color */
-  }
-  
-  .post-full-content em {
-    font-style: italic;
-  }
-  
-  .post-full-content a {
-    color: var(--accent, #008000);
-    text-decoration: none;
-    border-bottom: 1px dotted var(--accent, #008000);
-    transition: color 0.2s ease, border-bottom-color 0.2s ease;
-  }
-  
-  .post-full-content a:hover {
-    color: var(--accent-dark, #006400);
-    border-bottom: 1px solid var(--accent-dark, #006400);
-  }
-  
-  .post-full-content blockquote {
-    border-left: 4px solid var(--accent-light, #abebc6);
-    margin: 1.5em 0;
-    padding: 0.5em 1.5em;
-    color: var(--text-light, #666);
-    font-style: italic;
-    background-color: var(--accent-extralight, #f0f9f4);
-    border-radius: 0 4px 4px 0;
-  }
-  
-  .post-full-content code {
-    background-color: #f0f0f0;
-    padding: 0.2em 0.4em;
-    border-radius: 3px;
-    font-size: 0.9em;
-    font-family: monospace;
-  }
-  
-  .post-full-content pre {
-    background-color: #f0f0f0;
-    padding: 1em;
-    border-radius: 4px;
-    overflow-x: auto;
-    font-size: 0.9em;
-  }
-  .post-full-content pre code {
-    background-color: transparent;
-    padding: 0;
-  }
-  
-  /* --- Post Footer --- */
-  .blog-post-footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color);
-    text-align: center; /* Center the back button */
-  }
-  
-  .back-to-blog-btn {
-    display: inline-flex; /* To align icon and text */
+.blog-post-page .post-full-meta {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 0;
+  font-style: italic;
+}
+.blog-post-page .post-full-meta span {
+    margin: 0 0.5em;
+}
+
+/* --- Post Featured Image --- */
+.blog-post-page .post-full-image {
+  width: 100%;
+  max-height: 450px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 2.5rem;
+  display: block;
+}
+
+/* --- Post Content Area --- */
+.blog-post-page .post-full-content {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-body);
+}
+
+/* Styling for common HTML elements within the content */
+.blog-post-page .post-full-content p {
+  margin-bottom: 1.5em;
+}
+
+.blog-post-page .post-full-content h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 2.5em;
+  margin-bottom: 1em;
+  padding-bottom: 0.3em;
+  border-bottom: 2px solid var(--heading-underline-light);
+}
+
+.blog-post-page .post-full-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 2em;
+  margin-bottom: 0.8em;
+}
+
+.blog-post-page .post-full-content ul,
+.blog-post-page .post-full-content ol {
+  margin-bottom: 1.5em;
+  padding-left: 2em;
+}
+
+.blog-post-page .post-full-content ul li,
+.blog-post-page .post-full-content ol li {
+  margin-bottom: 0.75em;
+}
+
+.blog-post-page .post-full-content strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.blog-post-page .post-full-content em {
+  font-style: italic;
+}
+
+.blog-post-page .post-full-content a {
+  color: var(--accent-navbar);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent-navbar);
+  transition: color 0.2s ease, border-bottom-color 0.2s ease;
+}
+
+.blog-post-page .post-full-content a:hover {
+  color: var(--accent-navbar-darker);
+  border-bottom: 1px solid var(--accent-navbar-darker);
+}
+
+.blog-post-page .post-full-content blockquote {
+  border-left: 4px solid var(--blockquote-border);
+  margin: 1.5em 0;
+  padding: 0.5em 1.5em;
+  color: var(--text-secondary);
+  font-style: italic;
+  background-color: var(--blockquote-bg);
+  border-radius: 0 4px 4px 0;
+}
+
+.blog-post-page .post-full-content code {
+  background-color: var(--code-block-bg);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  font-family: monospace;
+  color: var(--text-primary);
+}
+
+.blog-post-page .post-full-content pre {
+  background-color: var(--code-block-bg);
+  padding: 1em;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.9em;
+}
+.blog-post-page .post-full-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* --- Post Footer --- */
+.blog-post-page .blog-post-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color-light);
+  text-align: center;
+}
+
+.blog-post-page .back-to-blog-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.7rem 1.5rem;
+  background-color: var(--accent-navbar);
+  color: var(--text-on-accent);
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.blog-post-page .back-to-blog-btn:hover {
+  background-color: var(--accent-navbar-darker);
+  transform: translateY(-2px);
+}
+.blog-post-page .back-to-blog-btn .icon {
+    margin-right: 0.5em;
+}
+
+/* --- Loading/Error States --- */
+.blog-post-page .blog-post-loading, 
+.blog-post-page .blog-post-error {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 0.7rem 1.5rem;
-    background-color: var(--accent, #008000);
-    color: var(--text-on-primary, white);
-    text-decoration: none;
-    border-radius: 30px; /* Pill shape */
-    font-weight: 500;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-    font-size: 0.95rem;
+    min-height: 80vh;
+    text-align: center;
+}
+.blog-post-page .blog-post-error .content-container {
+    background-color: transparent;
+    box-shadow: none;
+}
+.blog-post-page .text-center { text-align: center; }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .blog-post-page .content-container.blog-post-container {
+    padding: 2rem 1.5rem;
+    margin: 1.5rem auto;
   }
-  
-  .back-to-blog-btn:hover {
-    background-color: var(--accent-dark, #006400);
-    transform: translateY(-2px);
+  .blog-post-page .post-full-title {
+    font-size: 1.8rem;
   }
-  .back-to-blog-btn .icon { /* If you add an icon to the button */
-      margin-right: 0.5em;
+  .blog-post-page .post-full-content {
+    font-size: 1rem;
   }
-  
-  /* --- Loading/Error States Specific Styling (optional) --- */
-  .blog-post-loading, .blog-post-error {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 80vh; /* Take up significant height */
-      text-align: center;
-  }
-  .blog-post-error .content-container {
-      background-color: transparent; /* Don't need white bg for error message */
-      box-shadow: none;
-  }
-  .text-center { text-align: center; } /* Utility class */
-  
-  /* --- Responsive Adjustments --- */
-  @media (max-width: 768px) {
-    .blog-post-page .content-container.blog-post-container {
-      padding: 2rem 1.5rem; /* Less padding on mobile */
-      margin: 1.5rem auto;
-    }
-    .post-full-title {
-      font-size: 1.8rem; /* Adjust title size */
-    }
-    .post-full-content {
-      font-size: 1rem; /* Adjust body size */
-    }
-    .post-full-content h2 { font-size: 1.5rem; }
-    .post-full-content h3 { font-size: 1.3rem; }
-  }
+  .blog-post-page .post-full-content h2 { font-size: 1.5rem; }
+  .blog-post-page .post-full-content h3 { font-size: 1.3rem; }
+}

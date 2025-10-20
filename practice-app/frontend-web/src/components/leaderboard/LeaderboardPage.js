@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-// import { getLeaderboard } from '../services/api'; // Assuming you have this API service
+import { getLeaderboard } from '../../services/api'; // Assuming you have this API service
+import { useTranslation } from 'react-i18next'; // 1. Import hook
+import Navbar from '../common/Navbar'; // 2. Import shared Navbar
 import './LeaderboardPage.css'; // We'll create this
 
 // Re-usable Icon component (or import if you've centralized it)
@@ -24,28 +26,8 @@ const Icon = ({ name, className = "" }) => {
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
-// Mock API call - replace with your actual API
-const getLeaderboard = async () => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve([
-                { id: 1, rank: 1, username: 'EcoWarriorJane', avatarSeed: 'jane', score: 1250, isCurrentUser: false },
-                { id: 2, rank: 2, username: 'GreenThumbAlex', avatarSeed: 'alex', score: 1180, isCurrentUser: false },
-                { id: 3, rank: 3, username: 'RecycleRahul', avatarSeed: 'rahul', score: 1100, isCurrentUser: false },
-                { id: 4, rank: 4, username: 'SustainableSam', avatarSeed: 'sam', score: 950, isCurrentUser: true }, // Example current user
-                { id: 5, rank: 5, username: 'PlanetSaverPat', avatarSeed: 'pat', score: 920, isCurrentUser: false },
-                { id: 6, rank: 6, username: 'ZeroWasteZoe', avatarSeed: 'zoe', score: 880, isCurrentUser: false },
-                { id: 7, rank: 7, username: 'ClimateCarlos', avatarSeed: 'carlos', score: 850, isCurrentUser: false },
-                { id: 8, rank: 8, username: 'NatureNina', avatarSeed: 'nina', score: 760, isCurrentUser: false },
-                { id: 9, rank: 9, username: 'EarthEnthusiast', avatarSeed: 'earth', score: 730, isCurrentUser: false },
-                { id: 10, rank: 10, username: 'ForestFriend', avatarSeed: 'forest', score: 700, isCurrentUser: false },
-            ]);
-        }, 1000);
-    });
-};
-
-
 const LeaderboardPage = () => {
+    const { t } = useTranslation();
     const [leaderboardData, setLeaderboardData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -55,19 +37,34 @@ const LeaderboardPage = () => {
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         
-
         const fetchLeaderboard = async () => {
             setLoading(true);
             try {
-                let data = await getLeaderboard();
-                // If your API doesn't mark current user, do it client-side:
+                // 1. Get raw data from API
+                const rawData = await getLeaderboard(); 
+                
+                // 2. Transform raw data to match what the component expects
+                let transformedData = rawData.map((user, index) => ({
+                    id: user.id,
+                    username: user.username,
+                    // Map total_waste_quantity to score and convert to number
+                    score: parseFloat(user.total_waste_quantity), 
+                    // Add rank based on the API's sorted order
+                    rank: index + 1, 
+                    // Add avatarSeed for the placeholder
+                    avatarSeed: user.username 
+                }));
+
+                // 3. Mark the current user
                 if (currentUserId) {
-                    data = data.map(user => ({
+                    transformedData = transformedData.map(user => ({
                         ...user,
                         isCurrentUser: String(user.id) === currentUserId
                     }));
                 }
-                setLeaderboardData(data);
+
+                // 4. Set the final, correct data into state
+                setLeaderboardData(transformedData);
                 setError('');
             } catch (err) {
                 setError('Failed to load leaderboard data. Please try again later.');
@@ -105,48 +102,26 @@ const LeaderboardPage = () => {
 
 
     return (
-        <div className="leaderboard-page-layout">
-            {/* --- Top Navigation Bar (Same as Dashboard) --- */}
-            <header className="dashboard-top-nav"> {/* Reusing class for consistent styling */}
-                <Link to="/" className="app-logo">
-                    <Icon name="logo" />
-                    Greener
-                </Link>
-                <nav className="main-actions-nav">
-                <NavLink to="/dashboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="dashboard" /> Dashboard {/* Make sure 'dashboard' icon is in your Icon component */}
-                    </NavLink>
-                    <NavLink to="/waste" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="waste" /> Waste Log
-                    </NavLink>
-                    <NavLink to="/goals"  className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="goal" /> Goals
-                    </NavLink>
-                    <NavLink to="/leaderboard" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="leaderboard" /> Leaderboard
-                    </NavLink>
-                    <NavLink to="/challenges" className={({isActive}) => `nav-action-item ${isActive ? "active" : ""}`}>
-                        <Icon name="challenges" /> Challenges
-                    </NavLink>
-                </nav>
-            </header>
+        <div className="leaderboard-page-scoped leaderboard-page-layout">
+            {/* 4. Use the shared Navbar component */}
+            <Navbar isAuthenticated={true} />
 
-            {/* --- Main Content Area for Leaderboard --- */}
             <main className="leaderboard-main-content">
+                {/* 5. Replace all static text with the t() function */}
                 <div className="leaderboard-header-section">
-                    <h1><Icon name="trophy" /> Community Leaderboard</h1>
-                    <p>See who's leading the charge in making a positive environmental impact!</p>
+                    <h1><Icon name="trophy" /> {t('leaderboard_page.title')}</h1>
+                    <p>{t('leaderboard_page.subtitle')}</p>
                 </div>
 
                 {loading && (
-                    <div className="loader-container-main"> {/* Reusing loader style */}
+                    <div className="loader-container-main">
                         <div className="loader-spinner-main"></div>
-                        <p>Loading champions...</p>
+                        <p>{t('leaderboard_page.loading')}</p>
                     </div>
                 )}
                 {error && !loading && (
-                    <div className="error-message-box-main"> {/* Reusing error style */}
-                         <Icon name="alerts" className="error-icon" /> {error}
+                    <div className="error-message-box-main">
+                         <Icon name="alerts" className="error-icon" /> {t(error)} {/* Translate the key */}
                     </div>
                 )}
 
@@ -155,9 +130,9 @@ const LeaderboardPage = () => {
                         <table className="leaderboard-table">
                             <thead>
                                 <tr>
-                                    <th>Rank</th>
-                                    <th>Player</th>
-                                    <th>Score</th>
+                                    <th>{t('leaderboard_page.table.rank')}</th>
+                                    <th>{t('leaderboard_page.table.player')}</th>
+                                    <th>{t('leaderboard_page.table.score')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -167,9 +142,9 @@ const LeaderboardPage = () => {
                                         <td className="player-cell">
                                             <AvatarPlaceholder username={user.username} seed={user.avatarSeed || user.username} />
                                             <span className="player-name">{user.username}</span>
-                                            {user.isCurrentUser && <span className="you-badge">You</span>}
+                                            {user.isCurrentUser && <span className="you-badge">{t('leaderboard_page.you_badge')}</span>}
                                         </td>
-                                        <td className="score-cell">{user.score} pts</td>
+                                        <td className="score-cell">{user.score} kg</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -180,7 +155,7 @@ const LeaderboardPage = () => {
                 {!loading && !error && leaderboardData.length === 0 && (
                      <div className="empty-leaderboard-message">
                         <Icon name="leaderboard" />
-                        <p>The leaderboard is currently empty. Start logging your activities to get on the board!</p>
+                        <p>{t('leaderboard_page.empty_state')}</p>
                     </div>
                 )}
             </main>

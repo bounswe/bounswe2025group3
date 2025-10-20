@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 const GithubCallback = () => {
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ const GithubCallback = () => {
             try {
                 // You may need a backend endpoint to exchange code for access token
                 // For now, assume the backend can handle code directly at /api/auth/github/
-                const response = await axios.post(`${API_URL}/api/auth/github/`, {
+                const response = await axios.post(`${apiUrl}/auth/github/`, {
                     code: code // Send both for flexibility
                 });
                 localStorage.setItem('access_token', response.data.access);
