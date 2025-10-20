@@ -23,7 +23,7 @@ const GithubCallback = () => {
             try {
                 // You may need a backend endpoint to exchange code for access token
                 // For now, assume the backend can handle code directly at /api/auth/github/
-                const response = await axios.post(`${apiUrl}/api/auth/github/`, {
+                const response = await axios.post(`${apiUrl}/auth/github/`, {
                     code: code // Send both for flexibility
                 });
                 localStorage.setItem('access_token', response.data.access);

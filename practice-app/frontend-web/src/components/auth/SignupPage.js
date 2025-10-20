@@ -59,7 +59,7 @@ const SignupPage = () => {
         username: formData.username,
         apiUrl: apiUrl 
       });
-      await axios.post(`${apiUrl}/api/auth/register/`, submissionData);
+      await axios.post(`${apiUrl}/auth/register/`, submissionData);
       alert('Registration successful! Please log in.');
       navigate('/login');
     } catch (err) {

@@ -55,7 +55,7 @@ const ResetPasswordPage = () => {
             console.debug('Password reset confirmation:', { uid, token, apiUrl: apiUrl });
             // Replace with your backend endpoint for confirming password reset
             // The backend will use the uid and token to verify the request
-            await axios.post(`${apiUrl}/api/auth/password_reset_confirm/${uid}/${token}/`, {
+            await axios.post(`${apiUrl}/auth/password_reset_confirm/${uid}/${token}/`, {
             // Or if sending uid/token in body:
             // await axios.post(`${REACT_APP_API_URL}/api/auth/password_reset_confirm/`, {
                 // uid: uid, // uidFromQuery

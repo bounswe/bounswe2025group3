@@ -31,8 +31,8 @@ const GoalsPage = () => {
       setLoading(true);
       try {
         const [goalRes, catRes] = await Promise.all([
-          axios.get(`${apiUrl}/api/v1/goals/goals/`, { headers: authHeader }),
-          axios.get(`${apiUrl}/api/v1/waste/subcategories/`, { headers: authHeader })
+          axios.get(`${apiUrl}/v1/goals/goals/`, { headers: authHeader }),
+          axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers: authHeader })
         ]);
         setGoals(Array.isArray(goalRes.data) ? goalRes.data : goalRes.data.results ?? []);
         setCategories(Array.isArray(catRes.data) ? catRes.data : catRes.data.results ?? []);
@@ -62,8 +62,8 @@ const GoalsPage = () => {
         timeframe: newGoal.timeframe,
         target: Number(newGoal.target)
         }; 
-        await axios.post(`${apiUrl}/api/v1/goals/goals/`, payload, { headers: authHeader });
-        const fresh = await axios.get(`${apiUrl}/api/v1/goals/goals/`, { headers: authHeader });
+        await axios.post(`${apiUrl}/v1/goals/goals/`, payload, { headers: authHeader });
+        const fresh = await axios.get(`${apiUrl}/v1/goals/goals/`, { headers: authHeader });
         setGoals(Array.isArray(fresh.data) ? fresh.data : fresh.data.results ?? []);
         setNewGoal({ category_id: '', timeframe: 'daily', target: '' });
         setError('');

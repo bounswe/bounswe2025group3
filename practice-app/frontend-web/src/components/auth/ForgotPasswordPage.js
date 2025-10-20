@@ -61,7 +61,7 @@ const ForgotPasswordPage = () => {
         }
 
         try {
-            await axios.post(`${apiUrl}/api/auth/password_reset/`, { email });
+            await axios.post(`${apiUrl}/auth/password_reset/`, { email });
             setMessage(t('forgot_password.success_message'));
             setEmail('');
         } catch (err) {

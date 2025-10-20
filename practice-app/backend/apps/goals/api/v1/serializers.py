@@ -16,14 +16,18 @@ class GoalTemplateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GoalTemplate
-        fields = ['id', 'name', 'description', 'category', 'category_name', 'target', 'timeframe']
-        read_only_fields = ['id']
+        fields = ['id', 'name', 'description', 'category', 'category_name', 'target', 'timeframe', 'start_date', 'created_at']
+        read_only_fields = ['id', 'created_at']
         extra_kwargs = {
             'name': {'help_text': 'Name of the goal template'},
             'description': {'help_text': 'Detailed description of the goal template'},
             'category': {'help_text': 'Waste category ID associated with this template'},
             'target': {'help_text': 'Target value to reach (in kg)'},
             'timeframe': {'help_text': 'Time period for the goal (e.g., "weekly", "monthly")'},
+            'start_date': {
+                'required': False,
+                'help_text': 'Date when the template starts (optional, defaults to creation date if not provided)'
+            },
         }
 
 
@@ -62,7 +66,10 @@ class GoalSerializer(serializers.ModelSerializer):
             'user': {'write_only': True},
             'timeframe': {'help_text': 'Timeframe for the goal (daily, weekly, monthly)'},
             'target': {'help_text': 'Target amount in kg'},
-            'start_date': {'help_text': 'Date when the goal starts (YYYY-MM-DD)'},
+            'start_date': {
+                'required': False,
+                'help_text': 'Date when the goal starts (optional, defaults to creation date if not provided)'
+            },
         }
 
     def get_progress(self, obj):

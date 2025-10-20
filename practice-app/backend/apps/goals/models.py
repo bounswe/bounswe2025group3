@@ -24,14 +24,14 @@ class Goal(models.Model):
     is_complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, default='active', help_text="Status of the goal (e.g., active, achieved, failed)")
-    start_date = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateTimeField(default=timezone.now, help_text="Date when the goal starts (defaults to creation date)")
 
     def __str__(self):
         return f"{self.user.username} - {self.category.name}"
 
     def get_timeframe_dates(self):
         """Helper function to determine the start and end datetimes based on the timeframe."""
-        s_datetime = self.created_at  # already timezone-aware datetime
+        s_datetime = self.start_date  # Use start_date instead of created_at
 
         if self.timeframe == 'daily':
             e_datetime = s_datetime + timedelta(days=1)
@@ -103,7 +103,7 @@ class GoalTemplate(models.Model):
     target = models.FloatField(help_text="Target value the user should aim to reach")
     timeframe = models.CharField(max_length=50, help_text="Timeframe description (e.g., 'weekly', 'monthly')")
     created_at = models.DateTimeField(auto_now_add=True)
-    start_date = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateTimeField(default=timezone.now, help_text="Date when the template starts (defaults to creation date)")
 
     def __str__(self):
         return self.name
