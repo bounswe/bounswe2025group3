@@ -14,7 +14,6 @@ from .serializers import (
     AdminActionResponseSerializer, UserScoreSerializer,
     UserRankingSerializer
 )
-from django.db.models import Sum
 from django.contrib.auth import get_user_model
 
 # WasteCategory Views
