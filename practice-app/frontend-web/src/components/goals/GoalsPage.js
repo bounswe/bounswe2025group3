@@ -26,7 +26,7 @@ const GoalsPage = () => {
   const authHeader = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
-    // ... (fetchAll logic remains mostly the same, but uses translated errors) ...
+    if (!token) { setError('You must be logged in.'); setLoading(false); return; }
     const fetchAll = async () => {
       setLoading(true);
       try {
@@ -55,7 +55,18 @@ const GoalsPage = () => {
     setCreating(true);
     // ... (rest of add goal logic remains the same, but uses translated errors) ...
     try {
-        //...
+        const user = Number(localStorage.getItem('user_id'));
+        const payload = {
+        user,
+        category_id: Number(newGoal.category_id),
+        timeframe: newGoal.timeframe,
+        target: Number(newGoal.target)
+        }; 
+        await axios.post(`${API_URL}/api/v1/goals/goals/`, payload, { headers: authHeader });
+        const fresh = await axios.get(`${API_URL}/api/v1/goals/goals/`, { headers: authHeader });
+        setGoals(Array.isArray(fresh.data) ? fresh.data : fresh.data.results ?? []);
+        setNewGoal({ category_id: '', timeframe: 'daily', target: '' });
+        setError('');
     } catch (err) {
         const apiMsg = err?.response?.data ? JSON.stringify(err.response.data) : 'Bad request';
         setError(t('goals_page.error_create_failed', { apiMsg })); // Translate with dynamic data
