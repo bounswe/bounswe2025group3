@@ -4,4 +4,7 @@ db.sqlite3
 data.json
 postgres_data
 .coverage
-.env.local
+
+.env*
+.env.production
+!.env.sample
