@@ -45,6 +45,11 @@ services:
     build:
       context: ./frontend-web
       dockerfile: Dockerfile
+      args:
+         - REACT_APP_SITE_URL=http://localhost:3000
+         - REACT_APP_API_URL=http://localhost:8000/api
+         - REACT_APP_GITHUB_CLIENT_ID=Ov23liAeCX9IBhrPJ1ML
+         - REACT_APP_GCP_CLIENT_ID=115929609709-p3955grkice5ka8ul4m37uoce3bs53v2.apps.googleusercontent.com
     container_name: practice-app-frontend
     ports:
       - "3000:3000"

@@ -5,7 +5,7 @@ import './SignupPage.css';
 import { useTranslation } from 'react-i18next';
 import Header from '../common/Header';
 
-const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 const getCurrentTheme = () => {
   return localStorage.getItem('theme') || 'green';
