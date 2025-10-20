@@ -44,6 +44,12 @@ export const getUserScore = async () => {
     return response.data;
 };
 
+export const getLeaderboard = async () => {
+    // This matches the new endpoint: /api/v1/waste/leaderboard/
+    const response = await api.get('v1/waste/leaderboard/');
+    return response.data;
+};
+
 export const getUserProfile = async () => {
     const response = await api.get('user/me/');
     return response.data;

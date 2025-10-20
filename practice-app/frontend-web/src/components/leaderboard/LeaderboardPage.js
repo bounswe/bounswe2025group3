@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-// import { getLeaderboard } from '../services/api'; // Assuming you have this API service
+import { getLeaderboard } from '../../services/api'; // Assuming you have this API service
 import { useTranslation } from 'react-i18next'; // 1. Import hook
 import Navbar from '../common/Navbar'; // 2. Import shared Navbar
 import './LeaderboardPage.css'; // We'll create this
@@ -26,27 +26,6 @@ const Icon = ({ name, className = "" }) => {
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
-// Mock API call - replace with your actual API
-const getLeaderboard = async () => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve([
-                { id: 1, rank: 1, username: 'EcoWarriorJane', avatarSeed: 'jane', score: 1250, isCurrentUser: false },
-                { id: 2, rank: 2, username: 'GreenThumbAlex', avatarSeed: 'alex', score: 1180, isCurrentUser: false },
-                { id: 3, rank: 3, username: 'RecycleRahul', avatarSeed: 'rahul', score: 1100, isCurrentUser: false },
-                { id: 4, rank: 4, username: 'SustainableSam', avatarSeed: 'sam', score: 950, isCurrentUser: true }, // Example current user
-                { id: 5, rank: 5, username: 'PlanetSaverPat', avatarSeed: 'pat', score: 920, isCurrentUser: false },
-                { id: 6, rank: 6, username: 'ZeroWasteZoe', avatarSeed: 'zoe', score: 880, isCurrentUser: false },
-                { id: 7, rank: 7, username: 'ClimateCarlos', avatarSeed: 'carlos', score: 850, isCurrentUser: false },
-                { id: 8, rank: 8, username: 'NatureNina', avatarSeed: 'nina', score: 760, isCurrentUser: false },
-                { id: 9, rank: 9, username: 'EarthEnthusiast', avatarSeed: 'earth', score: 730, isCurrentUser: false },
-                { id: 10, rank: 10, username: 'ForestFriend', avatarSeed: 'forest', score: 700, isCurrentUser: false },
-            ]);
-        }, 1000);
-    });
-};
-
-
 const LeaderboardPage = () => {
     const { t } = useTranslation();
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -58,19 +37,34 @@ const LeaderboardPage = () => {
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         
-
         const fetchLeaderboard = async () => {
             setLoading(true);
             try {
-                let data = await getLeaderboard();
-                // If your API doesn't mark current user, do it client-side:
+                // 1. Get raw data from API
+                const rawData = await getLeaderboard(); 
+                
+                // 2. Transform raw data to match what the component expects
+                let transformedData = rawData.map((user, index) => ({
+                    id: user.id,
+                    username: user.username,
+                    // Map total_waste_quantity to score and convert to number
+                    score: parseFloat(user.total_waste_quantity), 
+                    // Add rank based on the API's sorted order
+                    rank: index + 1, 
+                    // Add avatarSeed for the placeholder
+                    avatarSeed: user.username 
+                }));
+
+                // 3. Mark the current user
                 if (currentUserId) {
-                    data = data.map(user => ({
+                    transformedData = transformedData.map(user => ({
                         ...user,
                         isCurrentUser: String(user.id) === currentUserId
                     }));
                 }
-                setLeaderboardData(data);
+
+                // 4. Set the final, correct data into state
+                setLeaderboardData(transformedData);
                 setError('');
             } catch (err) {
                 setError('Failed to load leaderboard data. Please try again later.');
@@ -150,7 +144,7 @@ const LeaderboardPage = () => {
                                             <span className="player-name">{user.username}</span>
                                             {user.isCurrentUser && <span className="you-badge">{t('leaderboard_page.you_badge')}</span>}
                                         </td>
-                                        <td className="score-cell">{user.score} {t('leaderboard_page.score_suffix')}</td>
+                                        <td className="score-cell">{user.score} kg</td>
                                     </tr>
                                 ))}
                             </tbody>
