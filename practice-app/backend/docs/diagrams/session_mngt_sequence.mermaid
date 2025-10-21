@@ -1,0 +1,38 @@
+sequenceDiagram
+    autonumber
+    participant Client
+    participant AuthMiddleware
+    participant View
+    participant TokenModel
+    participant UserModel
+    
+    %% Token-based Authentication
+    Client->>AuthMiddleware: Request with Authorization header
+    AuthMiddleware->>TokenModel: validate(token)
+    TokenModel-->>AuthMiddleware: Token valid, return user
+    AuthMiddleware->>View: Request with authenticated user
+    View->>View: Process request
+    View-->>Client: Response
+    
+    %% Session Refresh
+    Client->>AuthMiddleware: Request with expired token
+    AuthMiddleware->>TokenModel: validate(token)
+    TokenModel-->>AuthMiddleware: Token expired
+    AuthMiddleware->>Client: 401 Unauthorized (Token expired)
+    Client->>View: POST /api/auth/token/refresh (refresh_token)
+    View->>TokenModel: Validate refresh token
+    TokenModel-->>View: Refresh token valid
+    View->>TokenModel: Generate new access token
+    TokenModel-->>View: New access token
+    View-->>Client: 200 OK (new_token)
+    
+    %% Multiple Device Management
+    Client->>View: GET /api/auth/sessions (Authorization: Token)
+    View->>TokenModel: Get all tokens for user
+    TokenModel-->>View: List of active tokens with metadata
+    View-->>Client: 200 OK (List of active sessions)
+    
+    Client->>View: DELETE /api/auth/sessions/{session_id}
+    View->>TokenModel: delete(key)
+    TokenModel-->>View: Success
+    View-->>Client: 200 OK (Session terminated)

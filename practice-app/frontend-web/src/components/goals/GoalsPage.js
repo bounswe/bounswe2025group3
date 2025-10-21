@@ -4,7 +4,7 @@ import axios from 'axios';
 import Navbar from '../common/Navbar'; // 2. Import shared Navbar
 import './GoalsPage.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
 const Icon = ({ name, className = '' }) => {
   const icons = {
@@ -26,13 +26,13 @@ const GoalsPage = () => {
   const authHeader = { Authorization: `Bearer ${token}` };
 
   useEffect(() => {
-    // ... (fetchAll logic remains mostly the same, but uses translated errors) ...
+    if (!token) { setError('You must be logged in.'); setLoading(false); return; }
     const fetchAll = async () => {
       setLoading(true);
       try {
         const [goalRes, catRes] = await Promise.all([
-          axios.get(`${API_URL}/api/v1/goals/goals/`, { headers: authHeader }),
-          axios.get(`${API_URL}/api/v1/waste/subcategories/`, { headers: authHeader })
+          axios.get(`${apiUrl}/v1/goals/goals/`, { headers: authHeader }),
+          axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers: authHeader })
         ]);
         setGoals(Array.isArray(goalRes.data) ? goalRes.data : goalRes.data.results ?? []);
         setCategories(Array.isArray(catRes.data) ? catRes.data : catRes.data.results ?? []);
@@ -55,7 +55,18 @@ const GoalsPage = () => {
     setCreating(true);
     // ... (rest of add goal logic remains the same, but uses translated errors) ...
     try {
-        //...
+        const user = Number(localStorage.getItem('user_id'));
+        const payload = {
+        user,
+        category_id: Number(newGoal.category_id),
+        timeframe: newGoal.timeframe,
+        target: Number(newGoal.target)
+        }; 
+        await axios.post(`${apiUrl}/v1/goals/goals/`, payload, { headers: authHeader });
+        const fresh = await axios.get(`${apiUrl}/v1/goals/goals/`, { headers: authHeader });
+        setGoals(Array.isArray(fresh.data) ? fresh.data : fresh.data.results ?? []);
+        setNewGoal({ category_id: '', timeframe: 'daily', target: '' });
+        setError('');
     } catch (err) {
         const apiMsg = err?.response?.data ? JSON.stringify(err.response.data) : 'Bad request';
         setError(t('goals_page.error_create_failed', { apiMsg })); // Translate with dynamic data

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .signup-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 1.75rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        p {
+            margin-bottom: 1.5rem;
+            color: #555;
+            line-height: 1.5;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        .menu {
+            margin-bottom: 1rem;
+        }
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        .menu li {
+            margin-right: 1rem;
+        }
+        .menu li a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .menu li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="menu">
+            <ul>
+                <li><a href="{% url 'account_login' %}">Sign In</a></li>
+                <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+            </ul>
+        </div>
+
+        <h1>Sign Up</h1>
+        
+        <p>You are about to use your Google account to login to {{ site.name }}. As a final step, please complete the following form:</p>
+        
+        <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="error-message">
+                    Please correct the errors below.
+                </div>
+            {% endif %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error-message">
+                            {{ field.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html> 

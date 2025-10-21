@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Header from '../common/Header';
 import './ForgotPasswordPage.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:10000';
 
 // Helper function to get the current theme from local storage
 const getCurrentTheme = () => {
@@ -61,7 +61,7 @@ const ForgotPasswordPage = () => {
         }
 
         try {
-            await axios.post(`${API_URL}/api/auth/password_reset/`, { email });
+            await axios.post(`${apiUrl}/auth/password_reset/`, { email });
             setMessage(t('forgot_password.success_message'));
             setEmail('');
         } catch (err) {

@@ -6,19 +6,11 @@ const ThemeSwitcher = () => {
 
   useEffect(() => {
     document.body.classList.remove('blue-high-contrast');
-
     if (theme === 'blue') {
       document.body.classList.add('blue-high-contrast');
     }
-    
     localStorage.setItem('theme', theme);
-
-    // *** THIS IS THE FIX ***
-    // Dispatch a custom event on the document that other components can listen to.
-    // This notifies the ForgotPasswordPage (and any other page) that the theme has changed.
     document.dispatchEvent(new CustomEvent('themeChanged'));
-    // *** END OF FIX ***
-
   }, [theme]);
 
   const toggleTheme = () => {
@@ -26,9 +18,23 @@ const ThemeSwitcher = () => {
   };
 
   return (
-    <button onClick={toggleTheme} className="theme-switcher-button" title="Toggle Theme">
-      {theme === 'green' ? '🎨' : '🌿'}
-    </button>
+    <div className="theme-switcher">
+      <span className="theme-label">
+      
+      </span>
+      <label className="switch">
+        <input
+          type="checkbox"
+          checked={theme === 'blue'}
+          onChange={toggleTheme}
+        />
+        <span className="slider">
+          <span className="slider-icon">
+            {theme === 'green' ? '🌿' : '🌊'}
+          </span>
+        </span>
+      </label>
+    </div>
   );
 };
 
