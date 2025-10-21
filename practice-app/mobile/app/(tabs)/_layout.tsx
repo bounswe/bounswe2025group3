@@ -20,7 +20,6 @@ export default function TabLayout() {
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: "#85948A",
-
     }}> 
         <Tabs.Screen 
           name="home"  

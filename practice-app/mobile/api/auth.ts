@@ -8,7 +8,7 @@ export const login = async (email: string, password: string) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
-  
+  console.log(response);
   const data = await response.json();
 
   if (!response.ok) {

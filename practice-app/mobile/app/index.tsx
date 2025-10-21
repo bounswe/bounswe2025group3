@@ -31,7 +31,7 @@ export default function FirstScreen() {
       source={require('@/assets/images/leaves.jpg')}
       style={styles.background}
     > 
-      <StatusBar style="light" />
+      <StatusBar style="light"/>
       <View style={styles.logoContainer}>
         <Image
           source={require('@/assets/images/appicon_withoutbg.png')}
