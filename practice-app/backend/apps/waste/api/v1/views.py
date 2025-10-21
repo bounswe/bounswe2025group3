@@ -14,6 +14,7 @@ from .serializers import (
     AdminActionResponseSerializer, UserScoreSerializer,
     UserRankingSerializer
 )
+from django.db.models import Sum
 from django.contrib.auth import get_user_model
 
 # WasteCategory Views
@@ -295,16 +296,21 @@ class UserWasteScoreView(APIView):
 
 class UserRankingView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = UserRankingSerializer
 
     @extend_schema(
         tags=['User Stats'],
-        summary='Get user leaderboard ranking by Eco-Points',
-        description='Returns a list of all users sorted by their total_score (eco-points).',
+        summary='Get user leaderboard ranking',
+        description='Returns a list of users ranked by their total waste quantity logged.',
         responses={200: UserRankingSerializer(many=True)}
     )
     def get(self, request):
         user = get_user_model()
-        queryset = user.objects.all().order_by('-total_score')
-        serializer = self.serializer_class(queryset, many=True)
+        ranking_data = user.objects.annotate(
+            total_waste_quantity=Sum('wastelog__quantity')
+        ).filter(
+            total_waste_quantity__isnull=False
+        ).order_by(
+            '-total_waste_quantity'
+        )
+        serializer = UserRankingSerializer(ranking_data, many=True)
         return Response(serializer.data)

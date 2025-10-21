@@ -91,4 +91,4 @@ class UserScoreSerializer(serializers.Serializer):
 class UserRankingSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     username = serializers.CharField()
-    total_score = serializers.IntegerField(read_only=True)
+    total_waste_quantity = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
