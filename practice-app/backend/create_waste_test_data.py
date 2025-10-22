@@ -4,7 +4,11 @@ import os
 import django
 
 # Set up Django environment
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+# Use production settings if on Render, otherwise use default settings
+if os.environ.get('RENDER'):
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings_production')
+else:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 from apps.waste.models import WasteCategory, SubCategory
