@@ -10,11 +10,21 @@ SECRET_KEY = os.environ.get('SECRET_KEY', SECRET_KEY)
 # Add Render.com domain to allowed hosts
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 
-# Database configuration - uses PostgreSQL on Render
+# Database configuration - uses PostgreSQL (Supabase) on Render
 import dj_database_url
+
+# Get DATABASE_URL from environment variable
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if not DATABASE_URL:
+    raise ValueError(
+        "DATABASE_URL environment variable is not set! "
+        "Please set it in Render dashboard with your Supabase PostgreSQL URL."
+    )
+
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+        default=DATABASE_URL,
         conn_max_age=600,
         conn_health_checks=True,
     )
