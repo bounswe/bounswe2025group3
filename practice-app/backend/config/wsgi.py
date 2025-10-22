@@ -9,7 +9,11 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 
 import os
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+# Use production settings if on Render, otherwise use default settings
+if os.environ.get('RENDER'):
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings_production')
+else:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 # Reset database on Render deployment before initializing Django
 if os.environ.get('RENDER'):
