@@ -48,7 +48,7 @@ const LeaderboardPage = () => {
                     id: user.id,
                     username: user.username,
                     // Map total_waste_quantity to score and convert to number
-                    score: parseFloat(user.total_waste_quantity), 
+                    score: parseFloat(user.total_score), 
                     // Add rank based on the API's sorted order
                     rank: index + 1, 
                     // Add avatarSeed for the placeholder
@@ -144,7 +144,7 @@ const LeaderboardPage = () => {
                                             <span className="player-name">{user.username}</span>
                                             {user.isCurrentUser && <span className="you-badge">{t('leaderboard_page.you_badge')}</span>}
                                         </td>
-                                        <td className="score-cell">{user.score} kg</td>
+                                        <td className="score-cell">{user.score} {t('leaderboard_page.score_suffix')}</td>
                                     </tr>
                                 ))}
                             </tbody>
