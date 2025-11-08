@@ -11,7 +11,7 @@ import tokenManager from '@/services/tokenManager';
 interface ApiLeaderboardUser {
   id: number;
   username: string;
-  total_waste_quantity: string;
+  total_score: string;
 }
 
 // API'dan gelen ham kullanıcı profili verisi
@@ -64,7 +64,7 @@ export default function LeaderboardScreen() {
           const formattedPlayers: LeaderboardPlayer[] = leaderboardData.map((user, index) => ({
             id: String(user.id),
             name: user.username,
-            score: Math.round(parseFloat(user.total_waste_quantity)),
+            score: Math.round(parseFloat(user.total_score)),
             rank: index + 1,
             isCurrentUser: user.id === currentUserId,
           }));
