@@ -100,16 +100,16 @@ class GoogleLoginView(APIView):
 
     def post(self, request):
         try:
-            # Get token from request
-            id_token_str = request.data.get('id_token')
+            # Get token from request - support both field names for compatibility
+            id_token_str = request.data.get('googleToken') or request.data.get('id_token')
             if not id_token_str:
-                return Response({'error': 'No token provided'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'detail': 'Google token required'}, status=status.HTTP_401_UNAUTHORIZED)
 
             # Verify the Google ID token
             google_data = OAuthService.verify_provider_token('google', id_token_str)
             
             if not google_data:
-                return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'detail': 'Invalid Google token'}, status=status.HTTP_401_UNAUTHORIZED)
             
             email = google_data.get('email')
             if not email:
