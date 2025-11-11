@@ -62,3 +62,50 @@ def test_goal_serializer_invalid_date_range():
     assert not serializer.is_valid()
     assert "non_field_errors" in serializer.errors
     assert serializer.errors["non_field_errors"][0] == "start_date must be earlier than end_date."
+
+
+@pytest.mark.django_db
+def test_goal_serializer_update_triggers_progress_update(mocker):
+    """
+    Ensure that updating a Goal through the serializer calls update_progress().
+    """
+    user = CustomUser.objects.create_user(
+        email="update@test.com",
+        username="updateuser",
+        password="testpass"
+    )
+    category = WasteCategory.objects.create(name="Recyclable")
+
+    # Create an initial Goal instance
+    from apps.goals.models import Goal
+    goal = Goal.objects.create(
+        user=user,
+        category=category,
+        goal_type="recycling",
+        timeframe="weekly",
+        target=10,
+        start_date=now().date(),
+        end_date=(now() + timedelta(days=10)).date(),
+    )
+
+    # Mock update_progress to track calls
+    mock_update = mocker.patch.object(Goal, "update_progress")
+
+    updated_data = {
+        "target": 20,
+        "timeframe": "monthly",
+    }
+
+    serializer = GoalSerializer(
+        instance=goal,
+        data=updated_data,
+        partial=True,
+        context={"request": type('obj', (object,), {"user": user})}
+    )
+
+    assert serializer.is_valid(), serializer.errors
+    serializer.save()
+
+    # ✅ Ensure update_progress() was called
+    mock_update.assert_called_once()
+
