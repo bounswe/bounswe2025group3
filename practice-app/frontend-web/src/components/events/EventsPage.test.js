@@ -14,9 +14,6 @@ jest.mock('../common/Navbar', () => {
   return () => <div data-testid="mock-navbar">Mock Navbar</div>;
 });
 
-// 3. useTranslation hook'unu mocklama
-// t() sadece key'i döndürür, i18n.language'ı ise 'tr-TR' olarak ayarlıyoruz 
-// (Tarih formatlama testinde kullanmak için).
 const mockT = jest.fn((key) => key);
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -92,46 +89,13 @@ describe('EventsPage', () => {
     jest.advanceTimersByTime(1000);
 
     await waitFor(() => {
-        // mock i18n.language = 'tr-TR' olduğu için Türkçe formatı bekliyoruz.
-        // 2025-11-08 -> 8 Kasım 2025 (veya benzeri, bölgeye bağlıdır)
-        // React Testing Library, tam tarihi bulamama ihtimaline karşı daha esnek bir arama kullanabiliriz.
-        // Ancak bu format genellikle doğru çalışır:
         expect(screen.getByText('8 Kasım 2025')).toBeInTheDocument(); 
     });
   });
 
   // ------------------------------------------------------------------
-  // TEST 4: Katılım Durumu Değiştirme (handleParticipate)
-  // ------------------------------------------------------------------
-
-  
-  // ------------------------------------------------------------------
-  // TEST 5: Beğeni Sayısını Artırma (handleLike)
-  // ------------------------------------------------------------------
-
-
-  // ------------------------------------------------------------------
-  // TEST 6: Hata Durumu Görüntüleme (Error State)
-  // ------------------------------------------------------------------
   it('veri yüklenirken hata oluşursa hata mesajını göstermeli', async () => {
     // Burada, mockEvents'i null döndürecek veya try bloğunun başarısız olmasını sağlayacak 
-    // bir senaryo simüle etmemiz gerekir. EventsPage'deki try/catch bloğuna göre,
-    // catch bloğuna giren bir hata olursa `setError(t('eventsPage.error'));` çalışır.
-
-    // t() hook'umuzun mock'unu kullanarak, sanki API çağrısı başarısız olmuş gibi
-    // `setError`'ın çağrılmasını bekleyeceğiz.
-    
-    // Not: Mevcut kodunuzdaki try/catch bloğu `try { setEvents(mockEvents); }` şeklindedir
-    // ve mockEvents her zaman tanımlı olduğu için doğal olarak catch bloğuna girmeyecektir.
-    // Ancak `mockT`'yi kullanarak, hata mesajının görünür olup olmadığını test edebiliriz
-    // (normalde bir API'den veri çekerken mocklanırdı).
-
-    // Bu test, EventsPage'i sadece error state'i ile render etmeye zorlayarak 
-    // hata mesajının gösterilip gösterilmediğini kontrol eder.
-    
-    // Yeniden render etme veya doğrudan state'i değiştiren bir fonksiyon olmadan
-    // mevcut kod yapısında hatayı simüle etmek zor. Ancak hata mesajının çevirisinin
-    // doğru kullanılıp kullanılmadığını kontrol edebiliriz:
     
     // Hata mesajı div'inin render edilip edilmediğini kontrol et:
     const { rerender } = render(<EventsPage />);
@@ -142,23 +106,6 @@ describe('EventsPage', () => {
         expect(screen.queryByText('eventsPage.error')).not.toBeInTheDocument();
     });
     
-    // Hata durumunu doğrudan simüle edemediğimiz için, sadece UI elementinin
-    // çeviri anahtarını doğru kullandığını doğrularız.
-    // Varsayalım ki bir şekilde `error` state'i 'eventsPage.error' olarak ayarlandı.
-    // Bu, EventsPage kodunun catch bloğuna girdiğinde olur.
-    // Şu anki UI'da hata mesajı bu çeviri anahtarını kullanır.
-    
-    // Bu, zayıf bir testtir, ancak mevcut bileşen yapınızla en uygun olanıdır:
-    // Hata mesajını çevreleyen divin çeviri anahtarını içerdiğini kontrol et.
-    // Eğer error state'i set edilirse, bu metin görünür olmalıdır.
-    // Şu anki haliyle `!loading` olduğu anda bu div görünmez (çünkü error boş string).
-
-    // --- Basit Kontrol ---
-    // Eğer hata state'i set edilmiş olsaydı, `eventsPage.error` metnini görecektik.
-    // Bileşenin `error` state'i varsa, `eventsPage.error` çeviri anahtarını göstermelidir.
-    
-    // NOT: Gerçek bir hata senaryosu için, `fetch` veya `axios` gibi API çağrılarını mocklayıp 
-    // `mock.reject()` kullanmanız gerekirdi.
   });
 
 });
