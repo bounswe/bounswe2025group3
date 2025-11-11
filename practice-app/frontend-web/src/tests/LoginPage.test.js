@@ -49,7 +49,7 @@ jest.mock('../components/common/Header', () => () => <div data-testid="mock-head
 // ---
 
 // Define API URL for consistency in tests
-const API_URL = 'http://127.0.0.1:8000/api';
+const API_URL = 'http://localhost:8000/api';
 process.env.REACT_APP_API_URL = API_URL;
 
 // Helper to set up localStorage mock for each test
