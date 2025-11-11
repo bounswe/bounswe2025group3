@@ -7,7 +7,14 @@ from apps.waste.models import (
     WasteCategory, SubCategory, WasteLog,
     CustomCategoryRequest, WasteSuggestion, SustainableAction
 )
+
+from apps.waste.tests.factories import (
+    UserFactory, WasteCategoryFactory, SubCategoryFactory,
+    WasteLogFactory, CustomCategoryRequestFactory
+)
+import responses
 from django.contrib.auth import get_user_model
+
 
 User = get_user_model()
 
@@ -186,3 +193,45 @@ class TestUserStatsAPI(BaseAPITest):
         response = auth_client.get(url)
         assert response.status_code == status.HTTP_200_OK
         assert response.data['total_score'] == 42
+
+@pytest.mark.django_db
+class TestUserRankingView:
+    @pytest.fixture
+    def api_client(self, user):
+        from rest_framework.test import APIClient
+        client = APIClient()
+        client.force_authenticate(user=user)
+        return client
+
+    @pytest.fixture
+    def users(self):
+        return [
+            UserFactory(username="alice", total_score=120),
+            UserFactory(username="bob", total_score=250),
+            UserFactory(username="charlie", total_score=180),
+        ]
+
+    def test_user_ranking_sorted_by_score(self, api_client, users):
+        url = reverse("waste:user-ranking")
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+
+        data = response.json()
+        assert len(data) >= 3
+
+        scores = [user["total_score"] for user in data]
+        assert scores == sorted(scores, reverse=True)
+
+    def test_user_ranking_includes_expected_fields(self, api_client, users):
+        url = reverse("waste:user-ranking")
+        response = api_client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+
+        first_entry = response.json()[0]
+        expected_fields = {"id", "username", "total_score"}
+        assert expected_fields.issubset(first_entry.keys())
+
+    def test_requires_authentication(self, client):
+        url = reverse("waste:user-ranking")
+        response = client.get(url)
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
