@@ -3,8 +3,11 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, inline_serializer
 from drf_spectacular.types import OpenApiTypes
+from rest_framework import serializers
+from datetime import timedelta
+from django.utils import timezone
 from apps.waste.models import (
     WasteCategory, SubCategory, WasteLog, CustomCategoryRequest, WasteSuggestion, SustainableAction
 )
@@ -12,7 +15,7 @@ from .serializers import (
     WasteCategorySerializer, SubCategorySerializer, WasteLogSerializer,
     CustomCategoryRequestSerializer, WasteSuggestionSerializer, SustainableActionSerializer,
     AdminActionResponseSerializer, UserScoreSerializer,
-    UserRankingSerializer
+    UserRankingSerializer, WasteStatsItemSerializer
 )
 from django.contrib.auth import get_user_model
 
@@ -308,3 +311,91 @@ class UserRankingView(APIView):
         queryset = user.objects.all().order_by('-total_score')
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
+    
+
+
+
+class UserWasteStatsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = WasteStatsItemSerializer
+
+    @extend_schema(
+        tags=["User Stats"],
+        summary="Get User Waste Statistics",
+        description="Retrieves aggregated waste stats (score and log count) for the authenticated user. "
+                    "Stats can be grouped 'daily' (for the last 7 days) or 'weekly' (for the last 4 weeks).",
+        
+        parameters=[
+            OpenApiParameter(
+                name='period',
+                type=str,
+                location=OpenApiParameter.QUERY,
+                description='Time period for aggregation. Defaults to "weekly".',
+                enum=['daily', 'weekly'],
+                default='weekly',
+                required=False
+            )
+        ],
+        
+        responses={
+            # 200 OK: Successful response
+            200: inline_serializer(
+                name='UserWasteStatsResponse',  # A name for the generated schema
+                fields={
+                    'period': OpenApiTypes.STR,
+                    'data': WasteStatsItemSerializer(many=True)
+                }
+            ),
+            # 400 Bad Request: Invalid parameter
+            400: inline_serializer(
+                name='ErrorResponse400',
+                fields={'detail': OpenApiTypes.STR}
+            ),
+        }
+    )
+
+    def get(self, request):
+        period = request.query_params.get("period", "weekly")
+        if period not in ["daily", "weekly"]:
+            return Response(
+                {"detail": "Invalid or missing period. Use ?period=daily or weekly."},
+                status=400,
+            )
+
+        user = request.user
+        today = timezone.now().date()
+
+        if period == "daily":
+            start_date = today - timedelta(days=6)  # last 7 days
+            delta = timedelta(days=1)
+        else:  # weekly
+            start_date = today - timedelta(weeks=4)  # last 4 weeks
+            delta = timedelta(weeks=1)
+
+        logs = WasteLog.objects.filter(user=user, date_logged__date__gte=start_date).order_by("date_logged")
+
+        stats = []
+        current_start = start_date
+
+        while current_start <= today:
+            if period == "daily":
+                current_end = current_start
+            else:  # weekly
+                current_end = current_start + timedelta(days=6)
+
+            period_logs = [log for log in logs if current_start <= log.date_logged.date() <= current_end]
+
+            total_score = sum(log.get_score() for log in period_logs)
+            total_log = len(period_logs)
+
+            stats.append({
+                "start_date": current_start,
+                "end_date": current_end,
+                "total_score": float(total_score),
+                "total_log": total_log
+            })
+
+            current_start += delta
+
+        serializer = self.serializer_class(stats, many=True)
+        return Response({"period": period, "data": serializer.data})

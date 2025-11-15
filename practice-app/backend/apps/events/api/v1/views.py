@@ -1,32 +1,51 @@
-from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from drf_spectacular.utils import extend_schema, OpenApiResponse
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework import status
 from django.shortcuts import get_object_or_404
-
 from apps.events.models import Event
 from apps.events.api.v1.serializers import EventSerializer
 from apps.events.api.v1.permissions import IsCreatorOrAdmin, IsAdminForDelete
 
+
+@extend_schema(
+    tags=["Events"],
+    summary="Event CRUD operations",
+    description=(
+        "This viewset handles event creation, listing, updating, and retrieving.\n"
+        "Only authenticated users can create events.\n"
+        "Updating is restricted to the creator or an admin.\n"
+        "Deleting events is restricted to admins only."
+    )
+)
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.select_related('creator').prefetch_related('participants', 'likes').all()
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsCreatorOrAdmin, IsAdminForDelete]
 
     def perform_create(self, serializer):
-        # Attach creator from request.user
         serializer.save(creator=self.request.user)
 
-    # Optional: only allow updates by creator or admin (handled by IsCreatorOrAdmin)
-    # Deletion is enforced to admin by IsAdminForDelete
+    # ----------------------------------------
+    # Participate Endpoint
+    # ----------------------------------------
+    @extend_schema(
+        tags=["Events"],
+        summary="Toggle participation",
+        description=(
+            "Allows an authenticated user to join or leave an event.\n"
+            "Calling this endpoint toggles participation for the user.\n\n"
+            "**Returns:**\n"
+            "- participants_count: total number of users attending\n"
+            "- i_am_participating: whether the current user is now participating"
+        ),
+        responses={
+            200: OpenApiResponse(description="Participation toggled successfully.")
+        }
+    )
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def participate(self, request, pk=None):
-        """
-        Toggle participation (I'm coming).
-        POST to /events/{id}/participate/ toggles current user's participation.
-        Returns the new participants_count and i_am_participating.
-        """
         event = get_object_or_404(Event, pk=pk)
         user = request.user
 
@@ -42,12 +61,25 @@ class EventViewSet(viewsets.ModelViewSet):
             'i_am_participating': participating
         }, status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    # ----------------------------------------
+    # Like Endpoint
+    # ----------------------------------------
+    @extend_schema(
+        tags=["Events"],
+        summary="Toggle like",
+        description=(
+            "Allows an authenticated user to like or unlike an event.\n"
+            "Calling this endpoint toggles the like state.\n\n"
+            "**Returns:**\n"
+            "- likes_count: total number of likes on the event\n"
+            "- i_liked: whether the current user now likes the event"
+        ),
+        responses={
+            200: OpenApiResponse(description="Like toggled successfully.")
+        }
+    )
+
     def like(self, request, pk=None):
-        """
-        Toggle like for current user.
-        POST to /events/{id}/like/ toggles like.
-        """
         event = get_object_or_404(Event, pk=pk)
         user = request.user
 
