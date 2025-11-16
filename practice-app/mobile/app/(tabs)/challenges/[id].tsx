@@ -21,6 +21,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 
 interface WasteCategory {
   id: number;
@@ -52,10 +53,11 @@ export default function ChallengeDetailsScreen() {
 
   const colors = useColors();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [status, setStatus] = useState<ChallengeStatus>("upcoming");
-  const [targetLabel, setTargetLabel] = useState<string>("General impact");
+  const [targetLabel, setTargetLabel] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -213,7 +215,7 @@ export default function ChallengeDetailsScreen() {
 
   const fetchChallengeDetails = useCallback(async () => {
     if (Number.isNaN(challengeId)) {
-      setError("Challenge identifier is invalid.");
+      setError(t("challenges.invalid_id"));
       setIsLoading(false);
       return;
     }
@@ -255,15 +257,15 @@ export default function ChallengeDetailsScreen() {
       } else if (challengeData.target_category && categoryMap[challengeData.target_category]) {
         setTargetLabel(categoryMap[challengeData.target_category]);
       } else {
-        setTargetLabel("General impact");
+        setTargetLabel(t("challenges.general_impact"));
       }
     } catch (fetchError) {
       console.error("Failed to load challenge:", fetchError);
-      setError(fetchError instanceof Error ? fetchError.message : "Unable to load challenge.");
+      setError(fetchError instanceof Error ? fetchError.message : t("challenges.load_challenge_error"));
     } finally {
       setIsLoading(false);
     }
-  }, [challengeId]);
+  }, [challengeId, t]);
 
   useEffect(() => {
     fetchChallengeDetails();
@@ -280,25 +282,25 @@ export default function ChallengeDetailsScreen() {
           ? { ...prev, participants_count: (prev.participants_count ?? 0) + 1 }
           : prev
       );
-      Alert.alert("Joined challenge", "You're officially part of this challenge. Good luck!");
+      Alert.alert(t("challenges.joined_title"), t("challenges.joined_message"));
     } catch (joinError) {
       const message =
-        joinError instanceof Error ? joinError.message : "Could not join the challenge.";
-      Alert.alert("Join failed", message);
+        joinError instanceof Error ? joinError.message : t("challenges.join_failed_message");
+      Alert.alert(t("challenges.join_failed_title"), message);
     } finally {
       setIsActionLoading(false);
     }
-  }, [challenge]);
+  }, [challenge, t]);
 
   const handleLeave = useCallback(async () => {
     if (!challenge) return;
     Alert.alert(
-      "Leave challenge",
-      "Are you sure you want to leave this challenge?",
+      t("challenges.leave_title"),
+      t("challenges.leave_message"),
       [
-        { text: "Cancel", style: "cancel" },
+        { text: t("waste.cancel"), style: "cancel" },
         {
-          text: "Leave",
+          text: t("challenges.leave"),
           style: "destructive",
           onPress: async () => {
             setIsActionLoading(true);
@@ -313,13 +315,13 @@ export default function ChallengeDetailsScreen() {
                     }
                   : prev
               );
-              Alert.alert("Left challenge", "You have exited this challenge.");
+              Alert.alert(t("challenges.left_title"), t("challenges.left_message"));
             } catch (leaveError) {
               const message =
                 leaveError instanceof Error
                   ? leaveError.message
-                  : "Could not leave the challenge.";
-              Alert.alert("Leave failed", message);
+                  : t("challenges.leave_failed_message");
+              Alert.alert(t("challenges.leave_failed_title"), message);
             } finally {
               setIsActionLoading(false);
             }
@@ -328,7 +330,7 @@ export default function ChallengeDetailsScreen() {
       ],
       { cancelable: true }
     );
-  }, [challenge]);
+  }, [challenge, t]);
 
   const goalValue = Number(challenge?.goal_quantity ?? 0);
   const formattedGoal = Number.isFinite(goalValue)
@@ -357,10 +359,10 @@ export default function ChallengeDetailsScreen() {
         ) : error ? (
           <View style={styles.errorContainer}>
             <Ionicons name="alert-circle" size={42} color={colors.error} />
-            <Text style={styles.errorTitle}>Unable to load challenge</Text>
+            <Text style={styles.errorTitle}>{t("challenges.unable_to_load")}</Text>
             <Text style={styles.errorMessage}>{error}</Text>
             <TouchableOpacity style={styles.retryButton} onPress={fetchChallengeDetails}>
-              <Text style={styles.retryText}>Try again</Text>
+              <Text style={styles.retryText}>{t("challenges.try_again")}</Text>
             </TouchableOpacity>
           </View>
         ) : challenge ? (
@@ -374,7 +376,7 @@ export default function ChallengeDetailsScreen() {
                 ]}
               >
                 <Text style={[styles.statusText, { color: statusInfo.textColor }]}>
-                  {status.charAt(0).toUpperCase() + status.slice(1)}
+                  {status === "active" ? t("challenges.active") : status === "upcoming" ? t("challenges.upcoming") : t("challenges.past")}
                 </Text>
               </View>
             </View>
@@ -384,19 +386,19 @@ export default function ChallengeDetailsScreen() {
             <View style={styles.infoSection}>
               <View style={styles.infoRow}>
                 <Ionicons name="leaf-outline" size={20} color={colors.primary} />
-                <Text style={styles.infoText}>Focus area</Text>
+                <Text style={styles.infoText}>{t("challenges.focus_area")}</Text>
                 <Text style={styles.infoHighlight}>{targetLabel}</Text>
               </View>
               <View style={styles.infoRow}>
                 <Ionicons name="calendar-outline" size={20} color={colors.primary} />
-                <Text style={styles.infoText}>Schedule</Text>
+                <Text style={styles.infoText}>{t("challenges.schedule")}</Text>
                 <Text style={styles.infoHighlight}>
                   {formatDate(challenge.start_date)} - {formatDate(challenge.end_date)}
                 </Text>
               </View>
               <View style={styles.infoRow}>
                 <Ionicons name="people-outline" size={20} color={colors.primary} />
-                <Text style={styles.infoText}>Entry type</Text>
+                <Text style={styles.infoText}>{t("challenges.entry_type")}</Text>
                 <Text style={styles.infoHighlight}>
                   {challenge.entry_type.charAt(0).toUpperCase() + challenge.entry_type.slice(1)}
                 </Text>
@@ -405,13 +407,13 @@ export default function ChallengeDetailsScreen() {
 
             <View style={styles.statsGrid}>
               <View style={styles.statCard}>
-                <Text style={styles.statLabel}>Goal target</Text>
+                <Text style={styles.statLabel}>{t("challenges.goal_target")}</Text>
                 <Text style={styles.statValue}>
                   {formattedGoal} {challenge.unit ?? ""}
                 </Text>
               </View>
               <View style={styles.statCard}>
-                <Text style={styles.statLabel}>Participants</Text>
+                <Text style={styles.statLabel}>{t("challenges.participants")}</Text>
                 <Text style={styles.statValue}>{challenge.participants_count ?? 0}</Text>
               </View>
             </View>
@@ -437,7 +439,7 @@ export default function ChallengeDetailsScreen() {
                     isJoinDisabled ? styles.primaryButtonTextDisabled : undefined,
                   ]}
                 >
-                  {isParticipating ? "You're in" : "Join challenge"}
+                  {isParticipating ? t("challenges.youre_in") : t("challenges.join_challenge")}
                 </Text>
               </TouchableOpacity>
 
@@ -448,7 +450,7 @@ export default function ChallengeDetailsScreen() {
                   disabled={isActionLoading}
                 >
                   <Ionicons name="exit-outline" size={20} color={colors.error} />
-                  <Text style={styles.secondaryButtonText}>Leave challenge</Text>
+                  <Text style={styles.secondaryButtonText}>{t("challenges.leave_challenge")}</Text>
                 </TouchableOpacity>
               ) : null}
 
@@ -456,10 +458,10 @@ export default function ChallengeDetailsScreen() {
                 <Ionicons name="bulb-outline" size={20} color={colors.primary} />
                 <Text style={styles.helperText}>
                   {status === "upcoming"
-                    ? "Join now to secure your spot. We'll notify you when the challenge begins."
+                    ? t("challenges.helper_upcoming")
                     : status === "active"
-                      ? "This challenge has already started. Joining opens again in future editions."
-                      : "Challenge has concluded. Keep an eye out for new opportunities soon."}
+                      ? t("challenges.helper_active")
+                      : t("challenges.helper_past")}
                 </Text>
               </View>
             </View>

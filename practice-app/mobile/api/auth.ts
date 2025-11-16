@@ -8,7 +8,6 @@ export const login = async (email: string, password: string) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
   });
-  console.log(response);
   const data = await response.json();
 
   if (!response.ok) {
@@ -27,7 +26,6 @@ export const register = async (username: string, email: string, password: string
   });
 
   const data = await response.json();
-  console.log(data);
   if (!response.ok) {
       throw data;
   }
@@ -42,7 +40,7 @@ export const reset_password = async (email: string) => {
   });
   const data = await response.json();
   if (!response.ok) {
-    throw new data;
+    throw data;
   }
   return data;
 };

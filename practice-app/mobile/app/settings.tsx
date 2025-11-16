@@ -3,31 +3,54 @@ import { ThemeMode, useTheme } from '@/hooks/themeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState, useEffect } from 'react';
-import { Alert, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View, BackHandler} from 'react-native';
+import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View, BackHandler} from 'react-native';
 import { SafeAreaView} from 'react-native-safe-area-context';
 import MultipleChoiceModal from '@/components/ui/multiple-choice';
+import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SettingsScreen() {
   const router = useRouter();
   const colors = useColors();
   const { theme, setTheme, isColorBlind, setIsColorBlind } = useTheme();
+  const { i18n: i18nInstance, t } = useTranslation();
   const [notifications, setNotifications] = useState(true);
   const [isThemeModalVisible, setThemeModalVisible] = useState(false);
+  const [isLanguageModalVisible, setLanguageModalVisible] = useState(false);
 
   const themeOptions: ThemeMode[] = ['system', 'light', 'dark'];
+  const languageOptions: string[] = ['en-US', 'tr-TR'];
 
   const getThemeLabel = (mode: ThemeMode): string => {
     switch (mode) {
-      case 'system': return 'System';
-      case 'light': return 'Light Mode';
-      case 'dark': return 'Dark Mode';
-      default: return 'System';
+      case 'system': return t("settings.theme_system");
+      case 'light': return t("settings.theme_light");
+      case 'dark': return t("settings.theme_dark");
+      default: return t("settings.theme_system");
+    }
+  };
+
+  const getLanguageLabel = (lang: string): string => {
+    switch (lang) {
+      case 'en-US': return t("settings.language_english");
+      case 'tr-TR': return t("settings.language_turkish");
+      default: return t("settings.language_english");
     }
   };
 
   const handleThemeSelect = (selectedTheme: ThemeMode) => {
     setTheme(selectedTheme);
     setThemeModalVisible(false);
+  };
+
+  const handleLanguageSelect = async (selectedLanguage: string) => {
+    try {
+      await i18nInstance.changeLanguage(selectedLanguage);
+      await AsyncStorage.setItem('@app_language', selectedLanguage);
+      setLanguageModalVisible(false);
+    } catch (error) {
+      console.error('Error changing language:', error);
+    }
   };
 
   const styles = StyleSheet.create({
@@ -49,6 +72,10 @@ export default function SettingsScreen() {
         setThemeModalVisible(false);
         return true;
       }
+      if (isLanguageModalVisible) {
+        setLanguageModalVisible(false);
+        return true;
+      }
       router.back();
       return true;
     };
@@ -56,7 +83,7 @@ export default function SettingsScreen() {
     const subscription = BackHandler.addEventListener("hardwareBackPress", onBackPress);
     return () => subscription.remove();
     
-  }, [isThemeModalVisible]); 
+  }, [isThemeModalVisible, isLanguageModalVisible]); 
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -64,17 +91,17 @@ export default function SettingsScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.headerButton}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Settings</Text>
+        <Text style={styles.headerTitle}>{t("settings.title")}</Text>
         <View style={{ width: 28 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Text style={styles.sectionTitle}>General</Text>
+        <Text style={styles.sectionTitle}>{t("settings.general")}</Text>
         <View style={styles.section}>
           <View style={styles.row}>
             <View style={styles.rowLabel}>
               <Ionicons name="notifications-outline" size={22} color={colors.primary} />
-              <Text style={styles.rowText}>Notifications</Text>
+              <Text style={styles.rowText}>{t("settings.notifications")}</Text>
             </View>
             <Switch value={notifications} onValueChange={setNotifications} trackColor={{ false: '#767577', true: colors.primary }} thumbColor="white" />
           </View>
@@ -82,7 +109,7 @@ export default function SettingsScreen() {
           <View style={styles.row}>
             <View style={styles.rowLabel}>
               <Ionicons name="eye-outline" size={22} color={colors.primary} />
-              <Text style={styles.rowText}>Color-blind Mode</Text>
+              <Text style={styles.rowText}>{t("settings.color_blind_mode")}</Text>
             </View>
             <Switch value={isColorBlind} onValueChange={setIsColorBlind} trackColor={{ false: '#767577', true: colors.primary }} thumbColor="white" />
           </View>
@@ -90,26 +117,26 @@ export default function SettingsScreen() {
           <TouchableOpacity style={styles.row} onPress={() => setThemeModalVisible(true)}>
             <View style={styles.rowLabel}>
               <Ionicons name="color-palette-outline" size={22} color={colors.primary} />
-              <Text style={styles.rowText}>Theme</Text>
+              <Text style={styles.rowText}>{t("settings.theme")}</Text>
             </View>
             <Ionicons name="chevron-forward" size={22} color={colors.textSecondary} />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.row} onPress={() => Alert.alert("Language", "Language selection will be available soon.")}>
+          <TouchableOpacity style={styles.row} onPress={() => setLanguageModalVisible(true)}>
             <View style={styles.rowLabel}>
               <Ionicons name="language-outline" size={22} color={colors.primary} />
-              <Text style={styles.rowText}>Language</Text>
+              <Text style={styles.rowText}>{t("settings.language")}</Text>
             </View>
             <Ionicons name="chevron-forward" size={22} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>Account</Text>
+        <Text style={styles.sectionTitle}>{t("settings.account")}</Text>
         <View style={styles.section}>
           <TouchableOpacity style={styles.row}>
             <View style={styles.rowLabel}>
               <Ionicons name="person-circle-outline" size={22} color={colors.primary} />
-              <Text style={styles.rowText}>Account Information</Text>
+              <Text style={styles.rowText}>{t("settings.account_information")}</Text>
             </View>
             <Ionicons name="chevron-forward" size={22} color={colors.textSecondary} />
           </TouchableOpacity>
@@ -117,18 +144,18 @@ export default function SettingsScreen() {
           <TouchableOpacity style={styles.row}>
             <View style={styles.rowLabel}>
               <Ionicons name="shield-checkmark-outline" size={22} color={colors.primary} />
-              <Text style={styles.rowText}>Privacy & Security</Text>
+              <Text style={styles.rowText}>{t("settings.privacy_security")}</Text>
             </View>
             <Ionicons name="chevron-forward" size={22} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.sectionTitle}>Danger Zone</Text>
+        <Text style={styles.sectionTitle}>{t("settings.danger_zone")}</Text>
         <View style={styles.section}>
           <TouchableOpacity style={styles.row}>
             <View style={styles.rowLabel}>
               <Ionicons name="trash-outline" size={22} color={colors.error} />
-              <Text style={[styles.rowText, {color: colors.error}]}>Delete Account</Text>
+              <Text style={[styles.rowText, {color: colors.error}]}>{t("settings.delete_account")}</Text>
             </View>
             <Ionicons name="chevron-forward" size={22} color={colors.error} />
           </TouchableOpacity>
@@ -137,7 +164,7 @@ export default function SettingsScreen() {
 
       <MultipleChoiceModal
         visible={isThemeModalVisible}
-        title="Choose Theme"
+        title={t("settings.choose_theme")}
         options={themeOptions.map(getThemeLabel)}
         selectedOption={getThemeLabel(theme)}
         onSelect={(label) => {
@@ -145,6 +172,18 @@ export default function SettingsScreen() {
           if (selected) handleThemeSelect(selected);
         }}
         onClose={() => setThemeModalVisible(false)}
+      />
+
+      <MultipleChoiceModal
+        visible={isLanguageModalVisible}
+        title={t("settings.choose_language")}
+        options={languageOptions.map(getLanguageLabel)}
+        selectedOption={getLanguageLabel(i18nInstance.language || 'en-US')}
+        onSelect={(label) => {
+          const selected = languageOptions.find(lang => getLanguageLabel(lang) === label);
+          if (selected) handleLanguageSelect(selected);
+        }}
+        onClose={() => setLanguageModalVisible(false)}
       />
     </SafeAreaView>
   );

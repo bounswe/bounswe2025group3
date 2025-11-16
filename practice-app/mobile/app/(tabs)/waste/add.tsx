@@ -5,7 +5,8 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getSubcategories, Subcategory, createWasteLog } from '@/api/functions';
+import { getSubcategories, createWasteLog, Subcategory } from '@/api/waste';
+import { useTranslation } from 'react-i18next';
 
 const formatDateToLocal = (date: Date) => {
   const year = date.getFullYear();
@@ -27,6 +28,7 @@ export default function AddWasteLogScreen() {
 
   const router = useRouter();
   const colors = useColors();
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
       container: { flex: 1, backgroundColor: colors.background },
@@ -85,7 +87,7 @@ export default function AddWasteLogScreen() {
 
   const handleSubmit = async () => {
     if (!selectedSubCategory || !quantity) {
-        Alert.alert('Missing Information', 'Please select an item and enter the quantity.');
+        Alert.alert(t("waste.missing_info_title"), t("waste.missing_info_message"));
         return;
     }
     setIsSubmitting(true);
@@ -96,11 +98,11 @@ export default function AddWasteLogScreen() {
             disposal_date: formatDateToLocal(disposalDate),
             disposal_location: disposalLocation || undefined,
         });
-        Alert.alert('Success', 'Waste log added successfully!');
+        Alert.alert(t("waste.success_title"), t("waste.log_added_success"));
         router.back();
     } catch (error) {
         console.error('Error adding waste log:', error);
-        Alert.alert('Error', 'Failed to add waste log');
+        Alert.alert(t("waste.error_title"), t("waste.log_add_failed"));
     } finally {
         setIsSubmitting(false);
     }
@@ -122,12 +124,12 @@ export default function AddWasteLogScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={colors.primary} />
         </TouchableOpacity>
-        <Text style={styles.title}>Add New Entry</Text>
+        <Text style={styles.title}>{t("waste.add_new_entry")}</Text>
       </View>
 
       <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Select an Item</Text>
+          <Text style={styles.label}>{t("waste.select_item")}</Text>
           <View style={styles.chipList}>
             {subcategories.map(cat => (
               <TouchableOpacity
@@ -149,14 +151,14 @@ export default function AddWasteLogScreen() {
 
           <TouchableOpacity style={styles.requestCategoryButton} onPress={() => router.push("/custom_category_request")}>
             <Ionicons name="add-circle-outline" size={20} color={colors.primary} />
-            <Text style={styles.requestCategoryText}>Can't find your item? Request a new one</Text>
+            <Text style={styles.requestCategoryText}>{t("waste.request_new_item")}</Text>
           </TouchableOpacity>
         </View>
 
         {selectedSubCategory && (
             <>
               <View style={styles.formGroup}>
-                  <Text style={styles.label}>Enter Amount {quantityUnit}</Text>
+                  <Text style={styles.label}>{t("waste.enter_amount")} {quantityUnit}</Text>
                   <View style={styles.inputContainer}>
                       <Ionicons name="scale-outline" size={20} color={colors.primary} />
                       <TextInput 
@@ -171,7 +173,7 @@ export default function AddWasteLogScreen() {
               </View>
 
               <View style={styles.formGroup}>
-                  <Text style={styles.label}>Disposal Date</Text>
+                  <Text style={styles.label}>{t("waste.disposal_date")}</Text>
                   <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
                       <Ionicons name="calendar-outline" size={20} color={colors.primary} />
                       <Text style={styles.inputText}>{disposalDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</Text>
@@ -185,14 +187,14 @@ export default function AddWasteLogScreen() {
               )}
               
               <View style={[styles.formGroup, {marginBottom: 16}]}>
-                  <Text style={styles.label}>Disposal Location (Optional)</Text>
+                  <Text style={styles.label}>{t("waste.disposal_location")}</Text>
                   <View style={styles.inputContainer}>
                       <Ionicons name="location-outline" size={20} color={colors.primary} />
                       <TextInput 
                           style={styles.input} 
                           value={disposalLocation} 
                           onChangeText={setDisposalLocation} 
-                          placeholder="e.g., Recycling Center" 
+                          placeholder={t("waste.location_placeholder")} 
                           placeholderTextColor={colors.textSecondary} 
                       />
                   </View>
@@ -202,7 +204,7 @@ export default function AddWasteLogScreen() {
                   <View style={styles.infoBox}>
                       <MaterialCommunityIcons name="star-four-points-outline" size={20} color={colors.primary} />
                       <Text style={styles.infoText}>
-                          You will get : <Text style={{fontWeight: 'bold'}}>+{calculateEstimatedScore()} pts</Text>
+                          {t("waste.you_will_get")} <Text style={{fontWeight: 'bold'}}>+{calculateEstimatedScore()} {t("leaderboard.pts")}</Text>
                       </Text>
                   </View>
                 )}
@@ -214,7 +216,7 @@ export default function AddWasteLogScreen() {
           onPress={handleSubmit} 
           disabled={!selectedSubCategory || !quantity || isSubmitting}
         >
-          {isSubmitting ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>Submit</Text>}
+          {isSubmitting ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>{t("waste.submit")}</Text>}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

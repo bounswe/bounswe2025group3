@@ -4,7 +4,9 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getSubcategories, getWasteLogs, Subcategory, WasteLog, getMyScore } from '@/api/functions';
+import { getSubcategories, getWasteLogs, getMyScore, Subcategory, WasteLog } from '@/api/waste';
+import { useTranslation } from 'react-i18next';
+import { formatDateShort } from "@/i18n/utils";
 
 export default function WasteLogsScreen() {
   const [logs, setLogs] = useState<WasteLog[]>([]);
@@ -15,6 +17,7 @@ export default function WasteLogsScreen() {
   const router = useRouter();
   const colors = useColors();
   const isInitialLoad = useRef(true);
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -111,7 +114,7 @@ export default function WasteLogsScreen() {
           style={styles.headerBarLogo}
           resizeMode="contain"
         />
-        <Text style={styles.headerTitle}>Log Your Waste</Text>
+        <Text style={styles.headerTitle}>{t("waste.log_your_waste")}</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -128,14 +131,14 @@ export default function WasteLogsScreen() {
             <Text style={styles.statValue}>
               {score?.toFixed(1) || '0.0'}
             </Text>
-            <Text style={styles.statLabel}>Total Score</Text>
+            <Text style={styles.statLabel}>{t("waste.total_score")}</Text>
           </View>
           <View style={styles.statCard}>
             <Ionicons name="list-outline" size={32} color={colors.primary} style={styles.statIcon} />
             <Text style={styles.statValue}>
               {logs.length}
             </Text>
-            <Text style={styles.statLabel}>Total Logs</Text>
+            <Text style={styles.statLabel}>{t("waste.total_logs")}</Text>
           </View>
         </View>
 
@@ -145,10 +148,10 @@ export default function WasteLogsScreen() {
           activeOpacity={0.8}
         >
           <Ionicons name="add-circle" size={24} color="#FFFFFF" />
-          <Text style={styles.addButtonText}>Add Waste Log</Text>
+          <Text style={styles.addButtonText}>{t("waste.add_waste_log")}</Text>
         </TouchableOpacity>
 
-        <Text style={styles.sectionTitle}>Log History</Text>
+        <Text style={styles.sectionTitle}>{t("waste.log_history")}</Text>
 
         <View style={styles.logsContainer}>
           {logs.length > 0 ? (
@@ -170,14 +173,10 @@ export default function WasteLogsScreen() {
                 </View>
                 <View style={styles.logDetails}>
                   <Text style={styles.logQuantity}>
-                    Quantity: {log.quantity} {getSubCategoryUnit(log.sub_category)}
+                    {t("waste.quantity")} {log.quantity} {getSubCategoryUnit(log.sub_category)}
                   </Text>
                   <Text style={styles.logDate}>
-                    {new Date(log.disposal_date).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
+                    {formatDateShort(log.disposal_date)}
                   </Text>
                 </View>
                 {log.disposal_location && (
@@ -189,7 +188,7 @@ export default function WasteLogsScreen() {
                   </View>
                 )}
                 <View style={styles.viewDetailsButton}>
-                  <Text style={styles.viewDetailsText}>View Details</Text>
+                  <Text style={styles.viewDetailsText}>{t("waste.view_details")}</Text>
                   <Ionicons name="chevron-forward" size={16} color={colors.primary} />
                 </View>
               </TouchableOpacity>
@@ -198,7 +197,7 @@ export default function WasteLogsScreen() {
             <View style={styles.emptyState}>
               <Ionicons name="leaf-outline" size={48} color={colors.primary} />
               <Text style={styles.emptyStateText}>
-                No waste logs yet. Start tracking your waste!
+                {t("waste.no_logs_yet")}
               </Text>
             </View>
           )}
