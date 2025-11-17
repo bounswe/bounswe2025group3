@@ -7,6 +7,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-nativ
 import { useTheme } from "@/hooks/themeContext";
 import * as NavigationBar from 'expo-navigation-bar';
 import CustomInfoAlert from "@/components/ui/custom-info-alert";
+import { useTranslation } from "react-i18next";
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -19,13 +20,14 @@ export default function RegisterScreen() {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const colors = useColors();
   const { isDark } = useTheme();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (showSuccessAlert) {
       const timer = setTimeout(() => {
         setShowSuccessAlert(false);
         router.replace("/login");
-      }, 500);
+      }, 700);
 
       return () => clearTimeout(timer);
     }
@@ -64,7 +66,7 @@ export default function RegisterScreen() {
       setErrorMessage('');
       setShowSuccessAlert(true);
     } catch (error: any) {
-      let message = "Sign up failed.";
+      let message = t("register.register_failed");
       if (error.username) { message = error.username[0]; }
       else if (error.email) { message = error.email; }
       else if (error.password2) { message = error.password2; }
@@ -83,8 +85,8 @@ export default function RegisterScreen() {
     <View style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "transparent" }}>
       <CustomInfoAlert
         visible={showSuccessAlert}
-        title="Registration Successful"
-        message="Now you can login."
+        title={t("register.registration_successful")}
+        message={t("register.can_login_now")}
       />
 
       <TouchableOpacity
@@ -94,10 +96,10 @@ export default function RegisterScreen() {
         <Ionicons name="chevron-back" size={48} color="white" />
       </TouchableOpacity>
       <View style={styles.container}>
-        <Text style={styles.title}>Join the Zero Waste Movement</Text>
+        <Text style={styles.title}>{t("register.title")}</Text>
 
         <TextInput
-          placeholder="Username"
+          placeholder={t("register.username")}
           placeholderTextColor={colors.primary}
           cursorColor={colors.primary}
           style={styles.input}
@@ -106,7 +108,7 @@ export default function RegisterScreen() {
         />
 
         <TextInput
-          placeholder="Email"
+          placeholder={t("login.email")}
           placeholderTextColor={colors.primary}
           cursorColor={colors.primary}
           style={styles.input}
@@ -116,7 +118,7 @@ export default function RegisterScreen() {
 
         <View style={styles.passwordContainer}>
           <TextInput
-            placeholder="Password"
+            placeholder={t("login.password")}
             placeholderTextColor={colors.primary}
             cursorColor={colors.primary}
             style={styles.passwordInput}
@@ -134,7 +136,7 @@ export default function RegisterScreen() {
 
         <View style={styles.passwordContainer}>
           <TextInput
-            placeholder="Confirm Password"
+            placeholder={t("register.confirm_password")}
             placeholderTextColor={colors.primary}
             cursorColor={colors.primary}
             style={styles.passwordInput}
@@ -163,27 +165,27 @@ export default function RegisterScreen() {
           onPress={handleRegisterPress}
         >
           <Text style={{ color: isRegisterEnabled ? '#fff' : '#595C5C', fontWeight: 'bold' }}>
-            Sign Up
+            {t("register.register_button")}
           </Text>
         </TouchableOpacity>
 
         <View style={{ flexDirection: "row", marginTop: "5%" }}>
-          <Text style={{ color: "black" }}>I agree to Greener's </Text>
+          <Text style={{ color: "black" }}>{t("register.agree_terms_prefix")} </Text>
           <Text
             style={{ fontWeight: "bold", color: colors.blue, borderBottomColor: colors.blue, borderBottomWidth:2 }}
             onPress={() => router.push("/term_condition")}
           >
-            Terms and Conditions
+            {t("register.terms_and_conditions")}
           </Text>
         </View>
 
         <View style={{ flexDirection: "row", marginTop: "14%" }}>
-          <Text style={{ color: "#595C5C" }}>Already have an account? </Text>
+          <Text style={{ color: "#595C5C" }}>{t("register.already_have_account")} </Text>
           <Text
             style={{ fontWeight: "bold", color: colors.primary, borderBottomWidth: 2, borderBottomColor: colors.primary }}
             onPress={handleLoginPress}
           >
-            Log in
+            {t("register.log_in_link")}
           </Text>
         </View>
       </View>

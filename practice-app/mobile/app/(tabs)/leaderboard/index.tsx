@@ -3,24 +3,22 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect } from '@react-navigation/native';
-import { getUserProfile } from '@/api/functions';
+import { getUserProfile } from '@/api/user';
 import tokenManager from '@/services/tokenManager';
+import { useFocusEffect } from "expo-router";
+import { useTranslation } from "react-i18next";
 
-// API'dan gelen ham liderlik tablosu verisi
 interface ApiLeaderboardUser {
   id: number;
   username: string;
   total_score: string;
 }
 
-// API'dan gelen ham kullanıcı profili verisi
 interface ApiUserProfile {
   id: number;
   username: string;
 }
 
-// Ekranda gösterilecek işlenmiş veri
 interface LeaderboardPlayer {
   id: string;
   rank: number;
@@ -31,6 +29,7 @@ interface LeaderboardPlayer {
 
 export default function LeaderboardScreen() {
   const colors = useColors();
+  const { t } = useTranslation();
 
   const [players, setPlayers] = useState<LeaderboardPlayer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,11 +50,11 @@ export default function LeaderboardScreen() {
           ]);
 
           if (!leaderboardResponse.ok) {
-            throw new Error('Failed to fetch leaderboard data.');
+            throw new Error(t("leaderboard.fetch_leaderboard_error"));
           }
 
-          if (!userProfile || typeof userProfile.id === 'undefined') {
-            throw new Error('Failed to fetch user profile.');
+          if (!userProfile) {
+            throw new Error(t("leaderboard.fetch_profile_error"));
           }
           
           const leaderboardData: ApiLeaderboardUser[] = await leaderboardResponse.json();
@@ -75,7 +74,7 @@ export default function LeaderboardScreen() {
           if (err instanceof Error) {
             setError(err.message);
           } else {
-            setError('An unexpected error occurred. Please try again.');
+            setError(t("leaderboard.unexpected_error"));
           }
         } finally {
           setLoading(false);
@@ -122,11 +121,11 @@ export default function LeaderboardScreen() {
           <Text style={styles.playerName}>{name}</Text>
           {isCurrentUser && (
             <View style={styles.youTag}>
-              <Text style={styles.youTagText}>YOU</Text>
+              <Text style={styles.youTagText}>{t("leaderboard.you")}</Text>
             </View>
           )}
         </View>
-        <Text style={styles.scoreText}>{score} pts</Text>
+        <Text style={styles.scoreText}>{score} {t("leaderboard.pts")}</Text>
       </View>
     );
   };
@@ -160,9 +159,9 @@ export default function LeaderboardScreen() {
 
   const ListHeader = () => (
     <View style={styles.listHeader}>
-      <Text style={styles.headerText}>RANK</Text>
-      <Text style={[styles.headerText, styles.playerHeaderText]}>PLAYER</Text>
-      <Text style={styles.headerText}>SCORE</Text>
+      <Text style={styles.headerText}>{t("leaderboard.rank")}</Text>
+      <Text style={[styles.headerText, styles.playerHeaderText]}>{t("leaderboard.player")}</Text>
+      <Text style={styles.headerText}>{t("leaderboard.score")}</Text>
     </View>
   );
 
@@ -203,7 +202,7 @@ export default function LeaderboardScreen() {
           style={styles.headerBarLogo} 
           resizeMode="contain"
         />
-        <Text style={styles.title}>Community Leaderboard</Text>
+        <Text style={styles.title}>{t("leaderboard.title")}</Text>
       </View>
       <View style={styles.container}>
         {renderContent()}

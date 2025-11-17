@@ -5,27 +5,8 @@ import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getGoals } from '@/api/functions';
-
-interface SubCategory {
-  id: number;
-  name: string;
-  category: number;
-  unit: string;
-  score_per_unit: string;
-}
-
-interface Goal {
-  id: number;
-  category: SubCategory;
-  timeframe: 'daily' | 'weekly' | 'monthly';
-  target: number;
-  progress: number;
-  is_complete: boolean;
-  created_at: string;
-  start_date: string;
-  status: string;
-}
+import { getGoals, Goal } from '@/api/goals';
+import { useTranslation } from 'react-i18next';
 
 type FilterStatus = 'All' | 'In Progress' | 'Completed' | 'Failed' | 'Not Started';
 
@@ -48,6 +29,7 @@ export default function GoalsScreen() {
   const router = useRouter();
   const colors = useColors();
   const isInitialLoad = useRef(true);
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -85,7 +67,7 @@ export default function GoalsScreen() {
     emptyButton: { marginTop: 16, backgroundColor: colors.primary, paddingVertical: 12, paddingHorizontal: 24, borderRadius: 24, elevation: 2 },
     emptyButtonText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
     filterContainer: { paddingVertical: 10, paddingHorizontal: 10, backgroundColor: colors.background },
-    filterButton: { paddingVertical: 8, paddingHorizontal: 16, borderRadius: 20, marginRight: 8, backgroundColor: colors.cb2, borderWidth: 1, borderColor: colors.borders },
+    filterButton: { paddingVertical: 8, paddingHorizontal: 16, borderRadius: 20, marginRight: 8, backgroundColor: colors.cb1, borderWidth: 1, borderColor: colors.primary },
     activeFilterButton: { backgroundColor: colors.primary, borderColor: colors.primary },
     filterButtonText: { color: colors.textSecondary, fontWeight: '500' },
     activeFilterButtonText: { color: 'white' },
@@ -97,11 +79,11 @@ export default function GoalsScreen() {
     const startDate = new Date(goal.start_date);
     startDate.setHours(0, 0, 0, 0);
     const endDate = calculateEndDate(new Date(goal.start_date), goal.timeframe);
-    if (goal.is_complete) return { text: 'Completed' as const, style: styles.statusComplete };
-    if (today < startDate) return { text: 'Not Started' as const, style: styles.statusNotStarted };
-    if (today >= endDate) return { text: 'Failed' as const, style: styles.statusEnded };
-    return { text: 'In Progress' as const, style: styles.statusInProgress };
-  }, [styles]);
+    if (goal.is_complete) return { text: t("goals.completed"), style: styles.statusComplete };
+    if (today < startDate) return { text: t("goals.not_started"), style: styles.statusNotStarted };
+    if (today >= endDate) return { text: t("goals.failed"), style: styles.statusEnded };
+    return { text: t("goals.in_progress"), style: styles.statusInProgress };
+  }, [styles, t]);
 
   const fetchGoals = async (showLoader = true) => {
     try {
@@ -139,11 +121,18 @@ export default function GoalsScreen() {
     if (activeFilter === 'All') {
       return goals;
     }
+    const statusMap: Record<FilterStatus, string> = {
+      'All': '',
+      'In Progress': t("goals.in_progress"),
+      'Completed': t("goals.completed"),
+      'Failed': t("goals.failed"),
+      'Not Started': t("goals.not_started")
+    };
     return goals.filter(goal => {
       const statusInfo = getGoalStatusInfo(goal);
-      return statusInfo.text === activeFilter;
+      return statusInfo.text === statusMap[activeFilter];
     });
-  }, [goals, activeFilter, getGoalStatusInfo]);
+  }, [goals, activeFilter, getGoalStatusInfo, t]);
 
   const renderGoalItem = ({ item }: { item: Goal }) => {
     const endDate = calculateEndDate(new Date(item.start_date), item.timeframe);
@@ -160,7 +149,7 @@ export default function GoalsScreen() {
           <View style={styles.goalInfo}>
             <Ionicons name="calendar-outline" size={18} color={colors.primary} />
             <Text style={styles.goalInfoText}>
-              {item.timeframe?.charAt(0).toUpperCase() + item.timeframe?.slice(1)}
+              {t(`goals.${item.timeframe}`)}
             </Text>
           </View>
         </View>
@@ -168,13 +157,13 @@ export default function GoalsScreen() {
           <View style={styles.dateInfo}>
             <Ionicons name="play-circle-outline" size={16} color={colors.textSecondary} />
             <Text style={styles.dateText}>
-              Start: {new Date(item.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+              {t("goals.start")} {new Date(item.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
             </Text>
           </View>
           <View style={styles.dateInfo}>
             <Ionicons name="stop-circle-outline" size={16} color={colors.textSecondary} />
             <Text style={styles.dateText}>
-              End: {endDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+              {t("goals.end")} {endDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
             </Text>
           </View>
         </View>
@@ -192,6 +181,13 @@ export default function GoalsScreen() {
 
   const renderFilterBar = () => {
     const filters: FilterStatus[] = ['All', 'In Progress', 'Completed', 'Failed', 'Not Started'];
+    const filterLabels: Record<FilterStatus, string> = {
+      'All': t("goals.all"),
+      'In Progress': t("goals.in_progress"),
+      'Completed': t("goals.completed"),
+      'Failed': t("goals.failed"),
+      'Not Started': t("goals.not_started")
+    };
     return (
       <View>
         <ScrollView
@@ -211,7 +207,7 @@ export default function GoalsScreen() {
               <Text style={[
                 styles.filterButtonText,
                 activeFilter === filter && styles.activeFilterButtonText,
-              ]}>{filter}</Text>
+              ]}>{filterLabels[filter]}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -232,7 +228,7 @@ export default function GoalsScreen() {
       <View style={styles.headerBar}>
         <View style={styles.headerContent}>
           <Image source={require('@/assets/images/reversed-icon.png')} style={styles.headerBarLogo} resizeMode="contain" />
-          <Text style={styles.headerTitle}>Your Goals</Text>
+          <Text style={styles.headerTitle}>{t("goals.your_goals")}</Text>
         </View>
         <View style={styles.headerActions}>
           <TouchableOpacity style={styles.iconButton} onPress={() => router.push({ pathname: "/goals/templates" })}>
@@ -254,19 +250,19 @@ export default function GoalsScreen() {
         >
           <View style={styles.emptyContainer}>
             <Ionicons name="flag-outline" size={64} color={colors.primary} />
-            <Text style={styles.emptyTitle}>No Goals Found</Text>
-            <Text style={styles.emptyText}>You haven't set any sustainability goals yet. Let's create one!</Text>
+            <Text style={styles.emptyTitle}>{t("goals.no_goals_found")}</Text>
+            <Text style={styles.emptyText}>{t("goals.no_goals_message")}</Text>
             <TouchableOpacity style={styles.emptyButton} onPress={() => router.push("/goals/add")}>
-              <Text style={styles.emptyButtonText}>Create Your First Goal</Text>
+              <Text style={styles.emptyButtonText}>{t("goals.create_first_goal")}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
       ) : filteredGoals.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Ionicons name="search-outline" size={64} color={colors.textSecondary} />
-          <Text style={styles.emptyTitle}>No Matching Goals</Text>
+          <Text style={styles.emptyTitle}>{t("goals.no_matching_goals")}</Text>
           <Text style={styles.emptyText}>
-            There are no goals that match the "{activeFilter}" filter.
+            {t("goals.no_matching_goals_message").replace("{filter}", activeFilter === 'All' ? t("goals.all") : activeFilter === 'In Progress' ? t("goals.in_progress") : activeFilter === 'Completed' ? t("goals.completed") : activeFilter === 'Failed' ? t("goals.failed") : t("goals.not_started"))}
           </Text>
         </View>
       ) : (

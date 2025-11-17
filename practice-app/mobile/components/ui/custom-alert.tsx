@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface CustomAlertProps {
   visible: boolean;
@@ -26,6 +27,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
   confirmText,
 }) => {
   const colors = useColors();
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
     overlay: {
@@ -114,7 +116,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
             style={[styles.actionButton, styles.leftActionButton]}
             onPress={onClose}
             activeOpacity={0.7}>
-            <Text style={styles.textStyleCancel}>Cancel</Text>
+            <Text style={styles.textStyleCancel}>{t('common.cancel')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity

@@ -1,5 +1,4 @@
 import { useColors } from '@/constants/colors';
-import tokenManager from '@/services/tokenManager';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -16,25 +15,10 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAlert } from '@/hooks/alertContext';
+import { getGoalById, updateGoal, deleteGoal, Goal } from '@/api/goals';
+import { getUserProfile } from '@/api/user';
+import { useTranslation } from 'react-i18next';
 
-interface SubCategory {
-    id: number;
-    name: string;
-    unit: string;
-    score_per_unit: string;
-}
-
-interface Goal {
-    id: number;
-    category: SubCategory;
-    timeframe: 'daily' | 'weekly' | 'monthly';
-    target: number;
-    progress: number;
-    is_complete: boolean;
-    created_at: string;
-    start_date: string;
-    status: string;
-}
 
 interface UserProfile {
     id: number;
@@ -71,6 +55,7 @@ export default function GoalDetailsScreen() {
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const colors = useColors();
     const { showAlert, hideAlert, isVisible } = useAlert();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const onBackPress = () => {
@@ -137,30 +122,28 @@ export default function GoalDetailsScreen() {
         startDate.setHours(0, 0, 0, 0);
         const endDate = calculateEndDate(startDate, goal.timeframe);
 
-        if (goal.is_complete) return { text: 'Completed', style: styles.statusComplete };
-        if (today < startDate) return { text: 'Not Started', style: styles.statusNotStarted };
-        if (today >= endDate) return { text: 'Failed', style: styles.statusFailed };
-        return { text: 'In Progress', style: styles.statusInProgress };
+        if (goal.is_complete) return { text: t("goals.completed"), style: styles.statusComplete };
+        if (today < startDate) return { text: t("goals.not_started"), style: styles.statusNotStarted };
+        if (today >= endDate) return { text: t("goals.failed"), style: styles.statusFailed };
+        return { text: t("goals.in_progress"), style: styles.statusInProgress };
     };
 
     const fetchGoalDetails = async () => {
         setIsLoading(true);
         try {
-            const [userResponse, goalResponse] = await Promise.all([
-                tokenManager.authenticatedFetch("/api/user/me/"),
-                tokenManager.authenticatedFetch(`/api/v1/goals/goals/${id}/`)
+            const [userData, goalData] = await Promise.all([
+                getUserProfile(),
+                getGoalById(Number(id))
             ]);
 
-            if (userResponse.ok) setUserProfile(await userResponse.json());
-            if (goalResponse.ok) {
-                const data = await goalResponse.json();
-                setGoal(data);
-                setEditTarget(data.target.toString());
-                setEditTimeframe(data.timeframe);
-                setEditStartDate(new Date(data.start_date));
-            }
+            if (userData) setUserProfile(userData);
+            setGoal(goalData);
+            setEditTarget(goalData.target.toString());
+            setEditTimeframe(goalData.timeframe);
+            setEditStartDate(new Date(goalData.start_date));
         } catch (error) {
             console.error('Error fetching details:', error);
+            showAlert({ title: t("waste.error_title"), message: t("goals.load_details_error"), confirmText: t("waste.ok") });
         } finally {
             setIsLoading(false);
         }
@@ -172,10 +155,11 @@ export default function GoalDetailsScreen() {
         hideAlert();
         setIsLoading(true);
         try {
-            const response = await tokenManager.authenticatedFetch(`/api/v1/goals/goals/${id}/`, { method: 'DELETE' });
-            if (response.ok) router.back();
+            await deleteGoal(Number(id));
+            router.back();
         } catch (error) {
             console.error('Error deleting goal:', error);
+            showAlert({ title: t("waste.error_title"), message: t("goals.delete_goal_error"), confirmText: t("waste.ok") });
         } finally { 
             setIsLoading(false); 
         }
@@ -183,9 +167,9 @@ export default function GoalDetailsScreen() {
 
     const showDeleteConfirmation = () => {
         showAlert({
-            title: 'Delete Goal',
-            message: 'Are you sure you want to delete this goal?',
-            confirmText: 'Confirm',
+            title: t("goals.delete_goal_title"),
+            message: t("goals.delete_goal_message"),
+            confirmText: t("goals.confirm"),
             onConfirm: confirmDelete,
         });
     };
@@ -199,32 +183,25 @@ export default function GoalDetailsScreen() {
         originalStartDate.setHours(0, 0, 0, 0);
 
         if (originalStartDate < today) {
-            showAlert({ title: 'Cannot Edit', message: 'This goal has already started and cannot be modified.', confirmText: 'OK' });
+            showAlert({ title: t("goals.cannot_edit"), message: t("goals.cannot_edit_message"), confirmText: t("waste.ok") });
             return;
         }
 
         setEditLoading(true);
         try {
-            const response = await tokenManager.authenticatedFetch(`/api/v1/goals/goals/${id}/`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    user: userProfile.id,
-                    category_id: goal.category.id,
-                    timeframe: editTimeframe,
-                    target: parseFloat(editTarget),
-                    start_date: formatDateToLocal(editStartDate)
-                }),
+            await updateGoal(Number(id), {
+                user: userProfile.id,
+                category_id: goal.category.id,
+                timeframe: editTimeframe,
+                target: parseFloat(editTarget),
+                start_date: formatDateToLocal(editStartDate)
             });
-            if (response.ok) {
-                setMode('view');
-                await fetchGoalDetails();
-            } else {
-                const errorData = await response.json();
-                showAlert({ title: 'Error', message: errorData.detail || 'Failed to update goal', confirmText: 'OK' });
-            }
+            setMode('view');
+            await fetchGoalDetails();
         } catch (error) {
             console.error('Error updating goal:', error);
+            const errorMessage = error instanceof Error ? error.message : t("goals.update_goal_error");
+            showAlert({ title: t("waste.error_title"), message: errorMessage, confirmText: t("waste.ok") });
         } finally {
             setEditLoading(false);
         }
@@ -244,7 +221,7 @@ export default function GoalDetailsScreen() {
     };
 
     if (isLoading && !goal) return <View style={styles.loadingContainer}><ActivityIndicator size="large" color={colors.primary} /></View>;
-    if (!goal) return <View style={styles.loadingContainer}><Text>Goal not found.</Text></View>;
+    if (!goal) return <View style={styles.loadingContainer}><Text>{t("goals.goal_not_found")}</Text></View>;
 
     const progressPercent = goal.target > 0 ? Math.min((goal.progress / goal.target) * 100, 100) : 0;
     const statusInfo = getGoalStatusInfo(goal);
@@ -255,11 +232,11 @@ export default function GoalDetailsScreen() {
                 <View style={styles.actionsContainer}>
                     <TouchableOpacity style={[styles.actionButton, styles.editButton]} onPress={() => setMode('edit')}>
                         <Ionicons name="create-outline" size={20} color={colors.primary} />
-                        <Text style={styles.editButtonText}>Edit Goal</Text>
+                        <Text style={styles.editButtonText}>{t("goals.edit_goal")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.actionButton, styles.deleteButton]} onPress={showDeleteConfirmation}>
                         <Ionicons name="trash-outline" size={20} color={colors.error} />
-                        <Text style={styles.deleteButtonText}>Delete</Text>
+                        <Text style={styles.deleteButtonText}>{t("waste.delete")}</Text>
                     </TouchableOpacity>
                 </View>
             );
@@ -267,10 +244,10 @@ export default function GoalDetailsScreen() {
             return (
                 <View style={styles.actionsContainer}>
                     <TouchableOpacity style={[styles.actionButton, styles.cancelButton]} onPress={handleCancelEdit}>
-                        <Text style={styles.cancelButtonText}>Cancel</Text>
+                        <Text style={styles.cancelButtonText}>{t("waste.cancel")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.actionButton, styles.saveButton]} onPress={handleSaveChanges}>
-                        {editLoading ? <ActivityIndicator color="white" /> : <Text style={styles.saveButtonText}>Save Changes</Text>}
+                        {editLoading ? <ActivityIndicator color="white" /> : <Text style={styles.saveButtonText}>{t("waste.save_changes")}</Text>}
                     </TouchableOpacity>
                 </View>
             );
@@ -284,7 +261,7 @@ export default function GoalDetailsScreen() {
                 <TouchableOpacity onPress={() => router.back()} style={styles.headerAction} disabled={mode !== 'view'}>
                     <Ionicons name="arrow-back" size={26} color={mode !== 'view' ? colors.borders : colors.text} />
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Goal Details</Text>
+                <Text style={styles.headerTitle}>{t("goals.goal_details")}</Text>
             </View>
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <View style={styles.card}>
@@ -296,23 +273,23 @@ export default function GoalDetailsScreen() {
                             </View>
                         )}
                     </View>
-                    <Text style={styles.cardSubtitle}>Your goal is to reduce waste in this category.</Text>
+                    <Text style={styles.cardSubtitle}>{t("goals.goal_description")}</Text>
                 </View>
 
                 {/* Details Card */}
                 <View style={styles.card}>
-                    <Text style={styles.cardTitle}>{mode === 'edit' ? 'Edit Details' : 'Details & Progress'}</Text>
+                    <Text style={styles.cardTitle}>{mode === 'edit' ? t("goals.edit_details") : t("goals.details_progress")}</Text>
                     <View style={styles.detailItem}>
                         <Ionicons name="time-outline" size={22} color={colors.textSecondary} />
-                        <Text style={styles.detailLabel}>Timeframe</Text>
+                        <Text style={styles.detailLabel}>{t("goals.timeframe")}</Text>
                         {mode === 'view' ? (
-                            <Text style={styles.detailValue}>{goal.timeframe.charAt(0).toUpperCase() + goal.timeframe.slice(1)}</Text>
+                            <Text style={styles.detailValue}>{t(`goals.${goal.timeframe}`)}</Text>
                         ) : (
                             <View style={styles.buttonGroup}>
                                 {(['daily','weekly','monthly'] as const).map(option => (
                                     <TouchableOpacity key={option} style={[styles.segmentedButton, editTimeframe===option && styles.segmentedButtonActive]} onPress={()=>setEditTimeframe(option)}>
                                         <Text style={[styles.segmentedButtonText, editTimeframe===option && styles.segmentedButtonTextActive]}>
-                                            {option.charAt(0).toUpperCase() + option.slice(1)}
+                                            {t(`goals.${option}`)}
                                         </Text>
                                     </TouchableOpacity>
                                 ))}
@@ -322,7 +299,7 @@ export default function GoalDetailsScreen() {
 
                     <View style={styles.detailItem}>
                         <Ionicons name="play-circle-outline" size={22} color={colors.textSecondary} />
-                        <Text style={styles.detailLabel}>Start Date</Text>
+                        <Text style={styles.detailLabel}>{t("goals.start_date")}</Text>
                         {mode==='view' ? (
                             <Text style={styles.detailValue}>{new Date(goal.start_date).toLocaleDateString('en-GB')}</Text>
                         ) : (
@@ -336,7 +313,7 @@ export default function GoalDetailsScreen() {
 
                     <View style={styles.detailItem}>
                         <Ionicons name="stop-circle-outline" size={22} color={colors.textSecondary} />
-                        <Text style={styles.detailLabel}>End Date</Text>
+                        <Text style={styles.detailLabel}>{t("goals.end_date")}</Text>
                         <Text style={styles.detailValue}>
                             {calculateEndDate(mode==='edit'? editStartDate : new Date(goal.start_date), mode==='edit'? editTimeframe : goal.timeframe).toLocaleDateString('en-GB')}
                         </Text>
@@ -344,7 +321,7 @@ export default function GoalDetailsScreen() {
 
                     <View style={styles.detailItem}>
                         <Ionicons name="scale-outline" size={22} color={colors.textSecondary} />
-                        <Text style={styles.detailLabel}>Target ({goal.category.unit})</Text>
+                        <Text style={styles.detailLabel}>{t("goals.target")} ({goal.category.unit})</Text>
                         {mode==='view' ? (
                             <Text style={styles.detailValue}>{goal.target.toFixed(1)}</Text>
                         ) : (
@@ -355,7 +332,7 @@ export default function GoalDetailsScreen() {
                     {mode==='view' && (
                         <View style={styles.progressSection}>
                             <View style={styles.progressHeader}>
-                                <Text style={styles.progressLabel}>Progress</Text>
+                                <Text style={styles.progressLabel}>{t("goals.progress")}</Text>
                                 <Text style={styles.progressValue}>{goal.progress.toFixed(1)} / {goal.target.toFixed(1)} {goal.category.unit}</Text>
                             </View>
                             <View style={styles.progressBar}>

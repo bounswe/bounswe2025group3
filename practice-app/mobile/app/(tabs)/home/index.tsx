@@ -3,9 +3,12 @@ import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { ActivityIndicator, Dimensions, Image, ImageSourcePropType, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 
 import { useColors } from '@/constants/colors';
-import { getGoals, getMyScore, Goal } from "@/api/functions";
+import { getMyScore } from "@/api/waste";
+import { getGoals, Goal } from "@/api/goals";
+import { formatDateShort } from "@/i18n/utils";
 
 const { width } = Dimensions.get('window');
 const GOAL_CARD_WIDTH = width * 0.45;
@@ -79,6 +82,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const colors = useColors();
   const isInitialLoad = useRef(true);
+  const { t } = useTranslation();
 
   const [posts, setPosts] = useState(dummyPosts.map(post => ({
     ...post,
@@ -217,18 +221,18 @@ export default function HomeScreen() {
         <View style={styles.statsCard}>
           <View style={styles.statsHeader}>
             <MaterialCommunityIcons name="star-four-points-outline" size={24} color={colors.primary} />
-            <Text style={styles.statsTitle}>Your Eco Score</Text>
+            <Text style={styles.statsTitle}>{t("home.eco_score")}</Text>
           </View>
           <View style={styles.scoreValueContainer}>
             <Text style={styles.scoreValue}>{userScore ? Number(userScore).toFixed(1) : '0.0'}</Text>
-            <Text style={styles.scoreUnitLabel}>Points</Text>
+            <Text style={styles.scoreUnitLabel}>{t("home.points")}</Text>
           </View>
         </View>
 
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Upcoming Goal Deadlines</Text>
+          <Text style={styles.sectionTitle}>{t("home.upcoming_goal_deadlines")}</Text>
           <TouchableOpacity onPress={() => router.push('/goals')}>
-            <Text style={styles.seeAllText}>See All</Text>
+            <Text style={styles.seeAllText}>{t("home.see_all")}</Text>
           </TouchableOpacity>
         </View>
 
@@ -247,7 +251,7 @@ export default function HomeScreen() {
                   <View style={styles.deadlineContainer}>
                     <Ionicons name="time-outline" size={14} color={colors.error} />
                     <Text style={styles.deadlineText}>
-                      Due: {calculateEndDate(new Date(goal.start_date), goal.timeframe).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                      {t("home.due")} {formatDateShort(calculateEndDate(new Date(goal.start_date), goal.timeframe))}
                     </Text>
                   </View>
                 </View>
@@ -257,15 +261,15 @@ export default function HomeScreen() {
         ) : (
           <View style={styles.emptyStateContainer}>
             <Ionicons name="flag-outline" size={32} color={colors.primary} />
-            <Text style={styles.emptyStateText}>You have no upcoming goals.</Text>
+            <Text style={styles.emptyStateText}>{t("home.no_upcoming_goals")}</Text>
             <TouchableOpacity style={styles.addButton} onPress={() => router.push('/goals/add')}>
-              <Text style={styles.addButtonText}>Create New Goal</Text>
+              <Text style={styles.addButtonText}>{t("home.create_new_goal")}</Text>
             </TouchableOpacity>
           </View>
         )}
 
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Discover</Text>
+          <Text style={styles.sectionTitle}>{t("home.discover")}</Text>
         </View>
 
         {posts.map(post => (

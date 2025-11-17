@@ -5,17 +5,19 @@ import * as NavigationBar from 'expo-navigation-bar';
 import { useFocusEffect } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-export default function FirstScreen() {
+import { useTranslation } from "react-i18next";
 
+export default function FirstScreen() {
   useFocusEffect(
     React.useCallback(() => {
-      console.log("xxx");
       NavigationBar.setButtonStyleAsync('light');
       return () => {
       };
     }, [])
   );
 
+  const { t } = useTranslation();
+  
   const router = useRouter();
 
   const handleLoginPress = () => {
@@ -40,22 +42,22 @@ export default function FirstScreen() {
         />
       </View>
       <View style={styles.content}>
-        <Text style={styles.text}>Make Every Day</Text>
-        <Text style={styles.text}>a Zero Waste Day</Text>
+        <Text style={styles.text} adjustsFontSizeToFit numberOfLines={1}>{t("first_screen.title1")}</Text>
+        <Text style={styles.text} adjustsFontSizeToFit numberOfLines={1}>{t("first_screen.title2")}</Text>
   
         <View style={styles.buttonRow}>
           <TouchableOpacity
             style={[styles.loginButton, { backgroundColor: "#BCFF30" }]}
             onPress={handleLoginPress}
           >
-            <Text style={{ color: '#000', fontWeight: 'bold' }}>Log in</Text>
+            <Text style={{ color: '#000', fontWeight: 'bold' }}>{t("first_screen.login")}</Text>
           </TouchableOpacity>
   
           <TouchableOpacity
             style={[styles.loginButton, { backgroundColor: "#10632C", marginLeft: "20%" }]}
             onPress={handleRegisterPress}
           >
-            <Text style={{ color: '#fff', fontWeight: 'bold' }}>Sign Up</Text>
+            <Text style={{ color: '#fff', fontWeight: 'bold' }}>{t("first_screen.signup")}</Text>
           </TouchableOpacity>
         </View>
       </View>
