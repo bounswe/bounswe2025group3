@@ -193,7 +193,6 @@ export default function MenuDrawerScreen() {
   };
 
   const handleLogout = async () => {
-    await tokenManager.clearTokens();
     signOut();
   };
 

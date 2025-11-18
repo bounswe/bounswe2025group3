@@ -1,4 +1,5 @@
 import { register } from "@/api/auth";
+import { ApiError } from "@/api/utils";
 import { useColors } from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
@@ -65,13 +66,17 @@ export default function RegisterScreen() {
       await register(username, email, password, confirmPassword);
       setErrorMessage('');
       setShowSuccessAlert(true);
-    } catch (error: any) {
-      let message = t("register.register_failed");
-      if (error.username) { message = error.username[0]; }
-      else if (error.email) { message = error.email; }
-      else if (error.password2) { message = error.password2; }
-      else { message = JSON.stringify(error); }
-      setErrorMessage(message);
+    } catch (error: unknown) {
+      // ÇÖZÜM:
+      // 'error', 'parseJson' tarafından gönderilen ApiError'dur.
+      // 'error.message' ise extractMessage'in bize verdiği temiz string'dir.
+      // Payload'ı burada tekrar parse etmene gerek YOK.
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        // Her ihtimale karşı varsayılan bir mesaj
+        setErrorMessage(t("register.register_failed"));
+      }
     }
   };
 
