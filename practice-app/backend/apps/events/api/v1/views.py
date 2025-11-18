@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from apps.events.models import Event
 from apps.events.api.v1.serializers import EventSerializer
 from apps.events.api.v1.permissions import IsCreatorOrAdmin, IsAdminForDelete
+from rest_framework.decorators import action
 
 
 @extend_schema(
@@ -44,7 +45,7 @@ class EventViewSet(viewsets.ModelViewSet):
             200: OpenApiResponse(description="Participation toggled successfully.")
         }
     )
-
+    @action(detail=True, methods=["post"], url_path="participate")
     def participate(self, request, pk=None):
         event = get_object_or_404(Event, pk=pk)
         user = request.user
@@ -78,7 +79,7 @@ class EventViewSet(viewsets.ModelViewSet):
             200: OpenApiResponse(description="Like toggled successfully.")
         }
     )
-
+    @action(detail=True, methods=["post"], url_path="like")
     def like(self, request, pk=None):
         event = get_object_or_404(Event, pk=pk)
         user = request.user
