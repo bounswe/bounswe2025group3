@@ -323,8 +323,8 @@ class UserWasteStatsView(APIView):
         tags=["User Stats"],
         summary="Get User Waste Statistics",
         description="Retrieves aggregated waste stats (score and log count) for the authenticated user. "
-                    "Stats can be grouped 'daily' (for the last 7 days) or 'weekly' (for the last 4 weeks).",
-        
+                    "Stats can be grouped 'daily' (last 7 days) or 'weekly' (last 4 weeks).",
+
         parameters=[
             OpenApiParameter(
                 name='period',
@@ -334,19 +334,24 @@ class UserWasteStatsView(APIView):
                 enum=['daily', 'weekly'],
                 default='weekly',
                 required=False
+            ),
+            OpenApiParameter(
+                name='subcategory',
+                type=int,
+                location=OpenApiParameter.QUERY,
+                description='Filter results by SubCategory ID.',
+                required=False
             )
         ],
-        
+
         responses={
-            # 200 OK: Successful response
             200: inline_serializer(
-                name='UserWasteStatsResponse',  # A name for the generated schema
+                name='UserWasteStatsResponse',
                 fields={
                     'period': OpenApiTypes.STR,
                     'data': WasteStatsItemSerializer(many=True)
                 }
             ),
-            # 400 Bad Request: Invalid parameter
             400: inline_serializer(
                 name='ErrorResponse400',
                 fields={'detail': OpenApiTypes.STR}
@@ -355,6 +360,7 @@ class UserWasteStatsView(APIView):
     )
 
     def get(self, request):
+        # ----------- period parameter -----------
         period = request.query_params.get("period", "weekly")
         if period not in ["daily", "weekly"]:
             return Response(
@@ -362,28 +368,54 @@ class UserWasteStatsView(APIView):
                 status=400,
             )
 
+        # ----------- subcategory filter parameter -----------
+        subcat_id = request.query_params.get("subcategory")
+        if subcat_id:
+            try:
+                subcat_id = int(subcat_id)
+            except ValueError:
+                return Response({"detail": "subcategory must be an integer ID."}, status=400)
+
+            # Optional: validate that subcategory actually exists
+            if not SubCategory.objects.filter(id=subcat_id).exists():
+                return Response({"detail": "Subcategory not found."}, status=400)
+
+        # ----------- base filtering -----------
         user = request.user
         today = timezone.now().date()
 
         if period == "daily":
-            start_date = today - timedelta(days=6)  # last 7 days
+            start_date = today - timedelta(days=6)
             delta = timedelta(days=1)
-        else:  # weekly
-            start_date = today - timedelta(weeks=4)  # last 4 weeks
+        else:
+            start_date = today - timedelta(weeks=4)
             delta = timedelta(weeks=1)
 
-        logs = WasteLog.objects.filter(user=user, date_logged__date__gte=start_date).order_by("date_logged")
+        logs = WasteLog.objects.filter(
+            user=user,
+            date_logged__date__gte=start_date
+        )
 
+        # Apply subcategory filter
+        if subcat_id:
+            logs = logs.filter(sub_category_id=subcat_id)
+
+        logs = logs.order_by("date_logged")
+
+        # ----------- aggregation logic -----------
         stats = []
         current_start = start_date
 
         while current_start <= today:
             if period == "daily":
                 current_end = current_start
-            else:  # weekly
+            else:
                 current_end = current_start + timedelta(days=6)
 
-            period_logs = [log for log in logs if current_start <= log.date_logged.date() <= current_end]
+            period_logs = [
+                log for log in logs
+                if current_start <= log.date_logged.date() <= current_end
+            ]
 
             total_score = sum(log.get_score() for log in period_logs)
             total_log = len(period_logs)
