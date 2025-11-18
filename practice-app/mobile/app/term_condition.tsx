@@ -8,7 +8,7 @@ const PREAMBLE = `
 AGREEMENT TO OUR LEGAL TERMS
 We are ECOCHALLENGE LTD ("Company," "we," "us," "our").
 
-We operate the website https://ecochallenge-frontend.onrender.com/ (the "Site"), as well as any other related products and services that refer or link to these legal terms (the "Legal Terms") (collectively, the "Services").
+We operate the website https://ecochallenge.onrender.com/ (the "Site"), as well as any other related products and services that refer or link to these legal terms (the "Legal Terms") (collectively, the "Services").
 
 You can contact us by phone at 5455454545, email at zerowaste@gmail.com, or by mail to __________, __________, __________.
 

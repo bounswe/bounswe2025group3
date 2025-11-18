@@ -7,25 +7,39 @@ from apps.authentication.models import UserAuthToken
 User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True)
+    password1 = serializers.CharField(write_only=True, required=True, label="Password")
     password2 = serializers.CharField(write_only=True, required=True, label="Confirm password")
+    bio = serializers.CharField(required=False, allow_blank=True)
+    city = serializers.CharField(required=False, allow_blank=True, max_length=100)
+    country = serializers.CharField(required=False, allow_blank=True, max_length=100)
     
     class Meta:
         model = User
-        fields = ('email', 'username', 'password', 'password2', 'first_name', 'last_name')
+        fields = ('email', 'username', 'password1', 'password2', 'first_name', 'last_name', 'bio', 'city', 'country')
         extra_kwargs = {
             'first_name': {'required': False},
             'last_name': {'required': False},
         }
         
     def validate(self, data):
-        if data['password'] != data['password2']:
+        # Check password match
+        if data.get('password1') != data.get('password2'):
             raise serializers.ValidationError({"password2": "Passwords don't match"})
+        
+        # Validate password strength
+        password = data.get('password1')
+        if len(password) < 6:
+            raise serializers.ValidationError({"password1": "Password must be at least 6 characters long"})
+        
+        # Check if password is too common/simple
+        if password.isdigit():
+            raise serializers.ValidationError({"password1": "Password cannot be entirely numeric"})
+            
         return data
         
     def create(self, validated_data):
         validated_data.pop('password2')
-        password = validated_data.pop('password')
+        password = validated_data.pop('password1')
         user = User.objects.create(**validated_data)
         user.set_password(password)
         user.save()

@@ -128,6 +128,7 @@ export interface Goal {
 export const getGoals = async (): Promise<Goal[]> => {
     try {
         const goals = await fetchAllPages<Goal>(API_ENDPOINTS.GOALS.LIST);
+        console.log(goals);
         return goals;
     } catch (error) {
         console.error("Failed to get goals", error);

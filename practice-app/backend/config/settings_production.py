@@ -10,29 +10,25 @@ SECRET_KEY = os.environ.get('SECRET_KEY', SECRET_KEY)
 # Add Render.com domain to allowed hosts
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 
-# Database configuration - uses PostgreSQL on Render
+# Database configuration - uses PostgreSQL (Supabase) on Render
 import dj_database_url
+
+# Get DATABASE_URL from environment variable
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if not DATABASE_URL:
+    raise ValueError(
+        "DATABASE_URL environment variable is not set! "
+        "Please set it in Render dashboard with your Supabase PostgreSQL URL."
+    )
+
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+        default=DATABASE_URL,
         conn_max_age=600,
         conn_health_checks=True,
     )
 }
-
-# CORS settings for frontend
-CORS_ALLOWED_ORIGINS = [
-    'https://ecochallenge-frontend.onrender.com',
-    'https://ecochallenge-backend.onrender.com',
-    'http://localhost:3000',
-    'http://localhost:8000',
-]
-
-# Ensure CSRF is properly configured
-CSRF_TRUSTED_ORIGINS = [
-    'https://ecochallenge-frontend.onrender.com',
-    'https://ecochallenge-backend.onrender.com',
-]
 
 # Static files configuration
 STATIC_URL = '/static/'
@@ -53,6 +49,14 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+# Cross-Origin-Opener-Policy settings for OAuth compatibility
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+
+# Additional security headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
 
 # Log settings
 LOGGING = {
