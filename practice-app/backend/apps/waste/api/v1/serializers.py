@@ -92,3 +92,10 @@ class UserRankingSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     username = serializers.CharField()
     total_score = serializers.IntegerField(read_only=True)
+
+
+class WasteStatsItemSerializer(serializers.Serializer):
+    start_date = serializers.DateField()
+    end_date = serializers.DateField()
+    total_score = serializers.FloatField()
+    total_log = serializers.IntegerField()

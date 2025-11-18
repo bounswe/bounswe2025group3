@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'apps.community',
     'apps.course',
     'apps.goals',
+    'apps.events',
 ]
 
 MIDDLEWARE = [

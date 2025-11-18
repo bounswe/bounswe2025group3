@@ -6,7 +6,7 @@ from .views import (
     CustomCategoryRequestCreateView, AdminCustomCategoryRequestListView,
     AdminCustomCategoryRequestApproveView, AdminCustomCategoryRequestRejectView,
     WasteSuggestionListView, SustainableActionListCreateView, UserWasteScoreView,
-    UserRankingView
+    UserRankingView, UserWasteStatsView
 )
 
 app_name = 'waste'
@@ -40,6 +40,7 @@ urlpatterns = [
     # User score
     path('scores/me/', UserWasteScoreView.as_view(), name='user-waste-score'),
     path('leaderboard/', UserRankingView.as_view(), name='user-ranking'),
+    path('user/stats/', UserWasteStatsView.as_view(), name='user-waste-stats'),
 
     # Admin endpoints
     path('admin/', include((admin_urlpatterns, 'waste_admin'), namespace='waste_admin')),

@@ -54,6 +54,8 @@ class WasteLog(models.Model):
     disposal_photo = models.ImageField(upload_to='disposal_photos/', blank=True, null=True) 
 
     def get_score(self):
+        if not self.quantity or not self.sub_category or not self.sub_category.score_per_unit:
+            return 0
         return self.quantity * self.sub_category.score_per_unit
 
 class CustomCategoryRequest(models.Model):
