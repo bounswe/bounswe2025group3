@@ -105,7 +105,7 @@ class WasteLogListCreateView(generics.ListCreateAPIView):
                 'Waste Log Creation',
                 value={
                     'sub_category': 1,
-                    'amount': 2.5,
+                    'quantity': 2.5,
                     'disposal_method': 'recycled',
                     'notes': 'Plastic bottles from lunch'
                 },
