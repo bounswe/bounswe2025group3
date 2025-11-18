@@ -1,6 +1,6 @@
 import tokenManager from "@/services/tokenManager";
 import { API_ENDPOINTS } from "@/constants/api";
-import { fetchAllPages } from "./utils";
+import { fetchAllPages, parseJson } from "./utils";
 import { Subcategory } from "./waste";
 
 export interface Goal {
@@ -40,25 +40,6 @@ export interface UpdateGoalData {
     target: number;
     start_date: string;
 }
-
-const parseJson = async <T>(response: Response, fallbackMessage: string): Promise<T> => {
-    let data: any = null;
-    try {
-        data = await response.json();
-    } catch {
-        data = null;
-    }
-
-    if (!response.ok) {
-        const message =
-            (data && (data.detail || data.message || data.error)) ||
-            fallbackMessage ||
-            "Request failed";
-        throw new Error(typeof message === "string" ? message : fallbackMessage);
-    }
-
-    return data as T;
-};
 
 export const getGoals = async (): Promise<Goal[]> => {
     try {

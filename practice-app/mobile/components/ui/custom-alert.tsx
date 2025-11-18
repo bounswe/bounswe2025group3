@@ -18,17 +18,6 @@ interface CustomAlertProps {
   confirmText: string;
 }
 
-const CustomAlert: React.FC<CustomAlertProps> = ({
-  visible,
-  onClose,
-  onConfirm,
-  title,
-  message,
-  confirmText,
-}) => {
-  const colors = useColors();
-  const { t } = useTranslation();
-
   const styles = StyleSheet.create({
     overlay: {
       position: 'absolute',
@@ -39,7 +28,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'rgba(0, 0, 0, 0.4)',
-      zIndex: 9999, // en önde göster
+      zIndex: 9999,
     },
     modalView: {
       backgroundColor: 'white',
@@ -93,17 +82,27 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
       fontWeight: '500',
     },
     textStyleConfirm: {
-      color: colors.error,
       fontSize: 16,
       fontWeight: '500',
     },
   });
+
+const CustomAlert: React.FC<CustomAlertProps> = ({
+  visible,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  confirmText,
+}) => {
+  const colors = useColors();
+  const { t } = useTranslation();
   
   if (!visible) return null;
 
   return (
     <View style={styles.overlay}>
-      <Pressable style={StyleSheet.absoluteFill}/>
+      <Pressable style={StyleSheet.absoluteFill} />
 
       <View style={styles.modalView}>
         <View style={styles.contentContainer}>
@@ -123,7 +122,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
             style={styles.actionButton}
             onPress={onConfirm}
             activeOpacity={0.7}>
-            <Text style={styles.textStyleConfirm}>{confirmText}</Text>
+            <Text style={[styles.textStyleConfirm, { color: colors.error }]}>{confirmText}</Text>
           </TouchableOpacity>
         </View>
       </View>
