@@ -410,7 +410,12 @@
       "loading": "Etkinlikler Yükleniyor…",
       "error": "Etkinlikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
       "participate": "Katıl",
-      "participating": "Katılıyorsunuz!"
+      "participating": "Katılıyorsunuz!",
+      "creator": "Oluşturan",
+      "participants": "katılımcı",
+      "noEvents": "Şu anda yaklaşan etkinlik bulunmamaktadır. Lütfen daha sonra tekrar kontrol edin!",
+      "participationFeaturePending": "Katılım açma/kapama API özelliği bekleniyor.",
+      "likeFeaturePending": "Beğenme API özelliği bekleniyor."
     },
     "challenge_detail": {
       "not_found": "Meydan Okuma Bulunamadı",

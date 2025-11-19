@@ -1,95 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next'; // 1. Import useTranslation
-import Navbar from '../common/Navbar'; // Import the shared Navbar
-import './EventsPage.css';
+import { useTranslation } from 'react-i18next';
+import Navbar from '../common/Navbar';
+import './EventsPage.css'; // Assuming this CSS file contains the necessary styles
 
-// --- Mock Data for Events ---
-// This data is not translated, as it would come from an API
-const mockEvents = [
-  {
-    id: 1,
-    title: 'Community Tree Planting Day',
-    description: 'Join us to plant native trees in Willow Creek Park. A great way to give back to nature and beautify our community.',
-    location: 'Willow Creek Park',
-    date: '2025-11-08',
-    imageUrl: 'https://placehold.co/600x400/2ECC71/FFFFFF?text=Tree+Planting',
-    likes: 128,
-    participating: false,
-  },
-  {
-    id: 2,
-    title: 'Zero-Waste Workshop: Kitchen Edition',
-    description: 'Learn practical tips and tricks to reduce food and packaging waste in your kitchen. Includes a free starter kit!',
-    location: 'Green Living Center',
-    date: '2025-11-15',
-    imageUrl: 'https://placehold.co/600x400/1ABC9C/FFFFFF?text=Workshop',
-    likes: 94,
-    participating: true,
-  },
-  {
-    id: 3,
-    title: 'Beach Cleanup Challenge',
-    description: 'Help us clean up Sunrise Beach. Compete with teams to collect the most trash and win eco-friendly prizes.',
-    location: 'Sunrise Beach',
-    date: '2025-11-22',
-    imageUrl: 'https://placehold.co/600x400/3498DB/FFFFFF?text=Beach+Cleanup',
-    likes: 256,
-    participating: false,
-  },
-    {
-    id: 4,
-    title: 'Sustainable Fashion Swap',
-    description: 'Bring your gently used clothes and swap them for something new-to-you! A fun way to refresh your wardrobe without waste.',
-    location: 'City Community Hall',
-    date: '2025-12-06',
-    imageUrl: 'https://placehold.co/600x400/9B59B6/FFFFFF?text=Fashion+Swap',
-    likes: 152,
-    participating: false,
-  },
-];
+// 1. Import the new API function
+import { getEvents } from '../../services/api'; 
 
-// Reusable Icon component, consistent with your other pages.
+// --- Component Definitions ---
+
+// Reusable Icon component
 const Icon = ({ name, className = '' }) => {
   const icons = {
-    events: '📅', like: '❤️', location: '📍', date: '🗓️', alerts: '⚠️'
+    events: '📅', like: '❤️', location: '📍', date: '🗓️', alerts: '⚠️', user: '👤'
   };
   return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
+// 2. Remove the local EVENTS_API_URL constant
+
 const EventsPage = () => {
-  // 2. Setup the translation hook
-  const { t, i18n } = useTranslation(); 
+  const { t, i18n } = useTranslation();
   
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    // Simulate fetching data from an API
+  // Function to fetch events from the API
+  const fetchEvents = async () => {
     setLoading(true);
     setError('');
-    setTimeout(() => {
-      try {
-        setEvents(mockEvents);
-      } catch (err) {
-        // Use the translation key for the error
-        setError(t('eventsPage.error'));
-      } finally {
-        setLoading(false);
-      }
-    }, 1000); // 1-second delay to show loader
+    try {
+      // 3. Use the centralized getEvents function
+      // getEvents handles the URL, authentication, and returns the results array directly.
+      const data = await getEvents();
+      
+      setEvents(data);
+    } catch (err) {
+      console.error('Failed to fetch events:', err);
+      // 4. Update error handling for Axios responses
+      // Axios errors often contain response details in err.response
+      const errorMessage = err.response?.data?.detail || err.message;
+      setError(t('eventsPage.error') + `: ${errorMessage}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
   }, [t]); // Add 't' as a dependency in case the language changes
 
+  // NOTE: These handlers are placeholder stubs as they require separate POST/PATCH API calls
   const handleParticipate = (eventId) => {
-    setEvents(events.map(event =>
-      event.id === eventId ? { ...event, participating: !event.participating } : event
-    ));
+    // Placeholder for API call to toggle participation
+    // IMPORTANT: Do not use alert() in production code. Use a custom modal instead.
+    console.log(`Attempting to toggle participation for event ${eventId}`);
+    // eslint-disable-next-line no-alert
+    alert(t('eventsPage.participationFeaturePending'));
   };
 
   const handleLike = (eventId) => {
-    setEvents(events.map(event =>
-      event.id === eventId ? { ...event, likes: event.likes + 1 } : event
-    ));
+    // Placeholder for API call to toggle like
+    // IMPORTANT: Do not use alert() in production code. Use a custom modal instead.
+    console.log(`Attempting to like event ${eventId}`);
+    // eslint-disable-next-line no-alert
+    alert(t('eventsPage.likeFeaturePending'));
   };
 
   return (
@@ -98,7 +73,6 @@ const EventsPage = () => {
 
       <main className="events-main-content">
         <div className="events-header-section">
-          {/* 3. Use t() for all static text */}
           <h1><Icon name="events" /> {t('eventsPage.title')}</h1>
           <p>{t('eventsPage.subtitle')}</p>
         </div>
@@ -112,45 +86,64 @@ const EventsPage = () => {
         
         {error && !loading && (
           <div className="error-message-box-main">
-            <Icon name="alerts" /> {error} {/* Error message is now set from state */}
+            <Icon name="alerts" /> {error}
           </div>
         )}
 
         {!loading && !error && (
           <div className="events-grid">
             {events.map(event => (
+              // Using the API data properties: title, description, location, date, image, i_am_participating, participants_count, likes_count
               <div key={event.id} className="event-card">
-                <img src={event.imageUrl} alt={event.title} className="event-card-image" />
+                {/* Use 'event.image' property (can be null) */}
+                <img 
+                  src={event.image || 'https://placehold.co/600x400/CCCCCC/000000?text=No+Image'} 
+                  alt={event.title} 
+                  className="event-card-image" 
+                />
                 <div className="event-card-content">
-                  {/* API content remains untranslated */}
                   <h2>{event.title}</h2>
                   <div className="event-card-info">
                     <span>
                       <Icon name="date" /> 
-                      {/* 3. Use i18n.language for dynamic date formatting */}
+                      {/* Format the ISO date string '2025-11-19T14:32:24.788000Z' */}
                       {new Date(event.date).toLocaleDateString(i18n.language, { 
-                        year: 'numeric', month: 'long', day: 'numeric' 
+                        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
                       })}
                     </span>
                     <span><Icon name="location" /> {event.location}</span>
                   </div>
                   <p className="event-card-description">{event.description}</p>
+                  
+                  <div className="event-card-creator">
+                    <Icon name="user" /> {t('eventsPage.creator')}: <strong>{event.creator_username}</strong>
+                  </div>
+                  
                   <div className="event-card-actions">
                     <button
-                      className={`participate-btn ${event.participating ? 'participating' : ''}`}
+                      // Use 'event.i_am_participating'
+                      className={`participate-btn ${event.i_am_participating ? 'participating' : ''}`}
                       onClick={() => handleParticipate(event.id)}
                     >
-                      {/* 3. Use t() for button text */}
-                      {event.participating ? t('eventsPage.participating') : t('eventsPage.participate')}
+                      {/* Use t() for button text */}
+                      {event.i_am_participating ? t('eventsPage.participating') : t('eventsPage.participate')}
                     </button>
                     <button className="like-btn" onClick={() => handleLike(event.id)}>
-                      <Icon name="like" /> {event.likes}
+                      {/* Use 'event.likes_count' */}
+                      <Icon name="like" /> {event.likes_count}
                     </button>
+                    <span className="participants-count">
+                      <Icon name="user" /> {event.participants_count} {t('eventsPage.participants')}
+                    </span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+        )}
+        
+        {events.length === 0 && !loading && !error && (
+          <p className="no-events-message">{t('eventsPage.noEvents')}</p>
         )}
       </main>
     </div>

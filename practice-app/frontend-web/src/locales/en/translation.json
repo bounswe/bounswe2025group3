@@ -410,7 +410,12 @@
       "loading": "Loading Events…",
       "error": "Failed to load events. Please try again later.",
       "participate": "Participate",
-      "participating": "You are going!"
+      "participating": "You are going!",
+      "creator": "Creator",
+      "participants": "participants",
+      "noEvents": "There are no upcoming events right now. Check back soon!",
+      "participationFeaturePending": "API feature for participation toggle is pending.",
+      "likeFeaturePending": "API feature for liking an event is pending."
     },
     "challenge_detail": {
       "not_found": "Challenge Not Found",
