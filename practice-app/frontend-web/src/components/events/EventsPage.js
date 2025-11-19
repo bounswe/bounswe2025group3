@@ -1,38 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+// Ensure useNavigate is imported cleanly from react-router-dom
+import { useNavigate, NavLink } from 'react-router-dom'; 
 import Navbar from '../common/Navbar';
 import './EventsPage.css'; // Assuming this CSS file contains the necessary styles
 
-// 1. Update imports to include all necessary API functions
+// 1. Import all necessary API functions for display and actions (excluding createEvent)
 import { getEvents, toggleParticipation, toggleLike } from '../../services/api'; 
 
 // --- Component Definitions ---
 
-// Reusable Icon component
+// Reusable Icon component - ADDED 'plus' ICON
 const Icon = ({ name, className = '' }) => {
   const icons = {
-    events: '📅', like: '❤️', location: '📍', date: '🗓️', alerts: '⚠️', user: '👤'
+    events: '📅', like: '❤️', location: '📍', date: '🗓️', alerts: '⚠️', user: '👤', plus: '➕'
   };
   return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
-
 const EventsPage = () => {
+  // --- HOOKS MUST BE CALLED FIRST ---
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate(); // Hook call is correct
   
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   // 2. Add state for user feedback messages
   const [message, setMessage] = useState(null); 
-
-  // Helper function for user feedback
+  
+  // Helper function for user feedback (Not a hook)
   const showMessage = (text, type = 'success') => {
     setMessage({ text, type });
     setTimeout(() => setMessage(null), 3000); // Clear message after 3 seconds
   };
 
-  // Function to fetch events from the API
+  // Function to fetch events (Not a hook)
   const fetchEvents = async () => {
     setLoading(true);
     setError('');
@@ -50,7 +53,8 @@ const EventsPage = () => {
       setLoading(false);
     }
   };
-
+  
+  // useEffect hook is called unconditionally
   useEffect(() => {
     fetchEvents();
   }, [t]); // Add 't' as a dependency in case the language changes
@@ -100,7 +104,6 @@ const EventsPage = () => {
       // Call the centralized API function
       await toggleLike(eventId);
 
-      // Update local state based on the assumption the action was successful
       setEvents(prevEvents => prevEvents.map(event => {
         if (event.id === eventId) {
           const isLiked = !event.i_liked;
@@ -135,11 +138,21 @@ const EventsPage = () => {
         <div className="events-header-section">
           <h1><Icon name="events" /> {t('eventsPage.title')}</h1>
           <p>{t('eventsPage.subtitle')}</p>
+
+          {/* UPDATED: Use NavLink for declarative navigation */}
+          <NavLink 
+            to="/events/create"
+            // NavLink uses the 'className' prop for styling, treating it like the 'add-event-btn'
+            className="add-event-btn"
+          >
+            <Icon name="plus" className="mr-2" />
+            {t('eventsPage.buttonAdd') || 'Add New Event'}
+          </NavLink>
         </div>
 
         {/* 6. Display feedback message */}
         {message && (
-          <div className={`p-4 mb-4 rounded-lg shadow-md text-center ${message.type === 'success' ? 'bg-green-100 text-green-700 border border-green-400' : 'bg-red-100 text-red-700 border border-red-400'}`}>
+          <div className={`p-4 mb-4 rounded-lg shadow-md text-center ${message.type === 'success' ? 'success-message-box' : 'error-message-box'}`}>
             {message.text}
           </div>
         )}
