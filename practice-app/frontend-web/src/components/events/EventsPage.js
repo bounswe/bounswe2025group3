@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import Navbar from '../common/Navbar';
 import './EventsPage.css'; // Assuming this CSS file contains the necessary styles
 
-// 1. Import the new API function
-import { getEvents } from '../../services/api'; 
+// 1. Update imports to include all necessary API functions
+import { getEvents, toggleParticipation, toggleLike } from '../../services/api'; 
 
 // --- Component Definitions ---
 
@@ -16,7 +16,6 @@ const Icon = ({ name, className = '' }) => {
   return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
-// 2. Remove the local EVENTS_API_URL constant
 
 const EventsPage = () => {
   const { t, i18n } = useTranslation();
@@ -24,6 +23,14 @@ const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  // 2. Add state for user feedback messages
+  const [message, setMessage] = useState(null); 
+
+  // Helper function for user feedback
+  const showMessage = (text, type = 'success') => {
+    setMessage({ text, type });
+    setTimeout(() => setMessage(null), 3000); // Clear message after 3 seconds
+  };
 
   // Function to fetch events from the API
   const fetchEvents = async () => {
@@ -31,13 +38,11 @@ const EventsPage = () => {
     setError('');
     try {
       // 3. Use the centralized getEvents function
-      // getEvents handles the URL, authentication, and returns the results array directly.
       const data = await getEvents();
       
       setEvents(data);
     } catch (err) {
       console.error('Failed to fetch events:', err);
-      // 4. Update error handling for Axios responses
       // Axios errors often contain response details in err.response
       const errorMessage = err.response?.data?.detail || err.message;
       setError(t('eventsPage.error') + `: ${errorMessage}`);
@@ -50,21 +55,76 @@ const EventsPage = () => {
     fetchEvents();
   }, [t]); // Add 't' as a dependency in case the language changes
 
-  // NOTE: These handlers are placeholder stubs as they require separate POST/PATCH API calls
-  const handleParticipate = (eventId) => {
-    // Placeholder for API call to toggle participation
-    // IMPORTANT: Do not use alert() in production code. Use a custom modal instead.
-    console.log(`Attempting to toggle participation for event ${eventId}`);
-    // eslint-disable-next-line no-alert
-    alert(t('eventsPage.participationFeaturePending'));
+  // 4. Refactor handleParticipate to use toggleParticipation API
+  const handleParticipate = async (eventId) => {
+    const eventToUpdate = events.find(e => e.id === eventId);
+    if (!eventToUpdate) return;
+    
+    try {
+      // Call the centralized API function
+      await toggleParticipation(eventId);
+      
+      // Update local state based on the assumption the action was successful
+      setEvents(prevEvents => prevEvents.map(event => {
+        if (event.id === eventId) {
+          const isParticipating = !event.i_am_participating;
+          
+          // Use hardcoded text if translation keys are missing, but rely on t()
+          const successKey = isParticipating ? 'eventsPage.participateSuccess' : 'eventsPage.unparticipateSuccess';
+          showMessage(t(successKey) || (isParticipating ? 'You are now participating!' : 'You are no longer participating.'), 'success');
+
+          return { 
+            ...event, 
+            i_am_participating: isParticipating,
+            // Update the count locally
+            participants_count: event.participants_count + (isParticipating ? 1 : -1)
+          };
+        }
+        return event;
+      }));
+
+    } catch (err) {
+      console.error('Failed to toggle participation:', err);
+      const errorMessage = err.response?.data?.detail || err.message;
+      const errorKey = 'eventsPage.participateError';
+      showMessage(t(errorKey) + `: ${errorMessage}`, 'error');
+    }
   };
 
-  const handleLike = (eventId) => {
-    // Placeholder for API call to toggle like
-    // IMPORTANT: Do not use alert() in production code. Use a custom modal instead.
-    console.log(`Attempting to like event ${eventId}`);
-    // eslint-disable-next-line no-alert
-    alert(t('eventsPage.likeFeaturePending'));
+  // 5. Refactor handleLike to use toggleLike API
+  const handleLike = async (eventId) => {
+    const eventToUpdate = events.find(e => e.id === eventId);
+    if (!eventToUpdate) return;
+
+    try {
+      // Call the centralized API function
+      await toggleLike(eventId);
+
+      // Update local state based on the assumption the action was successful
+      setEvents(prevEvents => prevEvents.map(event => {
+        if (event.id === eventId) {
+          const isLiked = !event.i_liked;
+          
+          // Use hardcoded text if translation keys are missing, but rely on t()
+          const successKey = isLiked ? 'eventsPage.likeSuccess' : 'eventsPage.unlikeSuccess';
+          showMessage(t(successKey) || (isLiked ? 'Event liked!' : 'Event unliked.'), 'success');
+
+          return { 
+            ...event, 
+            i_liked: isLiked,
+            // Update the count locally
+            likes_count: event.likes_count + (isLiked ? 1 : -1)
+          };
+        }
+        return event;
+      }));
+      
+    } catch (err) {
+      console.error('Failed to toggle like:', err);
+      const errorMessage = err.response?.data?.detail || err.message;
+      const errorKey = 'eventsPage.likeError';
+      showMessage(t(errorKey) + `: ${errorMessage}`, 'error');
+    }
   };
 
   return (
@@ -76,6 +136,14 @@ const EventsPage = () => {
           <h1><Icon name="events" /> {t('eventsPage.title')}</h1>
           <p>{t('eventsPage.subtitle')}</p>
         </div>
+
+        {/* 6. Display feedback message */}
+        {message && (
+          <div className={`p-4 mb-4 rounded-lg shadow-md text-center ${message.type === 'success' ? 'bg-green-100 text-green-700 border border-green-400' : 'bg-red-100 text-red-700 border border-red-400'}`}>
+            {message.text}
+          </div>
+        )}
+        {/* End feedback message */}
 
         {loading && (
           <div className="loader-container-main">
@@ -123,12 +191,18 @@ const EventsPage = () => {
                     <button
                       // Use 'event.i_am_participating'
                       className={`participate-btn ${event.i_am_participating ? 'participating' : ''}`}
+                      // 7. Attach refactored handler
                       onClick={() => handleParticipate(event.id)}
                     >
                       {/* Use t() for button text */}
                       {event.i_am_participating ? t('eventsPage.participating') : t('eventsPage.participate')}
                     </button>
-                    <button className="like-btn" onClick={() => handleLike(event.id)}>
+                    <button 
+                      // Add 'liked' class for visual feedback if the user liked it
+                      className={`like-btn ${event.i_liked ? 'liked' : ''}`} 
+                      // 8. Attach refactored handler
+                      onClick={() => handleLike(event.id)}
+                    >
                       {/* Use 'event.likes_count' */}
                       <Icon name="like" /> {event.likes_count}
                     </button>
