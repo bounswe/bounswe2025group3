@@ -19,6 +19,7 @@ import EventsPage from './components/events/EventsPage';
 import TermsPage from './components/auth/TermsPage';
 import ChallengeDetailPage from './components/challenges/ChallengeDetail';
 import './i18n';
+import PersonalStats from './components/stats/PersonalStats';
 
 // Add debugging information for build and environment
 console.debug('App Initialization:', {
@@ -60,6 +61,7 @@ const App = () => {
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/github-callback" element={<GithubCallback />} />
                 <Route path="/" element={<Home />} /> {/* Redirect root to /home */}
+                <Route path="/stats" element={<PersonalStats />} />
             </Routes>
         </Router>
     );
