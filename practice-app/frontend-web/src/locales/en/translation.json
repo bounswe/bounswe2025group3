@@ -435,7 +435,8 @@
       "participateError": "Failed to toggle participation",
       "likeSuccess": "Event liked!",
       "unlikeSuccess": "Event unliked.",
-      "likeError": "Failed to toggle like"
+      "likeError": "Failed to toggle like",
+      "backToEvents": "Back to Events"
     },
     "challenge_detail": {
       "not_found": "Challenge Not Found",

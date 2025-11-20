@@ -435,7 +435,8 @@
       "participateError": "Katılım durumu değiştirilemedi",
       "likeSuccess": "Etkinlik beğenildi!",
       "unlikeSuccess": "Beğeni geri alındı.",
-      "likeError": "Beğeni durumu değiştirilemedi"
+      "likeError": "Beğeni durumu değiştirilemedi",
+      "backToEvents": "Etkinliklere Geri Dön"
     },
     "challenge_detail": {
       "not_found": "Meydan Okuma Bulunamadı",

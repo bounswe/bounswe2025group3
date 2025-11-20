@@ -184,7 +184,7 @@ const EventCreate = () => {
         <div className="back-button-container">
           <button onClick={handleGoBack} className="btn-back">
             <Icon name="back" className="mr-2" />
-            {t('common.backToEvents') || 'Back to Events'}
+            {t('eventsPage.backToEvents')}
           </button>
         </div>
       </main>
