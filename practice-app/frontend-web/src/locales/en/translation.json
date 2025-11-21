@@ -2,7 +2,7 @@
     "common": {
       "nav": {
         "home": "Home",
-        "about": "About us",
+        "about": "About Us",
         "blog": "Blog",
         "login": "Login",
         "signup": "Sign Up"
@@ -16,7 +16,7 @@
         "title": "Make Every Day a Zero Waste Day",
         "subtitle": "Join our community to track waste, earn rewards, and live sustainably!",
         "journey_button": "Start Your Journey",
-        "login_button": "Log In"
+        "login_button": "Login"
       },
       "mission": {
         "title": "Why Zero Waste Challenge?",
@@ -68,6 +68,13 @@
             "author": "- Liam, Green Starter"
           }
         ]
+      },
+      "info_box": {
+        "recycling_title": "What is Recycling?",
+        "sustainable_title": "What is Sustainable Development?",
+        "circular_title": "What is Circular Economy?",
+        "loading": "Loading...",
+        "error": "Failed to load description."
       }
     },
     "about": {
@@ -96,7 +103,7 @@
         "title": "Meet the Student Team",
         "subtitle": "The GreenerLife project is brought to you by a dedicated group of students:"
       },
-      "simple_footer": "© {year} GreenerLife Student Project."
+      "simple_footer": "© {{year}} GreenerLife Student Project."
     },
     "blog": {
       "header": {
@@ -198,7 +205,10 @@
       "back_to_login_button": "Back to Login",
       "alternate_action_prompt": "Already have an account?",
       "alternate_action_login": "Log In",
-      "error_passwords_no_match": "Passwords do not match."
+      "error_passwords_no_match": "Passwords do not match.",
+      "accept_terms_prefix": "I accept the ",
+      "accept_terms_link": "Terms and Conditions",
+      "accept_terms_suffix": ""
     },
     "forgot_password": {
       "title": "Forgot Your Password?",
@@ -218,6 +228,7 @@
       "leaderboard": "Leaderboard",
       "challenges": "Challenges",
       "events": "Events",
+      "my_stats": "My Stats",
       "logout": "Logout"
     },
     "dashboard": {
@@ -412,9 +423,100 @@
       "participate": "Participate",
       "participating": "You are going!"
     },
+    "events_data": {
+      "event_1_title": "Community Tree Planting Day",
+      "event_1_desc": "Join us to plant native trees in Willow Creek Park. A great way to give back to nature and beautify our community.",
+      "event_2_title": "Zero-Waste Workshop: Kitchen Edition",
+      "event_2_desc": "Learn practical tips and tricks to reduce food and packaging waste in your kitchen. Includes a free starter kit!",
+      "event_3_title": "Beach Cleanup Challenge",
+      "event_3_desc": "Help us clean up Sunrise Beach. Compete with teams to collect the most trash and win eco-friendly prizes.",
+      "event_4_title": "Sustainable Fashion Swap",
+      "event_4_desc": "Bring your gently used clothes and swap them for something new-to-you! A fun way to refresh your wardrobe without waste."
+    },
     "challenge_detail": {
       "not_found": "Challenge Not Found",
       "back_button": "Back to Challenges",
       "your_progress": "Your Progress"
+    },
+    "stats_page": {
+      "title": "Overview for {{username}}",
+      "loading": "Loading statistics...",
+      "error_load": "Failed to load statistics. Please try again later.",
+      "hero": {
+        "eco_score": "Eco Score",
+        "global_rank": "Global Rank",
+        "event_rate": "Event Rate",
+        "joined_subtext": "joined"
+      },
+      "charts": {
+        "activity_trend": "Activity Trend",
+        "points": "Points",
+        "items": "Items",
+        "impact_breakdown": "Impact Breakdown",
+        "no_breakdown_data": "Log waste to see breakdown.",
+        "filters": {
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "yearly": "Yearly"
+        },
+        "updating": "Updating..."
+      },
+      "badges": {
+        "title": "Your Trophy Case",
+        "empty": "Start logging to earn badges!"
+      },
+      "forest": {
+        "title": "My Eco Forest",
+        "info": "1 Tree = 500 Points",
+        "empty": "Your forest is waiting to grow."
+      }
+    },"waste_categories": {
+    "paper": "Paper",
+    "plastic_bottles": "Plastic Bottles",
+    "cardboard": "Cardboard",
+    "metal_cans": "Metal Cans",
+    "food_scraps": "Food Scraps",
+    "garden_waste": "Garden Waste",
+    "coffee_grounds": "Coffee Grounds",
+    "batteries": "Batteries",
+    "small_appliances": "Small Appliances",
+    "mobile_phones": "Mobile Phones",
+    "glass": "Glass",
+    "plastic": "Plastic",
+    "electronic": "Electronic",
+    "organic": "Organic",
+    "other": "Other"
+  },
+  "units": {
+    "kg": "kg",
+    "pcs": "pcs",
+    "l": "l"
+  },
+  "tiers": {
+    "planet_guardian": "Planet Guardian",
+    "zero_waste_champion": "Zero Waste Champion",
+    "sustainability_hero": "Sustainability Hero",
+    "eco_advocate": "Eco Advocate",
+    "green_starter": "Green Starter",
+    "eco_explorer": "Eco Explorer"
+  },
+  "badges_data": {
+    "first_step": {
+      "name": "First Step",
+      "desc": "Log first waste"
+    },
+    "plastic_buster": {
+      "name": "Plastic Buster",
+      "desc": "Reduce 10kg plastic"
+    },
+    "sustainability_streak": {
+      "name": "Sustainability Streak",
+      "desc": "7 Days Streak"
+    },
+    "zero_waste_legend": {
+      "name": "Zero Waste Legend",
+      "desc": "5000+ Score"
     }
   }
+}

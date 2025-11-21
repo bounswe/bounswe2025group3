@@ -119,6 +119,13 @@
     --profile-success-bg: #d4edda;
     --profile-success-text: #155724;
     --profile-success-border: #c3e6cb;
+
+    /* --- NEW: Personal Stats Variables (Green Theme) --- */
+    --stats-chart-bar-score: #27ae60; 
+    --stats-chart-bar-logs: #88eb9a;  
+    --stats-forest-bg-start: #e8f5e9; 
+    --stats-forest-bg-end: #c8e6c9;   
+    --stats-forest-text-bg: rgba(255, 255, 255, 0.7);
   }
   
   
@@ -239,4 +246,11 @@
     --profile-success-bg: #1a3b32;
     --profile-success-text: #a6ffcb;
     --profile-success-border: #52c41a;
+
+    /* --- NEW: Personal Stats Variables (Blue Theme) --- */
+    --stats-chart-bar-score: #0074D9; /* Mavi */
+    --stats-chart-bar-logs: #7FDBFF;  /* Açık Mavi */
+    --stats-forest-bg-start: #1a222f; /* Koyu Mavi */
+    --stats-forest-bg-end: #151b26;
+    --stats-forest-text-bg: rgba(0, 0, 0, 0.6);
   }

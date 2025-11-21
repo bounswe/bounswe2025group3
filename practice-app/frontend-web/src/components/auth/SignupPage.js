@@ -163,11 +163,13 @@ const SignupPage = () => {
                   onChange={(e) => setTermsAccepted(e.target.checked)}
                   required 
                 />
+
                 <label htmlFor="terms">
-                  {t('signup.accept_terms_prefix', 'I accept the ')} 
+                  {t('signup.accept_terms_prefix')} 
                   <Link to="/terms" target="_blank" rel="noopener noreferrer">
-                    {t('signup.accept_terms_link', 'Terms and Conditions')}
+                    {t('signup.accept_terms_link')}
                   </Link>
+                  {t('signup.accept_terms_suffix')}
                 </label>
               </div>
 

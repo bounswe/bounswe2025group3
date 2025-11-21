@@ -69,7 +69,7 @@ const Navbar = ({ isAuthenticated }) => {
                     <Icon name="events" /> {t('dashboard_nav.events')}
                 </NavLink>
                 <NavLink to="/stats" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
-                    <Icon name="stats" /> My Stats
+                    <Icon name="stats" /> {t('dashboard_nav.my_stats')}
                 </NavLink>
                 <button onClick={handleLogout} className="nav-action-item">
                     <Icon name="logout" /> {t('dashboard_nav.logout')}
