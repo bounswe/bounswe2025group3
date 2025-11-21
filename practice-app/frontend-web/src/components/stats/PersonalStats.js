@@ -246,6 +246,19 @@ const PersonalStats = () => {
     setStatsData(formatted);
   };
 
+  // Login kontrolü - token yoksa login'e yönlendir
+  useEffect(() => {
+    if (!token) {
+      navigate('/login', { replace: true });
+      return;
+    }
+    fetchInitialData();
+    // eslint-disable-next-line
+  }, [token, navigate]);
+
+
+  
+
   const processCategoryPie = (logs) => {
     const categoryMap = {};
     logs.forEach(log => {

@@ -19,9 +19,18 @@ const Icon = ({ name, className = '' }) => {
 };
 
 const EventsPage = () => {
-  // --- HOOKS MUST BE CALLED FIRST ---
+
   const { t, i18n } = useTranslation();
   const navigate = useNavigate(); // Hook call is correct
+    const token = localStorage.getItem('access_token');
+
+    useEffect(() => {
+    if (!token) {
+        navigate('/login');
+        return;
+        }
+    // eslint-disable-next-line
+  }, [token]);
   
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);

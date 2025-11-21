@@ -24,7 +24,15 @@ const WasteLog = () => {
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const token = localStorage.getItem('access_token');
 
+    useEffect(() => {
+    if (!token) {
+        navigate('/login');
+        return;
+        }
+    // eslint-disable-next-line
+  }, [token]);
     // --- YARDIMCI FONKSİYONLAR: Kategori ve Birim Çevirisi ---
     const getCategoryTrans = (apiName) => {
         if (!apiName) return "";

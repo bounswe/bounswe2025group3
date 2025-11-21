@@ -33,6 +33,15 @@ const LeaderboardPage = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const currentUserId = localStorage.getItem('user_id'); // Assuming you store user_id
+        const token = localStorage.getItem('access_token');
+
+    useEffect(() => {
+    if (!token) {
+        navigate('/login');
+        return;
+        }
+    // eslint-disable-next-line
+  }, [token]);
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
