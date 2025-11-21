@@ -18,6 +18,7 @@ import GithubCallback from './components/auth/GithubCallback';
 import EventsPage from './components/events/EventsPage';
 import TermsPage from './components/auth/TermsPage';
 import ChallengeDetailPage from './components/challenges/ChallengeDetail';
+import EventCreate from './components/events/EventCreate';
 import './i18n';
 import PersonalStats from './components/stats/PersonalStats';
 
@@ -47,6 +48,7 @@ const App = () => {
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/challenges" element={<Challanges />} />
                 <Route path="/events" element={<EventsPage />} />
+                <Route path="/events/create" element={<EventCreate />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
                 {/* Assuming slug is passed as URL parameter */}

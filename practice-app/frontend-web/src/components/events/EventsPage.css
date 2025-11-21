@@ -47,6 +47,30 @@
   margin: 0 auto;
 }
 
+.events-page-scoped .add-event-btn {
+  /* Style the NavLink as a button */
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none; /* Important for links */
+  
+  /* Button aesthetics */
+  background-color: var(--nav-dashboard-link-active-bg);
+  color: var(--text-on-accent);
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px var(--nav-dashboard-active-shadow-light);
+}
+
+.events-page-scoped .add-event-btn:hover {
+  background-color: var(--nav-dashboard-logo-color);
+  box-shadow: 0 4px 12px var(--nav-dashboard-active-shadow);
+}
+
 /* --- Events Grid & Cards (Scoped) --- */
 .events-page-scoped .events-grid {
   display: grid;
