@@ -1,43 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Navbar from '../common/Navbar';
-import './EventCreate.css'; // Dedicated styles for the creation page
-// FIX: Import the actual useNavigate hook from react-router-dom
+import './EventCreate.css'; 
 import { useNavigate } from 'react-router-dom'; 
-
-// Import necessary API functions
 import { createEvent } from '../../services/api'; 
 
-// --- Component Definitions ---
-
-// Reusable Icon component
+// --- Helper Components ---
 const Icon = ({ name, className = '' }) => {
   const icons = {
-    events: '📅', back: '⬅️', plus: '➕'
+    events: '📅', back: '⬅️', plus: '➕', upload: '📤', trash: '🗑️'
   };
   return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
-
 const EventCreate = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate(); // Use the actual hook
+  const navigate = useNavigate(); 
+  const fileInputRef = useRef(null); // Gizli input'a erişmek için
   
+  // State Tanımları
   const initialData = {
     title: '',
     description: '',
     location: '',
-    // Default to current date/time in local format
     date: new Date().toISOString().substring(0, 16), 
-    image: '',
+    image: null, 
   };
   
   const [formData, setFormData] = useState(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
-  const [message, setMessage] = useState(null); 
+  const [message, setMessage] = useState(null);
+  
+  // Sürükleme Durumu için State (Kütüphanesiz)
+  const [isDragging, setIsDragging] = useState(false);
 
-  // Helper function for user feedback
+  // --- Yardımcı Fonksiyonlar ---
   const showMessage = (text, type = 'success') => {
     setMessage({ text, type });
     setTimeout(() => setMessage(null), 3000); 
@@ -48,6 +46,63 @@ const EventCreate = () => {
     setFormError('');
   };
 
+  // --- DOSYA İŞLEME FONKSİYONLARI (SAF REACT) ---
+
+  // 1. Dosyayı işleyip state'e atayan yardımcı fonksiyon
+  const processFile = (file) => {
+    if (file && file.type.startsWith('image/')) {
+      // Önizleme URL'si oluştur
+      Object.assign(file, {
+        preview: URL.createObjectURL(file)
+      });
+      setFormData(prev => ({ ...prev, image: file }));
+      setFormError('');
+    } else {
+      setFormError(t('eventsPage.errorImageOnly') || 'Please upload an image file (jpg, png).');
+    }
+  };
+
+  // 2. Sürükleme Alanına Giriş
+  const handleDragOver = (e) => {
+    e.preventDefault(); // Tarayıcının dosyayı açmasını engelle
+    setIsDragging(true);
+  };
+
+  // 3. Sürükleme Alanından Çıkış
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  // 4. Dosya Bırakıldığında (DROP)
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      processFile(files[0]);
+    }
+  };
+
+  // 5. Normal Tıklama ile Seçim
+  const handleFileSelect = (e) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      processFile(files[0]);
+    }
+  };
+
+  // 6. Dosyayı Kaldır
+  const removeImage = (e) => {
+    e.stopPropagation(); // Tıklamanın yukarı gitmesini engelle
+    if (formData.image && formData.image.preview) {
+      URL.revokeObjectURL(formData.image.preview);
+    }
+    setFormData(prev => ({ ...prev, image: null }));
+  };
+
+  // --- FORM GÖNDERME ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.description || !formData.location || !formData.date) {
@@ -59,22 +114,22 @@ const EventCreate = () => {
     setFormError('');
 
     try {
-      // Convert local datetime string to ISO 8601 format (Z-suffix)
-      const dateInISO = new Date(formData.date).toISOString();
+      const dataToSend = new FormData();
+      dataToSend.append('title', formData.title);
+      dataToSend.append('description', formData.description);
+      dataToSend.append('location', formData.location);
+      dataToSend.append('date', new Date(formData.date).toISOString());
       
-      const payload = {
-        title: formData.title,
-        description: formData.description,
-        location: formData.location,
-        date: dateInISO,
-        // Send null if image field is empty
-        image: formData.image || null 
-      };
-
-      const response = await createEvent(payload);
+      if (formData.image) {
+        dataToSend.append('image', formData.image, formData.image.name); 
+      }
       
-      // Reset form and show success
+      const response = await createEvent(dataToSend);
+      
+      // Başarılı ise formu temizle
       setFormData(initialData);
+      if (fileInputRef.current) fileInputRef.current.value = ""; // Input'u da sıfırla
+      
       showMessage(t('eventsPage.createSuccess') || `Event "${response.title}" created successfully!`, 'success');
 
     } catch (err) {
@@ -83,13 +138,17 @@ const EventCreate = () => {
       showMessage(t('eventsPage.createError') + `: ${errorMessage}`, 'error');
     } finally {
       setIsSubmitting(false);
+      if (formData.image && formData.image.preview) {
+        URL.revokeObjectURL(formData.image.preview);
+      }
     }
   };
 
   const handleGoBack = () => {
-    navigate('/events'); // This uses the actual navigate function
+    navigate('/events'); 
   };
 
+  // --- RENDER ---
   return (
     <div className="event-create-scoped event-create-layout">
       <Navbar isAuthenticated={true} />
@@ -100,19 +159,15 @@ const EventCreate = () => {
           <p>{t('eventsPage.subtitle') || 'Fill out the details to organize your community event.'}</p>
         </div>
         
-        {/* Feedback Message */}
         {message && (
           <div className={`feedback-message ${message.type}`}>
             {message.text}
           </div>
         )}
         
-        {/* Form Container */}
         <div className="create-form-container">
           <form onSubmit={handleSubmit} className="event-create-form">
-            {formError && (
-              <p className="form-error">{formError}</p>
-            )}
+            {formError && <p className="form-error">{formError}</p>}
             
             <div className="form-group">
               <label>{t('eventsPage.placeholderTitle') || "Event Title *"}</label>
@@ -158,15 +213,59 @@ const EventCreate = () => {
               />
             </div>
 
-            <div className="form-group">
-              <label>{t('eventsPage.placeholderImage') || "Image URL (Optional)"}</label>
-              <input 
-                name="image" 
-                type="url" 
-                value={formData.image} 
-                onChange={handleChange} 
-              />
+            {/* --- SAF REACT DRAG & DROP ALANI --- */}
+            <div className="form-group image-upload-group">
+              <label>{t('eventsPage.labelImage') || "Event Image (Optional)"}</label>
+              
+              <div 
+                className={`dropzone ${isDragging ? 'active' : ''} ${formData.image ? 'has-file' : ''}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current.click()} // Kutunun herhangi bir yerine tıklayınca input açılsın
+              >
+                {/* Gizli Input */}
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  ref={fileInputRef}
+                  style={{ display: 'none' }} 
+                />
+                
+                {formData.image ? (
+                  <div className="file-preview">
+                    <div className="file-info">
+                        {formData.image.preview && (
+                        <img src={formData.image.preview} alt="Preview" className="image-preview-thumb" />
+                        )}
+                        <div className="text-info">
+                            <strong>{formData.image.name}</strong> 
+                            <br/>
+                            <small>{Math.round(formData.image.size / 1024)} KB</small>
+                        </div>
+                    </div>
+                    <button 
+                        type="button" 
+                        className="remove-btn" 
+                        onClick={removeImage}
+                        title="Remove image"
+                    >
+                        <Icon name="trash" />
+                    </button>
+                  </div>
+                ) : isDragging ? (
+                  <p className="dropzone-text">
+                    <Icon name="upload" /> {t('eventsPage.dropHere') || 'Drop the image here ...'}
+                  </p>
+                ) : (
+                  <p className="dropzone-text">
+                    <Icon name="upload" /> {t('eventsPage.dragAndDrop') || 'Drag and drop an image here, or click to select'}
+                  </p>
+                )}
+              </div>
             </div>
+            {/* ----------------------------- */}
 
             <div className="form-actions">
               <button 
@@ -180,7 +279,6 @@ const EventCreate = () => {
           </form>
         </div>
         
-        {/* Navigation Button */}
         <div className="back-button-container">
           <button onClick={handleGoBack} className="btn-back">
             <Icon name="back" className="mr-2" />

@@ -15,6 +15,53 @@
     margin: 0 auto;
     width: 100%;
   }
+  /* EventCreate.css içine eklenecekler */
+
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.dropzone:hover {
+  border-color: #007bff; /* Mavi vurgu */
+}
+
+.dropzone.active {
+  border-color: #0056b3;
+  background-color: #f0f8ff; /* Hafif mavi arka plan */
+}
+
+.dropzone-text {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.dropzone.has-file {
+  border: 2px solid #28a745; /* Yeşil sınır */
+  background-color: #f8fff0;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.image-preview-thumb {
+  max-width: 80px;
+  max-height: 80px;
+  border-radius: 4px;
+  object-fit: cover;
+}
   
   .event-create-scoped .create-header-section {
     text-align: center;
