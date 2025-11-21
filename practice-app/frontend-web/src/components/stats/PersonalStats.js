@@ -293,7 +293,7 @@ const PersonalStats = () => {
             desc: t('badges_data.plastic_buster.desc') 
         });
     }
-    if (dailyStats.length >= 7) {
+    if (dailyStats.length >= 14) {
         earned.push({ 
             name: t('badges_data.sustainability_streak.name'), 
             icon: '🔥', 
