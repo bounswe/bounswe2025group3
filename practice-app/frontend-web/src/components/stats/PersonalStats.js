@@ -9,7 +9,7 @@ import {
 import Navbar from '../common/Navbar';
 import './PersonalStats.css';
 
-const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF4560'];
 
@@ -90,12 +90,12 @@ const PersonalStats = () => {
         eventsRes,
         leaderboardRes
       ] = await Promise.all([
-        axios.get(`${apiUrl}/api/user/me/`, { headers }),
-        axios.get(`${apiUrl}/api/v1/waste/scores/me/`, { headers }),
-        axios.get(`${apiUrl}/api/v1/waste/user/stats/?period=daily`, { headers }),
-        axios.get(`${apiUrl}/api/v1/waste/logs/`, { headers }),
-        axios.get(`${apiUrl}/api/v1/events/events/`, { headers }),
-        axios.get(`${apiUrl}/api/v1/waste/leaderboard/`, { headers })
+        axios.get(`${apiUrl}/user/me/`, { headers }),
+        axios.get(`${apiUrl}/v1/waste/scores/me/`, { headers }),
+        axios.get(`${apiUrl}/v1/waste/user/stats/?period=daily`, { headers }),
+        axios.get(`${apiUrl}/v1/waste/logs/`, { headers }),
+        axios.get(`${apiUrl}/v1/events/events/`, { headers }),
+        axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers })
       ]);
 
       // Profil ve Skor
@@ -123,7 +123,7 @@ const PersonalStats = () => {
     setChartLoading(true);
     try {
         const headers = { Authorization: `Bearer ${token}` };
-        const response = await axios.get(`${apiUrl}/api/v1/waste/user/stats/`, { 
+        const response = await axios.get(`${apiUrl}/v1/waste/user/stats/`, { 
             params: { period: selectedPeriod },
             headers 
         });
