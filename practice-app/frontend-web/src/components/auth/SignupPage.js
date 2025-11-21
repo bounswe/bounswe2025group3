@@ -5,7 +5,7 @@ import './SignupPage.css';
 import { useTranslation } from 'react-i18next';
 import Header from '../common/Header';
 
-const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api';
 
 const getCurrentTheme = () => {
   return localStorage.getItem('theme') || 'green';
@@ -14,7 +14,7 @@ const getCurrentTheme = () => {
 const SignupPage = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
-    username: '', email: '', password: '', password2: '',
+    username: '', email: '', password1: '', password2: '',
     first_name: '', last_name: '', bio: '', city: '', country: '',
   });
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -41,7 +41,7 @@ const SignupPage = () => {
     e.preventDefault();
     setError('');
 
-    if (formData.password !== formData.password2) {
+    if (formData.password1 !== formData.password2) {
       setError('Passwords do not match.');
       return;
     }
@@ -113,10 +113,10 @@ const SignupPage = () => {
                     <input id="first_name" name="first_name" type="text" placeholder={t('signup.placeholder_first_name')} value={formData.first_name} onChange={handleChange} />
                   </div>
                   <div className="input-box">
-                    <label htmlFor="password">
+                    <label htmlFor="password1">
                       {t('signup.password_label')}<span className="asterisk">*</span>
                     </label>
-                    <input id="password" name="password" type="password" placeholder={t('signup.placeholder_password')} value={formData.password} onChange={handleChange} required />
+                    <input id="password1" name="password1" type="password" placeholder={t('signup.placeholder_password')} value={formData.password1} onChange={handleChange} required />
                   </div>
                    <div className="input-box">
                     <label htmlFor="city">{t('signup.city_label')}</label>
@@ -163,11 +163,13 @@ const SignupPage = () => {
                   onChange={(e) => setTermsAccepted(e.target.checked)}
                   required 
                 />
+
                 <label htmlFor="terms">
-                  {t('signup.accept_terms_prefix', 'I accept the ')} 
+                  {t('signup.accept_terms_prefix')} 
                   <Link to="/terms" target="_blank" rel="noopener noreferrer">
-                    {t('signup.accept_terms_link', 'Terms and Conditions')}
+                    {t('signup.accept_terms_link')}
                   </Link>
+                  {t('signup.accept_terms_suffix')}
                 </label>
               </div>
 
