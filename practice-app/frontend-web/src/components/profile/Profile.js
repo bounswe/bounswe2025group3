@@ -36,6 +36,15 @@ const Profile = () => {
         country: '',
         notifications_enabled: false,
     });
+        const token = localStorage.getItem('access_token');
+
+    useEffect(() => {
+    if (!token) {
+        navigate('/login');
+        return;
+        }
+    // eslint-disable-next-line
+  }, [token]);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [loading, setLoading] = useState(true);
@@ -43,10 +52,11 @@ const Profile = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('access_token');
+        
         
 
         const fetchProfile = async () => {
+            
             setLoading(true);
             setError('');
             try {

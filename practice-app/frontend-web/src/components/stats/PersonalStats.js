@@ -246,6 +246,19 @@ const PersonalStats = () => {
     setStatsData(formatted);
   };
 
+  // Login kontrolü - token yoksa login'e yönlendir
+  useEffect(() => {
+    if (!token) {
+      navigate('/login', { replace: true });
+      return;
+    }
+    fetchInitialData();
+    // eslint-disable-next-line
+  }, [token, navigate]);
+
+
+  
+
   const processCategoryPie = (logs) => {
     const categoryMap = {};
     logs.forEach(log => {
@@ -280,7 +293,7 @@ const PersonalStats = () => {
             desc: t('badges_data.plastic_buster.desc') 
         });
     }
-    if (dailyStats.length >= 7) {
+    if (dailyStats.length >= 14) {
         earned.push({ 
             name: t('badges_data.sustainability_streak.name'), 
             icon: '🔥', 

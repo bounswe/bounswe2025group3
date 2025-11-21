@@ -16,7 +16,17 @@ const Icon = ({ name, className = "" }) => {
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
+
 const Dashboard = () => {
+    const token = localStorage.getItem('access_token');
+
+    useEffect(() => {
+    if (!token) {
+        navigate('/login');
+        return;
+        }
+    // eslint-disable-next-line
+  }, [token]);
     const { t } = useTranslation();
     const [score, setScore] = useState(null);
     const [loading, setLoading] = useState(true);
