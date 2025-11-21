@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend
-} from 'recharts';
 import Navbar from '../common/Navbar';
 import './PersonalStats.css';
 
-const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF4560'];
 
@@ -21,11 +17,105 @@ const Icon = ({ name, className = "" }) => {
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
+// Basit Bar Chart Component
+const SimpleBarChart = ({ data, t }) => {
+  if (!data || data.length === 0) {
+    return <div className="empty-state-chart"><Icon name="loading" /><p>{t('stats_page.charts.no_data')}</p></div>;
+  }
+
+  const maxScore = Math.max(...data.map(d => d.Score), 1);
+  const maxLogs = Math.max(...data.map(d => d.Logs), 1);
+  const maxValue = Math.max(maxScore, maxLogs);
+
+  return (
+    <div className="simple-chart">
+      <div className="chart-legend">
+        <span><span className="legend-box" style={{backgroundColor: '#4CAF50'}}></span> {t('stats_page.charts.points')}</span>
+        <span><span className="legend-box" style={{backgroundColor: '#2196F3'}}></span> {t('stats_page.charts.items')}</span>
+      </div>
+      <div className="bar-chart-container">
+        {data.map((item, idx) => (
+          <div key={idx} className="bar-group">
+            <div className="bar-pair">
+              <div 
+                className="bar bar-score" 
+                style={{ height: `${(item.Score / maxValue) * 200}px` }}
+                title={`${t('stats_page.charts.points')}: ${item.Score}`}
+              >
+                <span className="bar-value">{item.Score}</span>
+              </div>
+              <div 
+                className="bar bar-logs" 
+                style={{ height: `${(item.Logs / maxValue) * 200}px` }}
+                title={`${t('stats_page.charts.items')}: ${item.Logs}`}
+              >
+                <span className="bar-value">{item.Logs}</span>
+              </div>
+            </div>
+            <div className="bar-label">{item.date}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Basit Pie Chart Component
+const SimplePieChart = ({ data }) => {
+  if (!data || data.length === 0) return null;
+
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  let currentAngle = 0;
+
+  return (
+    <div className="simple-pie-container">
+      <svg viewBox="0 0 200 200" className="pie-chart-svg">
+        {data.map((item, idx) => {
+          const percentage = item.value / total;
+          const angle = percentage * 360;
+          const startAngle = currentAngle;
+          currentAngle += angle;
+
+          const startRad = (startAngle - 90) * Math.PI / 180;
+          const endRad = (currentAngle - 90) * Math.PI / 180;
+          
+          const x1 = 100 + 80 * Math.cos(startRad);
+          const y1 = 100 + 80 * Math.sin(startRad);
+          const x2 = 100 + 80 * Math.cos(endRad);
+          const y2 = 100 + 80 * Math.sin(endRad);
+          
+          const largeArc = angle > 180 ? 1 : 0;
+          const pathData = `M 100 100 L ${x1} ${y1} A 80 80 0 ${largeArc} 1 ${x2} ${y2} Z`;
+
+          return (
+            <g key={idx}>
+              <path
+                d={pathData}
+                fill={COLORS[idx % COLORS.length]}
+                stroke="#fff"
+                strokeWidth="2"
+              />
+            </g>
+          );
+        })}
+        <circle cx="100" cy="100" r="50" fill="var(--background-primary)" />
+      </svg>
+      <div className="pie-legend">
+        {data.map((item, idx) => (
+          <div key={idx} className="legend-item">
+            <span className="legend-color" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></span>
+            <span>{item.name}: {Math.round((item.value / total) * 100)}%</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const PersonalStats = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   
-  // --- UI State ---
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(false);
   const [error, setError] = useState('');
@@ -35,12 +125,10 @@ const PersonalStats = () => {
   const [leaderboardRank, setLeaderboardRank] = useState('N/A');
   const [eventStats, setEventStats] = useState({ participating: 0, total: 0, rate: 0 });
 
-  // --- Raw Data State (Dil değişiminde referans almak için) ---
   const [rawLogs, setRawLogs] = useState([]);
   const [rawChartData, setRawChartData] = useState([]);
-  const [rawStreakStats, setRawStreakStats] = useState([]); // Badge hesaplaması için
+  const [rawStreakStats, setRawStreakStats] = useState([]);
 
-  // --- Processed Data State (Ekrana basılan çevrilmiş veri) ---
   const [statsData, setStatsData] = useState([]); 
   const [categoryStats, setCategoryStats] = useState([]);
   const [badges, setBadges] = useState([]);
@@ -48,7 +136,6 @@ const PersonalStats = () => {
   const token = localStorage.getItem('access_token');
   const userId = localStorage.getItem('user_id');
 
-  // 1. İlk Yükleme
   useEffect(() => {
     if (!token) {
       navigate('/login');
@@ -58,7 +145,6 @@ const PersonalStats = () => {
     // eslint-disable-next-line
   }, [token]);
 
-  // 2. Timeframe Değişimi (API'den yeni grafik verisi çeker)
   useEffect(() => {
     if (token) {
         fetchChartData(timeframe);
@@ -66,8 +152,6 @@ const PersonalStats = () => {
     // eslint-disable-next-line
   }, [timeframe, token]);
 
-  // 3. DİL DEĞİŞİMİ TEPKİSİ (KRİTİK KISIM)
-  // Dil (i18n.language) veya Ham Veri değiştiğinde verileri o anki dile göre tekrar işle.
   useEffect(() => {
       if (rawChartData.length > 0) processChartData(rawChartData);
       if (rawLogs.length > 0) processCategoryPie(rawLogs);
@@ -85,7 +169,7 @@ const PersonalStats = () => {
       const [
         profileRes, 
         scoreRes, 
-        dailyStatsRes, // Bu hem ilk grafik hem de streak için kullanılır
+        dailyStatsRes,
         logsRes,
         eventsRes,
         leaderboardRes
@@ -98,16 +182,12 @@ const PersonalStats = () => {
         axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers })
       ]);
 
-      // Profil ve Skor
       setProfile(profileRes.data);
       setScoreData(scoreRes.data);
-
-      // Ham Verileri Kaydet (Dil değişince tekrar kullanacağız)
       setRawLogs(logsRes.data.results || []);
       setRawStreakStats(dailyStatsRes.data.data || []);
-      setRawChartData(dailyStatsRes.data.data || []); // İlk grafik verisi (daily)
+      setRawChartData(dailyStatsRes.data.data || []);
 
-      // Diğer sayısal hesaplamalar (Dilden bağımsız)
       calculateEventStats(eventsRes.data.results || []);
       calculateRank(leaderboardRes.data || [], userId);
 
@@ -128,7 +208,6 @@ const PersonalStats = () => {
             headers 
         });
         
-        // Sadece ham veriyi güncelle, useEffect gerisini halledecek
         setRawChartData(response.data.data || []);
     } catch (err) {
         console.error("Error fetching chart data:", err);
@@ -138,8 +217,6 @@ const PersonalStats = () => {
     }
   };
 
-  // --- İŞLEME FONKSİYONLARI (Render anında dili kullanır) ---
-
   const getCategoryTrans = (apiName) => {
       if (!apiName) return t('waste_categories.other');
       const key = apiName.toLowerCase().replace(/ /g, "_");
@@ -147,7 +224,6 @@ const PersonalStats = () => {
   };
 
   const getTierInfo = (score) => {
-    // Tier isimleri render içinde anlık çağrıldığı için t() burada doğrudan çalışır
     if (score >= 5000) return { name: t('tiers.planet_guardian'), color: '#8e44ad', icon: '🌎' };
     if (score >= 2500) return { name: t('tiers.zero_waste_champion'), color: '#f1c40f', icon: '🌟' };
     if (score >= 1000) return { name: t('tiers.sustainability_hero'), color: '#e67e22', icon: '🌿' };
@@ -158,7 +234,6 @@ const PersonalStats = () => {
 
   const processChartData = (data) => {
     const formatted = data.map(item => ({
-      // i18n.language parametresini kullanarak tarihi formatla
       date: new Date(item.start_date).toLocaleDateString(i18n.language, { 
           weekday: timeframe === 'daily' ? 'short' : undefined, 
           day: 'numeric', 
@@ -179,7 +254,6 @@ const PersonalStats = () => {
       categoryMap[catName] += parseFloat(log.quantity);
     });
     
-    // Kategorileri o anki dilde çevirerek listeye dönüştür
     const data = Object.keys(categoryMap).map((key) => ({
       name: getCategoryTrans(key), 
       value: categoryMap[key]
@@ -190,7 +264,6 @@ const PersonalStats = () => {
   const calculateBadges = (logs, score, dailyStats) => {
     const earned = [];
     
-    // Rozet isimlerini ve açıklamalarını o anki dilde al (t fonksiyonu ile)
     if (logs.length > 0) {
         earned.push({ 
             name: t('badges_data.first_step.name'), 
@@ -286,7 +359,6 @@ const PersonalStats = () => {
 
             <div className="stats-grid-layout">
               
-              {/* --- Grafik 1 --- */}
               <div className="stats-card wide">
                 <div className="chart-header">
                     <h2>{t('stats_page.charts.activity_trend')}</h2>
@@ -309,49 +381,16 @@ const PersonalStats = () => {
                           <Icon name="loading" /> {t('stats_page.charts.updating')}
                       </div>
                   ) : (
-                    <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={statsData}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="date" />
-                        <YAxis />
-                        <Tooltip 
-                            contentStyle={{ backgroundColor: 'var(--background-primary)', borderRadius: '8px', border: '1px solid var(--border-color)' }}
-                            labelStyle={{ color: 'var(--text-primary)' }}
-                        />
-                        <Legend />
-                        <Bar dataKey="Score" fill="var(--stats-chart-bar-score)" name={t('stats_page.charts.points')} radius={[4, 4, 0, 0]} />
-                        <Bar dataKey="Logs" fill="var(--stats-chart-bar-logs)" name={t('stats_page.charts.items')} radius={[4, 4, 0, 0]} />
-                        </BarChart>
-                    </ResponsiveContainer>
+                    <SimpleBarChart data={statsData} t={t} />
                   )}
                 </div>
               </div>
 
-              {/* --- Grafik 2 --- */}
               <div className="stats-card">
                 <h2>{t('stats_page.charts.impact_breakdown')}</h2>
                 <div className="chart-container">
                   {categoryStats.length > 0 ? (
-                    <ResponsiveContainer width="100%" height={300}>
-                      <PieChart>
-                        <Pie
-                          data={categoryStats}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={80}
-                          paddingAngle={5}
-                          dataKey="value"
-                          label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
-                        >
-                          {categoryStats.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                        <Legend />
-                      </PieChart>
-                    </ResponsiveContainer>
+                    <SimplePieChart data={categoryStats} />
                   ) : (
                     <div className="empty-state-chart">
                         <Icon name="loading" />
@@ -361,7 +400,6 @@ const PersonalStats = () => {
                 </div>
               </div>
 
-              {/* --- Rozetler --- */}
               <div className="stats-card wide">
                 <h2>{t('stats_page.badges.title')}</h2>
                 <div className="badges-grid">
@@ -381,7 +419,6 @@ const PersonalStats = () => {
                 </div>
               </div>
 
-              {/* --- Orman --- */}
               <div className="stats-card forest-card">
                 <div className="forest-header">
                     <h2>{t('stats_page.forest.title')}</h2>
