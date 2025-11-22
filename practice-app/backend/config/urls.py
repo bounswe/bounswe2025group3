@@ -52,6 +52,7 @@ urlpatterns = [
     path('goals/', include('apps.goals.urls')),  # Frontend goals templates
     path('api/v1/waste/', include('apps.waste.api.v1.urls')),
     path('api/v1/goals/', include('apps.goals.api.v1.urls')),
+    path('api/v1/rewards/', include('apps.rewards.api.v1.urls')),
     path('api/v1/challenges/', include('apps.challenges.api.v1.urls')),
     path('api/v1/events/', include('apps.events.api.v1.urls')),
     
