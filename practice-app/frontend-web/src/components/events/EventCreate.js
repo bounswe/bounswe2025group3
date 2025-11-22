@@ -215,7 +215,7 @@ const EventCreate = () => {
 
             {/* --- SAF REACT DRAG & DROP ALANI --- */}
             <div className="form-group image-upload-group">
-              <label>{t('eventsPage.labelImage') || "Event Image (Optional)"}</label>
+              <label>{"Event Image (Optional)"}</label>
               
               <div 
                 className={`dropzone ${isDragging ? 'active' : ''} ${formData.image ? 'has-file' : ''}`}
@@ -256,11 +256,11 @@ const EventCreate = () => {
                   </div>
                 ) : isDragging ? (
                   <p className="dropzone-text">
-                    <Icon name="upload" /> {t('eventsPage.dropHere') || 'Drop the image here ...'}
+                    <Icon name="upload" /> { 'Drop the image here ...'}
                   </p>
                 ) : (
                   <p className="dropzone-text">
-                    <Icon name="upload" /> {t('eventsPage.dragAndDrop') || 'Drag and drop an image here, or click to select'}
+                    <Icon name="upload" /> {'Drag and drop an image here, or click to select'}
                   </p>
                 )}
               </div>
