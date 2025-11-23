@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom'; // Added Link, NavLink
 import { getUserProfile, updateUserProfile } from '../../services/api'; // Assuming path is correct
 import { useTranslation } from 'react-i18next';
+import { Country, State } from 'country-state-city';
 import Navbar from '../common/Navbar';
 import './Profile.css'; // We will heavily update this
 
@@ -51,24 +52,17 @@ const Profile = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
-    const [allCountriesData, setAllCountriesData] = useState([]);
+    const [allCountriesData, setAllCountriesData] = useState(Country.getAllCountries());
     const [availableCities, setAvailableCities] = useState([]);
 
     useEffect(() => {
-        fetch('https://countriesnow.space/api/v0.1/countries')
-            .then(res => res.json())
-            .then(data => {
-                if (!data.error) {
-                    setAllCountriesData(data.data);
-                }
-            })
-            .catch(err => console.error('Failed to fetch countries:', err));
-    }, []);
-
-    useEffect(() => {
         if (profile.country) {
-            const countryData = allCountriesData.find(c => c.country === profile.country);
-            setAvailableCities(countryData ? countryData.cities : []);
+            const countryObj = allCountriesData.find(c => c.name === profile.country);
+            if (countryObj) {
+                setAvailableCities(State.getStatesOfCountry(countryObj.isoCode));
+            } else {
+                setAvailableCities([]);
+            }
         } else {
             setAvailableCities([]);
         }
@@ -195,7 +189,7 @@ const Profile = () => {
                                     >
                                         <option value="">{t('profile_page.form.select_country') || 'Select Country'}</option>
                                         {allCountriesData.map((c) => (
-                                            <option key={c.country} value={c.country}>{c.country}</option>
+                                            <option key={c.isoCode} value={c.name}>{c.name}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -211,7 +205,7 @@ const Profile = () => {
                                     >
                                         <option value="">{t('profile_page.form.select_city') || 'Select City'}</option>
                                         {availableCities.map((city) => (
-                                            <option key={city} value={city}>{city}</option>
+                                            <option key={city.isoCode} value={city.name}>{city.name}</option>
                                         ))}
                                     </select>
                                 </div>
