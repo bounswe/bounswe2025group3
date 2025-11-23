@@ -55,6 +55,7 @@ urlpatterns = [
     path('api/v1/rewards/', include('apps.rewards.api.v1.urls')),
     path('api/v1/challenges/', include('apps.challenges.api.v1.urls')),
     path('api/v1/events/', include('apps.events.api.v1.urls')),
+    path('api/v1/notifications/', include('apps.notifications.api.v1.urls')),
     
     # Django allauth URLs
     path('accounts/', include('allauth.urls')),
