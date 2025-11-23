@@ -54,4 +54,29 @@ export const updateUserProfile = async (data) => {
     return response.data;
 };
 
+export const getEvents = async () => {
+    const response = await api.get('v1/events/events/');
+    return response.data.results || [];
+};
+
+export const getEvent = async (eventId) => {
+    const response = await api.get(`v1/events/events/${eventId}/`);
+    return response.data.results || [];
+};
+
+export const createEvent = async (data) => {
+    const response = await api.post('v1/events/events/', data);
+    return response.data;
+};
+
+export const toggleParticipation = async (eventId) => {
+    const response = await api.post(`v1/events/events/${eventId}/participate/`);
+    return response.data;
+};
+
+export const toggleLike = async (eventId) => {
+    const response = await api.post(`v1/events/events/${eventId}/like/`);
+    return response.data;
+};
+
 export default api;

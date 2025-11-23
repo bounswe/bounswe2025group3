@@ -1,0 +1,231 @@
+/* EventCreate.css - Scoped and Themed styles for the creation page */
+
+.event-create-scoped.event-create-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--dashboard-page-bg);
+    font-family: var(--font-primary, 'Poppins', sans-serif);
+  }
+  
+  .event-create-scoped .create-main-content {
+    flex-grow: 1;
+    padding: 2rem 1.5rem;
+    max-width: 700px; /* Wider than a modal, focused form */
+    margin: 0 auto;
+    width: 100%;
+  }
+  /* EventCreate.css içine eklenecekler */
+
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.dropzone:hover {
+  border-color: #007bff; /* Mavi vurgu */
+}
+
+.dropzone.active {
+  border-color: #0056b3;
+  background-color: #f0f8ff; /* Hafif mavi arka plan */
+}
+
+.dropzone-text {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.dropzone.has-file {
+  border: 2px solid #28a745; /* Yeşil sınır */
+  background-color: #f8fff0;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.image-preview-thumb {
+  max-width: 80px;
+  max-height: 80px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+  
+  .event-create-scoped .create-header-section {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .event-create-scoped .create-header-section h1 {
+    font-size: 2rem;
+    color: var(--nav-dashboard-logo-color);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .event-create-scoped .create-header-section h1 .icon {
+    color: var(--nav-dashboard-bottom-border);
+    font-size: 1.1em;
+    margin-right: 0.5rem;
+  }
+  
+  .event-create-scoped .create-header-section p {
+    font-size: 1rem;
+    color: var(--dashboard-text-medium);
+  }
+  
+  /* --- Form Container --- */
+  
+  .event-create-scoped .create-form-container {
+    background-color: var(--background-primary);
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .event-create-scoped .event-create-form .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .event-create-scoped .event-create-form label {
+    display: block;
+    font-weight: 600;
+    color: var(--dashboard-text-dark);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .event-create-scoped .event-create-form input,
+  .event-create-scoped .event-create-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--events-border-color);
+    border-radius: 8px;
+    background-color: var(--background-secondary);
+    color: var(--dashboard-text-dark);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+  
+  .event-create-scoped .event-create-form input:focus,
+  .event-create-scoped .event-create-form textarea:focus {
+    border-color: var(--nav-dashboard-bottom-border);
+    outline: none;
+    box-shadow: 0 0 0 2px var(--nav-dashboard-active-shadow-light);
+  }
+  
+  .event-create-scoped .event-create-form .form-error {
+    background-color: var(--dashboard-error-bg);
+    color: var(--dashboard-error-text);
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--dashboard-error-border);
+  }
+  
+  .event-create-scoped .event-create-form .form-actions {
+    display: flex;
+    justify-end: flex-end;
+    margin-top: 2rem;
+  }
+  
+  /* --- Submit Button --- */
+  
+  .event-create-scoped .event-create-form .btn-submit {
+    background-color: var(--nav-dashboard-link-active-bg);
+    color: var(--text-on-accent);
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+  }
+  
+  .event-create-scoped .event-create-form .btn-submit:hover:not(:disabled) {
+    background-color: var(--nav-dashboard-logo-color);
+  }
+  
+  .event-create-scoped .event-create-form .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* --- Feedback Messages --- */
+  
+  .event-create-scoped .feedback-message {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
+  }
+  
+  .event-create-scoped .feedback-message.success {
+    background-color: var(--success-bg, #e6ffe6);
+    color: var(--success-text, #1e8449);
+    border: 1px solid var(--success-border, #1e8449);
+  }
+  
+  .event-create-scoped .feedback-message.error {
+    background-color: var(--dashboard-error-bg);
+    color: var(--dashboard-error-text);
+    border: 1px solid var(--dashboard-error-border);
+  }
+  
+  /* --- Back Button --- */
+  
+  .event-create-scoped .back-button-container {
+      text-align: center;
+  }
+  
+  .event-create-scoped .btn-back {
+      background: transparent;
+      color: var(--nav-dashboard-logo-color);
+      border: 1px solid var(--nav-dashboard-logo-color);
+      padding: 0.5rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+  }
+  
+  .event-create-scoped .btn-back:hover {
+      background-color: var(--nav-dashboard-link-hover-bg);
+  }
+  
+  .event-create-scoped .btn-back .icon {
+      font-size: 1.2em;
+  }
+  
+  /* --- Responsive Tweaks --- */
+  @media (max-width: 500px) {
+      .event-create-scoped .create-main-content {
+          padding: 1rem 0.5rem;
+      }
+      .event-create-scoped .create-form-container {
+          padding: 1rem;
+      }
+      .event-create-scoped .create-header-section h1 {
+          font-size: 1.8rem;
+      }
+  }

@@ -22,8 +22,32 @@ const WasteLog = () => {
     const [form, setForm] = useState({ subcategory: '', quantity: '', disposal_method: '', notes: '' });
     const [loading, setLoading] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
-    const [error, setError] = useState(null); // Will store the translation KEY
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const token = localStorage.getItem('access_token');
+
+    useEffect(() => {
+    if (!token) {
+        navigate('/login');
+        return;
+        }
+    // eslint-disable-next-line
+  }, [token]);
+    // --- YARDIMCI FONKSİYONLAR: Kategori ve Birim Çevirisi ---
+    const getCategoryTrans = (apiName) => {
+        if (!apiName) return "";
+        // Örn: "Plastic Bottles" -> "plastic_bottles"
+        const key = apiName.toLowerCase().replace(/ /g, "_");
+        // Çeviri varsa getir, yoksa orijinal ismi göster
+        return t(`waste_categories.${key}`, { defaultValue: apiName });
+    };
+
+    const getUnitTrans = (unit) => {
+        if (!unit) return "";
+        // Örn: "kg" -> "kg", "pcs" -> "adet"
+        return t(`units.${unit.toLowerCase()}`, { defaultValue: unit });
+    };
+    // ----------------------------------------------------------
 
     const fetchData = async () => {
         setLoading(true);
@@ -33,10 +57,10 @@ const WasteLog = () => {
             setLogs(Array.isArray(logsData) ? logsData : []);
             setSubCategories(Array.isArray(subCategoriesData) ? subCategoriesData : []);
             if (!Array.isArray(subCategoriesData) || subCategoriesData.length === 0) {
-                setError('waste_log_page.error_no_categories'); // Store the key
+                setError('waste_log_page.error_no_categories'); 
             }
         } catch (err) {
-            setError('waste_log_page.error_fetch_failed'); // Store the key
+            setError('waste_log_page.error_fetch_failed');
         } finally {
             setLoading(false);
         }
@@ -54,12 +78,12 @@ const WasteLog = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.subcategory || !form.quantity) {
-            setError('waste_log_page.error_select_category_and_quantity'); // Store the key
+            setError('waste_log_page.error_select_category_and_quantity');
             return;
         }
         const quantity = parseFloat(form.quantity);
         if (isNaN(quantity) || quantity <= 0) {
-            setError('waste_log_page.error_quantity_positive'); // Store the key
+            setError('waste_log_page.error_quantity_positive');
             return;
         }
 
@@ -78,7 +102,7 @@ const WasteLog = () => {
             setForm({ subcategory: '', quantity: '', disposal_method: '', notes: '' });
             alert('Waste log added successfully!');
         } catch (err) {
-            setError('waste_log_page.error_add_log_failed'); // Store a generic key
+            setError('waste_log_page.error_add_log_failed');
             console.error('Error adding log:', err.response?.data || err.message);
         } finally {
             setLoadingSubmit(false);
@@ -97,7 +121,7 @@ const WasteLog = () => {
 
                 {error && (
                     <div className="error-message-box-main wastelog-error">
-                        <Icon name="alerts" className="error-icon"/> {t(error)} {/* Translate the key here */}
+                        <Icon name="alerts" className="error-icon"/> {t(error)}
                         {error === 'waste_log_page.error_no_categories' && (
                             <button onClick={fetchData} disabled={loading} className="retry-button">
                                 <Icon name="retry"/> {t('waste_log_page.retry_button')}
@@ -106,7 +130,6 @@ const WasteLog = () => {
                     </div>
                 )}
 
-                {/* THE MISSING JSX IS NOW RESTORED */}
                 <div className="wastelog-form-and-list-container">
                     <section className="wastelog-form-card">
                         <h3 className="form-card-title"><Icon name="logNew"/> {t('waste_log_page.form.title')}</h3>
@@ -115,7 +138,12 @@ const WasteLog = () => {
                                 <label htmlFor="subcategory"><Icon name="category"/> {t('waste_log_page.form.category_label')}</label>
                                 <select id="subcategory" name="subcategory" value={form.subcategory} onChange={handleInputChange} disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0} required>
                                     <option value="">{t('waste_log_page.form.category_placeholder')}</option>
-                                    {subCategories.map((sc) => <option key={sc.id} value={sc.id}>{sc.name} ({sc.unit})</option>)}
+                                    {subCategories.map((sc) => (
+                                        <option key={sc.id} value={sc.id}>
+                                            {/* Çevrilmiş Kategori ve Birim */}
+                                            {getCategoryTrans(sc.name)} ({getUnitTrans(sc.unit)})
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="form-field">
@@ -155,11 +183,21 @@ const WasteLog = () => {
                             <ul className="wastelog-items-list">
                                 {logs.slice(0, 10).map((log) => {
                                     const subCategoryDetails = subCategories.find(sc => sc.id === log.sub_category);
+                                    
+                                    // İsimleri ve birimleri alıp çevirelim
+                                    const rawName = log.sub_category_name || subCategoryDetails?.name;
+                                    const rawUnit = subCategoryDetails?.unit;
+
                                     return (
                                         <li key={log.id} className="wastelog-item">
                                             <div className="item-main-info">
-                                                <span className="item-category"><Icon name="category" /> {log.sub_category_name || subCategoryDetails?.name || t('waste_log_page.log_list.unknown_category')}</span>
-                                                <span className="item-quantity">{Number(log.quantity).toFixed(2)} {subCategoryDetails?.unit || 'units'}</span>
+                                                <span className="item-category">
+                                                    <Icon name="category" /> 
+                                                    {rawName ? getCategoryTrans(rawName) : t('waste_log_page.log_list.unknown_category')}
+                                                </span>
+                                                <span className="item-quantity">
+                                                    {Number(log.quantity).toFixed(2)} {getUnitTrans(rawUnit) || 'units'}
+                                                </span>
                                             </div>
                                             <div className="item-meta-info">
                                                 <span className="item-score">{t('waste_log_page.log_list.score_prefix')}: {log.score || t('waste_log_page.log_list.score_na')}</span>

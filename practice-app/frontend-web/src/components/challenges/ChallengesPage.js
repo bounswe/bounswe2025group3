@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Navbar from '../common/Navbar';
 import ChallengeCard from './ChallengeCard.js';
 import './ChallengesPage.css';
+import { useNavigate, NavLink } from 'react-router-dom'; 
 
 const Icon = ({ name, className = "" }) => {
     const icons = {
@@ -35,6 +36,17 @@ const joinChallengeAPI = async (challengeId) => {
 
 const ChallengesPage = () => {
     const { t } = useTranslation();
+    const token = localStorage.getItem('access_token');
+    const navigate = useNavigate(); // Hook call is correct
+
+    useEffect(() => {
+    if (!token) {
+        navigate('/login');
+        return;
+        }
+    // eslint-disable-next-line
+  }, [token]);
+
     const [challenges, setChallenges] = useState([]);
     const [filteredChallenges, setFilteredChallenges] = useState([]);
     const [loading, setLoading] = useState(true);

@@ -68,6 +68,23 @@
             "author": "- Liam, Yeşil Başlangıç"
           }
         ]
+      },
+      "info_box": {
+        "recycling_title": "Geri Dönüşüm Nedir?",
+        "sustainable_title": "Sürdürülebilir Kalkınma Nedir?",
+        "circular_title": "Döngüsel Ekonomi Nedir?",
+        "loading": "Yükleniyor...",
+        "error": "Açıklama yüklenemedi."
+      },
+      "events_data": {
+        "event_1_title": "Topluluk Ağaç Dikme Günü",
+        "event_1_desc": "Willow Creek Park'ta yerli ağaçlar dikmek için bize katılın. Doğaya geri vermenin harika bir yolu.",
+        "event_2_title": "Sıfır Atık Atölyesi: Mutfak",
+        "event_2_desc": "Mutfağınızda gıda ve ambalaj atığını azaltmak için pratik ipuçları öğrenin.",
+        "event_3_title": "Sahil Temizleme Yarışması",
+        "event_3_desc": "Sunrise Sahili'ni temizlememize yardım edin. En çok çöpü toplamak için yarışın.",
+        "event_4_title": "Sürdürülebilir Moda Takası",
+        "event_4_desc": "Kullanmadığınız kıyafetleri getirin ve yenileriyle takas edin!"
       }
     },
     "about": {
@@ -96,7 +113,7 @@
         "title": "Öğrenci Ekibiyle Tanışın",
         "subtitle": "GreenerLife projesi size kendini adamış bir grup öğrenci tarafından sunulmaktadır:"
       },
-      "simple_footer": "© {year} GreenerLife Öğrenci Projesi."
+      "simple_footer": "© {{year}} GreenerLife Öğrenci Projesi."
     },
     "blog": {
       "header": {
@@ -162,7 +179,7 @@
       "forgot_password": "Şifremi Unuttum",
       "login_button": "Giriş Yap",
       "signup_button": "Kayıt Ol",
-      "social_login_prompt": "Veya şununla giriş yapın",
+      "social_login_prompt": "veya şununla giriş yapın:",
       "github_button": "GitHub",
       "linkedin_button": "LinkedIn",
       "error_enter_credentials": "Lütfen hem E-posta hem de Şifre giriniz.",
@@ -171,9 +188,9 @@
       "error_login_failed": "Giriş başarısız: {message}"
     },
     "signup": {
-      "title_part1": "Sıfır Atık",
-      "title_part2": "Hareketine",
-      "title_part3": "Katılın",
+      "title_part1": "", 
+      "title_part2": "Sıfır Atık",
+      "title_part3": "Hareketine Katılın",
       "subtitle": "Atıklarınızı kaydetmeye ve geri dönüştürmeye başlamak için bir hesap oluşturun.",
       "mandatory_note": "* ile işaretlenmiş alanlar zorunludur.",
       "username_label": "Kullanıcı Adı",
@@ -198,7 +215,11 @@
       "back_to_login_button": "Giriş Ekranına Dön",
       "alternate_action_prompt": "Zaten bir hesabınız var mı?",
       "alternate_action_login": "Giriş Yap",
-      "error_passwords_no_match": "Şifreler uyuşmuyor."
+      "error_passwords_no_match": "Şifreler uyuşmuyor.",
+      "accept_terms_prefix": "",
+      "accept_terms_link": "Şartlar ve Koşulları",
+      "accept_terms_suffix": " kabul ediyorum"
+    
     },
     "forgot_password": {
       "title": "Şifrenizi mi Unuttunuz?",
@@ -218,6 +239,7 @@
       "leaderboard": "Lider Tablosu",
       "challenges": "Meydan Okumalar",
       "events": "Etkinlikler",
+      "my_stats": "İstatistiklerim",
       "logout": "Çıkış Yap"
     },
     "dashboard": {
@@ -410,11 +432,118 @@
       "loading": "Etkinlikler Yükleniyor…",
       "error": "Etkinlikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
       "participate": "Katıl",
-      "participating": "Katılıyorsunuz!"
+      "participating": "Katılıyorsunuz!",
+      "creator": "Oluşturan",
+      "participants": "katılımcı",
+      "noEvents": "Şu anda yaklaşan etkinlik bulunmamaktadır. Lütfen daha sonra tekrar kontrol edin!",
+      "participationFeaturePending": "Katılım açma/kapama API özelliği bekleniyor.",
+      "likeFeaturePending": "Beğenme API özelliği bekleniyor.",
+      
+      "buttonAdd": "Yeni Etkinlik Ekle",
+      "createTitle": "Yeni Etkinlik Oluştur",
+      "labelDateTime": "Tarih ve Saat *",
+      "placeholderTitle": "Etkinlik Başlığı *",
+      "placeholderDescription": "Açıklama *",
+      "placeholderLocation": "Konum *",
+      "placeholderImage": "Resim URL'si (İsteğe Bağlı)",
+      "buttonCancel": "İptal",
+      "buttonCreate": "Etkinlik Oluştur",
+      "buttonCreating": "Oluşturuluyor...",
+      "formRequired": "Lütfen tüm zorunlu alanları doldurun.",
+      "createSuccess": "Etkinlik başarıyla oluşturuldu!",
+      "createError": "Etkinlik oluşturulamadı.",
+      "participateSuccess": "Artık katılıyorsunuz!",
+      "unparticipateSuccess": "Artık katılmıyorsunuz.",
+      "participateError": "Katılım durumu değiştirilemedi",
+      "likeSuccess": "Etkinlik beğenildi!",
+      "unlikeSuccess": "Beğeni geri alındı.",
+      "likeError": "Beğeni durumu değiştirilemedi",
+      "backToEvents": "Etkinliklere Geri Dön"
     },
     "challenge_detail": {
       "not_found": "Meydan Okuma Bulunamadı",
       "back_button": "Meydan Okumalara Geri Dön",
       "your_progress": "İlerlemeniz"
+    },
+      "stats_page": {
+      "title": "{{username}} için Genel Bakış",
+      "loading": "İstatistikler yükleniyor...",
+      "error_load": "İstatistikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+      "hero": {
+        "eco_score": "Eko Puan",
+        "global_rank": "Küresel Sıralama",
+        "event_rate": "Etkinlik Oranı",
+        "joined_subtext": "katılım"
+      },
+      "charts": {
+        "activity_trend": "Haftalık Aktivite Trendi",
+        "points": "Puanlar",
+        "items": "Öğeler",
+        "impact_breakdown": "Etki Dağılımı",
+        "no_breakdown_data": "Dağılımı görmek için atık kaydedin.",
+        "filters": {
+          "daily": "Günlük",
+          "weekly": "Haftalık",
+          "monthly": "Aylık",
+          "yearly": "Yıllık"
+        },
+        "updating": "Güncelleniyor..."
+      },
+      "badges": {
+        "title": "Kupa Dolabınız",
+        "empty": "Rozet kazanmak için atık kaydetmeye başlayın!"
+      },
+      "forest": {
+        "title": "Eko Ormanım",
+        "info": "1 Ağaç = 500 Puan",
+        "empty": "Ormanınız büyümeyi bekliyor."
+      }
+    },"waste_categories": {
+    "paper": "Kağıt",
+    "plastic_bottles": "Plastik Şişe",
+    "cardboard": "Karton",
+    "metal_cans": "Metal Kutu",
+    "food_scraps": "Yemek Artığı",
+    "garden_waste": "Bahçe Atığı",
+    "coffee_grounds": "Kahve Telvesi",
+    "batteries": "Pil",
+    "small_appliances": "Küçük Ev Aletleri",
+    "mobile_phones": "Cep Telefonu",
+    "glass": "Cam",
+    "plastic": "Plastik",
+    "electronic": "Elektronik",
+    "organic": "Organik",
+    "other": "Diğer"
+  },
+  "units": {
+    "kg": "kg",
+    "pcs": "adet",
+    "l": "litre"
+  },
+  "tiers": {
+    "planet_guardian": "Gezegen Koruyucusu",
+    "zero_waste_champion": "Sıfır Atık Şampiyonu",
+    "sustainability_hero": "Sürdürülebilirlik Kahramanı",
+    "eco_advocate": "Eko Savunucu",
+    "green_starter": "Yeşil Başlangıç",
+    "eco_explorer": "Eko Kaşif"
+  },
+  "badges_data": {
+    "first_step": {
+      "name": "İlk Adım",
+      "desc": "İlk atığınızı kaydedin"
+    },
+    "plastic_buster": {
+      "name": "Plastik Avcısı",
+      "desc": "10 kg plastik atığı azalt"
+    },
+    "sustainability_streak": {
+      "name": "Sürdürülebilirlik Serisi",
+      "desc": "7 Günlük Seri"
+    },
+    "zero_waste_legend": {
+      "name": "Sıfır Atık Efsanesi",
+      "desc": "5000+ Puan"
     }
   }
+}
