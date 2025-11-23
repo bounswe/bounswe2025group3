@@ -121,6 +121,17 @@ DATABASES = {
     }
 }
 
+# Content Moderation Settings
+# List of blacklisted words for content moderation
+BLACKLISTED_WORDS = [
+    "spam",
+    "scam",
+    "abuse",
+    "violence",
+    "hate",
+    "drugs",
+]
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
