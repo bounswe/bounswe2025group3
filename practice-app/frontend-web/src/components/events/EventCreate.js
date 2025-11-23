@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Country, State } from 'country-state-city';
 import Navbar from '../common/Navbar';
 import './EventCreate.css'; 
 import { useNavigate } from 'react-router-dom'; 
@@ -28,6 +29,7 @@ const EventCreate = () => {
   };
   
   const [formData, setFormData] = useState(initialData);
+  const [selectedCountry, setSelectedCountry] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [message, setMessage] = useState(null);
@@ -44,6 +46,11 @@ const EventCreate = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setFormError('');
+  };
+
+  const handleCountryChange = (e) => {
+    setSelectedCountry(e.target.value);
+    setFormData(prev => ({ ...prev, location: '' }));
   };
 
   // --- DOSYA İŞLEME FONKSİYONLARI (SAF REACT) ---
@@ -193,13 +200,37 @@ const EventCreate = () => {
             
             <div className="form-group">
               <label>{t('eventsPage.placeholderLocation') || "Location *"}</label>
-              <input 
-                name="location" 
-                type="text" 
-                value={formData.location} 
-                onChange={handleChange} 
-                required
-              />
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <select
+                  value={selectedCountry}
+                  onChange={handleCountryChange}
+                  required
+                  style={{ flex: 1, padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                >
+                  <option value="">Select Country</option>
+                  {Country.getAllCountries().map((country) => (
+                    <option key={country.isoCode} value={country.isoCode}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  required
+                  disabled={!selectedCountry}
+                  style={{ flex: 1, padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                >
+                  <option value="">Select City</option>
+                  {selectedCountry &&
+                    State.getStatesOfCountry(selectedCountry).map((state, index) => (
+                      <option key={`${state.name}-${index}`} value={state.name}>
+                        {state.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
             </div>
 
             <div className="form-group">
