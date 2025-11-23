@@ -13,6 +13,7 @@ python-dotenv
 gunicorn
 whitenoise
 dj-database-url
+supabase>=2.0.0
 # Testing dependencies
 pytest>=7.4.0
 pytest-django>=4.5.2

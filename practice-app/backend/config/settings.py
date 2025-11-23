@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'apps.community',
     'apps.course',
     'apps.goals',
+    'apps.events',
 ]
 
 MIDDLEWARE = [
@@ -161,6 +162,18 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Media files (User uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Supabase Storage Configuration
+SUPABASE_URL = os.getenv('SUPABASE_URL', '')
+SUPABASE_SERVICE_KEY = os.getenv('SUPABASE_SERVICE_KEY', '')
+SUPABASE_STORAGE_BUCKET = os.getenv('SUPABASE_STORAGE_BUCKET', 'images')
+
+# Supabase Storage settings dictionary for easy access
+SUPABASE_STORAGE = {
+    'URL': SUPABASE_URL,
+    'SERVICE_KEY': SUPABASE_SERVICE_KEY,
+    'BUCKET': SUPABASE_STORAGE_BUCKET,
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
