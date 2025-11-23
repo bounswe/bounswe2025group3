@@ -10,6 +10,7 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
+    "country-state-city": "^3.2.1",
     "i18next": "^23.16.8",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

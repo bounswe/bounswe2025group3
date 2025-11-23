@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import './SignupPage.css';
 import { useTranslation } from 'react-i18next';
 import Header from '../common/Header';
+import { Country, City, State } from 'country-state-city';
 
 const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api';
 
@@ -15,8 +16,10 @@ const SignupPage = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     username: '', email: '', password1: '', password2: '',
-    first_name: '', last_name: '', bio: '', city: '', country: '',
+    first_name: '', last_name: '', bio: '', city: '', country: '', state: '',
   });
+  const [selectedCountryCode, setSelectedCountryCode] = useState('');
+  const [selectedStateCode, setSelectedStateCode] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -35,6 +38,24 @@ const SignupPage = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCountryChange = (e) => {
+    const countryCode = e.target.value;
+    const country = Country.getCountryByCode(countryCode);
+    setSelectedCountryCode(countryCode);
+    setFormData(prev => ({ ...prev, country: country ? country.name : '', city: '', state: '' }));
+  };
+
+  const handleStateChange = (e) => {
+    const stateCode = e.target.value;
+    const state = State.getStateByCodeAndCountry(stateCode, selectedCountryCode);
+    setSelectedStateCode(stateCode);
+    setFormData(prev => ({ ...prev, city: '', state: state ? state.name : '' }));
+  };
+
+  const handleCityChange = (e) => {
+    setFormData(prev => ({ ...prev, city: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -118,9 +139,20 @@ const SignupPage = () => {
                     </label>
                     <input id="password1" name="password1" type="password" placeholder={t('signup.placeholder_password')} value={formData.password1} onChange={handleChange} required />
                   </div>
-                   <div className="input-box">
-                    <label htmlFor="city">{t('signup.city_label')}</label>
-                    <input id="city" name="city" type="text" placeholder={t('signup.placeholder_city')} value={formData.city} onChange={handleChange} />
+                  <div className="input-box">
+                    <label htmlFor="country">{t('signup.country_label')}</label>
+                    <select
+                        id="country"
+                        name="country"
+                        value={selectedCountryCode}
+                        onChange={handleCountryChange}
+                        style={{ height: '45px', width: '100%', padding: '0 10px', borderRadius: '5px', border: '1px solid #ccc' }}
+                    >
+                        <option value="">{t('signup.placeholder_country')}</option>
+                        {Country.getAllCountries().map((country) => (
+                            <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
+                        ))}
+                    </select>
                   </div>
                 </div>
 
@@ -142,9 +174,21 @@ const SignupPage = () => {
                     </label>
                     <input id="password2" name="password2" type="password" placeholder={t('signup.placeholder_confirm_password')} value={formData.password2} onChange={handleChange} required />
                   </div>
-                  <div className="input-box">
-                    <label htmlFor="country">{t('signup.country_label')}</label>
-                    <input id="country" name="country" type="text" placeholder={t('signup.placeholder_country')} value={formData.country} onChange={handleChange} />
+                   <div className="input-box">
+                    <label htmlFor="state">{t('signup.city_state_label')}</label>
+                    <select
+                        id="state"
+                        name="state"
+                        value={selectedStateCode}
+                        onChange={handleStateChange}
+                        disabled={!selectedCountryCode}
+                        style={{ height: '45px', width: '100%', padding: '0 10px', borderRadius: '5px', border: '1px solid #ccc' }}
+                    >
+                        <option value="">{t('signup.placeholder_city_state')}</option>
+                        {selectedCountryCode && State.getStatesOfCountry(selectedCountryCode).map((state, index) => (
+                            <option key={`${state.isoCode}-${index}`} value={state.isoCode}>{state.name}</option>
+                        ))}
+                    </select>
                   </div>
                 </div>
               </div>
