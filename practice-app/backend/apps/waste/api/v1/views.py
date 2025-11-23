@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
+from rest_framework.parsers import MultiPartParser, JSONParser
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, inline_serializer
 from drf_spectacular.types import OpenApiTypes
 from rest_framework import serializers
@@ -70,6 +71,7 @@ class SubCategoryDetailView(generics.RetrieveAPIView):
 class WasteLogListCreateView(generics.ListCreateAPIView):
     serializer_class = WasteLogSerializer
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, JSONParser]  # Support both multipart and JSON
     
     @extend_schema(
         tags=['Waste Logs'],
@@ -153,6 +155,7 @@ class WasteLogListCreateView(generics.ListCreateAPIView):
 class WasteLogDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = WasteLogSerializer
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, JSONParser]  # Support both multipart and JSON
 
     def get_queryset(self):
         return WasteLog.objects.filter(user=self.request.user)

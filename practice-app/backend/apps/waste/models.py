@@ -51,7 +51,7 @@ class WasteLog(models.Model):
 
     # optional 
     disposal_location = models.CharField(max_length=100, blank=True, null=True) 
-    disposal_photo = models.ImageField(upload_to='disposal_photos/', blank=True, null=True) 
+    disposal_photo_url = models.URLField(blank=True, null=True, max_length=500)  # Supabase Storage URL 
 
     def get_score(self):
         if not self.quantity or not self.sub_category or not self.sub_category.score_per_unit:

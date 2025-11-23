@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser, JSONParser
 from django.shortcuts import get_object_or_404
 from apps.events.models import Event
 from apps.events.api.v1.serializers import EventSerializer
@@ -24,6 +25,7 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.select_related('creator').prefetch_related('participants', 'likes').all()
     serializer_class = EventSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsCreatorOrAdmin, IsAdminForDelete]
+    parser_classes = [MultiPartParser, JSONParser]  # Support both multipart and JSON
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
