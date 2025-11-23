@@ -9,7 +9,7 @@ class Event(models.Model):
     description = models.TextField(blank=True)
     location = models.CharField(max_length=255, blank=True)
     date = models.DateTimeField()  # when the event happens
-    image = models.ImageField(upload_to='events/images/', blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True, max_length=500)  # Supabase Storage URL
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_events')
     participants = models.ManyToManyField(
         User, related_name='participated_events', blank=True
