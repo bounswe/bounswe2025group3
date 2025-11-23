@@ -6,12 +6,14 @@ import ThemeSwitcher from './ThemeSwitcher'; // 1. Import the ThemeSwitcher
 import './ThemeSwitcher.css'; // 2. Import its styles
 
 const Icon = ({ name, className = '' }) => {
-  const icons = {
-    logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆', 
-    dashboard: '🏠', goal: '🎯', language: '🌐', logout: '🚪', events: '📅',
-  };
-  return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
+    const icons = {
+      logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆', 
+      dashboard: '🏠', goal: '🎯', language: '🌐', logout: '🚪', events: '📅',
+      stats: '📈'
+    };
+    return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
+  
 
 const Navbar = ({ isAuthenticated }) => {
     const { t, i18n } = useTranslation();
@@ -65,6 +67,9 @@ const Navbar = ({ isAuthenticated }) => {
                 </NavLink>
                 <NavLink to="/events" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
                     <Icon name="events" /> {t('dashboard_nav.events')}
+                </NavLink>
+                <NavLink to="/stats" className={({ isActive }) => `nav-action-item ${isActive ? 'active' : ''}`}>
+                    <Icon name="stats" /> {t('dashboard_nav.my_stats')}
                 </NavLink>
                 <button onClick={handleLogout} className="nav-action-item">
                     <Icon name="logout" /> {t('dashboard_nav.logout')}

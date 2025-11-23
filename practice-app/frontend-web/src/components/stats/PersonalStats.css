@@ -1,0 +1,491 @@
+/* PersonalStats.css - Scoped and Themed */
+
+/* --- Base Layout --- */
+.personal-stats-page-scoped.personal-stats-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--dashboard-page-bg);
+  font-family: var(--font-primary, 'Poppins', sans-serif);
+}
+
+.personal-stats-page-scoped .stats-main-content {
+  flex-grow: 1;
+  padding: 2rem 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+.chart-wrapper {
+  width: 100%;
+  height: 300px;
+}
+
+/* Bar Chart Styles */
+.simple-chart {
+  width: 100%;
+  padding: 20px 0;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.legend-box {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border-radius: 3px;
+}
+
+.bar-chart-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 250px;
+  gap: 10px;
+  padding: 10px;
+  overflow-x: auto;
+}
+
+.bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.bar-pair {
+  display: flex;
+  gap: 5px;
+  align-items: flex-end;
+}
+
+.bar {
+  width: 25px;
+  min-height: 5px;
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.bar:hover {
+  opacity: 0.8;
+  transform: translateY(-2px);
+}
+
+.bar-score {
+  background: linear-gradient(180deg, #4CAF50 0%, #45a049 100%);
+}
+
+.bar-logs {
+  background: linear-gradient(180deg, #2196F3 0%, #1976D2 100%);
+}
+
+.bar-value {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.bar-label {
+  margin-top: 8px;
+  font-size: 11px;
+  text-align: center;
+  max-width: 70px;
+  word-wrap: break-word;
+}
+
+/* Pie Chart Styles */
+.simple-pie-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.pie-chart-svg {
+  width: 200px;
+  height: 200px;
+}
+
+.pie-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+}
+/* --- Hero Section --- */
+.personal-stats-page-scoped .stats-hero-section {
+  background-color: var(--background-primary);
+  border-radius: 16px;
+  box-shadow: var(--shadow-light);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.personal-stats-page-scoped .hero-welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-bottom: 1px solid var(--events-border-color);
+  padding-bottom: 1.5rem;
+}
+
+.personal-stats-page-scoped .hero-welcome h1 {
+  font-size: 1.8rem;
+  color: var(--dashboard-text-dark);
+  margin: 0;
+  font-weight: 700;
+}
+
+.personal-stats-page-scoped .tier-badge {
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.personal-stats-page-scoped .hero-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.personal-stats-page-scoped .metric-card {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: var(--dashboard-page-bg); 
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+.personal-stats-page-scoped .metric-card:hover {
+  transform: translateY(-3px);
+}
+
+.personal-stats-page-scoped .metric-card h3 {
+  font-size: 0.9rem;
+  color: var(--dashboard-text-medium);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0;
+}
+
+.personal-stats-page-scoped .metric-card .value {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--nav-dashboard-logo-color);
+  line-height: 1.2;
+}
+
+.personal-stats-page-scoped .metric-card small {
+    color: var(--dashboard-text-light);
+    font-size: 0.8rem;
+}
+
+/* --- Grid Layout for Widgets --- */
+.personal-stats-page-scoped .stats-grid-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+.personal-stats-page-scoped .stats-card {
+  background-color: var(--background-primary);
+  border-radius: 16px;
+  box-shadow: var(--shadow-light);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.personal-stats-page-scoped .stats-card.wide {
+  grid-column: 1 / -1;
+}
+
+/* --- Chart Header & Filters --- */
+.personal-stats-page-scoped .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--heading-underline-color);
+    padding-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.personal-stats-page-scoped .chart-header h2 {
+    font-size: 1.2rem;
+    color: var(--dashboard-text-dark);
+    margin: 0;
+    font-weight: 600;
+}
+
+.personal-stats-page-scoped .stats-card h2 {
+  font-size: 1.2rem;
+  color: var(--dashboard-text-dark);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--heading-underline-color);
+  font-weight: 600;
+}
+
+.personal-stats-page-scoped .stats-filter-group {
+    display: flex;
+    gap: 0.5rem;
+    background-color: var(--dashboard-page-bg);
+    padding: 0.3rem;
+    border-radius: 20px;
+}
+
+.personal-stats-page-scoped .filter-btn {
+    background: transparent;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    color: var(--dashboard-text-medium);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.personal-stats-page-scoped .filter-btn:hover {
+    color: var(--nav-dashboard-logo-color);
+}
+
+.personal-stats-page-scoped .filter-btn.active {
+    background-color: var(--nav-dashboard-link-active-bg);
+    color: var(--text-on-accent);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* --- Chart Styling --- */
+.personal-stats-page-scoped .chart-container {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.personal-stats-page-scoped .empty-state-chart {
+  text-align: center;
+  color: var(--dashboard-text-medium);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.personal-stats-page-scoped .chart-loader {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dashboard-text-medium);
+    font-style: italic;
+    gap: 0.5rem;
+}
+
+/* --- Badges --- */
+.personal-stats-page-scoped .badges-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.personal-stats-page-scoped .badge-item {
+  background-color: var(--dashboard-page-bg);
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 120px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  border: 1px solid var(--events-border-color);
+}
+
+.personal-stats-page-scoped .badge-item:hover {
+  transform: translateY(-5px);
+  background-color: var(--nav-dashboard-link-hover-bg);
+}
+
+.personal-stats-page-scoped .badge-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.personal-stats-page-scoped .badge-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--dashboard-text-dark);
+  margin-bottom: 0.2rem;
+  line-height: 1.2;
+}
+
+.personal-stats-page-scoped .badge-desc {
+  font-size: 0.7rem;
+  color: var(--dashboard-text-medium);
+}
+
+.personal-stats-page-scoped .empty-badges {
+    width: 100%;
+    text-align: center;
+    color: var(--dashboard-text-medium);
+    padding: 1rem;
+    font-style: italic;
+}
+
+/* --- Eco Forest --- */
+.personal-stats-page-scoped .forest-card {
+  /* Use theme variables for dynamic background */
+  background: linear-gradient(to bottom, var(--stats-forest-bg-start), var(--stats-forest-bg-end));
+  border: 1px solid var(--events-border-color);
+  position: relative;
+}
+.personal-stats-page-scoped .forest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.personal-stats-page-scoped .forest-info {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--nav-dashboard-logo-color);
+    background: var(--stats-forest-text-bg);
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.personal-stats-page-scoped .forest-visual {
+  min-height: 150px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-end;
+  align-content: flex-end;
+}
+
+.personal-stats-page-scoped .tree-icon {
+  font-size: 2rem;
+  animation: growTree 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+  cursor: help;
+  transition: transform 0.2s;
+}
+.personal-stats-page-scoped .tree-icon:hover {
+    transform: scale(1.2);
+}
+
+.personal-stats-page-scoped .empty-forest {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--dashboard-text-medium);
+  opacity: 0.8;
+  margin-top: 2rem;
+}
+.personal-stats-page-scoped .seed-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+@keyframes growTree {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* --- Loader & Error (Reused styles) --- */
+.personal-stats-page-scoped .loader-container-main {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 3rem; text-align: center; color: var(--dashboard-text-medium); font-size: 1rem;
+  background-color: var(--background-primary); border-radius: 12px; box-shadow: var(--shadow-light);
+}
+.personal-stats-page-scoped .loader-spinner-main {
+  border: 5px solid var(--nav-dashboard-link-hover-bg);
+  border-top: 5px solid var(--nav-dashboard-bottom-border);
+  border-radius: 50%; width: 40px; height: 40px;
+  animation: spin 0.8s linear infinite; margin-bottom: 1rem;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.personal-stats-page-scoped .error-message-box-main {
+  background-color: var(--dashboard-error-bg); color: var(--dashboard-error-text);
+  padding: 1rem 1.5rem; border: 1px solid var(--dashboard-error-border);
+  border-left: 5px solid var(--dashboard-error-text);
+  border-radius: 8px; font-weight: 500; margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+
+/* --- Responsive --- */
+@media (max-width: 992px) {
+  .personal-stats-page-scoped .stats-grid-layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 768px) {
+  .personal-stats-page-scoped .stats-main-content { padding: 1.5rem 1rem; }
+  .personal-stats-page-scoped .hero-welcome { flex-direction: column; align-items: flex-start; }
+  .personal-stats-page-scoped .hero-metrics-grid { grid-template-columns: 1fr; }
+  .personal-stats-page-scoped .metric-card { display: flex; justify-content: space-between; align-items: center; padding: 1rem; text-align: left; }
+  .personal-stats-page-scoped .metric-card h3 { margin: 0; }
+  
+  .personal-stats-page-scoped .chart-header {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+  .personal-stats-page-scoped .stats-filter-group {
+      width: 100%;
+      justify-content: space-between;
+  }
+  .personal-stats-page-scoped .filter-btn {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.8rem;
+  }
+}

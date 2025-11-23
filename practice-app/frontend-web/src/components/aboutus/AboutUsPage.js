@@ -7,13 +7,12 @@ import Header from '../common/Header';
 // Team members - student names
 const teamMembersData = [
     { name: 'Ahmet Okta', avatarSeed: 'ahmet' },
-    { name: 'Baran Korkmaz', avatarSeed: 'baran' },
     { name: 'Barathan Aslan', avatarSeed: 'barathan' },
     { name: 'Berke Kartal', avatarSeed: 'berke' },
-    { name: 'Ege Uslu', avatarSeed: 'ege' },
     { name: 'Mehmet Çağlar Kurt', avatarSeed: 'caglar' },
     { name: 'Mehmet Emin Atak', avatarSeed: 'emin' },
     { name: 'Mustafa Taha Söylemez', avatarSeed: 'taha' },
+    { name: 'Muhammet Berkay Keskin', avatarSeed: 'berkay' },
     { name: 'Nilsu Tüysüz', avatarSeed: 'nilsu' },
     { name: 'Ömer Faruk Bayram', avatarSeed: 'omer' },
     { name: 'Selman Akman', avatarSeed: 'selman' },
