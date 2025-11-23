@@ -384,6 +384,8 @@
         "bio_placeholder": "Bize biraz kendinizden ve eko-yolculuğunuzdan bahsedin...",
         "city_placeholder": "Şehriniz",
         "country_placeholder": "Ülkeniz",
+        "select_country": "Ülke Seçin",
+        "select_city": "Şehir Seçin",
         "button_update": "Profili Güncelle",
         "button_updating": "Güncelleniyor..."
       }

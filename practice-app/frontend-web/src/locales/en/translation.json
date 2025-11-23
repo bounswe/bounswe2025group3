@@ -374,6 +374,8 @@
         "bio_placeholder": "Tell us a bit about yourself and your eco-journey...",
         "city_placeholder": "Your city",
         "country_placeholder": "Your country",
+        "select_country": "Select Country",
+        "select_city": "Select City",
         "button_update": "Update Profile",
         "button_updating": "Updating..."
       }
