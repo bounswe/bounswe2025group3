@@ -77,8 +77,8 @@ const App = () => {
         // Initial poll
         pollNotifications();
 
-        // Poll every 1 minute (60000 ms)
-        const intervalId = setInterval(pollNotifications, 1000);
+        // Poll every 30 seconds (30000 ms)
+        const intervalId = setInterval(pollNotifications, 30000);
 
         return () => clearInterval(intervalId);
     }, []);
