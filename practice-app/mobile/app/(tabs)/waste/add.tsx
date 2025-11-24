@@ -7,6 +7,8 @@ import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, Touc
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getSubcategories, createWasteLog, Subcategory } from '@/api/waste';
 import { useTranslation } from 'react-i18next';
+import * as ImagePicker from 'expo-image-picker';
+import { Image } from 'expo-image';
 
 const formatDateToLocal = (date: Date) => {
   const year = date.getFullYear();
@@ -22,41 +24,50 @@ export default function AddWasteLogScreen() {
   const [quantity, setQuantity] = useState('');
   const [disposalDate, setDisposalDate] = useState(new Date());
   const [disposalLocation, setDisposalLocation] = useState('');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
+
+  const [successMessage, setSuccessMessage] = useState('');
 
   const router = useRouter();
   const colors = useColors();
   const { t } = useTranslation();
 
   const styles = StyleSheet.create({
-      container: { flex: 1, backgroundColor: colors.background },
-      loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
-      header: { height: "7%", paddingHorizontal: "4%", paddingTop: "2%", flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: colors.background, borderBottomWidth: 1, borderBottomColor: colors.primary},
-      backButton: { padding: 4},
-      title: { marginLeft: "12%", fontSize: 26, fontWeight: '600', color: colors.primary },
-      content: { flex: 1, backgroundColor: colors.background },
-      contentContainer: { padding: 20 },
-      formGroup: { marginBottom: 36 },
-      label: { fontSize: 16, fontWeight: '600', marginBottom: 12, color: colors.text },
-      chipList: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, },
-      chipButton: { paddingHorizontal: 14, paddingVertical: 10, borderWidth: 1, borderColor: colors.primary, borderRadius: 20, backgroundColor: colors.cb1},
-      chipButtonActive: { backgroundColor: colors.primary, borderColor: colors.primary, },
-      chipButtonText: { color: colors.text, fontWeight: '500' },
-      chipButtonTextActive: { color: 'white' },
-      descriptionBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginTop: 16, padding: 12, backgroundColor: colors.cb1, borderRadius: 8, borderLeftWidth: 4, borderLeftColor: colors.primary, },
-      descriptionText: { flex: 1, fontSize: 14, color: colors.textSecondary, lineHeight: 20, },
-      inputContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.cb1, borderWidth: 1, borderColor: colors.primary, borderRadius: 12, paddingHorizontal: 12, height: 50, gap: 10, },
-      inputText: { fontSize: 16, color: colors.text },
-      input: { flex: 1, fontSize: 16, color: colors.text, height: '100%', },
-      infoBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.cb1, padding: 12, borderRadius: 12, gap: 10, borderWidth: 1, borderColor: colors.borders, marginTop: 12, marginBottom: 24,},
-      infoText: { flex: 1, fontSize: 14, color: colors.text, lineHeight: 20, },
-      requestCategoryButton: { backgroundColor: colors.cb1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 12, borderRadius: 12, gap: 8, marginTop: 20, borderWidth: 1, borderColor: colors.primary, borderStyle: 'dashed', },
-      requestCategoryText: { color: colors.primary, fontSize: 14, fontWeight: '600' },
-      submitButton: { backgroundColor: colors.primary, padding: 16, borderRadius: 16, alignItems: 'center', justifyContent: 'center', height: 52, marginTop: 16, marginBottom: "20%" },
-      submitButtonDisabled: { backgroundColor: colors.cb4, },
-      submitButtonText: { color: 'white', fontSize: 16, fontWeight: 'bold', },
+    container: { flex: 1, backgroundColor: colors.background },
+    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
+    header: { height: "7%", paddingHorizontal: "4%", paddingTop: "2%", flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: colors.background, borderBottomWidth: 1, borderBottomColor: colors.primary },
+    backButton: { padding: 4 },
+    title: { marginLeft: "12%", fontSize: 26, fontWeight: '600', color: colors.primary },
+    content: { flex: 1, backgroundColor: colors.background },
+    contentContainer: { padding: 20 },
+    formGroup: { marginBottom: 36 },
+    label: { fontSize: 16, fontWeight: '600', marginBottom: 12, color: colors.text },
+    chipList: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, },
+    chipButton: { paddingHorizontal: 14, paddingVertical: 10, borderWidth: 1, borderColor: colors.primary, borderRadius: 20, backgroundColor: colors.cb1 },
+    chipButtonActive: { backgroundColor: colors.primary, borderColor: colors.primary, },
+    chipButtonText: { color: colors.text, fontWeight: '500' },
+    chipButtonTextActive: { color: 'white' },
+    descriptionBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginTop: 16, padding: 12, backgroundColor: colors.cb1, borderRadius: 8, borderLeftWidth: 4, borderLeftColor: colors.primary, },
+    descriptionText: { flex: 1, fontSize: 14, color: colors.textSecondary, lineHeight: 20, },
+    inputContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.cb1, borderWidth: 1, borderColor: colors.primary, borderRadius: 12, paddingHorizontal: 12, height: 50, gap: 10, },
+    inputText: { fontSize: 16, color: colors.text },
+    input: { flex: 1, fontSize: 16, color: colors.text, height: '100%', },
+    infoBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.cb1, padding: 12, borderRadius: 12, gap: 10, borderWidth: 1, borderColor: colors.borders, marginTop: 12, marginBottom: 24, },
+    infoText: { flex: 1, fontSize: 14, color: colors.text, lineHeight: 20, },
+    requestCategoryButton: { backgroundColor: colors.cb1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 12, borderRadius: 12, gap: 8, marginTop: 20, borderWidth: 1, borderColor: colors.primary, borderStyle: 'dashed', },
+    requestCategoryText: { color: colors.primary, fontSize: 14, fontWeight: '600' },
+    submitButton: { backgroundColor: colors.primary, padding: 16, borderRadius: 16, alignItems: 'center', justifyContent: 'center', height: 52, marginTop: 16, marginBottom: "20%" },
+    submitButtonDisabled: { backgroundColor: colors.cb4, },
+    submitButtonText: { color: 'white', fontSize: 16, fontWeight: 'bold', },
+    imagePickerContainer: { alignItems: 'center', justifyContent: 'center', height: 200, backgroundColor: colors.cb1, borderRadius: 12, borderWidth: 1, borderColor: colors.primary, borderStyle: 'dashed', marginTop: 8, overflow: 'hidden' },
+    imagePreview: { width: '100%', height: '100%' },
+    imagePlaceholder: { alignItems: 'center', gap: 8 },
+    imagePlaceholderText: { color: colors.primary, fontSize: 14, fontWeight: '600' },
+    removeImageButton: { position: 'absolute', top: 8, right: 8, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 12, padding: 4 },
+    successText: { color: colors.primary, textAlign: 'center', fontSize: 16, fontWeight: '600', marginBottom: 10 },
   });
 
   useEffect(() => {
@@ -76,7 +87,7 @@ export default function AddWasteLogScreen() {
 
   const handleSubCategorySelect = (subcategory: Subcategory) => {
     setSelectedSubCategory(subcategory);
-    setQuantity(''); 
+    setQuantity('');
   };
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
@@ -85,26 +96,84 @@ export default function AddWasteLogScreen() {
     setDisposalDate(currentDate);
   };
 
+  const handleImageSelection = () => {
+    Alert.alert(
+      t("waste.add_photo"),
+      t("waste.tap_to_select_photo"),
+      [
+        {
+          text: t("waste.take_photo"),
+          onPress: takePhoto,
+        },
+        {
+          text: t("waste.choose_from_gallery"),
+          onPress: pickImage,
+        },
+        {
+          text: t("common.cancel"),
+          style: "cancel",
+        },
+      ]
+    );
+  };
+
+  const takePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert(t("waste.error_title"), t("waste.camera_permission_denied"));
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 0.5,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 0.5,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+  };
+
   const handleSubmit = async () => {
     if (!selectedSubCategory || !quantity) {
-        Alert.alert(t("waste.missing_info_title"), t("waste.missing_info_message"));
-        return;
+      Alert.alert(t("waste.missing_info_title"), t("waste.missing_info_message"));
+      return;
     }
     setIsSubmitting(true);
     try {
-        await createWasteLog({
-            sub_category: selectedSubCategory.id,
-            quantity: parseFloat(quantity),
-            disposal_date: formatDateToLocal(disposalDate),
-            disposal_location: disposalLocation || undefined,
-        });
-        Alert.alert(t("waste.success_title"), t("waste.log_added_success"));
+      await createWasteLog({
+        sub_category: selectedSubCategory.id,
+        quantity: parseFloat(quantity),
+        disposal_date: formatDateToLocal(disposalDate),
+        disposal_location: disposalLocation || undefined,
+        disposal_photo: selectedImage || undefined,
+      });
+      setSuccessMessage(t("waste.log_added_success"));
+      setTimeout(() => {
         router.back();
+      }, 1500);
     } catch (error) {
-        console.error('Error adding waste log:', error);
-        Alert.alert(t("waste.error_title"), t("waste.log_add_failed"));
+      console.error('Error adding waste log:', error);
+      Alert.alert(t("waste.error_title"), t("waste.log_add_failed"));
     } finally {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -141,9 +210,9 @@ export default function AddWasteLogScreen() {
               </TouchableOpacity>
             ))}
           </View>
-          
+
           {selectedSubCategory?.description && (
-            <View style={styles.descriptionBox}>
+            <View style={[styles.descriptionBox, { marginBottom: 24 }]}>
               <Ionicons name="information-circle-outline" size={20} color={colors.primary} />
               <Text style={styles.descriptionText}>{selectedSubCategory.description}</Text>
             </View>
@@ -156,64 +225,87 @@ export default function AddWasteLogScreen() {
         </View>
 
         {selectedSubCategory && (
-            <>
-              <View style={styles.formGroup}>
-                  <Text style={styles.label}>{t("waste.enter_amount")} {quantityUnit}</Text>
-                  <View style={styles.inputContainer}>
-                      <Ionicons name="scale-outline" size={20} color={colors.primary} />
-                      <TextInput 
-                          style={styles.input} 
-                          value={quantity} 
-                          onChangeText={setQuantity} 
-                          keyboardType="decimal-pad" 
-                          placeholder={`e.g., 5`} 
-                          placeholderTextColor={colors.textSecondary} 
-                      />
-                  </View>
+          <>
+            <View style={[styles.formGroup, { marginTop: 24 }]}>
+              <Text style={styles.label}>{t("waste.enter_amount")} {quantityUnit}</Text>
+              <View style={styles.inputContainer}>
+                <Ionicons name="scale-outline" size={20} color={colors.primary} />
+                <TextInput
+                  style={styles.input}
+                  value={quantity}
+                  onChangeText={setQuantity}
+                  keyboardType="decimal-pad"
+                  placeholder={`e.g., 5`}
+                  placeholderTextColor={colors.textSecondary}
+                />
               </View>
+            </View>
 
-              <View style={styles.formGroup}>
-                  <Text style={styles.label}>{t("waste.disposal_date")}</Text>
-                  <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
-                      <Ionicons name="calendar-outline" size={20} color={colors.primary} />
-                      <Text style={styles.inputText}>{disposalDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</Text>
-                  </TouchableOpacity>
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>{t("waste.disposal_date")}</Text>
+              <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
+                <Ionicons name="calendar-outline" size={20} color={colors.primary} />
+                <Text style={styles.inputText}>{disposalDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</Text>
+              </TouchableOpacity>
+            </View>
+
+            {showDatePicker && (
+              <DateTimePicker
+                value={disposalDate} mode="date" display="spinner" onChange={handleDateChange} maximumDate={new Date()}
+              />
+            )}
+
+            <View style={[styles.formGroup, { marginBottom: 16 }]}>
+              <Text style={styles.label}>{t("waste.disposal_location")}</Text>
+              <View style={styles.inputContainer}>
+                <Ionicons name="location-outline" size={20} color={colors.primary} />
+                <TextInput
+                  style={styles.input}
+                  value={disposalLocation}
+                  onChangeText={setDisposalLocation}
+                  placeholder={t("waste.location_placeholder")}
+                  placeholderTextColor={colors.textSecondary}
+                />
               </View>
+            </View>
 
-              {showDatePicker && (
-                  <DateTimePicker
-                      value={disposalDate} mode="date" display="spinner" onChange={handleDateChange} maximumDate={new Date()}
-                  />
-              )}
-              
-              <View style={[styles.formGroup, {marginBottom: 16}]}>
-                  <Text style={styles.label}>{t("waste.disposal_location")}</Text>
-                  <View style={styles.inputContainer}>
-                      <Ionicons name="location-outline" size={20} color={colors.primary} />
-                      <TextInput 
-                          style={styles.input} 
-                          value={disposalLocation} 
-                          onChangeText={setDisposalLocation} 
-                          placeholder={t("waste.location_placeholder")} 
-                          placeholderTextColor={colors.textSecondary} 
-                      />
-                  </View>
-              </View>
-
-              {quantity && (
-                  <View style={styles.infoBox}>
-                      <MaterialCommunityIcons name="star-four-points-outline" size={20} color={colors.primary} />
-                      <Text style={styles.infoText}>
-                          {t("waste.you_will_get")} <Text style={{fontWeight: 'bold'}}>+{calculateEstimatedScore()} {t("leaderboard.pts")}</Text>
-                      </Text>
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>{t("waste.add_photo")}</Text>
+              <TouchableOpacity style={[styles.imagePickerContainer, { height: 100, width: 100, alignSelf: 'flex-start', borderStyle: 'solid' }]} onPress={handleImageSelection}>
+                {selectedImage ? (
+                  <>
+                    <Image source={{ uri: selectedImage }} style={styles.imagePreview} contentFit="cover" />
+                    <TouchableOpacity style={styles.removeImageButton} onPress={(e) => { e.stopPropagation(); removeImage(); }}>
+                      <Ionicons name="close" size={16} color="white" />
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  <View style={styles.imagePlaceholder}>
+                    <Ionicons name="camera-outline" size={24} color={colors.primary} />
+                    <Text style={[styles.imagePlaceholderText, { fontSize: 12, textAlign: 'center' }]}>{t("waste.add_photo")}</Text>
                   </View>
                 )}
-            </>
+              </TouchableOpacity>
+            </View>
+
+            {quantity && (
+              <View style={styles.infoBox}>
+                <MaterialCommunityIcons name="star-four-points-outline" size={20} color={colors.primary} />
+                <Text style={styles.infoText}>
+                  {t("waste.you_will_get")} <Text style={{ fontWeight: 'bold' }}>+{calculateEstimatedScore()} {t("leaderboard.pts")}</Text>
+                </Text>
+              </View>
+            )}
+          </>
         )}
 
-        <TouchableOpacity 
-          style={[styles.submitButton, (!selectedSubCategory || !quantity) && styles.submitButtonDisabled]} 
-          onPress={handleSubmit} 
+        {successMessage ? (
+          <Text style={styles.successText}>{successMessage}</Text>
+        ) : null}
+
+        <TouchableOpacity
+          style={[styles.submitButton, (!selectedSubCategory || !quantity) && styles.submitButtonDisabled]}
+          onPress={handleSubmit}
           disabled={!selectedSubCategory || !quantity || isSubmitting}
         >
           {isSubmitting ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>{t("waste.submit")}</Text>}

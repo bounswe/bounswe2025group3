@@ -17,6 +17,7 @@ import { WasteLog, deleteWasteLog, getWasteLogById, updateWasteLog } from '@/api
 import { useAlert } from '@/hooks/alertContext';
 import { useTranslation } from 'react-i18next';
 import { formatDateShort } from "@/i18n/utils";
+import { Image } from 'expo-image';
 
 export default function WasteLogDetailsScreen() {
     const { id } = useLocalSearchParams();
@@ -78,6 +79,8 @@ export default function WasteLogDetailsScreen() {
         saveButtonText: { color: 'white', fontWeight: 'bold' },
         cancelButton: { backgroundColor: colors.borders, },
         cancelButtonText: { color: colors.text, fontWeight: 'bold' },
+        imageContainer: { marginTop: 16, borderRadius: 12, overflow: 'hidden', height: 200, width: '100%', backgroundColor: colors.cb2 },
+        logImage: { width: '100%', height: '100%' },
     });
 
     useEffect(() => {
@@ -227,6 +230,12 @@ export default function WasteLogDetailsScreen() {
                             {isEditing ? (<TextInput style={styles.input} value={editedLocation} onChangeText={setEditedLocation} />)
                                 : (<Text style={styles.value}>{log.disposal_location || t("waste.not_specified")}</Text>)}
                         </View>
+
+                        {log.disposal_photo && (
+                            <View style={styles.imageContainer}>
+                                <Image source={{ uri: log.disposal_photo }} style={styles.logImage} contentFit="cover" />
+                            </View>
+                        )}
                     </View>
                 </View>
 

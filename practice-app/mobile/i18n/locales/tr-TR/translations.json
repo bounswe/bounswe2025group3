@@ -114,7 +114,13 @@
         "delete_log_error": "Atık kaydı silinemedi.",
         "update_success": "Atık kaydı başarıyla güncellendi.",
         "update_error": "Atık kaydı güncellenemedi.",
-        "ok": "Tamam"
+        "ok": "Tamam",
+        "add_photo": "Fotoğraf Ekle",
+        "tap_to_select_photo": "Fotoğraf seçmek için dokunun",
+        "take_photo": "Fotoğraf Çek",
+        "choose_from_gallery": "Galeriden Seç",
+        "gallery": "Galeri",
+        "no_photos": "Henüz fotoğraf yok"
     },
     "goals": {
         "your_goals": "Hedefleriniz",

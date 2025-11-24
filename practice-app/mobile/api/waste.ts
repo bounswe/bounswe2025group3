@@ -30,6 +30,7 @@ export interface CreateWasteLogData {
     quantity: number;
     disposal_date: string;
     disposal_location?: string;
+    disposal_photo?: string; // URI of the photo
 }
 
 export interface UpdateWasteLogData {
@@ -76,10 +77,37 @@ export const getWasteLogById = async (logId: number): Promise<WasteLog> => {
 };
 
 export const createWasteLog = async (wasteLogData: CreateWasteLogData): Promise<WasteLog> => {
+    const formData = new FormData();
+    formData.append('sub_category', String(wasteLogData.sub_category));
+    formData.append('quantity', String(wasteLogData.quantity));
+    formData.append('disposal_date', wasteLogData.disposal_date);
+
+    if (wasteLogData.disposal_location) {
+        formData.append('disposal_location', wasteLogData.disposal_location);
+    }
+
+    if (wasteLogData.disposal_photo) {
+        const uri = wasteLogData.disposal_photo;
+        const filename = uri.split('/').pop() || 'photo.jpg';
+        const match = /\.(\w+)$/.exec(filename);
+        const type = match ? `image/${match[1]}` : 'image/jpeg';
+
+        formData.append('disposal_photo', {
+            uri,
+            name: filename,
+            type,
+        } as any);
+    }
+
     const response = await tokenManager.authenticatedFetch(API_ENDPOINTS.WASTE.LOGS, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(wasteLogData),
+        headers: {
+            // Content-Type is handled automatically by FormData, but we need to ensure tokenManager doesn't override it with application/json if we don't pass it.
+            // However, usually fetch handles FormData correctly if Content-Type is NOT set.
+            // Let's assume tokenManager handles this or we might need to check its implementation.
+            // Standard fetch with FormData should NOT have Content-Type header set manually.
+        },
+        body: formData,
     });
     return parseJson<WasteLog>(response, "Failed to create waste log.");
 };

@@ -67,7 +67,7 @@ export default function WasteLogsScreen() {
       setLogs(logsData);
       setScore(scoreData);
     } catch (error) {
-        console.error('Failed to fetch screen data:', error);
+      console.error('Failed to fetch screen data:', error);
     } finally {
       if (showLoader) setIsLoading(false);
       setRefreshing(false);
@@ -140,6 +140,17 @@ export default function WasteLogsScreen() {
             </Text>
             <Text style={styles.statLabel}>{t("waste.total_logs")}</Text>
           </View>
+          <TouchableOpacity
+            style={styles.statCard}
+            onPress={() => router.push('/waste/gallery')}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="images-outline" size={32} color={colors.primary} style={styles.statIcon} />
+            <Text style={styles.statValue}>
+              <Ionicons name="arrow-forward" size={24} color={colors.primary} />
+            </Text>
+            <Text style={styles.statLabel}>{t("waste.gallery")}</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity
