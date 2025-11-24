@@ -22,6 +22,7 @@ import EventCreate from './components/events/EventCreate';
 import './i18n';
 import PersonalStats from './components/stats/PersonalStats';
 import { getUnreadNotifications, markNotificationAsRead, markAllNotificationsAsRead } from './services/api';
+import { useTranslation } from 'react-i18next';
 
 // Add debugging information for build and environment
 console.debug('App Initialization:', {
@@ -35,6 +36,7 @@ console.debug('App Initialization:', {
 //<Route path="/pricing" element={<Pricing />} />
 
 const App = () => {
+    const { t } = useTranslation();
     const [notifications, setNotifications] = useState([]);
 
     const markAsRead = async (id) => {
@@ -76,7 +78,7 @@ const App = () => {
         pollNotifications();
 
         // Poll every 1 minute (60000 ms)
-        const intervalId = setInterval(pollNotifications, 60000);
+        const intervalId = setInterval(pollNotifications, 1000);
 
         return () => clearInterval(intervalId);
     }, []);
@@ -99,12 +101,12 @@ const App = () => {
                     border: '1px solid #e0e0e0'
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', borderBottom: '1px solid #eee', paddingBottom: '5px' }}>
-                        <h4 style={{ margin: 0, fontSize: '16px' }}>Notifications ({notifications.length})</h4>
+                        <h4 style={{ margin: 0, fontSize: '16px' }}>{t('notifications.title')} ({notifications.length})</h4>
                         <button 
                             onClick={markAllRead}
                             style={{ fontSize: '12px', padding: '4px 8px', cursor: 'pointer', background: '#f0f0f0', border: 'none', borderRadius: '4px' }}
                         >
-                            Mark all read
+                            {t('notifications.mark_all_read')}
                         </button>
                     </div>
                     {notifications.map(notification => (
@@ -118,7 +120,7 @@ const App = () => {
                                     onClick={() => markAsRead(notification.id)}
                                     style={{ fontSize: '11px', color: '#007bff', background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
                                 >
-                                    Dismiss
+                                    {t('notifications.dismiss')}
                                 </button>
                             </div>
                         </div>

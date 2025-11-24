@@ -545,5 +545,10 @@
       "name": "Sıfır Atık Efsanesi",
       "desc": "5000+ Puan"
     }
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "mark_all_read": "Tümünü okundu işaretle",
+    "dismiss": "Kapat"
   }
 }

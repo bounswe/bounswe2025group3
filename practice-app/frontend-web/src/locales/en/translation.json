@@ -544,5 +544,10 @@
       "name": "Zero Waste Legend",
       "desc": "5000+ Score"
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "mark_all_read": "Mark all read",
+    "dismiss": "Dismiss"
   }
 }
