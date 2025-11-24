@@ -40,8 +40,13 @@ RUN sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 # Set working directory
 WORKDIR /app
 
-# Increase Gradle memory to prevent OOM kills
-ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx4g"
+# Increase Node.js memory for the bundler
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Configure Gradle memory globally
+RUN mkdir -p /root/.gradle && \
+    echo "org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m" > /root/.gradle/gradle.properties && \
+    echo "org.gradle.daemon=false" >> /root/.gradle/gradle.properties
 
 # Copy package.json and package-lock.json first for caching
 COPY package*.json ./
