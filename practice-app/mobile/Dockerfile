@@ -40,6 +40,9 @@ RUN sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 # Set working directory
 WORKDIR /app
 
+# Increase Gradle memory to prevent OOM kills
+ENV GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx4g"
+
 # Copy package.json and package-lock.json first for caching
 COPY package*.json ./
 
