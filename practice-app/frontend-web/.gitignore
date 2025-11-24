@@ -16,3 +16,4 @@
 .env*
 .env.production
 !.env.sample
+!.env.example
