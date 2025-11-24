@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Home from './components/home/Home';
 import Login from './components/auth/LoginPage'; 
@@ -21,6 +21,8 @@ import ChallengeDetailPage from './components/challenges/ChallengeDetail';
 import EventCreate from './components/events/EventCreate';
 import './i18n';
 import PersonalStats from './components/stats/PersonalStats';
+import { getUnreadNotifications, markNotificationAsRead, markAllNotificationsAsRead } from './services/api';
+import { useTranslation } from 'react-i18next';
 
 // Add debugging information for build and environment
 console.debug('App Initialization:', {
@@ -34,8 +36,97 @@ console.debug('App Initialization:', {
 //<Route path="/pricing" element={<Pricing />} />
 
 const App = () => {
+    const { t } = useTranslation();
+    const [notifications, setNotifications] = useState([]);
+
+    const markAsRead = async (id) => {
+        try {
+            await markNotificationAsRead(id);
+            setNotifications(prev => prev.filter(n => n.id !== id));
+        } catch (error) {
+            console.error('Error marking notification as read:', error);
+        }
+    };
+
+    const markAllRead = async () => {
+        try {
+            await markAllNotificationsAsRead();
+            setNotifications([]);
+        } catch (error) {
+            console.error('Error marking all notifications as read:', error);
+        }
+    };
+
+    useEffect(() => {
+        const pollNotifications = async () => {
+            try {
+                const token = localStorage.getItem('access_token');
+                if (!token) {
+                    console.debug('No auth token found, skipping notification poll.');
+                    return;
+                }
+
+                const results = await getUnreadNotifications();
+                setNotifications(results);
+
+            } catch (error) {
+                console.error('Error polling notifications:', error);
+            }
+        };
+
+        // Initial poll
+        pollNotifications();
+
+        // Poll every 30 seconds (30000 ms)
+        const intervalId = setInterval(pollNotifications, 30000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
     return (
         <Router>
+            {notifications.length > 0 && (
+                <div style={{
+                    position: 'fixed',
+                    top: '20px',
+                    right: '20px',
+                    zIndex: 9999,
+                    backgroundColor: 'white',
+                    padding: '15px',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                    maxWidth: '350px',
+                    maxHeight: '80vh',
+                    overflowY: 'auto',
+                    border: '1px solid #e0e0e0'
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', borderBottom: '1px solid #eee', paddingBottom: '5px' }}>
+                        <h4 style={{ margin: 0, fontSize: '16px' }}>{t('notifications.title')} ({notifications.length})</h4>
+                        <button 
+                            onClick={markAllRead}
+                            style={{ fontSize: '12px', padding: '4px 8px', cursor: 'pointer', background: '#f0f0f0', border: 'none', borderRadius: '4px' }}
+                        >
+                            {t('notifications.mark_all_read')}
+                        </button>
+                    </div>
+                    {notifications.map(notification => (
+                        <div key={notification.id} style={{ borderBottom: '1px solid #f5f5f5', padding: '10px 0' }}>
+                            <p style={{ margin: '0 0 5px 0', fontSize: '14px' }}>{notification.message}</p>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <small style={{ color: '#888', fontSize: '11px' }}>
+                                    {new Date(notification.created_at).toLocaleString()}
+                                </small>
+                                <button 
+                                    onClick={() => markAsRead(notification.id)}
+                                    style={{ fontSize: '11px', color: '#007bff', background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                                >
+                                    {t('notifications.dismiss')}
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
             <Routes>
                 <Route path="/home" element={<Home />} />
                 <Route path="/login" element={<Login />} />
