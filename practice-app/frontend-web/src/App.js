@@ -21,7 +21,7 @@ import ChallengeDetailPage from './components/challenges/ChallengeDetail';
 import EventCreate from './components/events/EventCreate';
 import './i18n';
 import PersonalStats from './components/stats/PersonalStats';
-import axios from 'axios';
+import { getUnreadNotifications, markNotificationAsRead, markAllNotificationsAsRead } from './services/api';
 
 // Add debugging information for build and environment
 console.debug('App Initialization:', {
@@ -39,11 +39,7 @@ const App = () => {
 
     const markAsRead = async (id) => {
         try {
-            const token = localStorage.getItem('access_token');
-            if (!token) return;
-            await axios.post(`http://localhost:8000/api/v1/notifications/${id}/read/`, {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await markNotificationAsRead(id);
             setNotifications(prev => prev.filter(n => n.id !== id));
         } catch (error) {
             console.error('Error marking notification as read:', error);
@@ -52,11 +48,7 @@ const App = () => {
 
     const markAllRead = async () => {
         try {
-            const token = localStorage.getItem('access_token');
-            if (!token) return;
-            await axios.post('http://localhost:8000/api/v1/notifications/mark-all-read/', {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await markAllNotificationsAsRead();
             setNotifications([]);
         } catch (error) {
             console.error('Error marking all notifications as read:', error);
@@ -72,13 +64,8 @@ const App = () => {
                     return;
                 }
 
-                const response = await axios.get('http://localhost:8000/api/v1/notifications/?is_read=false', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                
-                // API returns paginated response: { count: 0, results: [], ... }
-                const { results } = response.data;
-                setNotifications(results || []);
+                const results = await getUnreadNotifications();
+                setNotifications(results);
 
             } catch (error) {
                 console.error('Error polling notifications:', error);
@@ -89,7 +76,7 @@ const App = () => {
         pollNotifications();
 
         // Poll every 1 minute (60000 ms)
-        const intervalId = setInterval(pollNotifications, 1000);
+        const intervalId = setInterval(pollNotifications, 60000);
 
         return () => clearInterval(intervalId);
     }, []);

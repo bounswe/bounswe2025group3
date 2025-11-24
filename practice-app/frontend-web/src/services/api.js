@@ -79,4 +79,19 @@ export const toggleLike = async (eventId) => {
     return response.data;
 };
 
+export const getUnreadNotifications = async () => {
+    const response = await api.get('v1/notifications/?is_read=false');
+    return response.data.results || [];
+};
+
+export const markNotificationAsRead = async (id) => {
+    const response = await api.post(`v1/notifications/${id}/read/`);
+    return response.data;
+};
+
+export const markAllNotificationsAsRead = async () => {
+    const response = await api.post('v1/notifications/mark-all-read/');
+    return response.data;
+};
+
 export default api;
