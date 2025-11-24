@@ -26,7 +26,7 @@ export const register = async (username: string, email: string, password: string
   const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.REGISTER}`, {
     method: 'POST',
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, email, password, password2 }),
+    body: JSON.stringify({ username, email, password1: password, password2 }),
   });
 
   return parseJson(response, "Registration failed.");
