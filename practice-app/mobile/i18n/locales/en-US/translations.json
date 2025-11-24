@@ -114,7 +114,13 @@
         "delete_log_error": "Failed to delete waste log.",
         "update_success": "Waste log updated successfully.",
         "update_error": "Failed to update waste log.",
-        "ok": "OK"
+        "ok": "OK",
+        "add_photo": "Add Photo",
+        "tap_to_select_photo": "Tap to select photo",
+        "take_photo": "Take Photo",
+        "choose_from_gallery": "Choose from Gallery",
+        "gallery": "Gallery",
+        "no_photos": "No photos yet"
     },
     "goals": {
         "your_goals": "Your Goals",

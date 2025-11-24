@@ -50,7 +50,13 @@
           }
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to take photos of your waste."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

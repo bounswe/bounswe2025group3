@@ -29,6 +29,8 @@ export default function AddWasteLogScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
 
+  const [successMessage, setSuccessMessage] = useState('');
+
   const router = useRouter();
   const colors = useColors();
   const { t } = useTranslation();
@@ -65,6 +67,7 @@ export default function AddWasteLogScreen() {
     imagePlaceholder: { alignItems: 'center', gap: 8 },
     imagePlaceholderText: { color: colors.primary, fontSize: 14, fontWeight: '600' },
     removeImageButton: { position: 'absolute', top: 8, right: 8, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 12, padding: 4 },
+    successText: { color: colors.primary, textAlign: 'center', fontSize: 16, fontWeight: '600', marginBottom: 10 },
   });
 
   useEffect(() => {
@@ -93,12 +96,49 @@ export default function AddWasteLogScreen() {
     setDisposalDate(currentDate);
   };
 
+  const handleImageSelection = () => {
+    Alert.alert(
+      t("waste.add_photo"),
+      t("waste.tap_to_select_photo"),
+      [
+        {
+          text: t("waste.take_photo"),
+          onPress: takePhoto,
+        },
+        {
+          text: t("waste.choose_from_gallery"),
+          onPress: pickImage,
+        },
+        {
+          text: t("common.cancel"),
+          style: "cancel",
+        },
+      ]
+    );
+  };
+
+  const takePhoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert(t("waste.error_title"), t("waste.camera_permission_denied"));
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
+      quality: 0.5,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
+      allowsEditing: false,
       quality: 0.5,
     });
 
@@ -125,8 +165,10 @@ export default function AddWasteLogScreen() {
         disposal_location: disposalLocation || undefined,
         disposal_photo: selectedImage || undefined,
       });
-      Alert.alert(t("waste.success_title"), t("waste.log_added_success"));
-      router.back();
+      setSuccessMessage(t("waste.log_added_success"));
+      setTimeout(() => {
+        router.back();
+      }, 1500);
     } catch (error) {
       console.error('Error adding waste log:', error);
       Alert.alert(t("waste.error_title"), t("waste.log_add_failed"));
@@ -170,7 +212,7 @@ export default function AddWasteLogScreen() {
           </View>
 
           {selectedSubCategory?.description && (
-            <View style={styles.descriptionBox}>
+            <View style={[styles.descriptionBox, { marginBottom: 24 }]}>
               <Ionicons name="information-circle-outline" size={20} color={colors.primary} />
               <Text style={styles.descriptionText}>{selectedSubCategory.description}</Text>
             </View>
@@ -184,7 +226,7 @@ export default function AddWasteLogScreen() {
 
         {selectedSubCategory && (
           <>
-            <View style={styles.formGroup}>
+            <View style={[styles.formGroup, { marginTop: 24 }]}>
               <Text style={styles.label}>{t("waste.enter_amount")} {quantityUnit}</Text>
               <View style={styles.inputContainer}>
                 <Ionicons name="scale-outline" size={20} color={colors.primary} />
@@ -228,19 +270,19 @@ export default function AddWasteLogScreen() {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={styles.label}>{t("waste.add_photo") || "Add Photo"}</Text>
-              <TouchableOpacity style={styles.imagePickerContainer} onPress={pickImage}>
+              <Text style={styles.label}>{t("waste.add_photo")}</Text>
+              <TouchableOpacity style={[styles.imagePickerContainer, { height: 100, width: 100, alignSelf: 'flex-start', borderStyle: 'solid' }]} onPress={handleImageSelection}>
                 {selectedImage ? (
                   <>
                     <Image source={{ uri: selectedImage }} style={styles.imagePreview} contentFit="cover" />
                     <TouchableOpacity style={styles.removeImageButton} onPress={(e) => { e.stopPropagation(); removeImage(); }}>
-                      <Ionicons name="close" size={20} color="white" />
+                      <Ionicons name="close" size={16} color="white" />
                     </TouchableOpacity>
                   </>
                 ) : (
                   <View style={styles.imagePlaceholder}>
-                    <Ionicons name="camera-outline" size={32} color={colors.primary} />
-                    <Text style={styles.imagePlaceholderText}>{t("waste.tap_to_select_photo") || "Tap to select photo"}</Text>
+                    <Ionicons name="camera-outline" size={24} color={colors.primary} />
+                    <Text style={[styles.imagePlaceholderText, { fontSize: 12, textAlign: 'center' }]}>{t("waste.add_photo")}</Text>
                   </View>
                 )}
               </TouchableOpacity>
@@ -256,6 +298,10 @@ export default function AddWasteLogScreen() {
             )}
           </>
         )}
+
+        {successMessage ? (
+          <Text style={styles.successText}>{successMessage}</Text>
+        ) : null}
 
         <TouchableOpacity
           style={[styles.submitButton, (!selectedSubCategory || !quantity) && styles.submitButtonDisabled]}
