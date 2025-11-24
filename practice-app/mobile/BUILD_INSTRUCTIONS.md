@@ -65,5 +65,6 @@ Yes! You can use the emulator from Android Studio to run the APK you built with 
 
 ## Troubleshooting
 
+-   **Docker Daemon Error:** If you see "Cannot connect to the Docker daemon", make sure **Docker Desktop** is running on your computer.
 -   **Build Failures:** If the build fails, check the logs output by the `docker run` command. Common issues include network timeouts during SDK download or Gradle sync errors.
 -   **Permissions:** Ensure the `.env` file exists and is readable.
