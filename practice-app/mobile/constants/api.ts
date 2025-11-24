@@ -1,5 +1,5 @@
 //export const API_BASE_URL = 'https://ecochallenge-backend.onrender.com';
-export const API_BASE_URL = 'http://10.0.2.2:8000';
+export const API_BASE_URL = 'http://192.168.111.2:8000';
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -56,5 +56,13 @@ export const API_ENDPOINTS = {
     DETAIL: (id: number) => `/v1/challenges/api/v1/challenges/${id}/`,
     JOIN: (id: number) => `/v1/challenges/api/v1/challenges/${id}/join/`,
     LEAVE: (id: number) => `/v1/challenges/api/v1/challenges/${id}/leave/`,
+  },
+
+  EVENTS: {
+    LIST: '/api/v1/events/events/',
+    BY_ID: (id: number) => `/api/v1/events/events/${id}/`,
+    CREATE: '/api/v1/events/events/',
+    LIKE: (id: number) => `/api/v1/events/events/${id}/like/`,
+    PARTICIPATE: (id: number) => `/api/v1/events/events/${id}/participate/`,
   },
 };

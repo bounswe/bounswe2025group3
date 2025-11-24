@@ -159,6 +159,7 @@ export default function HomeScreen() {
     statsCard: { marginHorizontal: "2%", marginTop: "4%", paddingHorizontal: "5%", paddingVertical: "3%", backgroundColor: colors.cb1, borderRadius: 16 },
     statsHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
     statsTitle: { fontSize: 16, fontWeight: '600', marginLeft: 12, color: colors.primary },
+    actionTitle: { fontSize: 14, fontWeight: '600', color: colors.primary, marginTop: 4 },
     scoreValueContainer: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'center', backgroundColor: colors.cb1, paddingHorizontal: 16, borderRadius: 16 },
     scoreValue: { fontSize: 32, fontWeight: '700', color: colors.primary, marginRight: 8 },
     scoreUnitLabel: { fontSize: 14, fontWeight: '600', color: colors.textSecondary },
@@ -190,7 +191,19 @@ export default function HomeScreen() {
     postActionGroup: { flexDirection: 'row', alignItems: 'center', gap: 16 },
     postActionButton: { flexDirection: 'row', alignItems: 'center', gap: 5 },
     postActionText: { color: colors.textSecondary, fontWeight: '500', fontSize: 14 },
-    postLikeText: { color: colors.primary, fontWeight: '600', fontSize: 14 }
+    postLikeText: { color: colors.primary, fontWeight: '600', fontSize: 14 },
+    
+    smallActionButtonCard: { 
+      width: width * 0.25, 
+      height: width * 0.25, 
+      marginHorizontal: "2%", 
+      marginTop: "4%", 
+      padding: 12, 
+      backgroundColor: colors.cb1, 
+      borderRadius: 16,
+      justifyContent: 'center', 
+      alignItems: 'center',
+    },
   });
 
   if (isLoading) {
@@ -227,6 +240,17 @@ export default function HomeScreen() {
             <Text style={styles.scoreValue}>{userScore ? Number(userScore).toFixed(1) : '0.0'}</Text>
             <Text style={styles.scoreUnitLabel}>{t("home.points")}</Text>
           </View>
+        </View>
+
+        <View style={{ flexDirection: 'row', paddingHorizontal: "2%", marginTop: "2%" }}>
+            <TouchableOpacity 
+                style={styles.smallActionButtonCard} 
+                onPress={() => router.push("/events")}
+                activeOpacity={0.7}
+            >
+                <Ionicons name="calendar-outline" size={30} color={colors.primary} />
+                <Text style={styles.actionTitle}>Events</Text>
+            </TouchableOpacity>
         </View>
 
         <View style={styles.sectionHeader}>

@@ -43,6 +43,7 @@ function RootLayout() {
     <Stack screenOptions={{ headerShown: false}}>
       <Stack.Protected guard={!!session}>
         <Stack.Screen name="(tabs)" options={{ animation: 'none', statusBarStyle: "dark"}} />
+        <Stack.Screen name="events" options={{ animation: 'none', statusBarStyle: "dark"}} />
         <Stack.Screen
           name="menu_drawer"
           options={{
