@@ -1,0 +1,60 @@
+# ==============================================================================
+# Docker Compose Configuration for Mobile Application
+# ==============================================================================
+# This file provides easy management of development and production builds.
+#
+# Usage:
+#   Development: docker-compose up dev
+#   Production:  docker-compose up production-build
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  # ----------------------------------------------------------------------------
+  # Development Service - Metro Bundler
+  # ----------------------------------------------------------------------------
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    container_name: mobile-app-dev
+    ports:
+      - "8081:8081"    # Metro bundler
+      - "19000:19000"  # Expo DevTools
+      - "19001:19001"  # Expo iOS
+      - "19002:19002"  # Expo Android
+    volumes:
+      # Mount source code for hot reloading
+      - .:/app
+      - /app/node_modules  # Persist node_modules
+    environment:
+      - NODE_ENV=development
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+    command: npm start
+    stdin_open: true
+    tty: true
+    networks:
+      - mobile-network
+
+  # ----------------------------------------------------------------------------
+  # Production Build Service - APK Builder
+  # ----------------------------------------------------------------------------
+  production-build:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+      args:
+        - BACKEND_IP=${BACKEND_IP:-10.0.2.2}
+        - BACKEND_PORT=${BACKEND_PORT:-8000}
+    container_name: mobile-app-production-build
+    environment:
+      - NODE_ENV=production
+    # The production container exits after building
+    # Extract APK with: docker cp mobile-app-production-build:/app/android/app/build/outputs/apk/release/app-release.apk .
+    networks:
+      - mobile-network
+
+networks:
+  mobile-network:
+    driver: bridge
