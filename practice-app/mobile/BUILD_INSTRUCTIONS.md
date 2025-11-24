@@ -53,8 +53,15 @@ docker rm mobile-build-container
 
 You can now install the `app-release.apk` on your Android device or emulator.
 
--   **Emulator:** Drag and drop the APK file onto the emulator window.
--   **Physical Device:** Transfer the file to your phone and install it, or use `adb install app-release.apk`.
+### Using Android Studio Emulator
+Yes! You can use the emulator from Android Studio to run the APK you built with Docker.
+1.  Open Android Studio and start your emulator (Virtual Device).
+2.  Simply **drag and drop** the `app-release.apk` file from your file explorer onto the emulator window.
+3.  The app will install and appear in the app drawer.
+
+### Using Physical Device
+-   Transfer the file to your phone and install it.
+-   Or use `adb install app-release.apk` if you have platform-tools installed.
 
 ## Troubleshooting
 
