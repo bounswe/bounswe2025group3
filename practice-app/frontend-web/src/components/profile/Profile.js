@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom'; // Added Link, NavLink
 import { getUserProfile, updateUserProfile } from '../../services/api'; // Assuming path is correct
 import { useTranslation } from 'react-i18next';
+import { Country, State } from 'country-state-city';
 import Navbar from '../common/Navbar';
 import './Profile.css'; // We will heavily update this
 
@@ -36,27 +37,39 @@ const Profile = () => {
         country: '',
         notifications_enabled: false,
     });
-        const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
-    if (!token) {
-        navigate('/login');
-        return;
+        if (!token) {
+            navigate('/login');
+            return;
         }
     // eslint-disable-next-line
-  }, [token]);
+    }, [token]);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        
-        
+    const [allCountriesData, setAllCountriesData] = useState(Country.getAllCountries());
+    const [availableCities, setAvailableCities] = useState([]);
 
+    useEffect(() => {
+        if (profile.country) {
+            const countryObj = allCountriesData.find(c => c.name === profile.country);
+            if (countryObj) {
+                setAvailableCities(State.getStatesOfCountry(countryObj.isoCode));
+            } else {
+                setAvailableCities([]);
+            }
+        } else {
+            setAvailableCities([]);
+        }
+    }, [profile.country, allCountriesData]);
+
+    useEffect(() => {
         const fetchProfile = async () => {
-            
             setLoading(true);
             setError('');
             try {
@@ -81,10 +94,16 @@ const Profile = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setProfile(prevProfile => ({
-            ...prevProfile,
-            [name]: type === 'checkbox' ? checked : value,
-        }));
+        setProfile(prevProfile => {
+            const updated = {
+                ...prevProfile,
+                [name]: type === 'checkbox' ? checked : value,
+            };
+            if (name === 'country') {
+                updated.city = '';
+            }
+            return updated;
+        });
     };
 
     const handleSubmit = async (e) => {
@@ -159,12 +178,36 @@ const Profile = () => {
 
                             <div className="form-row">
                                 <div className="form-field">
-                                    <label htmlFor="city"><Icon name="location" /> {t('profile_page.form.city_label')}</label>
-                                    <input id="city" name="city" type="text" placeholder={t('profile_page.form.city_placeholder')} value={profile.city || ''} onChange={handleChange} disabled={isSubmitting}/>
+                                    <label htmlFor="country"><Icon name="location" /> {t('profile_page.form.country_label')}</label>
+                                    <select 
+                                        id="country" 
+                                        name="country" 
+                                        value={profile.country || ''} 
+                                        onChange={handleChange} 
+                                        disabled={isSubmitting}
+                                        style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+                                    >
+                                        <option value="">{t('profile_page.form.select_country') || 'Select Country'}</option>
+                                        {allCountriesData.map((c) => (
+                                            <option key={c.isoCode} value={c.name}>{c.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="form-field">
-                                    <label htmlFor="country"><Icon name="location" /> {t('profile_page.form.country_label')}</label>
-                                    <input id="country" name="country" type="text" placeholder={t('profile_page.form.country_placeholder')} value={profile.country || ''} onChange={handleChange} disabled={isSubmitting}/>
+                                    <label htmlFor="city"><Icon name="location" /> {t('profile_page.form.city_label')}</label>
+                                    <select 
+                                        id="city" 
+                                        name="city" 
+                                        value={profile.city || ''} 
+                                        onChange={handleChange} 
+                                        disabled={isSubmitting || !profile.country}
+                                        style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+                                    >
+                                        <option value="">{t('profile_page.form.select_city') || 'Select City'}</option>
+                                        {availableCities.map((city) => (
+                                            <option key={city.isoCode} value={city.name}>{city.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 

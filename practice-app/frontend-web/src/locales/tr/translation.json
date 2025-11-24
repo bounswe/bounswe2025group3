@@ -200,6 +200,7 @@
       "first_name_label": "Ad",
       "last_name_label": "Soyad",
       "city_label": "Şehir",
+      "city_state_label": "Şehir/Eyalet",
       "country_label": "Ülke",
       "bio_label": "Biyografi",
       "placeholder_username": "Kullanıcı Adınızı Girin",
@@ -209,6 +210,7 @@
       "placeholder_first_name": "Adınızı Girin",
       "placeholder_last_name": "Soyadınızı Girin",
       "placeholder_city": "Şehrinizi Girin",
+      "placeholder_city_state": "Şehir/Eyalet Seçin",
       "placeholder_country": "Ülkenizi Girin",
       "placeholder_bio": "Bize kendinizden bahsedin (isteğe bağlı)",
       "signup_button": "Kayıt Ol",
@@ -219,7 +221,6 @@
       "accept_terms_prefix": "",
       "accept_terms_link": "Şartlar ve Koşulları",
       "accept_terms_suffix": " kabul ediyorum"
-    
     },
     "forgot_password": {
       "title": "Şifrenizi mi Unuttunuz?",
@@ -383,6 +384,8 @@
         "bio_placeholder": "Bize biraz kendinizden ve eko-yolculuğunuzdan bahsedin...",
         "city_placeholder": "Şehriniz",
         "country_placeholder": "Ülkeniz",
+        "select_country": "Ülke Seçin",
+        "select_city": "Şehir Seçin",
         "button_update": "Profili Güncelle",
         "button_updating": "Güncelleniyor..."
       }

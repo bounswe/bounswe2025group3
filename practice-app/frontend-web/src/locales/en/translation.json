@@ -190,6 +190,7 @@
       "first_name_label": "First Name",
       "last_name_label": "Last Name",
       "city_label": "City",
+      "city_state_label": "City/State",
       "country_label": "Country",
       "bio_label": "Bio",
       "placeholder_username": "Enter Username",
@@ -199,6 +200,7 @@
       "placeholder_first_name": "Enter First Name",
       "placeholder_last_name": "Enter Last Name",
       "placeholder_city": "Enter City",
+      "placeholder_city_state": "Select City/State",
       "placeholder_country": "Enter Country",
       "placeholder_bio": "Tell us about yourself (optional)",
       "signup_button": "Sign Up",
@@ -372,6 +374,8 @@
         "bio_placeholder": "Tell us a bit about yourself and your eco-journey...",
         "city_placeholder": "Your city",
         "country_placeholder": "Your country",
+        "select_country": "Select Country",
+        "select_city": "Select City",
         "button_update": "Update Profile",
         "button_updating": "Updating..."
       }
