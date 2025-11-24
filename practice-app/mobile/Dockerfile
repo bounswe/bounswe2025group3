@@ -55,7 +55,7 @@ RUN node --version && npm --version
 # ANDROID SDK SETUP
 # ==============================================================================
 ENV ANDROID_HOME=/opt/android-sdk
-ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/34.0.0
+ENV PATH=${PATH}:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/35.0.0
 
 # Download and install Android SDK Command Line Tools
 RUN mkdir -p ${ANDROID_HOME}/cmdline-tools \
@@ -71,27 +71,30 @@ RUN yes | sdkmanager --licenses || true
 # Include CMake and NDK for building native code (react-native modules)
 RUN sdkmanager \
     "platform-tools" \
-    "platforms;android-34" \
-    "build-tools;34.0.0" \
+    "platforms;android-35" \
+    "build-tools;35.0.0" \
     "cmdline-tools;latest" \
     "cmake;3.22.1" \
     "ndk;27.1.12297006"
 
 # ==============================================================================
-# MEMORY OPTIMIZATION
+# MEMORY OPTIMIZATION FOR CROSS-ARCHITECTURE BUILD
 # ==============================================================================
-# Increase Node.js heap size for Metro bundler (critical for large apps)
-ENV NODE_OPTIONS="--max-old-space-size=8192"
+# Note: When building on Apple Silicon via Rosetta 2 emulation, memory usage is higher.
+# These settings are conservative to ensure successful builds under emulation.
 
-# Configure Gradle for better performance and memory management
+# Increase Node.js heap size for Metro bundler
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Configure Gradle for memory-constrained environments
 RUN mkdir -p /root/.gradle && \
     { \
-        echo "# Memory settings"; \
-        echo "org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=1g -XX:+HeapDumpOnOutOfMemoryError"; \
+        echo "# Memory settings - conservative for emulation"; \
+        echo "org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError"; \
         echo ""; \
-        echo "# Performance settings"; \
+        echo "# Disable parallel to reduce memory pressure"; \
         echo "org.gradle.daemon=false"; \
-        echo "org.gradle.parallel=true"; \
+        echo "org.gradle.parallel=false"; \
         echo "org.gradle.configureondemand=true"; \
         echo "org.gradle.caching=true"; \
         echo ""; \
@@ -126,6 +129,10 @@ RUN echo "Configuring API_BASE_URL to http://${BACKEND_IP}:${BACKEND_PORT}" && \
 # ==============================================================================
 # BUILD APK
 # ==============================================================================
+# Build for arm64-v8a only to reduce memory usage (most common architecture)
+# This significantly reduces build time and memory requirements
+ENV REACT_NATIVE_ARCHITECTURES=arm64-v8a
+
 # Set the default command to build the APK
 CMD ["/bin/bash", "-c", "\
     set -e && \
@@ -135,10 +142,10 @@ CMD ["/bin/bash", "-c", "\
     echo 'Step 1/3: Running Expo prebuild...' && \
     npx expo prebuild --platform android --clean && \
     echo '' && \
-    echo 'Step 2/3: Building release APK...' && \
+    echo 'Step 2/3: Building release APK (arm64-v8a only)...' && \
     cd android && \
     chmod +x ./gradlew && \
-    ./gradlew assembleRelease --no-daemon --max-workers=2 && \
+    ./gradlew assembleRelease --no-daemon --max-workers=1 -PreactNativeArchitectures=arm64-v8a && \
     echo '' && \
     echo '========================================' && \
     echo 'Build Complete!' && \
