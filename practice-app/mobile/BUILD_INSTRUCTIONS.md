@@ -13,9 +13,12 @@ This guide explains how to build the Android APK for the mobile application usin
     ```bash
     cp .env.example .env
     ```
-3.  Update the `API_BASE_URL` in `.env` if necessary.
-    -   **Emulator:** Use `http://10.0.2.2:8000`
-    -   **Physical Device:** Use your computer's local IP address (e.g., `http://192.168.1.x:8000`).
+3.  **Configure API URL (Crucial Step):**
+    The `API_BASE_URL` you set here will be **baked into the APK**. The app will try to connect to this URL when installed on your phone/emulator.
+    *   **If testing on Android Emulator:** Use `http://10.0.2.2:8000`. This is a special alias that points to your computer's localhost.
+    *   **If testing on a Physical Device:** You MUST use your computer's local network IP address (e.g., `http://192.168.1.35:8000`).
+        *   *To find your IP:* Run `ipconfig` (Windows) or `ifconfig` (Mac/Linux) and look for `en0` or `wlan0`.
+    *   **Do NOT use `localhost` or `127.0.0.1`**, as that refers to the phone itself, not your computer.
 
 ## Building the Docker Image
 
