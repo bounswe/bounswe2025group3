@@ -418,7 +418,6 @@ mobile/
 ├── .env                       # Your local config (git-ignored)
 ├── BUILD_INSTRUCTIONS.md      # This file
 ├── QUICK_REFERENCE.md         # Common commands cheatsheet
-├── status_report.md           # Project status documentation
 ├── app.json                   # Expo configuration
 ├── package.json               # Dependencies
 └── constants/
@@ -511,7 +510,6 @@ After successfully building:
 - **Project README**: `../../README.md`
 - **Backend Setup**: `../backend/README.md`
 - **Quick Reference**: `QUICK_REFERENCE.md`
-- **Status Report**: `status_report.md`
 - **Issues**: Open a GitHub issue in the repository
 
 ---

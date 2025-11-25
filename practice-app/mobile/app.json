@@ -20,7 +20,8 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.oktaahmet.Greener"
+      "package": "com.oktaahmet.Greener",
+      "usesCleartextTraffic": true
     },
     "web": {
       "output": "static",
@@ -63,7 +64,8 @@
           "android": {
             "compileSdkVersion": 35,
             "targetSdkVersion": 35,
-            "buildToolsVersion": "35.0.0"
+            "buildToolsVersion": "35.0.0",
+            "usesCleartextTraffic": true
           }
         }
       ]
