@@ -498,7 +498,17 @@ After successfully building:
 
 1. **Development**: Start coding! Changes hot-reload automatically
 2. **Production**:
-   - Start your backend server
+   - **Start and prepare your backend server:**
+     ```bash
+     cd practice-app/backend
+     source venv/bin/activate  # or activate your virtual environment
+     python manage.py migrate  # Important: Run migrations to create all tables
+     python manage.py runserver 0.0.0.0:8000
+     ```
+   - **Set up ADB port forwarding** (for emulator):
+     ```bash
+     adb reverse tcp:8000 tcp:8000
+     ```
    - Install APK on device
    - Test connectivity and features
    - Check backend logs for incoming requests

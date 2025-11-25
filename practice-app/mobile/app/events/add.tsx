@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, Image, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, PermissionsAndroid, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createEvent } from '@/api/events';
 import { useTranslation } from 'react-i18next';
@@ -86,7 +86,38 @@ export default function AddEventScreen() {
     }
   };
 
+  const requestGalleryPermission = async (): Promise<boolean> => {
+    if (Platform.OS !== 'android') return true;
+    
+    try {
+      // Android 13+ uses READ_MEDIA_IMAGES, older versions use READ_EXTERNAL_STORAGE
+      const permission = Platform.Version >= 33 
+        ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
+        : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+      
+      const granted = await PermissionsAndroid.request(permission, {
+        title: 'Galeri İzni Gerekli',
+        message: 'Fotoğraf seçebilmek için galeri erişim izni gereklidir.',
+        buttonNeutral: 'Daha Sonra Sor',
+        buttonNegative: 'İptal',
+        buttonPositive: 'Tamam',
+      });
+      
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } catch (err) {
+      console.warn('Permission request error:', err);
+      return false;
+    }
+  };
+
   const pickImage = async () => {
+    // Request permission first on Android
+    const hasPermission = await requestGalleryPermission();
+    if (!hasPermission) {
+      Alert.alert('İzin Gerekli', 'Fotoğraf seçmek için galeri erişim izni vermeniz gerekmektedir.');
+      return;
+    }
+
     try {
       const image = await ImagePicker.openPicker({
         width: 1280,
