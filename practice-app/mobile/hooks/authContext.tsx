@@ -1,7 +1,8 @@
 // This page is directly copied from expo documentations.
 
-import { createContext, use, type PropsWithChildren } from 'react';
+import { createContext, use, type PropsWithChildren, useEffect, useState } from 'react';
 import { useStorageState } from './useStorageState';
+import tokenManager from '@/services/tokenManager';
 
 type UserRole = 'USER' | 'ADMIN' | 'MODERATOR';
 
@@ -13,7 +14,7 @@ const AuthContext = createContext<{
   isLoading: boolean;
 }>({
   signIn: () => null,
-  signOut: () => null,
+  signOut: () => undefined,
   userRole: null,
   session: null,
   isLoading: false,
@@ -32,22 +33,50 @@ export function useSession() {
 export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState('session');
   const [[roleLoading, userRole], setUserRole] = useStorageState('userRole');
+  const [isBootstrapping, setIsBootstrapping] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const bootstrapSession = async () => {
+      try {
+        const isLoggedIn = await tokenManager.autoLogin();
+        if (!isMounted) return;
+        setSession(isLoggedIn ? 'authenticated' : null);
+      } catch {
+        if (!isMounted) return;
+        setSession(null);
+      } finally {
+        if (isMounted) {
+          setIsBootstrapping(false);
+        }
+      }
+    };
+
+    bootstrapSession();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [setSession]);
 
   return (
     <AuthContext
       value={{
         signIn: (role: UserRole) => {
-          // Perform sign-in logic here
-          setSession('xxx');
+          setSession('authenticated');
           setUserRole(role);
         },
         signOut: () => {
+          tokenManager.clearTokens().catch((error) => {
+            console.error('Failed to clear tokens on sign out:', error);
+          });
           setSession(null);
           setUserRole(null);
         },
         userRole: userRole as UserRole | null,
         session,
-        isLoading: isLoading || roleLoading,
+        isLoading: isLoading || roleLoading || isBootstrapping,
       }}>
       {children}
     </AuthContext>

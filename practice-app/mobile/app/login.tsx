@@ -4,14 +4,15 @@ import { useSession } from "@/hooks/authContext";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useFocusEffect } from "expo-router";
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, useColorScheme } from "react-native";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import * as NavigationBar from 'expo-navigation-bar';
 import { useTheme } from "@/hooks/themeContext";
+import { useTranslation } from "react-i18next";
 
 export default function LoginScreen() {
   const { signIn } = useSession();
   const router = useRouter();
-  const colorScheme = useColorScheme();
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,10 +24,8 @@ export default function LoginScreen() {
   useFocusEffect(
     React.useCallback(() => {
       if (isDark) {
-        console.log("dasdas");
         NavigationBar.setButtonStyleAsync('light');
       } else {
-        console.log("a");
         NavigationBar.setButtonStyleAsync('dark');
       }
     }, [isDark])
@@ -54,15 +53,12 @@ export default function LoginScreen() {
   };
 
   const handleLoginPress = async () => {
-    console.log("login button pressed");
     setErrorMessage('');
     try {
       const data = await login(email, password);
-      console.log("Login successful", data);
       signIn(data.role);
     } catch (error: any) {
-      console.log(error);
-      setErrorMessage(error.message || "Login failed. Please check your credentials.");
+      setErrorMessage(error.message || t("login.login_failed"));
     }
   };
 
@@ -78,10 +74,10 @@ export default function LoginScreen() {
       </TouchableOpacity>
 
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome Back!</Text>
+        <Text style={styles.title}>{t("login.title")}</Text>
 
         <TextInput
-          placeholder="Email"
+          placeholder={t("login.email")}
           placeholderTextColor={colors.primary}
           cursorColor={colors.primary}
           style={styles.input}
@@ -91,7 +87,7 @@ export default function LoginScreen() {
 
         <View style={styles.passwordContainer}>
           <TextInput
-            placeholder="Password"
+            placeholder={t("login.password")}
             placeholderTextColor={colors.primary}
             cursorColor={colors.primary}
             style={styles.passwordInput}
@@ -105,7 +101,7 @@ export default function LoginScreen() {
         </View>
 
         <Text style={styles.forgot_text} onPress={handleForgotPasswordPress}>
-          Forgot Password?
+          {t("login.forgot_password")}
         </Text>
 
         <Text style={[styles.errorText, {opacity: errorMessage ? 1 : 0}]}>
@@ -117,10 +113,10 @@ export default function LoginScreen() {
           disabled={!isLoginEnabled}
           onPress={handleLoginPress}
         >
-          <Text style={{color:isLoginEnabled ? '#fff' : '#595C5C', fontWeight:'bold'}}>Login</Text>
+          <Text style={{color:isLoginEnabled ? '#fff' : '#595C5C', fontWeight:'bold'}}>{t("login.login_button")}</Text>
         </TouchableOpacity>
 
-        <Text style={{fontSize:14, color:"#595C5C", fontWeight:"300", marginTop:"5%"}}>Or continue with</Text>
+        <Text style={{fontSize:14, color:"#595C5C", fontWeight:"300", marginTop:"5%"}}>{t("login.or_continue_with")}</Text>
 
         <TouchableOpacity style={styles.otherButton}>
           <View style={{flexDirection:"row"}}>
@@ -132,7 +128,7 @@ export default function LoginScreen() {
         <TouchableOpacity style={styles.otherButton}>
           <View style={{flexDirection:"row"}}>
             <Image
-              source={colorScheme === "dark" ? require('@/assets/images/github_dark.png') : require('@/assets/images/github.png')}
+              source={isDark ? require('@/assets/images/github_dark.png') : require('@/assets/images/github.png')}
               style={styles.logo}
             />
             <Text style={styles.logo_text}>Github</Text>
@@ -147,12 +143,12 @@ export default function LoginScreen() {
         </TouchableOpacity>
 
         <View style={{flexDirection:"row", marginTop:"8%"}}>
-          <Text style={{color:"#595C5C"}}>Don’t have an account? </Text>
+          <Text style={{color:"#595C5C"}}>{t("login.no_account")} </Text>
           <Text
             style={{fontWeight:"bold", color:colors.primary, borderBottomWidth:2, borderBottomColor:colors.primary}}
             onPress={handleRegisterPress}
           >
-            Sign Up
+            {t("login.sign_up")}
           </Text>
         </View>
       </View>

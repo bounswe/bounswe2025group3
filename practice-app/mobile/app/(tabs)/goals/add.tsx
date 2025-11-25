@@ -1,12 +1,14 @@
 import { useColors } from '@/constants/colors';
-import tokenManager from '@/services/tokenManager';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getSubcategories,getUserProfile } from '@/api/functions';
+import { getSubcategories } from '@/api/waste';
+import { getUserProfile } from '@/api/user';
+import { createGoal } from '@/api/goals';
+import { useTranslation } from 'react-i18next';
 
 interface SubCategory {
   id: number;
@@ -39,6 +41,7 @@ export default function AddGoalScreen() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const router = useRouter();
   const colors = useColors();
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -115,32 +118,25 @@ export default function AddGoalScreen() {
 
   const handleSubmit = async () => {
     if (!selectedSubCategory || !target || !userProfile) {
-        Alert.alert('Missing Information', 'Please complete all fields to create a goal.');
+        Alert.alert(t("waste.missing_info_title"), t("goals.missing_fields"));
         return;
     }
     setIsLoading(true);
     try {
-      const response = await tokenManager.authenticatedFetch("/api/v1/goals/goals/", {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user: userProfile.id,
-          category_id: selectedSubCategory.id,
-          timeframe,
-          target: parseFloat(target),
-          start_date: formatDateToLocal(startDate),
-          status: 'pending',
-        }),
+      await createGoal({
+        user: userProfile.id,
+        category_id: selectedSubCategory.id,
+        timeframe,
+        target: parseFloat(target),
+        start_date: formatDateToLocal(startDate),
+        status: 'pending',
       });
-      if (response.ok) {
-        Alert.alert('Success', 'Your new goal has been created!');
-        router.back();
-      } else {
-        const errorData = await response.json();
-        Alert.alert('Error', errorData.detail || 'Failed to create goal');
-      }
+      Alert.alert(t("waste.success_title"), t("goals.goal_created"));
+      router.back();
     } catch (error) {
       console.error('Error creating goal:', error);
+      const errorMessage = error instanceof Error ? error.message : t("goals.goal_create_error");
+      Alert.alert(t("waste.error_title"), errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -159,12 +155,12 @@ export default function AddGoalScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color={colors.primary} />
         </TouchableOpacity>
-        <Text style={styles.title}>New Goal</Text>
+        <Text style={styles.title}>{t("goals.new_goal")}</Text>
       </View>
 
       <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Select a Category</Text>
+          <Text style={styles.label}>{t("goals.select_category")}</Text>
           <View style={styles.chipList}>
             {subcategories.map(cat => (
               <TouchableOpacity
@@ -186,14 +182,14 @@ export default function AddGoalScreen() {
 
           <TouchableOpacity style={styles.requestCategoryButton} onPress={() => router.push("/custom_category_request")}>
             <Ionicons name="add-circle-outline" size={20} color={colors.primary} />
-            <Text style={styles.requestCategoryText}>Can't find your item? Request a new one</Text>
+            <Text style={styles.requestCategoryText}>{t("goals.request_new_category")}</Text>
           </TouchableOpacity>
         </View>
         
         {selectedSubCategory && (
             <>
                 <View style={styles.formGroup}>
-                    <Text style={styles.label}>Set a Timeframe</Text>
+                    <Text style={styles.label}>{t("goals.set_timeframe")}</Text>
                     <View style={styles.buttonGroup}>
                         {(['daily', 'weekly', 'monthly'] as const).map((option) => (
                         <TouchableOpacity
@@ -202,7 +198,7 @@ export default function AddGoalScreen() {
                             onPress={() => setTimeframe(option)}
                         >
                             <Text style={[styles.segmentedButtonText, timeframe === option && styles.segmentedButtonTextActive]}>
-                                {option.charAt(0).toUpperCase() + option.slice(1)}
+                                {t(`goals.${option}`)}
                             </Text>
                         </TouchableOpacity>
                         ))}
@@ -210,7 +206,7 @@ export default function AddGoalScreen() {
                 </View>
                 
                 <View style={[styles.formGroup, {marginBottom:16}]}>
-                    <Text style={styles.label}>Select a Start Date</Text>
+                    <Text style={styles.label}>{t("goals.select_start_date")}</Text>
                     <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
                         <Ionicons name="calendar-outline" size={20} color={colors.primary} />
                         <Text style={styles.inputText}>{startDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</Text>
@@ -226,12 +222,12 @@ export default function AddGoalScreen() {
                 <View style={styles.infoBox}>
                     <Ionicons name="information-circle-outline" size={20} color={colors.primary} />
                     <Text style={styles.infoText}>
-                        Your goal will automatically end on <Text style={{fontWeight: 'bold'}}>{calculateEndDate(startDate, timeframe).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</Text>.
+                        {t("goals.goal_end_info").replace("{date}", calculateEndDate(startDate, timeframe).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }))}
                     </Text>
                 </View>
 
                 <View style={[styles.formGroup, {marginBottom: 16}]}>
-                    <Text style={styles.label}>Set a Target Amount {targetUnit}</Text>
+                    <Text style={styles.label}>{t("goals.set_target")} {targetUnit}</Text>
                     <View style={styles.inputContainer}>
                         <Ionicons name="scale-outline" size={20} color={colors.primary} />
                         <TextInput 
@@ -248,7 +244,7 @@ export default function AddGoalScreen() {
         )}
 
         <TouchableOpacity style={[styles.submitButton, (!selectedSubCategory || !target) && styles.submitButtonDisabled]} onPress={handleSubmit} disabled={!selectedSubCategory || !target || isLoading}>
-          {isLoading ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>Create Goal</Text>}
+          {isLoading ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>{t("goals.create_goal")}</Text>}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

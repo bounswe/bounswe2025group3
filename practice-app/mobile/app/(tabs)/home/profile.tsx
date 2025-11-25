@@ -1,11 +1,13 @@
 import { useColors } from '@/constants/colors';
-import { getUserProfile, getMyScore } from '@/api/functions';
+import { getUserProfile } from '@/api/user';
+import { getMyScore } from '@/api/waste';
 import { Feather } from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import { formatDateShort } from "@/i18n/utils";
 
 interface UserProfile {
   id: number;
@@ -27,6 +29,7 @@ export default function ProfileScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const colors = useColors();
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -95,30 +98,30 @@ export default function ProfileScreen() {
         <Image source={require("@/assets/images/kageaki.png")} style={styles.avatarContainer} />
           <Text style={styles.fullName}>{profile.first_name} {profile.last_name}</Text>
           <Text style={styles.username}>@{profile.username}</Text>
-          <Text style={styles.bio}>{profile.bio || "No bio available."}</Text>
+          <Text style={styles.bio}>{profile.bio || t("profile.no_bio")}</Text>
         </View>
 
         <View style={styles.statsContainer}>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{profile.score.toFixed(1)}</Text>
-            <Text style={styles.statLabel}>Total Points</Text>
+            <Text style={styles.statLabel}>{t("profile.total_points")}</Text>
           </View>
           <View style={styles.separator} />
           <View style={styles.statBox}>
-            <Text style={styles.statValueSecondary}>{new Date(profile.date_joined).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</Text>
-            <Text style={styles.statLabel}>Member Since</Text>
+            <Text style={styles.statValueSecondary}>{formatDateShort(profile.date_joined)}</Text>
+            <Text style={styles.statLabel}>{t("profile.member_since")}</Text>
           </View>
         </View>
         
         <TouchableOpacity style={styles.editButton} onPress={() => router.push('/edit_profile')}>
           <Feather name="edit" size={16} color={colors.text} />
-          <Text style={styles.editButtonText}>Edit Profile</Text>
+          <Text style={styles.editButtonText}>{t("profile.edit_profile")}</Text>
         </TouchableOpacity>
 
         <View style={styles.postsContainer}>
           <Feather name="grid" size={32} color={colors.textSecondary} />
-          <Text style={styles.postsPlaceholderTitle}>Your Posts</Text>
-          <Text style={styles.postsPlaceholderText}>Your forum posts will appear here soon.</Text>
+          <Text style={styles.postsPlaceholderTitle}>{t("profile.your_posts")}</Text>
+          <Text style={styles.postsPlaceholderText}>{t("profile.posts_placeholder")}</Text>
         </View>
 
       </ScrollView>

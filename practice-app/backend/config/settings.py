@@ -334,6 +334,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://ecochallenge.onrender.com',  # Production frontend
     'https://ecochallenge-backend.onrender.com',   # Production backend
     'null',                    # For local testing
+    'http://10.0.2.2:8000',    # Android Emulator
 ]
 
 # Allow credentials (cookies, authorization headers) to be sent with requests
@@ -371,4 +372,5 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'https://ecochallenge.onrender.com',
     'https://ecochallenge-backend.onrender.com',
+    'http://10.0.2.2:8000',
 ]

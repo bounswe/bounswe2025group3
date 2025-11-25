@@ -4,7 +4,8 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getUserProfile, updateUserProfile } from '@/api/functions';
+import { getUserProfile, updateUserProfile } from '@/api/user';
+import { useTranslation } from 'react-i18next';
 
 const FormInput = ({ label, value, onChangeText, ...props }: any) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -45,6 +46,7 @@ export default function EditProfileScreen() {
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
   const colors = useColors();
+  const { t } = useTranslation();
   
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -76,13 +78,13 @@ export default function EditProfileScreen() {
         }
       } catch (error) {
         console.error("Failed to fetch profile data", error);
-        Alert.alert("Error", "Failed to load profile data.");
+        Alert.alert(t("edit_profile.error_title"), t("edit_profile.load_error"));
       } finally {
         setIsLoading(false);
       }
     };
     fetchProfileData();
-  }, []);
+  }, [t]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -95,11 +97,11 @@ export default function EditProfileScreen() {
     };
     try {
       await updateUserProfile(profileData);
-      Alert.alert("Success", "Profile updated successfully!");
+      Alert.alert(t("edit_profile.success_title"), t("edit_profile.update_success"));
       router.back();
     } catch (error) {
       console.error("Failed to save profile", error);
-      Alert.alert("Error", "Failed to update profile. Please try again.");
+      Alert.alert(t("edit_profile.error_title"), t("edit_profile.update_error"));
     } finally {
       setIsSaving(false);
     }
@@ -116,23 +118,23 @@ export default function EditProfileScreen() {
           <TouchableOpacity onPress={() => router.back()} style={styles.headerButton}>
               <Ionicons name="chevron-back" size={26} color={colors.black} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Edit Profile</Text>
+          <Text style={styles.headerTitle}>{t("edit_profile.title")}</Text>
           <TouchableOpacity onPress={handleSave} style={styles.headerButton} disabled={isSaving}>
               {isSaving ? <ActivityIndicator size="small" /> : <Ionicons name="checkmark" size={26} color={colors.primary} />}
           </TouchableOpacity>
         </View>
         <ScrollView contentContainerStyle={styles.contentContainer} keyboardShouldPersistTaps= "always">
           <ImageBackground style={styles.avatarContainer} source={require("@/assets/images/kageaki.png")} resizeMode='contain'>
-              <TouchableOpacity onPress={() => Alert.alert("Coming Soon", "Profile picture uploads will be available in a future update.")}>
+              <TouchableOpacity onPress={() => Alert.alert(t("edit_profile.coming_soon"), t("edit_profile.profile_picture_message"))}>
                   <Ionicons name="camera-outline" size={32} color="white" style={styles.cameraIcon}/>
               </TouchableOpacity>
           </ImageBackground>
 
-          <FormInput label="First Name (Optional)" value={firstName} onChangeText={setFirstName} placeholder="Your first name" />
-          <FormInput label="Last Name (Optional)" value={lastName} onChangeText={setLastName} placeholder="Your last name" />
-          <FormInput label="Bio (Optional)" value={bio} onChangeText={setBio} placeholder="Tell us about yourself" multiline />
-          <FormInput label="City (Optional)" value={city} onChangeText={setCity} placeholder="Your city" />
-          <FormInput label="Country (Optional)" value={country} onChangeText={setCountry} placeholder="Your country" marginBottom={"40%"} />
+          <FormInput label={t("edit_profile.first_name")} value={firstName} onChangeText={setFirstName} placeholder={t("edit_profile.first_name_placeholder")} />
+          <FormInput label={t("edit_profile.last_name")} value={lastName} onChangeText={setLastName} placeholder={t("edit_profile.last_name_placeholder")} />
+          <FormInput label={t("edit_profile.bio")} value={bio} onChangeText={setBio} placeholder={t("edit_profile.bio_placeholder")} multiline />
+          <FormInput label={t("edit_profile.city")} value={city} onChangeText={setCity} placeholder={t("edit_profile.city_placeholder")} />
+          <FormInput label={t("edit_profile.country")} value={country} onChangeText={setCountry} placeholder={t("edit_profile.country_placeholder")} marginBottom={"40%"} />
         </ScrollView>
       </View>
     </SafeAreaView>

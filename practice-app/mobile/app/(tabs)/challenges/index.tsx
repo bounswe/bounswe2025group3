@@ -21,6 +21,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 
 type FilterValue = "all" | ChallengeStatus;
 
@@ -35,12 +36,7 @@ interface WasteSubCategory {
   category: number;
 }
 
-const filterOptions: { value: FilterValue; label: string }[] = [
-  { value: "all", label: "All challenges" },
-  { value: "active", label: "Active" },
-  { value: "upcoming", label: "Upcoming" },
-  { value: "past", label: "Past" },
-];
+// filterOptions will be created inside component to use translations
 
 const extractResults = <T,>(payload: any): T[] => {
   if (!payload) return [];
@@ -52,6 +48,7 @@ const extractResults = <T,>(payload: any): T[] => {
 export default function ChallengesScreen() {
   const colors = useColors();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<FilterValue>("all");
@@ -60,6 +57,13 @@ export default function ChallengesScreen() {
   const [error, setError] = useState<string | null>(null);
   const [categoryLabels, setCategoryLabels] = useState<Record<number, string>>({});
   const [subCategoryLabels, setSubCategoryLabels] = useState<Record<number, string>>({});
+
+  const filterOptions: { value: FilterValue; label: string }[] = [
+    { value: "all", label: t("challenges.all_challenges") },
+    { value: "active", label: t("challenges.active") },
+    { value: "upcoming", label: t("challenges.upcoming") },
+    { value: "past", label: t("challenges.past") },
+  ];
 
   const styles = useMemo(
     () =>
@@ -142,9 +146,9 @@ export default function ChallengesScreen() {
       if (challenge.target_category && categoryLabels[challenge.target_category]) {
         return categoryLabels[challenge.target_category];
       }
-      return "General impact";
+      return t("challenges.general_impact");
     },
-    [categoryLabels, subCategoryLabels]
+    [categoryLabels, subCategoryLabels, t]
   );
 
   const loadChallenges = useCallback(
@@ -190,14 +194,14 @@ export default function ChallengesScreen() {
       } catch (fetchError) {
         console.error("Failed to fetch challenges:", fetchError);
         setError(
-          fetchError instanceof Error ? fetchError.message : "Failed to load challenges."
+          fetchError instanceof Error ? fetchError.message : t("challenges.load_error")
         );
       } finally {
         setIsLoading(false);
         setIsRefreshing(false);
       }
     },
-    []
+    [t]
   );
 
   useFocusEffect(
@@ -249,17 +253,17 @@ export default function ChallengesScreen() {
             params: { id: item.challenge.id.toString() },
           })
         }
-        actionLabel="View details"
+        actionLabel={t("challenges.view_details")}
       />
     ),
-    [router, getTargetLabel]
+    [router, getTargetLabel, t]
   );
 
   const listHeader = (
     <View style={styles.screenIntro}>
-      <Text style={styles.headerTitle}>Take on eco challenges</Text>
+      <Text style={styles.headerTitle}>{t("challenges.intro_title")}</Text>
       <Text style={styles.helperText}>
-        Join themed challenges to earn points, compete with others, and build lasting habits.
+        {t("challenges.intro_description")}
       </Text>
 
       <View style={styles.filterBar}>
@@ -316,8 +320,8 @@ export default function ChallengesScreen() {
             resizeMode="contain"
           />
           <View>
-            <Text style={styles.headerTitle}>Challenges</Text>
-            <Text style={styles.headerSubtitle}>Explore, join, and make an impact</Text>
+            <Text style={styles.headerTitle}>{t("challenges.title")}</Text>
+            <Text style={styles.headerSubtitle}>{t("challenges.subtitle")}</Text>
           </View>
         </View>
       </View>
@@ -332,9 +336,9 @@ export default function ChallengesScreen() {
           !isLoading && !error ? (
             <View style={styles.emptyState}>
               <Text style={styles.emptyIcon}>🌿</Text>
-              <Text style={styles.emptyTitle}>No challenges yet</Text>
+              <Text style={styles.emptyTitle}>{t("challenges.no_challenges")}</Text>
               <Text style={styles.emptyText}>
-                Check back soon for new sustainability challenges curated by the community.
+                {t("challenges.no_challenges_message")}
               </Text>
             </View>
           ) : null

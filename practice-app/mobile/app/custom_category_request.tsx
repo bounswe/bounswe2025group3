@@ -6,14 +6,15 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { API_ENDPOINTS } from '@/constants/api';
+import { useTranslation } from 'react-i18next';
 
-const CustomAlert = ({ visible, title, message, type, onClose }: any) => {
+const CustomAlert = ({ visible, title, message, type, onClose, t }: any) => {
     if (!visible) return null;
     return (
         <View style={{ position: 'absolute', top: 50, left: 20, right: 20, padding: 20, backgroundColor: type === 'success' ? 'green' : 'red', borderRadius: 10 }}>
             <Text style={{ color: 'white', fontWeight: 'bold' }}>{title}</Text>
             <Text style={{ color: 'white' }}>{message}</Text>
-            <TouchableOpacity onPress={onClose}><Text style={{ color: 'white', marginTop: 10 }}>Close</Text></TouchableOpacity>
+            <TouchableOpacity onPress={onClose}><Text style={{ color: 'white', marginTop: 10 }}>{t("category_request.close")}</Text></TouchableOpacity>
         </View>
     );
 };
@@ -29,6 +30,7 @@ export default function CustomCategoryRequestScreen() {
   const [alertType, setAlertType] = useState<'success' | 'error'>('error');
   const router = useRouter();
   const colors = useColors();
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -58,7 +60,7 @@ export default function CustomCategoryRequestScreen() {
 
   const handleSubmit = async () => {
     if (!name || !unit) {
-      showAlert('Error', 'Please fill in all required fields');
+      showAlert(t("category_request.error_title"), t("category_request.missing_fields"));
       return;
     }
 
@@ -77,16 +79,16 @@ export default function CustomCategoryRequestScreen() {
       });
 
       if (response.ok) {
-        showAlert('Success', 'Category request submitted successfully', 'success');
+        showAlert(t("category_request.success_title"), t("category_request.request_submitted"), 'success');
         setTimeout(() => {
           router.back();
         }, 1500);
       } else {
         const error = await response.json();
-        showAlert('Error', error.detail || 'Failed to submit category request');
+        showAlert(t("category_request.error_title"), error.detail || t("category_request.submit_error"));
       }
     } catch (error) {
-      showAlert('Error', 'Failed to submit category request');
+      showAlert(t("category_request.error_title"), t("category_request.submit_error"));
     } finally {
       setIsLoading(false);
     }
@@ -101,7 +103,7 @@ export default function CustomCategoryRequestScreen() {
         >
           <Ionicons name="arrow-back" size={24} color={colors.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Request New Category</Text>
+        <Text style={styles.headerTitle}>{t("category_request.title")}</Text>
         <View style={styles.headerSpacer} />
       </View>
 
@@ -110,28 +112,28 @@ export default function CustomCategoryRequestScreen() {
             <View style={styles.infoBox}>
               <Ionicons name="information-circle-outline" size={24} color={colors.primary} />
               <Text style={styles.infoText}>
-                Can't find the waste category you're looking for? Request a new one and our team will review it.
+                {t("category_request.info_message")}
               </Text>
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Category Name *</Text>
+              <Text style={styles.label}>{t("category_request.category_name")}</Text>
               <TextInput
                 style={styles.input}
                 value={name}
                 onChangeText={setName}
-                placeholder="e.g., Electronic Waste"
+                placeholder={t("category_request.category_name_placeholder")}
                 placeholderTextColor="#666"
               />
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Description (Optional)</Text>
+              <Text style={styles.label}>{t("category_request.description")}</Text>
               <TextInput
                 style={[styles.input, styles.textArea]}
                 value={description}
                 onChangeText={setDescription}
-                placeholder="Describe this waste category..."
+                placeholder={t("category_request.description_placeholder")}
                 placeholderTextColor="#666"
                 multiline
                 numberOfLines={4}
@@ -140,12 +142,12 @@ export default function CustomCategoryRequestScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Unit of Measurement *</Text>
+              <Text style={styles.label}>{t("category_request.unit")}</Text>
               <TextInput
                 style={styles.input}
                 value={unit}
                 onChangeText={setUnit}
-                placeholder="e.g., kg, pieces, liters"
+                placeholder={t("category_request.unit_placeholder")}
                 placeholderTextColor="#666"
               />
             </View>
@@ -159,7 +161,7 @@ export default function CustomCategoryRequestScreen() {
               disabled={!name || !unit || isLoading}
             >
               <Text style={styles.submitButtonText}>
-                {isLoading ? 'Submitting...' : 'Submit Request'}
+                {isLoading ? t("category_request.submitting") : t("category_request.submit_request")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -171,6 +173,7 @@ export default function CustomCategoryRequestScreen() {
         message={alertMessage}
         type={alertType}
         onClose={() => setAlertVisible(false)}
+        t={t}
       />
     </SafeAreaView>
   );
