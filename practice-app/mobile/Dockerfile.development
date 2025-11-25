@@ -1,0 +1,54 @@
+# ==============================================================================
+# Development Dockerfile for Mobile Application
+# ==============================================================================
+# This Dockerfile sets up a development environment with Metro bundler
+# for rapid development with hot reloading.
+#
+# Usage:
+#   docker build -f Dockerfile.development -t mobile-app-dev .
+#   docker run -p 8081:8081 -v $(pwd):/app mobile-app-dev
+# ==============================================================================
+
+FROM node:20-slim
+
+# Prevent interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# ==============================================================================
+# SYSTEM DEPENDENCIES
+# ==============================================================================
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# ==============================================================================
+# APPLICATION SETUP
+# ==============================================================================
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install --legacy-peer-deps
+
+# Copy application code
+# Note: In development, this will be overridden by volume mount
+COPY . .
+
+# ==============================================================================
+# DEVELOPMENT CONFIGURATION
+# ==============================================================================
+
+# Expose Metro bundler port
+EXPOSE 8081
+
+# Expose Expo DevTools port
+EXPOSE 19000 19001 19002
+
+# Set environment to development
+ENV NODE_ENV=development
+
+# Default command: Start Metro bundler
+CMD ["npm", "start"]
