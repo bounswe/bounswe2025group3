@@ -1,11 +1,13 @@
 import { useColors } from '@/constants/colors';
-import tokenManager from '@/services/tokenManager';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getSubcategories,getUserProfile, getGoalTemplates } from '@/api/functions';
+import { getSubcategories } from '@/api/waste';
+import { getUserProfile } from '@/api/user';
+import { getGoalTemplates, createGoalFromTemplate, GoalTemplate } from '@/api/goals';
+import { useTranslation } from 'react-i18next';
 
 interface UserProfile {
   id: number;
@@ -14,14 +16,6 @@ interface SubCategory {
   id: number;
   name: string;
   unit: string;
-}
-interface GoalTemplate { 
-  id: number; 
-  name: string; 
-  description: string; 
-  category_name: string; 
-  target: number; 
-  timeframe: string; 
 }
 
 export default function GoalTemplatesScreen() {
@@ -32,6 +26,7 @@ export default function GoalTemplatesScreen() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
   const colors = useColors();
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -81,35 +76,22 @@ export default function GoalTemplatesScreen() {
     setCreatingId(template.id);
     const subcategory = subcategories.find(sub => sub.name === template.category_name);
     if (!subcategory || !userProfile) {
-      Alert.alert('Error', 'Required user or category data is missing. Cannot create goal.');
+      Alert.alert(t("waste.error_title"), t("goals.template_error"));
       setCreatingId(null);
       return;
     }
 
-    const requestBody = {
-      user: userProfile.id,
-      category_id: subcategory.id,
-      timeframe: template.timeframe,
-      target: template.target,
-      start_date: new Date().toISOString().split('T')[0],
-    };
-
     try {
-      const response = await tokenManager.authenticatedFetch(`/api/v1/goals/goals/api-template/${template.id}/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
+      await createGoalFromTemplate(template.id, {
+        user: userProfile.id,
+        start_date: new Date().toISOString().split('T')[0],
       });
-
-      if (response.ok) {
-        Alert.alert('Success', 'Goal created successfully from the template!');
-        router.back();
-      } else {
-        const errorData = await response.json();
-        Alert.alert('Error', errorData.detail || 'Failed to create goal.');
-      }
+      Alert.alert(t("waste.success_title"), t("goals.template_success"));
+      router.back();
     } catch (error) {
-      Alert.alert('Error', 'An unexpected error occurred.');
+      console.error('Error creating goal from template:', error);
+      const errorMessage = error instanceof Error ? error.message : t("goals.template_create_error");
+      Alert.alert(t("waste.error_title"), errorMessage);
     } finally {
       setCreatingId(null);
     }
@@ -149,7 +131,7 @@ export default function GoalTemplatesScreen() {
           {creatingId === item.id ? (
             <ActivityIndicator size="small" color="white" />
           ) : (
-            <Text style={styles.createButtonText}>Use This Template</Text>
+            <Text style={styles.createButtonText}>{t("goals.use_template")}</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -166,15 +148,15 @@ export default function GoalTemplatesScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.headerButton}>
           <Ionicons name="arrow-back" size={24} color={colors.primary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Goal Templates</Text>
+        <Text style={styles.headerTitle}>{t("goals.goal_templates")}</Text>
         <View style={styles.placeholder} />
       </View>
 
       {templates.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Ionicons name="file-tray-outline" size={64} color={colors.primary} />
-          <Text style={styles.emptyTitle}>No Templates Found</Text>
-          <Text style={styles.emptyText}>There are currently no goal templates available.</Text>
+          <Text style={styles.emptyTitle}>{t("goals.no_templates_found")}</Text>
+          <Text style={styles.emptyText}>{t("goals.no_templates_message")}</Text>
         </View>
       ) : (
         <FlatList 

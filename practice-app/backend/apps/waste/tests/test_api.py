@@ -37,19 +37,19 @@ def subcategory(waste_category):
 class TestWasteAPI:
     
     def test_list_categories(self, api_client, waste_category):
-        url = reverse('waste-category-list')
+        url = reverse('waste:waste-category-list')
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) >= 1
     
     def test_list_subcategories(self, api_client, subcategory):
-        url = reverse('subcategory-list')
+        url = reverse('waste:subcategory-list')
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) >= 1
     
     def test_create_waste_log(self, api_client, subcategory, user):
-        url = reverse('waste-log-list-create')
+        url = reverse('waste:waste-log-list-create')
         data = {
             'sub_category': subcategory.id,
             'quantity': 3,
@@ -65,7 +65,7 @@ class TestWasteAPI:
         assert log.user == user
     
     def test_create_custom_category_request(self, api_client, waste_category, user):
-        url = reverse('custom-category-request-create')
+        url = reverse('waste:custom-category-request-create')
         data = {
             'name': 'Test Custom Subcategory',
             'description': 'A custom subcategory for testing.',
@@ -91,7 +91,7 @@ class TestWasteLogFiltering:
         log2 = WasteLogFactory(user=user, disposal_date='2024-02-15')
         log3 = WasteLogFactory(user=user, disposal_date='2024-03-20')
         
-        url = reverse('waste-log-list-create')
+        url = reverse('waste:waste-log-list-create')
         
         # Test 1: Get all logs without filtering
         response = api_client.get(url)

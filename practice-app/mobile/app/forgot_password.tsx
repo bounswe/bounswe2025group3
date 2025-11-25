@@ -3,10 +3,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useTranslation } from "react-i18next";
 
 export default function ForgotPasswordScreen(){
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const { t } = useTranslation();
 
   const validateEmail = (text: string): boolean => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,11 +42,11 @@ export default function ForgotPasswordScreen(){
       </TouchableOpacity>
       <View style={styles.container}>
       
-      <Text style={styles.title}>Forgot Your Password?</Text>
-      <Text style={styles.title2}>No worries! Enter your email address below, and we'll send you a link to reset your password.</Text>
+      <Text style={styles.title}>{t("forgot_password.title")}</Text>
+      <Text style={styles.title2}>{t("forgot_password.description")}</Text>
 
       <TextInput
-        placeholder="Email Adress"
+        placeholder={t("forgot_password.email_address")}
         placeholderTextColor="#10A674"
         cursorColor="#10A674"
         style={styles.input}
@@ -61,17 +63,17 @@ export default function ForgotPasswordScreen(){
         onPress={handleSendResetLinkPress}
       >
         <Text style={{ color: isButtonEnabled ? '#fff' : '#595C5C', fontWeight: 'bold' }}>
-          Send Reset Link
+          {t("forgot_password.send_reset_link")}
         </Text>
       </TouchableOpacity>
 
       <View style={{ flexDirection: "row", marginTop: "8%" }}>
-        <Text style={{ color: "#595C5C" }}>Remember your password? </Text>
+        <Text style={{ color: "#595C5C" }}>{t("forgot_password.remember_password")} </Text>
         <Text
           style={{ fontWeight: "bold", color: "#10632C", borderBottomWidth: 2, borderBottomColor: "#10632C" }}
           onPress={handleLoginPress}
         >
-          Log in
+          {t("forgot_password.log_in_link")}
         </Text>
       </View>
     </View>
@@ -112,14 +114,6 @@ const styles = StyleSheet.create({
       marginBottom: "6%",
       alignSelf: "center",
       marginLeft: "5%",
-    },
-  
-    texts: {
-      fontSize: 16,
-      color: "#838387",
-      marginLeft: "5%",
-      alignSelf: "flex-start",
-      marginBottom: "10%"
     },
   
     input: {

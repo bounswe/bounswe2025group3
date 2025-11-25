@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 interface CustomAlertProps {
   visible: boolean;
@@ -16,16 +17,6 @@ interface CustomAlertProps {
   message: string;
   confirmText: string;
 }
-
-const CustomAlert: React.FC<CustomAlertProps> = ({
-  visible,
-  onClose,
-  onConfirm,
-  title,
-  message,
-  confirmText,
-}) => {
-  const colors = useColors();
 
   const styles = StyleSheet.create({
     overlay: {
@@ -37,7 +28,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'rgba(0, 0, 0, 0.4)',
-      zIndex: 9999, // en önde göster
+      zIndex: 9999,
     },
     modalView: {
       backgroundColor: 'white',
@@ -91,17 +82,27 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
       fontWeight: '500',
     },
     textStyleConfirm: {
-      color: colors.error,
       fontSize: 16,
       fontWeight: '500',
     },
   });
+
+const CustomAlert: React.FC<CustomAlertProps> = ({
+  visible,
+  onClose,
+  onConfirm,
+  title,
+  message,
+  confirmText,
+}) => {
+  const colors = useColors();
+  const { t } = useTranslation();
   
   if (!visible) return null;
 
   return (
     <View style={styles.overlay}>
-      <Pressable style={StyleSheet.absoluteFill}/>
+      <Pressable style={StyleSheet.absoluteFill} />
 
       <View style={styles.modalView}>
         <View style={styles.contentContainer}>
@@ -114,14 +115,14 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
             style={[styles.actionButton, styles.leftActionButton]}
             onPress={onClose}
             activeOpacity={0.7}>
-            <Text style={styles.textStyleCancel}>Cancel</Text>
+            <Text style={styles.textStyleCancel}>{t('common.cancel')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.actionButton}
             onPress={onConfirm}
             activeOpacity={0.7}>
-            <Text style={styles.textStyleConfirm}>{confirmText}</Text>
+            <Text style={[styles.textStyleConfirm, { color: colors.error }]}>{confirmText}</Text>
           </TouchableOpacity>
         </View>
       </View>

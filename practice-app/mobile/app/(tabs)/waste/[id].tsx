@@ -13,8 +13,11 @@ import {
     View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { WasteLog, deleteWasteLog, getWasteLogById, updateWasteLog } from '@/api/functions';
+import { WasteLog, deleteWasteLog, getWasteLogById, updateWasteLog } from '@/api/waste';
 import { useAlert } from '@/hooks/alertContext';
+import { useTranslation } from 'react-i18next';
+import { formatDateShort } from "@/i18n/utils";
+import { Image } from 'expo-image';
 
 export default function WasteLogDetailsScreen() {
     const { id } = useLocalSearchParams();
@@ -27,6 +30,7 @@ export default function WasteLogDetailsScreen() {
     const router = useRouter();
     const colors = useColors();
     const { showAlert, hideAlert, isVisible } = useAlert();
+    const { t } = useTranslation();
 
     const styles = StyleSheet.create({
         container: { flex: 1, backgroundColor: colors.background },
@@ -75,6 +79,8 @@ export default function WasteLogDetailsScreen() {
         saveButtonText: { color: 'white', fontWeight: 'bold' },
         cancelButton: { backgroundColor: colors.borders, },
         cancelButtonText: { color: colors.text, fontWeight: 'bold' },
+        imageContainer: { marginTop: 16, borderRadius: 12, overflow: 'hidden', height: 200, width: '100%', backgroundColor: colors.cb2 },
+        logImage: { width: '100%', height: '100%' },
     });
 
     useEffect(() => {
@@ -105,7 +111,7 @@ export default function WasteLogDetailsScreen() {
             setEditedDisposalDate(data.disposal_date || '');
         } catch (error) {
             console.error('Error fetching waste log details:', error);
-            showAlert({ title: 'Error', message: 'Failed to fetch log details.', confirmText: 'OK' });
+            showAlert({ title: t("waste.error_title"), message: t("waste.fetch_details_error"), confirmText: t("waste.ok") });
         } finally {
             setIsLoading(false);
         }
@@ -118,7 +124,7 @@ export default function WasteLogDetailsScreen() {
             await deleteWasteLog(Number(id));
             router.back();
         } catch (error) {
-            showAlert({ title: 'Error', message: 'Failed to delete waste log.', confirmText: 'OK' });
+            showAlert({ title: t("waste.error_title"), message: t("waste.delete_log_error"), confirmText: t("waste.ok") });
         } finally {
             setIsLoading(false);
         }
@@ -126,9 +132,9 @@ export default function WasteLogDetailsScreen() {
 
     const showDeleteConfirmation = () => {
         showAlert({
-            title: 'Delete Log',
-            message: 'Are you sure you want to delete this log entry?',
-            confirmText: 'Delete',
+            title: t("waste.delete_log_title"),
+            message: t("waste.delete_log_message"),
+            confirmText: t("waste.delete"),
             onConfirm: confirmDelete,
         });
     };
@@ -141,11 +147,11 @@ export default function WasteLogDetailsScreen() {
                 disposal_location: editedLocation || undefined,
                 disposal_date: editedDisposalDate || undefined,
             });
-            showAlert({ title: 'Success', message: 'Waste log updated successfully.', confirmText: 'OK' });
+            showAlert({ title: t("waste.success_title"), message: t("waste.update_success"), confirmText: t("waste.ok") });
             setIsEditing(false);
             fetchLogDetails();
         } catch (error) {
-            showAlert({ title: 'Error', message: 'Failed to update waste log.', confirmText: 'OK' });
+            showAlert({ title: t("waste.error_title"), message: t("waste.update_error"), confirmText: t("waste.ok") });
         } finally {
             setIsLoading(false);
         }
@@ -175,11 +181,11 @@ export default function WasteLogDetailsScreen() {
                     <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
                         <Ionicons name="arrow-back" size={24} color={colors.text} />
                     </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Details</Text>
+                    <Text style={styles.headerTitle}>{t("waste.details")}</Text>
                     <View style={styles.headerSpacer} />
                 </View>
                 <View style={styles.loadingContainer}>
-                    <Text>Waste log not found</Text>
+                    <Text>{t("waste.log_not_found")}</Text>
                 </View>
             </SafeAreaView>
         );
@@ -191,39 +197,45 @@ export default function WasteLogDetailsScreen() {
                 <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
                     <Ionicons name="arrow-back" size={24} color={colors.text} />
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Log Details</Text>
+                <Text style={styles.headerTitle}>{t("waste.log_details")}</Text>
                 <View style={styles.headerSpacer} />
             </View>
             <ScrollView contentContainerStyle={styles.content}>
                 <View style={styles.card}>
                     <View style={styles.cardHeader}>
                         <Text style={styles.title}>{log.sub_category_name}</Text>
-                        <Text style={styles.score}>+{log.score} pts</Text>
+                        <Text style={styles.score}>+{log.score} {t("leaderboard.pts")}</Text>
                     </View>
 
                     <View style={styles.details}>
                         <View style={styles.detailRow}>
-                            <View style={styles.labelContainer}><Ionicons name="scale-outline" size={20} color={colors.textSecondary} /><Text style={styles.label}>Quantity</Text></View>
+                            <View style={styles.labelContainer}><Ionicons name="scale-outline" size={20} color={colors.textSecondary} /><Text style={styles.label}>{t("waste.quantity_label")}</Text></View>
                             {isEditing ? (<TextInput style={styles.input} value={editedQuantity} onChangeText={setEditedQuantity} keyboardType="decimal-pad" />)
                                 : (<Text style={styles.value}>{log.quantity} {log.unit}</Text>)}
                         </View>
 
                         <View style={styles.detailRow}>
-                            <View style={styles.labelContainer}><Ionicons name="calendar-outline" size={20} color={colors.textSecondary} /><Text style={styles.label}>Date Logged</Text></View>
-                            <Text style={styles.value}>{new Date(log.date_logged).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</Text>
+                            <View style={styles.labelContainer}><Ionicons name="calendar-outline" size={20} color={colors.textSecondary} /><Text style={styles.label}>{t("waste.date_logged")}</Text></View>
+                            <Text style={styles.value}>{formatDateShort(log.date_logged)}</Text>
                         </View>
 
                         <View style={styles.detailRow}>
-                            <View style={styles.labelContainer}><Ionicons name="checkmark-circle-outline" size={20} color={colors.textSecondary} /><Text style={styles.label}>Disposal Date</Text></View>
+                            <View style={styles.labelContainer}><Ionicons name="checkmark-circle-outline" size={20} color={colors.textSecondary} /><Text style={styles.label}>{t("waste.disposal_date")}</Text></View>
                             {isEditing ? (<TextInput style={styles.input} value={editedDisposalDate} onChangeText={setEditedDisposalDate} placeholder="YYYY-MM-DD" />)
-                                : (<Text style={styles.value}>{log.disposal_date ? new Date(log.disposal_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Not specified'}</Text>)}
+                                : (<Text style={styles.value}>{log.disposal_date ? formatDateShort(log.disposal_date) : t("waste.not_specified")}</Text>)}
                         </View>
 
                         <View style={styles.detailRow}>
-                            <View style={styles.labelContainer}><Ionicons name="location-outline" size={20} color={colors.textSecondary} /><Text style={styles.label}>Location</Text></View>
+                            <View style={styles.labelContainer}><Ionicons name="location-outline" size={20} color={colors.textSecondary} /><Text style={styles.label}>{t("waste.location")}</Text></View>
                             {isEditing ? (<TextInput style={styles.input} value={editedLocation} onChangeText={setEditedLocation} />)
-                                : (<Text style={styles.value}>{log.disposal_location || 'Not specified'}</Text>)}
+                                : (<Text style={styles.value}>{log.disposal_location || t("waste.not_specified")}</Text>)}
                         </View>
+
+                        {log.disposal_photo && (
+                            <View style={styles.imageContainer}>
+                                <Image source={{ uri: log.disposal_photo }} style={styles.logImage} contentFit="cover" />
+                            </View>
+                        )}
                     </View>
                 </View>
 
@@ -231,21 +243,21 @@ export default function WasteLogDetailsScreen() {
                     {isEditing ? (
                         <>
                             <TouchableOpacity style={[styles.actionButton, styles.cancelButton]} onPress={handleCancel}>
-                                <Text style={styles.cancelButtonText}>Cancel</Text>
+                                <Text style={styles.cancelButtonText}>{t("waste.cancel")}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.actionButton, styles.saveButton]} onPress={handleSave} disabled={isLoading}>
-                                {isLoading ? <ActivityIndicator color="white" /> : <Text style={styles.saveButtonText}>Save Changes</Text>}
+                                {isLoading ? <ActivityIndicator color="white" /> : <Text style={styles.saveButtonText}>{t("waste.save_changes")}</Text>}
                             </TouchableOpacity>
                         </>
                     ) : (
                         <>
                             <TouchableOpacity style={[styles.actionButton, styles.deleteButton]} onPress={showDeleteConfirmation}>
                                 <Ionicons name="trash-outline" size={20} color={colors.error} />
-                                <Text style={styles.deleteButtonText}>Delete</Text>
+                                <Text style={styles.deleteButtonText}>{t("waste.delete")}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={[styles.actionButton, styles.editButton]} onPress={() => setIsEditing(true)}>
                                 <Ionicons name="pencil-outline" size={20} color={colors.primary} />
-                                <Text style={styles.editButtonText}>Edit</Text>
+                                <Text style={styles.editButtonText}>{t("waste.edit")}</Text>
                             </TouchableOpacity>
                         </>
                     )}

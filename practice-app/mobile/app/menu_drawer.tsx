@@ -1,4 +1,4 @@
-import { getUserProfile } from "@/api/functions";
+import { getUserProfile, type UserProfile as APIUserProfile } from "@/api/user";
 import CustomAlert from "@/components/ui/custom-alert";
 import { useColors } from "@/constants/colors";
 import { useSession } from "@/hooks/authContext";
@@ -17,22 +17,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const { width } = Dimensions.get("window");
 
-interface UserProfile {
-  id: number;
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  bio: string;
-  city: string;
-  country: string;
+type UserProfile = APIUserProfile & {
   role: "USER" | "MODERATOR" | "ADMIN";
-  date_joined: string;
-  notifications_enabled: boolean;
-}
+};
 
 interface LeaderboardUser {
   id: number;
@@ -82,6 +73,7 @@ export default function MenuDrawerScreen() {
   const [AlertVisible, setAlertVisible] = useState(false);
   const { userRole, signOut } = useSession();
   const colors = useColors();
+  const { t } = useTranslation();
 
   const styles = StyleSheet.create({
     overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(0, 0, 0, 0.5)", zIndex: 999 },
@@ -104,11 +96,13 @@ export default function MenuDrawerScreen() {
     accountAge,
     userId,
     userRank,
+    t,
   }: {
     role: "USER" | "MODERATOR" | "ADMIN";
     accountAge?: string;
     userId?: number;
     userRank?: number | null;
+    t: any;
   }) => {
     const getRoleColors = (roleName: string) => {
       switch (roleName) {
@@ -191,7 +185,7 @@ export default function MenuDrawerScreen() {
         {accountAge && (
           <View style={styles.accountAgeContainer}>
             <Ionicons name="calendar-outline" size={14} color="#555" />
-            <Text style={styles.accountAgeText}>Account age: {accountAge}</Text>
+            <Text style={styles.accountAgeText}>{t("menu_drawer.account_age", { age: accountAge })}</Text>
           </View>
         )}
       </View>
@@ -199,7 +193,6 @@ export default function MenuDrawerScreen() {
   };
 
   const handleLogout = async () => {
-    await tokenManager.clearTokens();
     signOut();
   };
 
@@ -223,7 +216,7 @@ export default function MenuDrawerScreen() {
         ]);
 
         if (profile) {
-            setUserProfile(profile);
+            setUserProfile(profile as UserProfile);
             if (leaderboardData && leaderboardData.length > 0) {
                 const userIndex = leaderboardData.findIndex(user => user.id === profile.id);
                 if (userIndex !== -1) {
@@ -278,13 +271,14 @@ export default function MenuDrawerScreen() {
       <Animated.View style={[styles.drawer, { transform: [{ translateX }] }]}>
         <View style={styles.profileSection}>
           <Image source={require("@/assets/images/kageaki.png")} style={styles.avatar} />
-          <Text style={styles.username}>{isLoading ? "Loading..." : userProfile?.username || "User"}</Text>
+          <Text style={styles.username}>{isLoading ? t("menu_drawer.loading") : userProfile?.username || t("menu_drawer.user")}</Text>
           {userProfile?.role && (
             <RoleBadge
               role={userProfile.role}
               accountAge={userProfile.date_joined ? calculateAccountAge(userProfile.date_joined) : undefined}
               userId={userProfile.id}
               userRank={userRank}
+              t={t}
             />
           )}
         </View>
@@ -294,21 +288,21 @@ export default function MenuDrawerScreen() {
         <TouchableOpacity style={styles.menuButton} onPress={() => router.replace("/(tabs)/home/achievements")}>
           <View style={styles.menuButtonContent}>
             <Ionicons name="trophy" size={20} color={colors.black} />
-            <Text style={styles.menuText}>Achievements</Text>
+            <Text style={styles.menuText}>{t("menu_drawer.achievements")}</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.menuButton} onPress={() => router.replace("/(tabs)/home/profile")}>
           <View style={styles.menuButtonContent}>
             <Ionicons name="person" size={20} color={colors.black} />
-            <Text style={styles.menuText}>Profile</Text>
+            <Text style={styles.menuText}>{t("menu_drawer.profile")}</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.menuButton} onPress={() => router.replace("/settings")}>
           <View style={styles.menuButtonContent}>
             <Ionicons name="settings" size={20} color={colors.black} />
-            <Text style={styles.menuText}>Settings</Text>
+            <Text style={styles.menuText}>{t("menu_drawer.settings")}</Text>
           </View>
         </TouchableOpacity>
 
@@ -319,7 +313,7 @@ export default function MenuDrawerScreen() {
           >
             <View style={styles.menuButtonContent}>
               <Ionicons name="construct" size={20} color="#F89707" />
-              <Text style={{ color: "#F89707" }}>Admin Page</Text>
+              <Text style={{ color: "#F89707" }}>{t("menu_drawer.admin_page")}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -327,7 +321,7 @@ export default function MenuDrawerScreen() {
         <TouchableOpacity style={[styles.menuButton, { marginTop: "auto", marginBottom: "25%" }]} onPress={() => setAlertVisible(true)}>
           <View style={styles.menuButtonContent}>
             <Ionicons name="log-out" size={20} color={colors.error} />
-            <Text style={[styles.menuText, { color: colors.error }]}>Logout</Text>
+            <Text style={[styles.menuText, { color: colors.error }]}>{t("menu_drawer.logout")}</Text>
           </View>
         </TouchableOpacity>
       </Animated.View>
@@ -336,9 +330,9 @@ export default function MenuDrawerScreen() {
         visible={AlertVisible}
         onClose={() => setAlertVisible(false)}
         onConfirm={handleLogout}
-        title="Logout"
-        message="Are you sure you want to logout?"
-        confirmText="Logout"
+        title={t("menu_drawer.logout_title")}
+        message={t("menu_drawer.logout_message")}
+        confirmText={t("menu_drawer.logout_confirm")}
       />
     </View>
   );

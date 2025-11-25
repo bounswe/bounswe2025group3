@@ -5,6 +5,7 @@ import { Stack, usePathname } from 'expo-router';
 import React, { useEffect } from 'react';
 import * as NavigationBar from 'expo-navigation-bar';
 import { AlertProvider } from '@/hooks/alertContext';
+import "@/i18n";
 
 export default function Root() {
   return (
@@ -42,6 +43,7 @@ function RootLayout() {
     <Stack screenOptions={{ headerShown: false}}>
       <Stack.Protected guard={!!session}>
         <Stack.Screen name="(tabs)" options={{ animation: 'none', statusBarStyle: "dark"}} />
+        <Stack.Screen name="events" options={{ animation: 'none', statusBarStyle: "dark"}} />
         <Stack.Screen
           name="menu_drawer"
           options={{

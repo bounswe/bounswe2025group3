@@ -9,7 +9,7 @@ export const API_ENDPOINTS = {
     VERIFY: '/api/token/verify/',
     PASSWORD_CHANGE: '/api/auth/password/change/',
     PASSWORD_RESET: '/api/auth/password/reset/',
-    PASSWORD_RESET_CONFIRM: (uid: string, token: string) => 
+    PASSWORD_RESET_CONFIRM: (uid: string, token: string) =>
       `/api/auth/password/reset/confirm/${uid}/${token}/`,
     TEST_PROTECTED: '/api/auth/test-protected/',
   },
@@ -34,9 +34,9 @@ export const API_ENDPOINTS = {
     SUSTAINABLE_ACTIONS: '/api/v1/waste/sustainable-actions/',
     ADMIN: {
       CATEGORY_REQUESTS: '/api/v1/waste/admin/categories/requests/',
-      APPROVE_CATEGORY_REQUEST: (id: number) => 
+      APPROVE_CATEGORY_REQUEST: (id: number) =>
         `/api/v1/waste/admin/categories/requests/${id}/approve/`,
-      REJECT_CATEGORY_REQUEST: (id: number) => 
+      REJECT_CATEGORY_REQUEST: (id: number) =>
         `/api/v1/waste/admin/categories/requests/${id}/reject/`,
     },
   },
@@ -45,7 +45,7 @@ export const API_ENDPOINTS = {
     LIST: '/api/v1/goals/goals/',
     BY_ID: (id: string) => `/api/v1/goals/goals/${id}/`,
     CREATE: '/api/v1/goals/goals/',
-    CREATE_FROM_TEMPLATE: (templateId: number) => 
+    CREATE_FROM_TEMPLATE: (templateId: number) =>
       `/api/v1/goals/goals/api-template/${templateId}/`,
     TEMPLATES: '/api/v1/goals/templates/',
   },
@@ -55,5 +55,13 @@ export const API_ENDPOINTS = {
     DETAIL: (id: number) => `/v1/challenges/api/v1/challenges/${id}/`,
     JOIN: (id: number) => `/v1/challenges/api/v1/challenges/${id}/join/`,
     LEAVE: (id: number) => `/v1/challenges/api/v1/challenges/${id}/leave/`,
+  },
+
+  EVENTS: {
+    LIST: '/api/v1/events/events/',
+    BY_ID: (id: number) => `/api/v1/events/events/${id}/`,
+    CREATE: '/api/v1/events/events/',
+    LIKE: (id: number) => `/api/v1/events/events/${id}/like/`,
+    PARTICIPATE: (id: number) => `/api/v1/events/events/${id}/participate/`,
   },
 };
