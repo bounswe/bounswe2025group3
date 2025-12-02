@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from apps.events.models import Event
+from django.conf import settings
 
 class EventSerializer(serializers.ModelSerializer):
     creator_username = serializers.ReadOnlyField(source='creator.username')
@@ -18,6 +19,31 @@ class EventSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at'
         ]
         read_only_fields = ['creator', 'creator_username', 'participants_count', 'likes_count', 'created_at', 'updated_at']
+
+    ## BLACKLISTED WORDS VALIDATION ##
+    def validate(self, data):
+        title = data.get("title", "")
+        description = data.get("description", "")
+
+        banned = getattr(settings, "BLACKLISTED_WORDS", [])
+
+        lower_title = title.lower()
+        lower_desc = description.lower()
+
+        for word in banned:
+            w = word.lower()
+
+            if w in lower_title:
+                raise serializers.ValidationError({
+                    "title": f"Title contains banned word: '{word}'"
+                })
+
+            if w in lower_desc:
+                raise serializers.ValidationError({
+                    "description": f"Description contains banned word: '{word}'"
+                })
+
+        return data
 
     def get_i_am_participating(self, obj):
         user = self.context['request'].user
