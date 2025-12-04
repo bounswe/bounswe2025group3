@@ -414,7 +414,15 @@ const PersonalStats = () => {
               </div>
 
               <div className="stats-card wide">
-                <h2>{t('stats_page.badges.title')}</h2>
+                <div className="badges-header-with-button">
+                  <h2>{t('stats_page.badges.title')}</h2>
+                  <button 
+                    className="view-all-badges-btn"
+                    onClick={() => navigate('/badges')}
+                  >
+                    {t('stats_page.badges.view_all', { defaultValue: 'View All Badges' })} →
+                  </button>
+                </div>
                 <div className="badges-grid">
                   {badges.length > 0 ? (
                     badges.map((badge, index) => (
