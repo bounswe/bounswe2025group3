@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from dj_rest_auth.registration.serializers import RegisterSerializer as DjRestAuthRegisterSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer as SimpleJWTTokenObtainPairSerializer
 from apps.authentication.models import UserAuthToken
+from apps.authentication.utils.blacklist import check_blacklist
 
 User = get_user_model()
 
@@ -12,6 +13,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     bio = serializers.CharField(required=False, allow_blank=True)
     city = serializers.CharField(required=False, allow_blank=True, max_length=100)
     country = serializers.CharField(required=False, allow_blank=True, max_length=100)
+
     
     class Meta:
         model = User
@@ -20,7 +22,23 @@ class RegisterSerializer(serializers.ModelSerializer):
             'first_name': {'required': False},
             'last_name': {'required': False},
         }
-        
+    
+    def validate_username(self, value):
+        check_blacklist(value, field_name="username")
+        return value
+    
+    def validate_bio(self, value):
+        check_blacklist(value, field_name="bio")
+        return value
+    
+    def validate_first_name(self, value):
+        check_blacklist(value, field_name="first_name")
+        return value
+    
+    def validate_last_name(self, value):
+        check_blacklist(value, field_name="last_name")
+        return value
+
     def validate(self, data):
         # Check password match
         if data.get('password1') != data.get('password2'):
@@ -51,7 +69,23 @@ class CustomRegisterSerializer(DjRestAuthRegisterSerializer):
     last_name = serializers.CharField(required=False, allow_blank=True, max_length=150)
     bio = serializers.CharField(required=False, allow_blank=True)
     city = serializers.CharField(required=False, allow_blank=True, max_length=100)
-    country = serializers.CharField(required=False, allow_blank=True, max_length=100)
+    
+
+    def validate_username(self, value):
+        check_blacklist(value, field_name="username")
+        return value
+    
+    def validate_bio(self, value):
+        check_blacklist(value, field_name="bio")
+        return value
+    
+    def validate_first_name(self, value):
+        check_blacklist(value, field_name="first_name")
+        return value
+    
+    def validate_last_name(self, value):
+        check_blacklist(value, field_name="last_name")
+        return value
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
