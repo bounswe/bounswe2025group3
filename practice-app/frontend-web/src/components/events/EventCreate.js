@@ -128,7 +128,7 @@ const EventCreate = () => {
       dataToSend.append('date', new Date(formData.date).toISOString());
       
       if (formData.image) {
-        dataToSend.append('image', formData.image, formData.image.name); 
+        dataToSend.append('image_file', formData.image, formData.image.name); 
       }
       
       const response = await createEvent(dataToSend);
@@ -141,7 +141,27 @@ const EventCreate = () => {
 
     } catch (err) {
       console.error('Failed to create event:', err);
-      const errorMessage = err.response?.data?.detail || err.message;
+      console.error('Error response:', err.response?.data);
+      
+      // Handle DRF validation errors - they can be in different formats
+      let errorMessage = err.message;
+      if (err.response?.data) {
+        if (err.response.data.detail) {
+          errorMessage = err.response.data.detail;
+        } else if (typeof err.response.data === 'object') {
+          // DRF validation errors are usually an object with field names
+          const errorFields = Object.keys(err.response.data);
+          const errorMessages = errorFields.map(field => {
+            const fieldErrors = Array.isArray(err.response.data[field]) 
+              ? err.response.data[field].join(', ')
+              : err.response.data[field];
+            return `${field}: ${fieldErrors}`;
+          });
+          errorMessage = errorMessages.join('; ') || JSON.stringify(err.response.data);
+        } else {
+          errorMessage = err.response.data;
+        }
+      }
       showMessage(t('eventsPage.createError') + `: ${errorMessage}`, 'error');
     } finally {
       setIsSubmitting(false);

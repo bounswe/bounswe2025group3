@@ -29,6 +29,24 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
+    
+    def create(self, request, *args, **kwargs):
+        """Override create to log validation errors for debugging"""
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        # Log incoming request
+        logger.info(f"Event creation request - Data keys: {list(request.data.keys())}")
+        logger.info(f"Event creation request - Content type: {request.content_type}")
+        
+        try:
+            response = super().create(request, *args, **kwargs)
+            logger.info(f"Event created successfully")
+            return response
+        except Exception as e:
+            logger.error(f"Event creation failed with error: {str(e)}")
+            logger.error(f"Error type: {type(e).__name__}")
+            raise
 
     # ----------------------------------------
     # Participate Endpoint

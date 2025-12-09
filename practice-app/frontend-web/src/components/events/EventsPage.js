@@ -185,9 +185,9 @@ const EventsPage = () => {
             {events.map(event => (
               // Using the API data properties: title, description, location, date, image, i_am_participating, participants_count, likes_count
               <div key={event.id} className="event-card">
-                {/* Use 'event.image' property (can be null) */}
+                {/* Use 'event.image_url' property (can be null) */}
                 <img 
-                  src={event.image || 'https://placehold.co/600x400/CCCCCC/000000?text=No+Image'} 
+                  src={event.image_url || 'https://placehold.co/600x400/CCCCCC/000000?text=No+Image'} 
                   alt={event.title} 
                   className="event-card-image" 
                 />

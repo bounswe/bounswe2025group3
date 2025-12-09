@@ -4,7 +4,7 @@ from apps.waste.models import (
 )
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
-from common.supabase_storage import upload_image, upload_base64_image
+from common.supabase_storage import upload_image, upload_base64_image, delete_image, extract_path_from_url
 
 class WasteCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -109,25 +109,33 @@ class WasteLogSerializer(serializers.ModelSerializer):
         photo_base64 = validated_data.pop('disposal_photo_base64', None)
         
         # Upload image to Supabase if provided
-        if photo_file:
-            try:
-                photo_url = upload_image(
-                    file_content=photo_file,
-                    folder_path='waste',
-                    content_type=photo_file.content_type
-                )
-                validated_data['disposal_photo_url'] = photo_url
-            except Exception as e:
-                raise serializers.ValidationError(f"Failed to upload image: {str(e)}")
-        elif photo_base64:
-            try:
-                photo_url = upload_base64_image(
-                    base64_string=photo_base64,
-                    folder_path='waste'
-                )
-                validated_data['disposal_photo_url'] = photo_url
-            except Exception as e:
-                raise serializers.ValidationError(f"Failed to upload image: {str(e)}")
+        if photo_file or photo_base64:
+            # Delete old image if exists
+            if instance.disposal_photo_url:
+                old_path = extract_path_from_url(instance.disposal_photo_url)
+                if old_path:
+                    delete_image(old_path)
+            
+            # Upload new image
+            if photo_file:
+                try:
+                    photo_url = upload_image(
+                        file_content=photo_file,
+                        folder_path='waste',
+                        content_type=photo_file.content_type
+                    )
+                    validated_data['disposal_photo_url'] = photo_url
+                except Exception as e:
+                    raise serializers.ValidationError(f"Failed to upload image: {str(e)}")
+            elif photo_base64:
+                try:
+                    photo_url = upload_base64_image(
+                        base64_string=photo_base64,
+                        folder_path='waste'
+                    )
+                    validated_data['disposal_photo_url'] = photo_url
+                except Exception as e:
+                    raise serializers.ValidationError(f"Failed to upload image: {str(e)}")
         
         return super().update(instance, validated_data)
 
