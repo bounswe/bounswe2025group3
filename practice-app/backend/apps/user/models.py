@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
@@ -45,7 +47,7 @@ class CustomUser(AbstractUser):
 
     # Profile fields
     bio = models.TextField(_('bio'), blank=True, null=True)
-    profile_picture = models.ImageField(_('profile picture'), upload_to='profiles/', blank=True, null=True)
+    profile_picture_url = models.URLField(_('profile picture'), blank=True, null=True, max_length=500)
     city = models.CharField(_('city'), max_length=100, blank=True, null=True)
     country = models.CharField(_('country'), max_length=100, blank=True, null=True)
 
@@ -60,3 +62,13 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+@receiver(pre_delete, sender=CustomUser)
+def delete_user_profile_picture(sender, instance, **kwargs):
+    """Delete associated profile picture from Supabase storage when user is deleted"""
+    if instance.profile_picture_url:
+        from common.supabase_storage import delete_image, extract_path_from_url
+        path = extract_path_from_url(instance.profile_picture_url)
+        if path:
+            delete_image(path)
