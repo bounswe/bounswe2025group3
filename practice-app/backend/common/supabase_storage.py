@@ -4,10 +4,12 @@ Supabase Storage utility for handling image uploads
 import base64
 import mimetypes
 import uuid
+import logging
 from typing import Optional, Union, BinaryIO
 from django.conf import settings
 from supabase import create_client, Client
-from supabase.lib.client_options import ClientOptions
+
+logger = logging.getLogger(__name__)
 
 
 def get_supabase_client() -> Client:
@@ -17,19 +19,18 @@ def get_supabase_client() -> Client:
     supabase_url = getattr(settings, 'SUPABASE_URL', None)
     supabase_key = getattr(settings, 'SUPABASE_SERVICE_KEY', None)
     
+    logger.info(f"Supabase URL: {supabase_url}")
+    logger.info(f"Supabase Service Key configured: {bool(supabase_key)}")
+    
     if not supabase_url or not supabase_key:
+        logger.error("Supabase credentials not configured!")
         raise ValueError(
             "Supabase credentials not configured. "
             "Please set SUPABASE_URL and SUPABASE_SERVICE_KEY in settings."
         )
     
     # Create client with service role key for server-side operations
-    options = ClientOptions(
-        auto_refresh_token=False,
-        persist_session=False,
-    )
-    
-    return create_client(supabase_url, supabase_key, options=options)
+    return create_client(supabase_url, supabase_key)
 
 
 def upload_image(
@@ -82,6 +83,9 @@ def upload_image(
     
     # Upload to Supabase
     try:
+        logger.info(f"Uploading to bucket '{bucket_name}' at path '{file_path}'")
+        logger.info(f"Content type: {content_type}, Size: {len(file_bytes)} bytes")
+        
         file_options = {
             "content-type": content_type,
             "upsert": "true" if upsert else "false",
@@ -98,6 +102,8 @@ def upload_image(
             )
         )
         
+        logger.info(f"Upload response: {response}")
+        
         # Get public URL
         public_url = (
             supabase.storage
@@ -105,9 +111,12 @@ def upload_image(
             .get_public_url(file_path)
         )
         
+        logger.info(f"Public URL generated: {public_url}")
         return public_url
         
     except Exception as e:
+        logger.error(f"Upload failed: {str(e)}")
+        logger.error(f"Error type: {type(e).__name__}")
         raise ValueError(f"Failed to upload image to Supabase: {str(e)}")
 
 
@@ -191,3 +200,24 @@ def delete_image(file_path: str) -> bool:
     except Exception:
         return False
 
+
+def extract_path_from_url(public_url: str) -> Optional[str]:
+    """
+    Extract storage path from Supabase public URL for deletion
+    
+    Args:
+        public_url: Full Supabase public URL 
+            (e.g., 'https://xxx.supabase.co/storage/v1/object/public/images/events/abc.jpg')
+    
+    Returns:
+        Storage path (e.g., 'events/abc.jpg') or None if URL is invalid
+    """
+    if not public_url:
+        return None
+    
+    bucket_name = getattr(settings, 'SUPABASE_STORAGE_BUCKET', 'images')
+    pattern = f'/public/{bucket_name}/'
+    
+    if pattern in public_url:
+        return public_url.split(pattern)[1]
+    return None

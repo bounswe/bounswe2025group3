@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.conf import settings
 from django.utils import timezone
 
@@ -34,3 +36,13 @@ class Event(models.Model):
     @property
     def likes_count(self):
         return self.likes.count()
+
+
+@receiver(pre_delete, sender=Event)
+def delete_event_image(sender, instance, **kwargs):
+    """Delete associated image from Supabase storage when event is deleted"""
+    if instance.image_url:
+        from common.supabase_storage import delete_image, extract_path_from_url
+        path = extract_path_from_url(instance.image_url)
+        if path:
+            delete_image(path)

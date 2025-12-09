@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.conf import settings
 
 
@@ -88,3 +90,13 @@ class SustainableAction(models.Model):
     description = models.TextField(blank=True, null=True)
     date = models.DateField()
     score = models.DecimalField(max_digits=6, decimal_places=2)
+
+
+@receiver(pre_delete, sender=WasteLog)
+def delete_wastelog_image(sender, instance, **kwargs):
+    """Delete associated image from Supabase storage when waste log is deleted"""
+    if instance.disposal_photo_url:
+        from common.supabase_storage import delete_image, extract_path_from_url
+        path = extract_path_from_url(instance.disposal_photo_url)
+        if path:
+            delete_image(path)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from apps.events.models import Event
-from common.supabase_storage import upload_image, upload_base64_image
+from common.supabase_storage import upload_image, upload_base64_image, delete_image, extract_path_from_url
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -77,10 +77,7 @@ class EventSerializer(serializers.ModelSerializer):
         if image_url:
             validated_data['image_url'] = image_url
         
-        # creator will be attached in view (or you can set here if available in context)
-        request = self.context.get('request')
-        if request and hasattr(request, 'user'):
-            validated_data['creator'] = request.user
+        # creator will be set by view's perform_create method
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
@@ -89,24 +86,32 @@ class EventSerializer(serializers.ModelSerializer):
         image_base64 = validated_data.pop('image_base64', None)
         
         # Upload image to Supabase if provided
-        if image_file:
-            try:
-                image_url = upload_image(
-                    file_content=image_file,
-                    folder_path='events',
-                    content_type=image_file.content_type
-                )
-                validated_data['image_url'] = image_url
-            except Exception as e:
-                raise serializers.ValidationError(f"Failed to upload image: {str(e)}")
-        elif image_base64:
-            try:
-                image_url = upload_base64_image(
-                    base64_string=image_base64,
-                    folder_path='events'
-                )
-                validated_data['image_url'] = image_url
-            except Exception as e:
-                raise serializers.ValidationError(f"Failed to upload image: {str(e)}")
+        if image_file or image_base64:
+            # Delete old image if exists
+            if instance.image_url:
+                old_path = extract_path_from_url(instance.image_url)
+                if old_path:
+                    delete_image(old_path)
+            
+            # Upload new image
+            if image_file:
+                try:
+                    image_url = upload_image(
+                        file_content=image_file,
+                        folder_path='events',
+                        content_type=image_file.content_type
+                    )
+                    validated_data['image_url'] = image_url
+                except Exception as e:
+                    raise serializers.ValidationError(f"Failed to upload image: {str(e)}")
+            elif image_base64:
+                try:
+                    image_url = upload_base64_image(
+                        base64_string=image_base64,
+                        folder_path='events'
+                    )
+                    validated_data['image_url'] = image_url
+                except Exception as e:
+                    raise serializers.ValidationError(f"Failed to upload image: {str(e)}")
         
         return super().update(instance, validated_data)
