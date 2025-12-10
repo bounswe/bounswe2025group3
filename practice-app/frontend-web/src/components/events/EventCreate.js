@@ -6,7 +6,6 @@ import './EventCreate.css';
 import { useNavigate } from 'react-router-dom'; 
 import { createEvent } from '../../services/api'; 
 
-// --- Helper Components ---
 const Icon = ({ name, className = '' }) => {
   const icons = {
     events: '📅', back: '⬅️', plus: '➕', upload: '📤', trash: '🗑️'
@@ -17,13 +16,15 @@ const Icon = ({ name, className = '' }) => {
 const EventCreate = () => {
   const { t } = useTranslation();
   const navigate = useNavigate(); 
-  const fileInputRef = useRef(null); // Gizli input'a erişmek için
+  const fileInputRef = useRef(null);
   
-  // State Tanımları
   const initialData = {
     title: '',
     description: '',
     location: '',
+    district: '',
+    duration: '',
+    equipment: '',
     date: new Date().toISOString().substring(0, 16), 
     image: null, 
   };
@@ -33,11 +34,8 @@ const EventCreate = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
   const [message, setMessage] = useState(null);
-  
-  // Sürükleme Durumu için State (Kütüphanesiz)
   const [isDragging, setIsDragging] = useState(false);
 
-  // --- Yardımcı Fonksiyonlar ---
   const showMessage = (text, type = 'success') => {
     setMessage({ text, type });
     setTimeout(() => setMessage(null), 3000); 
@@ -53,12 +51,8 @@ const EventCreate = () => {
     setFormData(prev => ({ ...prev, location: '' }));
   };
 
-  // --- DOSYA İŞLEME FONKSİYONLARI (SAF REACT) ---
-
-  // 1. Dosyayı işleyip state'e atayan yardımcı fonksiyon
   const processFile = (file) => {
     if (file && file.type.startsWith('image/')) {
-      // Önizleme URL'si oluştur
       Object.assign(file, {
         preview: URL.createObjectURL(file)
       });
@@ -69,30 +63,25 @@ const EventCreate = () => {
     }
   };
 
-  // 2. Sürükleme Alanına Giriş
   const handleDragOver = (e) => {
-    e.preventDefault(); // Tarayıcının dosyayı açmasını engelle
+    e.preventDefault();
     setIsDragging(true);
   };
 
-  // 3. Sürükleme Alanından Çıkış
   const handleDragLeave = (e) => {
     e.preventDefault();
     setIsDragging(false);
   };
 
-  // 4. Dosya Bırakıldığında (DROP)
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-    
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
       processFile(files[0]);
     }
   };
 
-  // 5. Normal Tıklama ile Seçim
   const handleFileSelect = (e) => {
     const files = e.target.files;
     if (files && files.length > 0) {
@@ -100,20 +89,18 @@ const EventCreate = () => {
     }
   };
 
-  // 6. Dosyayı Kaldır
   const removeImage = (e) => {
-    e.stopPropagation(); // Tıklamanın yukarı gitmesini engelle
+    e.stopPropagation();
     if (formData.image && formData.image.preview) {
       URL.revokeObjectURL(formData.image.preview);
     }
     setFormData(prev => ({ ...prev, image: null }));
   };
 
-  // --- FORM GÖNDERME ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.description || !formData.location || !formData.date) {
-      setFormError(t('eventsPage.formRequired') || 'Please fill in all mandatory fields.');
+      setFormError(t('eventsPage.formRequired'));
       return;
     }
     
@@ -123,7 +110,13 @@ const EventCreate = () => {
     try {
       const dataToSend = new FormData();
       dataToSend.append('title', formData.title);
-      dataToSend.append('description', formData.description);
+      
+      let fullDescription = formData.description;
+      if (formData.district) fullDescription += `\n\nDistrict: ${formData.district}`;
+      if (formData.duration) fullDescription += `\nDuration: ${formData.duration} hours`;
+      if (formData.equipment) fullDescription += `\nEquipment Needed: ${formData.equipment}`;
+
+      dataToSend.append('description', fullDescription);
       dataToSend.append('location', formData.location);
       dataToSend.append('date', new Date(formData.date).toISOString());
       
@@ -133,11 +126,10 @@ const EventCreate = () => {
       
       const response = await createEvent(dataToSend);
       
-      // Başarılı ise formu temizle
       setFormData(initialData);
-      if (fileInputRef.current) fileInputRef.current.value = ""; // Input'u da sıfırla
+      if (fileInputRef.current) fileInputRef.current.value = ""; 
       
-      showMessage(t('eventsPage.createSuccess') || `Event "${response.title}" created successfully!`, 'success');
+      showMessage(t('eventsPage.createSuccess'), 'success');
 
     } catch (err) {
       console.error('Failed to create event:', err);
@@ -155,15 +147,14 @@ const EventCreate = () => {
     navigate('/events'); 
   };
 
-  // --- RENDER ---
   return (
     <div className="event-create-scoped event-create-layout">
       <Navbar isAuthenticated={true} />
 
       <main className="create-main-content">
         <div className="create-header-section">
-          <h1><Icon name="plus" /> {t('eventsPage.createTitle') || 'Create New Event'}</h1>
-          <p>{t('eventsPage.subtitle') || 'Fill out the details to organize your community event.'}</p>
+          <h1><Icon name="plus" /> {t('eventsPage.createTitle')}</h1>
+          <p>{t('eventsPage.subtitle')}</p>
         </div>
         
         {message && (
@@ -176,8 +167,9 @@ const EventCreate = () => {
           <form onSubmit={handleSubmit} className="event-create-form">
             {formError && <p className="form-error">{formError}</p>}
             
+            {/* 1. BAŞLIK */}
             <div className="form-group">
-              <label>{t('eventsPage.placeholderTitle') || "Event Title *"}</label>
+              <label>{t('eventsPage.placeholderTitle')}</label>
               <input 
                 name="title" 
                 type="text" 
@@ -187,8 +179,9 @@ const EventCreate = () => {
               />
             </div>
 
+            {/* 2. AÇIKLAMA */}
             <div className="form-group">
-              <label>{t('eventsPage.placeholderDescription') || "Description *"}</label>
+              <label>{t('eventsPage.placeholderDescription')}</label>
               <textarea
                 name="description" 
                 value={formData.description} 
@@ -197,17 +190,20 @@ const EventCreate = () => {
                 required
               />
             </div>
-            
+
+            {/* 3. KONUM SEÇİMİ (Ülke -> Şehir -> İlçe/Mahalle) */}
             <div className="form-group">
-              <label>{t('eventsPage.placeholderLocation') || "Location *"}</label>
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <label>{t('eventsPage.placeholderLocation')}</label>
+              
+              {/* Ülke ve Şehir Yan Yana */}
+              <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                 <select
                   value={selectedCountry}
                   onChange={handleCountryChange}
                   required
-                  style={{ flex: 1, padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                  style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--dashboard-input-border)', backgroundColor: 'var(--dashboard-input-bg)', color: 'var(--dashboard-text-primary)' }}
                 >
-                  <option value="">Select Country</option>
+                  <option value="">{t('profile_page.form.select_country')}</option>
                   {Country.getAllCountries().map((country) => (
                     <option key={country.isoCode} value={country.isoCode}>
                       {country.name}
@@ -220,9 +216,9 @@ const EventCreate = () => {
                   onChange={handleChange}
                   required
                   disabled={!selectedCountry}
-                  style={{ flex: 1, padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                  style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--dashboard-input-border)', backgroundColor: 'var(--dashboard-input-bg)', color: 'var(--dashboard-text-primary)' }}
                 >
-                  <option value="">Select City</option>
+                  <option value="">{t('profile_page.form.select_city')}</option>
                   {selectedCountry &&
                     State.getStatesOfCountry(selectedCountry).map((state, index) => (
                       <option key={`${state.name}-${index}`} value={state.name}>
@@ -231,31 +227,73 @@ const EventCreate = () => {
                     ))}
                 </select>
               </div>
+
+              {/* İlçe/Mahalle (Alt Satır) */}
+              <div style={{ marginTop: '10px' }}>
+                <label style={{ fontSize: '0.9em', color: 'var(--dashboard-text-medium)', marginBottom: '5px', display:'block' }}>
+                    {t('eventsPage.labelDistrict')}
+                </label>
+                <input 
+                    name="district" 
+                    type="text" 
+                    value={formData.district} 
+                    onChange={handleChange} 
+                    placeholder={t('eventsPage.placeholderDistrict')} 
+                />
+              </div>
             </div>
 
+            {/* 4. TARİH, SÜRE VE EKİPMAN */}
+            <div className="form-row">
+                {/* Tarih */}
+                <div className="form-field">
+                    <label>{t('eventsPage.labelDateTime')}</label>
+                    <input 
+                        name="date" 
+                        type="datetime-local" 
+                        value={formData.date} 
+                        onChange={handleChange} 
+                        required
+                    />
+                </div>
+
+                {/* Süre */}
+                <div className="form-field">
+                    <label>{t('eventsPage.labelDuration')}</label>
+                    <input 
+                        name="duration" 
+                        type="number" 
+                        value={formData.duration} 
+                        onChange={handleChange} 
+                        placeholder={t('eventsPage.placeholderDuration')} 
+                        min="0"
+                    />
+                </div>
+            </div>
+
+            {/* Ekipman (Tam Genişlik) */}
             <div className="form-group">
-              <label>{t('eventsPage.labelDateTime') || 'Date and Time *'}</label>
-              <input 
-                name="date" 
-                type="datetime-local" 
-                value={formData.date} 
-                onChange={handleChange} 
-                required
-              />
+                <label>{t('eventsPage.labelEquipment')}</label>
+                <input 
+                    name="equipment" 
+                    type="text" 
+                    value={formData.equipment} 
+                    onChange={handleChange} 
+                    placeholder={t('eventsPage.placeholderEquipment')} 
+                />
             </div>
 
-            {/* --- SAF REACT DRAG & DROP ALANI --- */}
+            {/* 5. GÖRSEL YÜKLEME (EN SON) */}
             <div className="form-group image-upload-group">
-              <label>{"Event Image (Optional)"}</label>
+              <label>{t('eventsPage.labelImage')}</label>
               
               <div 
                 className={`dropzone ${isDragging ? 'active' : ''} ${formData.image ? 'has-file' : ''}`}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onClick={() => fileInputRef.current.click()} // Kutunun herhangi bir yerine tıklayınca input açılsın
+                onClick={() => fileInputRef.current.click()}
               >
-                {/* Gizli Input */}
                 <input 
                   type="file" 
                   accept="image/*"
@@ -280,23 +318,22 @@ const EventCreate = () => {
                         type="button" 
                         className="remove-btn" 
                         onClick={removeImage}
-                        title="Remove image"
+                        title={t('eventsPage.imageRemoveTitle')}
                     >
                         <Icon name="trash" />
                     </button>
                   </div>
                 ) : isDragging ? (
                   <p className="dropzone-text">
-                    <Icon name="upload" /> { 'Drop the image here ...'}
+                    <Icon name="upload" /> {t('eventsPage.dragDropActive')}
                   </p>
                 ) : (
                   <p className="dropzone-text">
-                    <Icon name="upload" /> {'Drag and drop an image here, or click to select'}
+                    <Icon name="upload" /> {t('eventsPage.dragDropInactive')}
                   </p>
                 )}
               </div>
             </div>
-            {/* ----------------------------- */}
 
             <div className="form-actions">
               <button 
@@ -304,7 +341,7 @@ const EventCreate = () => {
                 className="btn-submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? (t('eventsPage.buttonCreating') || 'Creating...') : (t('eventsPage.buttonCreate') || 'Create Event')}
+                {isSubmitting ? t('eventsPage.buttonCreating') : t('eventsPage.buttonCreate')}
               </button>
             </div>
           </form>
