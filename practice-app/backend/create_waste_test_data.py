@@ -19,6 +19,7 @@ def create_waste_test_data():
     categories = [
         {'name': 'Recyclable', 'description': 'Materials that can be recycled'},
         {'name': 'Organic', 'description': 'Food and green waste'}, 
+        {'name': 'Batteries', 'description': 'Used batteries of all types'},
         {'name': 'Electronic', 'description': 'Electronic waste and devices'},
         {'name': 'Glass', 'description': 'Glass containers and items'},
         {'name': 'Cooking Oil', 'description': 'Used cooking oil'},
@@ -45,10 +46,20 @@ def create_waste_test_data():
          'score_per_unit': 0.8, 'unit': 'kg'},
         {'name': 'Coffee Grounds', 'category_name': 'Organic', 'description': 'Used coffee grounds', 
          'score_per_unit': 2.0, 'unit': 'kg'},
+
+        # Batteries subcategories
+        {'name': 'AA Batteries', 'category_name': 'Batteries', 'description': 'Standard AA batteries', 
+         'score_per_unit': 5.0, 'unit': 'pcs'},
+        {'name': 'Lithium-ion Batteries', 'category_name': 'Batteries', 'description': 'Rechargeable lithium-ion batteries', 
+         'score_per_unit': 10.0, 'unit': 'pcs'},
+        {'name': 'Button Cell Batteries', 'category_name': 'Batteries', 'description': 'Small button cell batteries', 
+         'score_per_unit': 3.0, 'unit': 'pcs'},
+        {'name': 'Car Batteries', 'category_name': 'Batteries', 'description': 'Automotive lead-acid batteries', 
+         'score_per_unit': 20.0, 'unit': 'pcs'},
+        {"name": 'NiMH Batteries', 'category_name': 'Batteries', 'description': 'Nickel-metal hydride batteries', 
+         'score_per_unit': 7.0, 'unit': 'pcs'},      
          
         # Electronic subcategories
-        {'name': 'Batteries', 'category_name': 'Electronic', 'description': 'All types of batteries', 
-         'score_per_unit': 5.0, 'unit': 'pcs'},
         {'name': 'Small Appliances', 'category_name': 'Electronic', 'description': 'Small electronic devices', 
          'score_per_unit': 10.0, 'unit': 'pcs'},
         {'name': 'Mobile Phones', 'category_name': 'Electronic', 'description': 'Cell phones and accessories', 
