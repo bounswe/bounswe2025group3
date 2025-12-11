@@ -127,9 +127,7 @@ const EventCreate = () => {
       const response = await createEvent(dataToSend);
       
       setFormData(initialData);
-      if (fileInputRef.current) fileInputRef.current.value = ""; 
-      
-      showMessage(t('eventsPage.createSuccess'), 'success');
+      if (fileInputRef.current) fileInputRef.current.value = "";
 
     } catch (err) {
       console.error('Failed to create event:', err);

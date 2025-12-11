@@ -133,6 +133,44 @@
   color: var(--nav-dashboard-icon-color);
 }
 
+/* Score Display for Selected Subcategory */
+.wastelog-page-scoped .score-display {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--accent-bg, rgba(46, 204, 113, 0.1));
+  border-left: 4px solid var(--accent-primary, #2ecc71);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--dashboard-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wastelog-page-scoped .score-display .icon {
+  font-size: 1.2em;
+  color: var(--accent-primary, #2ecc71);
+}
+
+.wastelog-page-scoped .score-value {
+  font-weight: 700;
+  color: var(--accent-primary, #2ecc71);
+  font-size: 1.1em;
+}
+
+/* Optgroup styling for grouped subcategories */
+.wastelog-page-scoped .form-field select optgroup {
+  font-weight: 600;
+  color: var(--dashboard-text-dark);
+  background-color: var(--wastelog-input-bg);
+}
+
+.wastelog-page-scoped .form-field select optgroup option {
+  padding-left: 1.5rem;
+  color: var(--dashboard-text-dark);
+}
+
 .wastelog-page-scoped .form-field input[type="number"],
 .wastelog-page-scoped .form-field select,
 .wastelog-page-scoped .form-field textarea {
