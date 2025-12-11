@@ -31,7 +31,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'country',
             'role', # Display role
             'date_joined',
-            'notifications_enabled' # Added from CustomUser
+            'notifications_enabled', # Added from CustomUser
+            'is_anonymous'      # Added from CustomUser
         ]
         # Fields that should not be directly editable by the user via this endpoint
         read_only_fields = [
