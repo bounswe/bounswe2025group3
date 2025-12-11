@@ -50,8 +50,6 @@ class Command(BaseCommand):
             'score_per_unit': 7.0, 'unit': 'pcs'},   
                 
             # Electronic subcategories
-            {'name': 'Batteries', 'category_name': 'Electronic', 'description': 'All types of batteries', 
-             'score_per_unit': 5.0, 'unit': 'pcs'},
             {'name': 'Small Appliances', 'category_name': 'Electronic', 'description': 'Small electronic devices', 
              'score_per_unit': 10.0, 'unit': 'pcs'},
             {'name': 'Mobile Phones', 'category_name': 'Electronic', 'description': 'Cell phones and accessories', 
