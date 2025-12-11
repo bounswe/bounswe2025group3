@@ -130,6 +130,9 @@ BLACKLISTED_WORDS = [
     "violence",
     "hate",
     "drugs",
+    "terror",
+    "fraud",
+    "f-word",
 ]
 
 

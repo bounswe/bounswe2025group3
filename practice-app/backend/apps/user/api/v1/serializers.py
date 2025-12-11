@@ -2,10 +2,20 @@
 
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from apps.user.utils.blacklist import check_blacklist
 
 User = get_user_model() # This should get CustomUser
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    def validate(self, data):
+        # Fields to protect
+        fields = ['first_name', 'last_name', 'bio']
+
+        for field in fields:
+            if field in data:
+                check_blacklist(data.get(field), field)
+        return data
+
     class Meta:
         model = User
         # Fields that the user can view and potentially update
@@ -40,6 +50,15 @@ class AdminUserSerializer(serializers.ModelSerializer):
     """
     # Make password write-only and not required on updates
     password = serializers.CharField(write_only=True, required=False, style={'input_type': 'password'})
+
+    def validate(self, data):
+        # Fields to protect
+        fields = ['first_name', 'last_name', 'bio']
+
+        for field in fields:
+            if field in data:
+                check_blacklist(data.get(field), field)
+        return data
 
     class Meta:
         model = User
