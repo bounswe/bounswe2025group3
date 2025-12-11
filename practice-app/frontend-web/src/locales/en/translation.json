@@ -477,87 +477,102 @@
       "back_button": "Back to Challenges",
       "your_progress": "Your Progress"
     },
-    "stats_page": {
-      "title": "Overview for {{username}}",
-      "loading": "Loading statistics...",
-      "error_load": "Failed to load statistics. Please try again later.",
-      "hero": {
-        "eco_score": "Eco Score",
-        "global_rank": "Global Rank",
-        "event_rate": "Event Rate",
-        "joined_subtext": "joined"
-      },
-      "charts": {
-        "activity_trend": "Activity Trend",
-        "points": "Points",
-        "items": "Items",
-        "impact_breakdown": "Impact Breakdown",
-        "no_breakdown_data": "Log waste to see breakdown.",
-        "filters": {
-          "daily": "Daily",
-          "weekly": "Weekly",
-          "monthly": "Monthly",
-          "yearly": "Yearly"
+  
+      "stats_page": {
+        "title": "Overview for {{username}}",
+        "loading": "Loading statistics...",
+        "error_load": "Failed to load statistics. Please try again later.",
+        "next_level": "Next Level",
+        "to_go": "to go",
+        "level_indicator": "(Level {{current}} / {{total}})",
+        "hero": {
+          "eco_score": "Eco Score",
+          "global_rank": "Global Rank",
+          "event_rate": "Event Rate",
+          "trees_planted": "Trees Planted",
+          "joined_subtext": "joined"
         },
-        "updating": "Updating..."
+        "charts": {
+          "activity_trend": "Activity Trend",
+          "points_history": "Points History",
+          "items_logged_frequency": "Items Logged (Frequency)",
+          "points": "Points",
+          "items": "Items",
+          "impact_breakdown": "Impact Breakdown",
+          "no_breakdown_data": "Log waste to see breakdown.",
+          "last": "Last",
+          "by_points": "By Points",
+          "by_frequency": "By Frequency",
+          "filters": {
+            "daily": "Daily",
+            "weekly": "Weekly",
+            "monthly": "Monthly",
+            "yearly": "Yearly"
+          },
+          "updating": "Updating...",
+          "no_data": "No data available"
+        },
+        "badges": {
+          "title": "Badge Collection",
+          "empty": "Start logging to earn badges!"
+        },
+        "forest": {
+          "title": "My Eco Forest",
+          "info": "1 Tree = 500 Points",
+          "empty": "Your forest is waiting to grow."
+        }
       },
-      "badges": {
-        "title": "Your Trophy Case",
-        "empty": "Start logging to earn badges!"
+      "waste_categories": {
+        "paper": "Paper",
+        "plastic_bottles": "Plastic Bottles",
+        "cardboard": "Cardboard",
+        "metal_cans": "Metal Cans",
+        "food_scraps": "Food Scraps",
+        "garden_waste": "Garden Waste",
+        "coffee_grounds": "Coffee Grounds",
+        "batteries": "Batteries",
+        "small_appliances": "Small Appliances",
+        "mobile_phones": "Mobile Phones",
+        "glass": "Glass",
+        "plastic": "Plastic",
+        "electronic": "Electronic",
+        "organic": "Organic",
+        "other": "Other"
       },
-      "forest": {
-        "title": "My Eco Forest",
-        "info": "1 Tree = 500 Points",
-        "empty": "Your forest is waiting to grow."
-      }
-    },"waste_categories": {
-    "paper": "Paper",
-    "plastic_bottles": "Plastic Bottles",
-    "cardboard": "Cardboard",
-    "metal_cans": "Metal Cans",
-    "food_scraps": "Food Scraps",
-    "garden_waste": "Garden Waste",
-    "coffee_grounds": "Coffee Grounds",
-    "batteries": "Batteries",
-    "small_appliances": "Small Appliances",
-    "mobile_phones": "Mobile Phones",
-    "glass": "Glass",
-    "plastic": "Plastic",
-    "electronic": "Electronic",
-    "organic": "Organic",
-    "other": "Other"
-  },
-  "units": {
-    "kg": "kg",
-    "pcs": "pcs",
-    "l": "l"
-  },
-  "tiers": {
-    "planet_guardian": "Planet Guardian",
-    "zero_waste_champion": "Zero Waste Champion",
-    "sustainability_hero": "Sustainability Hero",
-    "eco_advocate": "Eco Advocate",
-    "green_starter": "Green Starter",
-    "eco_explorer": "Eco Explorer"
-  },
-  "badges_data": {
-    "first_step": {
-      "name": "First Step",
-      "desc": "Log first waste"
+      "units": {
+        "kg": "kg",
+        "pcs": "pcs",
+        "l": "l",
+        "pts": "pts",
+        "logs": "logs"
+      },
+      "tiers": {
+        "planet_guardian": "Planet Guardian",
+        "zero_waste_champion": "Zero Waste Champion",
+        "sustainability_hero": "Sustainability Hero",
+        "eco_advocate": "Eco Advocate",
+        "green_starter": "Green Starter",
+        "eco_explorer": "Eco Explorer"
+      },
+      "badges_data": {
+        "first_step": {
+          "name": "First Step",
+          "desc": "Log first waste"
+        },
+        "plastic_buster": {
+          "name": "Plastic Buster",
+          "desc": "Reduce 10kg plastic"
+        },
+        "sustainability_streak": {
+          "name": "Sustainability Streak",
+          "desc": "7 Days Streak"
+        },
+        "zero_waste_legend": {
+          "name": "Zero Waste Legend",
+          "desc": "5000+ Score"
+        }
+      
     },
-    "plastic_buster": {
-      "name": "Plastic Buster",
-      "desc": "Reduce 10kg plastic"
-    },
-    "sustainability_streak": {
-      "name": "Sustainability Streak",
-      "desc": "7 Days Streak"
-    },
-    "zero_waste_legend": {
-      "name": "Zero Waste Legend",
-      "desc": "5000+ Score"
-    }
-  },
   "notifications": {
     "title": "Notifications",
     "mark_all_read": "Mark all read",

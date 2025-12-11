@@ -478,86 +478,100 @@
       "your_progress": "İlerlemeniz"
     },
       "stats_page": {
-      "title": "{{username}} için Genel Bakış",
-      "loading": "İstatistikler yükleniyor...",
-      "error_load": "İstatistikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
-      "hero": {
-        "eco_score": "Eko Puan",
-        "global_rank": "Küresel Sıralama",
-        "event_rate": "Etkinlik Oranı",
-        "joined_subtext": "katılım"
-      },
-      "charts": {
-        "activity_trend": "Haftalık Aktivite Trendi",
-        "points": "Puanlar",
-        "items": "Öğeler",
-        "impact_breakdown": "Etki Dağılımı",
-        "no_breakdown_data": "Dağılımı görmek için atık kaydedin.",
-        "filters": {
-          "daily": "Günlük",
-          "weekly": "Haftalık",
-          "monthly": "Aylık",
-          "yearly": "Yıllık"
+        "title": "{{username}} Genel Bakış",
+        "loading": "İstatistikler yükleniyor...",
+        "error_load": "İstatistikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+        "next_level": "Sonraki Seviye",
+        "to_go": "kaldı",
+        "level_indicator": "(Seviye {{current}} / {{total}})",
+        "hero": {
+          "eco_score": "Eko Puan",
+          "global_rank": "Küresel Sıralama",
+          "event_rate": "Etkinlik Oranı",
+          "trees_planted": "Dİkİlen Ağaçlar",
+          "joined_subtext": "katılım"
         },
-        "updating": "Güncelleniyor..."
+        "charts": {
+          "activity_trend": "Aktivite Trendi",
+          "points_history": "Puan Geçmişi",
+          "items_logged_frequency": "Kaydedilen Atıklar (Sıklık)",
+          "points": "Puanlar",
+          "items": "Öğeler",
+          "impact_breakdown": "Etki Dağılımı",
+          "no_breakdown_data": "Dağılımı görmek için atık kaydedin.",
+          "last": "Son",
+          "by_points": "Puana Göre",
+          "by_frequency": "Sıklığa Göre",
+          "filters": {
+            "daily": "Günlük",
+            "weekly": "Haftalık",
+            "monthly": "Aylık",
+            "yearly": "Yıllık"
+          },
+          "updating": "Güncelleniyor...",
+          "no_data": "Veri yok"
+        },
+        "badges": {
+          "title": "Kupa Dolabı",
+          "empty": "Rozet kazanmak için atık kaydetmeye başla!"
+        },
+        "forest": {
+          "title": "Eko Ormanım",
+          "info": "1 Ağaç = 500 Puan",
+          "empty": "Ormanın büyümeyi bekliyor."
+        }
       },
-      "badges": {
-        "title": "Kupa Dolabınız",
-        "empty": "Rozet kazanmak için atık kaydetmeye başlayın!"
+      "waste_categories": {
+        "paper": "Kağıt",
+        "plastic_bottles": "Plastik Şişe",
+        "cardboard": "Karton",
+        "metal_cans": "Metal Kutu",
+        "food_scraps": "Yemek Artığı",
+        "garden_waste": "Bahçe Atığı",
+        "coffee_grounds": "Kahve Telvesi",
+        "batteries": "Pil",
+        "small_appliances": "Küçük Ev Aletleri",
+        "mobile_phones": "Cep Telefonu",
+        "glass": "Cam",
+        "plastic": "Plastik",
+        "electronic": "Elektronik",
+        "organic": "Organik",
+        "other": "Diğer"
       },
-      "forest": {
-        "title": "Eko Ormanım",
-        "info": "1 Ağaç = 500 Puan",
-        "empty": "Ormanınız büyümeyi bekliyor."
-      }
-    },"waste_categories": {
-    "paper": "Kağıt",
-    "plastic_bottles": "Plastik Şişe",
-    "cardboard": "Karton",
-    "metal_cans": "Metal Kutu",
-    "food_scraps": "Yemek Artığı",
-    "garden_waste": "Bahçe Atığı",
-    "coffee_grounds": "Kahve Telvesi",
-    "batteries": "Pil",
-    "small_appliances": "Küçük Ev Aletleri",
-    "mobile_phones": "Cep Telefonu",
-    "glass": "Cam",
-    "plastic": "Plastik",
-    "electronic": "Elektronik",
-    "organic": "Organik",
-    "other": "Diğer"
-  },
-  "units": {
-    "kg": "kg",
-    "pcs": "adet",
-    "l": "litre"
-  },
-  "tiers": {
-    "planet_guardian": "Gezegen Koruyucusu",
-    "zero_waste_champion": "Sıfır Atık Şampiyonu",
-    "sustainability_hero": "Sürdürülebilirlik Kahramanı",
-    "eco_advocate": "Eko Savunucu",
-    "green_starter": "Yeşil Başlangıç",
-    "eco_explorer": "Eko Kaşif"
-  },
-  "badges_data": {
-    "first_step": {
-      "name": "İlk Adım",
-      "desc": "İlk atığınızı kaydedin"
+      "units": {
+        "kg": "kg",
+        "pcs": "adet",
+        "l": "lt",
+        "pts": "puan",
+        "logs": "kayıt"
+      },
+      "tiers": {
+        "planet_guardian": "Gezegen Koruyucusu",
+        "zero_waste_champion": "Sıfır Atık Şampiyonu",
+        "sustainability_hero": "Sürdürülebilirlik Kahramanı",
+        "eco_advocate": "Eko Savunucu",
+        "green_starter": "Yeşil Başlangıç",
+        "eco_explorer": "Eko Kaşif"
+      },
+      "badges_data": {
+        "first_step": {
+          "name": "İlk Adım",
+          "desc": "İlk atığını kaydet"
+        },
+        "plastic_buster": {
+          "name": "Plastik Avcısı",
+          "desc": "10 kg plastik azalt"
+        },
+        "sustainability_streak": {
+          "name": "İstikrar Serisi",
+          "desc": "7 Günlük Seri"
+        },
+        "zero_waste_legend": {
+          "name": "Sıfır Atık Efsanesi",
+          "desc": "5000+ Puan"
+        }
+      
     },
-    "plastic_buster": {
-      "name": "Plastik Avcısı",
-      "desc": "10 kg plastik atığı azalt"
-    },
-    "sustainability_streak": {
-      "name": "Sürdürülebilirlik Serisi",
-      "desc": "7 Günlük Seri"
-    },
-    "zero_waste_legend": {
-      "name": "Sıfır Atık Efsanesi",
-      "desc": "5000+ Puan"
-    }
-  },
   "notifications": {
     "title": "Bildirimler",
     "mark_all_read": "Tümünü okundu işaretle",

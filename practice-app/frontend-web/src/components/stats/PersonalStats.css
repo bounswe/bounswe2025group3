@@ -1,4 +1,4 @@
-/* PersonalStats.css - Scoped and Themed */
+/* PersonalStats.css - Scoped, Themed, and Improved for Visibility */
 
 /* --- Base Layout --- */
 .personal-stats-page-scoped.personal-stats-layout {
@@ -16,128 +16,8 @@
   margin: 0 auto;
   width: 100%;
 }
-.chart-wrapper {
-  width: 100%;
-  height: 300px;
-}
 
-/* Bar Chart Styles */
-.simple-chart {
-  width: 100%;
-  padding: 20px 0;
-}
-
-.chart-legend {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-
-.legend-box {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-  border-radius: 3px;
-}
-
-.bar-chart-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  height: 250px;
-  gap: 10px;
-  padding: 10px;
-  overflow-x: auto;
-}
-
-.bar-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 60px;
-}
-
-.bar-pair {
-  display: flex;
-  gap: 5px;
-  align-items: flex-end;
-}
-
-.bar {
-  width: 25px;
-  min-height: 5px;
-  border-radius: 4px 4px 0 0;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.bar:hover {
-  opacity: 0.8;
-  transform: translateY(-2px);
-}
-
-.bar-score {
-  background: linear-gradient(180deg, #4CAF50 0%, #45a049 100%);
-}
-
-.bar-logs {
-  background: linear-gradient(180deg, #2196F3 0%, #1976D2 100%);
-}
-
-.bar-value {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.bar-label {
-  margin-top: 8px;
-  font-size: 11px;
-  text-align: center;
-  max-width: 70px;
-  word-wrap: break-word;
-}
-
-/* Pie Chart Styles */
-.simple-pie-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding: 20px;
-}
-
-.pie-chart-svg {
-  width: 200px;
-  height: 200px;
-}
-
-.pie-legend {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 14px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 3px;
-}
-/* --- Hero Section --- */
+/* --- Hero Section & Progress Bar --- */
 .personal-stats-page-scoped .stats-hero-section {
   background-color: var(--background-primary);
   border-radius: 16px;
@@ -146,41 +26,85 @@
   margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
-.personal-stats-page-scoped .hero-welcome {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+.personal-stats-page-scoped .hero-header {
   border-bottom: 1px solid var(--events-border-color);
   padding-bottom: 1.5rem;
 }
 
-.personal-stats-page-scoped .hero-welcome h1 {
+.personal-stats-page-scoped .hero-header h1 {
   font-size: 1.8rem;
   color: var(--dashboard-text-dark);
-  margin: 0;
+  margin: 0 0 1rem 0;
   font-weight: 700;
 }
 
-.personal-stats-page-scoped .tier-badge {
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+/* Level Progress Bar Styles */
+.level-progress-container {
+    background-color: var(--background-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-top: 1rem;
 }
 
+.tier-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    flex-wrap: wrap; 
+    gap: 10px;
+}
+
+.current-tier {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.next-tier-hint {
+    font-size: 0.9rem;
+    color: var(--dashboard-text-medium);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.progress-track {
+    height: 14px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.8rem;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--dashboard-text-dark);
+    font-weight: 500;
+}
+
+.current-points { font-weight: 700; }
+.points-needed { color: var(--dashboard-text-medium); font-style: italic; }
+.max-level { color: var(--nav-dashboard-logo-color); font-weight: bold; }
+
+/* --- Metrics Grid --- */
 .personal-stats-page-scoped .hero-metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
 }
 
@@ -189,40 +113,36 @@
   padding: 1.5rem;
   background-color: var(--dashboard-page-bg); 
   border-radius: 12px;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border-color-light);
 }
+
 .personal-stats-page-scoped .metric-card:hover {
   transform: translateY(-3px);
+  box-shadow: var(--shadow-medium);
 }
 
 .personal-stats-page-scoped .metric-card h3 {
   font-size: 0.9rem;
   color: var(--dashboard-text-medium);
   text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 0;
 }
 
 .personal-stats-page-scoped .metric-card .value {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--nav-dashboard-logo-color);
-  line-height: 1.2;
 }
 
-.personal-stats-page-scoped .metric-card small {
-    color: var(--dashboard-text-light);
-    font-size: 0.8rem;
-}
-
-/* --- Grid Layout for Widgets --- */
+/* --- Stats Grid Layout (Charts) --- */
 .personal-stats-page-scoped .stats-grid-layout {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: repeat(2, 1fr); 
   gap: 2rem;
 }
 
@@ -233,10 +153,20 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  min-height: 400px; /* Increased height for better chart visibility */
 }
 
 .personal-stats-page-scoped .stats-card.wide {
   grid-column: 1 / -1;
+}
+
+.personal-stats-page-scoped .stats-card h2 {
+  font-size: 1.2rem;
+  color: var(--dashboard-text-dark);
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--heading-underline-color);
+  font-weight: 600;
 }
 
 /* --- Chart Header & Filters --- */
@@ -244,36 +174,35 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
-    border-bottom: 2px solid var(--heading-underline-color);
-    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
     flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.personal-stats-page-scoped .chart-header h2 {
-    font-size: 1.2rem;
-    color: var(--dashboard-text-dark);
-    margin: 0;
-    font-weight: 600;
-}
-
-.personal-stats-page-scoped .stats-card h2 {
-  font-size: 1.2rem;
-  color: var(--dashboard-text-dark);
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--heading-underline-color);
-  font-weight: 600;
+    gap: 10px;
 }
 
 .personal-stats-page-scoped .stats-filter-group {
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 10px;
     background-color: var(--dashboard-page-bg);
-    padding: 0.3rem;
-    border-radius: 20px;
+    padding: 5px 10px;
+    border-radius: 25px;
+    flex-wrap: wrap;
+}
+
+.range-selector {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding-right: 10px;
+    border-right: 1px solid var(--border-color);
+}
+
+.range-input {
+    width: 50px;
+    padding: 3px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-align: center;
 }
 
 .personal-stats-page-scoped .filter-btn {
@@ -290,6 +219,7 @@
 
 .personal-stats-page-scoped .filter-btn:hover {
     color: var(--nav-dashboard-logo-color);
+    background-color: rgba(0,0,0,0.05);
 }
 
 .personal-stats-page-scoped .filter-btn.active {
@@ -298,33 +228,65 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* --- Chart Styling --- */
 .personal-stats-page-scoped .chart-container {
   width: 100%;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 320px; /* Fixed height for consistent chart rendering */
+  position: relative;
 }
 
-.personal-stats-page-scoped .empty-state-chart {
-  text-align: center;
-  color: var(--dashboard-text-medium);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.personal-stats-page-scoped .chart-loader {
-    width: 100%;
-    height: 300px;
+/* --- Pie Chart Specifics --- */
+.pie-toggle-group {
     display: flex;
-    align-items: center;
     justify-content: center;
-    color: var(--dashboard-text-medium);
+    gap: 10px;
+    margin-bottom: 1rem;
+    background-color: var(--dashboard-page-bg);
+    padding: 5px;
+    border-radius: 8px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- TOOLTIP STYLES (Improved Visibility) --- */
+.custom-tooltip {
+    background-color: #ffffff !important; /* Force solid white */
+    border: 1px solid #ccc;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 10000;
+    min-width: 180px;
+    pointer-events: none;
+    opacity: 1 !important; /* Ensure opacity */
+}
+
+.custom-tooltip .label {
+    margin: 0 0 8px 0;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+.custom-tooltip .tooltip-items p {
+    margin: 3px 0;
+    font-size: 0.9rem;
+}
+
+.custom-tooltip .tooltip-total p {
+    color: #333;
+    font-weight: bold;
+}
+
+.custom-tooltip .highlight-info {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #666;
+    border-top: 1px dashed #ddd;
+    padding-top: 5px;
     font-style: italic;
-    gap: 0.5rem;
 }
 
 /* --- Badges --- */
@@ -332,6 +294,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
+  justify-content: flex-start;
 }
 
 .personal-stats-page-scoped .badge-item {
@@ -342,14 +305,14 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 120px;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  width: 130px;
   border: 1px solid var(--events-border-color);
+  transition: transform 0.2s;
 }
 
 .personal-stats-page-scoped .badge-item:hover {
-  transform: translateY(-5px);
-  background-color: var(--nav-dashboard-link-hover-bg);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
 }
 
 .personal-stats-page-scoped .badge-icon {
@@ -359,14 +322,13 @@
 
 .personal-stats-page-scoped .badge-name {
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: var(--dashboard-text-dark);
   margin-bottom: 0.2rem;
-  line-height: 1.2;
 }
 
 .personal-stats-page-scoped .badge-desc {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--dashboard-text-medium);
 }
 
@@ -374,23 +336,25 @@
     width: 100%;
     text-align: center;
     color: var(--dashboard-text-medium);
-    padding: 1rem;
+    padding: 2rem;
     font-style: italic;
+    background-color: var(--dashboard-page-bg);
+    border-radius: 8px;
 }
 
-/* --- Eco Forest --- */
+/* --- Forest --- */
 .personal-stats-page-scoped .forest-card {
-  /* Use theme variables for dynamic background */
-  background: linear-gradient(to bottom, var(--stats-forest-bg-start), var(--stats-forest-bg-end));
-  border: 1px solid var(--events-border-color);
-  position: relative;
+    background: linear-gradient(to bottom, var(--stats-forest-bg-start), var(--stats-forest-bg-end));
+    border: none;
 }
+
 .personal-stats-page-scoped .forest-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
 }
+
 .personal-stats-page-scoped .forest-info {
     font-size: 0.8rem;
     font-weight: 600;
@@ -402,21 +366,24 @@
 }
 
 .personal-stats-page-scoped .forest-visual {
-  min-height: 150px;
+  min-height: 200px;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.2rem;
   align-items: flex-end;
+  padding-top: 1rem;
   align-content: flex-end;
 }
 
 .personal-stats-page-scoped .tree-icon {
   font-size: 2rem;
-  animation: growTree 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+  animation: popIn 0.5s ease-out forwards;
+  opacity: 0;
+  transform: scale(0.5);
   cursor: help;
   transition: transform 0.2s;
 }
+
 .personal-stats-page-scoped .tree-icon:hover {
     transform: scale(1.2);
 }
@@ -429,19 +396,19 @@
   justify-content: center;
   color: var(--dashboard-text-medium);
   opacity: 0.8;
-  margin-top: 2rem;
+  margin-top: 3rem;
 }
+
 .personal-stats-page-scoped .seed-icon {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 0.5rem;
 }
 
-@keyframes growTree {
-  from { transform: scale(0); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+@keyframes popIn {
+    to { opacity: 1; transform: scale(1); }
 }
 
-/* --- Loader & Error (Reused styles) --- */
+/* --- Loader & Error --- */
 .personal-stats-page-scoped .loader-container-main {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 3rem; text-align: center; color: var(--dashboard-text-medium); font-size: 1rem;
@@ -469,12 +436,10 @@
     grid-template-columns: 1fr;
   }
 }
+
 @media (max-width: 768px) {
   .personal-stats-page-scoped .stats-main-content { padding: 1.5rem 1rem; }
   .personal-stats-page-scoped .hero-welcome { flex-direction: column; align-items: flex-start; }
-  .personal-stats-page-scoped .hero-metrics-grid { grid-template-columns: 1fr; }
-  .personal-stats-page-scoped .metric-card { display: flex; justify-content: space-between; align-items: center; padding: 1rem; text-align: left; }
-  .personal-stats-page-scoped .metric-card h3 { margin: 0; }
   
   .personal-stats-page-scoped .chart-header {
       flex-direction: column;
@@ -484,8 +449,17 @@
       width: 100%;
       justify-content: space-between;
   }
+  .range-selector {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 5px;
+      margin-bottom: 5px;
+      justify-content: center;
+  }
   .personal-stats-page-scoped .filter-btn {
       padding: 0.4rem 0.6rem;
       font-size: 0.8rem;
+      flex: 1;
   }
 }
