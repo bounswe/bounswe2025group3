@@ -21,6 +21,7 @@ import ChallengeDetailPage from './components/challenges/ChallengeDetail';
 import EventCreate from './components/events/EventCreate';
 import './i18n';
 import PersonalStats from './components/stats/PersonalStats';
+import BadgesGallery from './components/stats/BadgesGallery';
 import { getUnreadNotifications, markNotificationAsRead, markAllNotificationsAsRead } from './services/api';
 import { useTranslation } from 'react-i18next';
 
@@ -155,6 +156,7 @@ const App = () => {
                 <Route path="/github-callback" element={<GithubCallback />} />
                 <Route path="/" element={<Home />} /> {/* Redirect root to /home */}
                 <Route path="/stats" element={<PersonalStats />} />
+                <Route path="/badges" element={<BadgesGallery />} />
             </Routes>
         </Router>
     );

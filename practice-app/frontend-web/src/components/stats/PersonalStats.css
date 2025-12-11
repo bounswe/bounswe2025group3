@@ -328,6 +328,34 @@
 }
 
 /* --- Badges --- */
+.personal-stats-page-scoped .badges-header-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.personal-stats-page-scoped .badges-header-with-button h2 {
+  margin: 0;
+}
+
+.personal-stats-page-scoped .view-all-badges-btn {
+  background-color: var(--accent-primary, #2ecc71);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.personal-stats-page-scoped .view-all-badges-btn:hover {
+  background-color: var(--accent-primary-dark, #27ae60);
+  transform: translateX(3px);
+}
+
 .personal-stats-page-scoped .badges-grid {
   display: flex;
   flex-wrap: wrap;
