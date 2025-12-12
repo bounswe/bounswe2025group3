@@ -13,6 +13,10 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = [
             'id', 'title', 'description', 'location', 'date', 'image',
+            'exact_location',    # Frontend: District
+            'duration',          # Frontend: Duration
+            'equipment_needed',  # Frontend: Equipment
+            # ---------------------------------------------
             'creator', 'creator_username',
             'participants_count', 'likes_count',
             'i_am_participating', 'i_liked',
@@ -24,11 +28,16 @@ class EventSerializer(serializers.ModelSerializer):
     def validate(self, data):
         title = data.get("title", "")
         description = data.get("description", "")
+        
+        equipment = data.get("equipment_needed", "")
+        exact_loc = data.get("exact_location", "")
 
         banned = getattr(settings, "BLACKLISTED_WORDS", [])
 
-        lower_title = title.lower()
-        lower_desc = description.lower()
+        lower_title = str(title).lower()
+        lower_desc = str(description).lower()
+        lower_equip = str(equipment).lower()
+        lower_loc = str(exact_loc).lower()
 
         for word in banned:
             w = word.lower()
@@ -43,19 +52,33 @@ class EventSerializer(serializers.ModelSerializer):
                     "description": f"Description contains banned word: '{word}'"
                 })
 
+            if w in lower_equip:
+                raise serializers.ValidationError({
+                    "equipment_needed": f"Equipment list contains banned word: '{word}'"
+                })
+            
+            if w in lower_loc:
+                 raise serializers.ValidationError({
+                    "exact_location": f"District/Location contains banned word: '{word}'"
+                })
+
         return data
 
     def get_i_am_participating(self, obj):
-        user = self.context['request'].user
-        if user.is_anonymous:
+        request = self.context.get('request')
+
+        if not request or not request.user.is_authenticated:
             return False
-        return obj.participants.filter(pk=user.pk).exists()
+            
+        return request.user in obj.participants.all()
 
     def get_i_liked(self, obj):
-        user = self.context['request'].user
-        if user.is_anonymous:
+        request = self.context.get('request')
+        
+        if not request or not request.user.is_authenticated:
             return False
-        return obj.likes.filter(pk=user.pk).exists()
+
+        return request.user in obj.likes.all()
 
     def create(self, validated_data):
         # creator will be attached in view (or you can set here if available in context)
