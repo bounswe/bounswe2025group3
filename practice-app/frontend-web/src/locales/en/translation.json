@@ -267,6 +267,11 @@
         "content": "\"Reduce your carbon footprint by choosing locally sourced and seasonal foods. It supports local farmers and reduces transportation emissions!\"",
         "discover_more": "Discover more tips"
       },
+      "forest_widget": {
+        "title": "Your Eco Forest",
+        "info": "1 forest = 1000 points",
+        "empty": "Start logging waste to grow your forest!"
+      },
       "error_fetch_score": "Failed to fetch your score. Please try again later."
     },
     "waste_log_page": {

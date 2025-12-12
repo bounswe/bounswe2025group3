@@ -75,6 +75,22 @@ const WasteLog = () => {
         setForm(prevForm => ({ ...prevForm, [name]: value }));
     };
 
+    // Group subcategories by main category
+    const groupedSubCategories = subCategories.reduce((acc, sc) => {
+        const mainCat = sc.category_name || 'Other';
+        if (!acc[mainCat]) {
+            acc[mainCat] = [];
+        }
+        acc[mainCat].push(sc);
+        return acc;
+    }, {});
+
+    // Get score for selected subcategory
+    const getScoreForSubcategory = (subcategoryId) => {
+        const subcategory = subCategories.find(sc => sc.id === parseInt(subcategoryId));
+        return subcategory?.score_per_unit || 'N/A';
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.subcategory || !form.quantity) {
@@ -138,13 +154,21 @@ const WasteLog = () => {
                                 <label htmlFor="subcategory"><Icon name="category"/> {t('waste_log_page.form.category_label')}</label>
                                 <select id="subcategory" name="subcategory" value={form.subcategory} onChange={handleInputChange} disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0} required>
                                     <option value="">{t('waste_log_page.form.category_placeholder')}</option>
-                                    {subCategories.map((sc) => (
-                                        <option key={sc.id} value={sc.id}>
-                                            {/* Çevrilmiş Kategori ve Birim */}
-                                            {getCategoryTrans(sc.name)} ({getUnitTrans(sc.unit)})
-                                        </option>
+                                    {Object.entries(groupedSubCategories).map(([mainCat, items]) => (
+                                        <optgroup key={mainCat} label={mainCat}>
+                                            {items.map((sc) => (
+                                                <option key={sc.id} value={sc.id}>
+                                                    {getCategoryTrans(sc.name)} ({getUnitTrans(sc.unit)}) - {sc.score_per_unit || 0} pts
+                                                </option>
+                                            ))}
+                                        </optgroup>
                                     ))}
                                 </select>
+                                {form.subcategory && (
+                                    <div className="score-display">
+                                        <Icon name="goal" /> {t('waste_log_page.form.score_per_item', { defaultValue: 'Points per item' })}: <span className="score-value">{getScoreForSubcategory(form.subcategory)} pts</span>
+                                    </div>
+                                )}
                             </div>
                             <div className="form-field">
                                 <label htmlFor="quantity"><Icon name="quantity"/> {t('waste_log_page.form.quantity_label')}</label>
