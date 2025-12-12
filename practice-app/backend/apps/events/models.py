@@ -8,8 +8,11 @@ class Event(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     location = models.CharField(max_length=255, blank=True)
+    exact_location = models.CharField(max_length=255, null=True, blank=True)
     date = models.DateTimeField()  # when the event happens
+    duration = models.IntegerField(help_text="Duration in minutes", null=True, blank=True) 
     image = models.ImageField(upload_to='events/images/', blank=True, null=True)
+    equipment_needed = models.TextField(null=True, blank=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_events')
     participants = models.ManyToManyField(
         User, related_name='participated_events', blank=True
