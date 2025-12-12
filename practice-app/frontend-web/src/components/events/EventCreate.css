@@ -11,18 +11,18 @@
 .event-create-scoped .create-main-content {
   flex-grow: 1;
   padding: 2rem 1.5rem;
-  max-width: 700px;
+  max-width: 800px; /* Genişlik biraz artırıldı */
   margin: 0 auto;
   width: 100%;
 }
 
 .event-create-scoped .create-header-section {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .event-create-scoped .create-header-section h1 {
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: var(--nav-dashboard-logo-color);
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -37,7 +37,7 @@
 }
 
 .event-create-scoped .create-header-section p {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: var(--dashboard-text-medium);
 }
 
@@ -45,9 +45,9 @@
 
 .event-create-scoped .create-form-container {
   background-color: var(--background-primary);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: var(--shadow-light);
-  padding: 2rem;
+  padding: 2.5rem;
   margin-bottom: 2rem;
 }
 
@@ -55,11 +55,23 @@
   margin-bottom: 1.5rem;
 }
 
+/* YAN YANA ALANLAR İÇİN GRUP (YENİ) */
+.event-create-scoped .form-row-split {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 1.5rem;
+}
+
+.event-create-scoped .form-row-split .form-group {
+  flex: 1;
+  margin-bottom: 0; /* Satır içi olduğu için alt marjini sıfırla */
+}
+
 .event-create-scoped .event-create-form label {
   display: block;
   font-weight: 600;
   color: var(--dashboard-text-dark);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   font-size: 0.95rem;
 }
 
@@ -70,13 +82,14 @@
 .event-create-scoped .event-create-form select,
 .event-create-scoped .event-create-form textarea {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1rem;
   border: 1px solid var(--dashboard-input-border);
   border-radius: 8px;
   background-color: var(--dashboard-input-bg);
   color: var(--dashboard-text-dark);
   transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
+  font-size: 1rem;
 }
 
 .event-create-scoped .event-create-form input:focus,
@@ -84,79 +97,18 @@
 .event-create-scoped .event-create-form textarea:focus {
   border-color: var(--accent-primary);
   outline: none;
-  box-shadow: 0 0 0 2px var(--accent-primary-ring);
+  box-shadow: 0 0 0 3px var(--accent-primary-ring);
 }
 
-.event-create-scoped .event-create-form .form-error {
-  background-color: var(--dashboard-error-bg);
-  color: var(--dashboard-error-text);
-  border-radius: 6px;
-  padding: 0.75rem;
-  font-size: 0.9rem;
-  margin-bottom: 1.5rem;
-  border: 1px solid var(--dashboard-error-border);
-}
-
-.event-create-scoped .event-create-form .form-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 2rem;
-}
-
-/* --- Submit Button --- */
-
-.event-create-scoped .event-create-form .btn-submit {
-  background-color: var(--nav-dashboard-link-active-bg);
-  color: var(--text-on-accent);
-  padding: 0.8rem 2rem;
-  border-radius: 25px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s, opacity 0.2s;
-}
-
-.event-create-scoped .event-create-form .btn-submit:hover:not(:disabled) {
-  background-color: var(--nav-dashboard-logo-color);
-}
-
-.event-create-scoped .event-create-form .btn-submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* --- Feedback Messages --- */
-
-.event-create-scoped .feedback-message {
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.event-create-scoped .feedback-message.success {
-  background-color: var(--success-message-bg);
-  color: var(--success-message-text);
-  border: 1px solid var(--success-message-border);
-}
-
-.event-create-scoped .feedback-message.error {
-  background-color: var(--dashboard-error-bg);
-  color: var(--dashboard-error-text);
-  border: 1px solid var(--dashboard-error-border);
-}
-
-/* --- Dropzone (Drag & Drop Area) --- */
-
+/* Dropzone (Drag & Drop Area) */
 .event-create-scoped .dropzone {
   border: 2px dashed var(--event-dropzone-border);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 30px 20px;
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-  min-height: 100px;
+  transition: all 0.3s ease;
+  min-height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -166,6 +118,7 @@
 
 .event-create-scoped .dropzone:hover {
   border-color: var(--event-dropzone-hover-border);
+  background-color: var(--background-secondary);
 }
 
 .event-create-scoped .dropzone.active {
@@ -173,17 +126,18 @@
   background-color: var(--event-dropzone-active-bg);
 }
 
-.event-create-scoped .dropzone-text {
-  margin: 0;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .event-create-scoped .dropzone.has-file {
   border: 2px solid var(--success-message-text);
-  background-color: var(--success-message-bg);
+  background-color: rgba(39, 174, 96, 0.05);
+}
+
+.event-create-scoped .image-preview-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-subtle);
 }
 
 .event-create-scoped .file-preview {
@@ -194,46 +148,89 @@
   justify-content: space-between;
 }
 
-.event-create-scoped .file-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.event-create-scoped .image-preview-thumb {
-  width: 60px;
-  height: 60px;
-  border-radius: 6px;
-  object-fit: cover;
-  border: 1px solid var(--border-color);
-}
-
-.event-create-scoped .text-info {
-  text-align: left;
-  color: var(--dashboard-text-dark);
-}
-
 .event-create-scoped .remove-btn {
-  background: transparent;
-  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--dashboard-error-text);
   color: var(--dashboard-error-text);
   cursor: pointer;
-  font-size: 1.2rem;
-  padding: 5px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .event-create-scoped .remove-btn:hover {
-  background-color: var(--dashboard-error-bg);
-  color: var(--dashboard-error-text-hover);
+  background-color: var(--dashboard-error-text);
+  color: white;
 }
 
-/* --- Back Button --- */
+/* --- Actions --- */
+.event-create-scoped .event-create-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color-light);
+}
 
+.event-create-scoped .event-create-form .btn-submit {
+  background-color: var(--nav-dashboard-link-active-bg);
+  color: var(--text-on-accent);
+  padding: 0.9rem 2.5rem;
+  border-radius: 30px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.event-create-scoped .event-create-form .btn-submit:hover:not(:disabled) {
+  background-color: var(--nav-dashboard-logo-color);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.event-create-scoped .event-create-form .btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Feedback Messages */
+.event-create-scoped .feedback-message {
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 10px;
+  font-weight: 500;
+  text-align: center;
+  border-left: 5px solid transparent;
+}
+
+.event-create-scoped .feedback-message.success {
+  background-color: var(--success-message-bg);
+  color: var(--success-message-text);
+  border-left-color: var(--success-message-text);
+}
+
+.event-create-scoped .feedback-message.error {
+  background-color: var(--dashboard-error-bg);
+  color: var(--dashboard-error-text);
+  border-left-color: var(--dashboard-error-text);
+}
+
+.event-create-scoped .form-error {
+  color: var(--dashboard-error-text);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Back Button */
 .event-create-scoped .back-button-container {
   text-align: center;
 }
@@ -242,10 +239,10 @@
   background: transparent;
   color: var(--nav-dashboard-logo-color);
   border: 1px solid var(--nav-dashboard-logo-color);
-  padding: 0.5rem 1.5rem;
-  border-radius: 25px;
+  padding: 0.6rem 2rem;
+  border-radius: 30px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
@@ -256,26 +253,96 @@
   background-color: var(--nav-dashboard-link-hover-bg);
 }
 
-.event-create-scoped .btn-back .icon {
-  font-size: 1.2em;
-}
-
 /* --- Responsive Tweaks --- */
 @media (max-width: 600px) {
   .event-create-scoped .create-main-content {
-      padding: 1rem 0.5rem;
+      padding: 1rem 1rem;
   }
   .event-create-scoped .create-form-container {
-      padding: 1.5rem 1rem;
+      padding: 1.5rem;
   }
   .event-create-scoped .create-header-section h1 {
       font-size: 1.8rem;
   }
+  /* Yan yana olan alanları mobilde alt alta al */
+  .event-create-scoped .form-row-split {
+      flex-direction: column;
+      gap: 1.5rem;
+  }
+  .event-create-scoped .event-create-form .btn-submit {
+      width: 100%;
+  }
   .event-create-scoped .file-preview {
       flex-direction: column;
       align-items: flex-start;
+      gap: 10px;
   }
   .event-create-scoped .remove-btn {
       align-self: flex-end;
+  }
+  /* Increase spacing between the Location section and the Date/Duration section */
+  .event-create-scoped .form-row-split {
+    display: flex;
+    gap: 20px;
+    margin-top: 1.5rem; /* Added top margin for separation from previous section */
+    margin-bottom: 1.5rem;
+  }
+
+  /* Ensure labels have consistent bottom margin */
+  .event-create-scoped .event-create-form label {
+    display: block;
+    font-weight: 600;
+    color: var(--dashboard-text-dark);
+    margin-bottom: 0.8rem; /* Increased from 0.6rem for better visual separation */
+    font-size: 0.95rem;
+    line-height: 1.4; /* Improve readability */
+  }
+
+  /* Add specific spacing for the standalone Equipment field */
+  .event-create-scoped .form-group.equipment-group {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  /* Select ve Input stilleri */
+  .event-create-scoped .form-select,
+  .event-create-scoped .event-create-form input,
+  .event-create-scoped .event-create-form select,
+  .event-create-scoped .event-create-form textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--dashboard-input-border);
+    border-radius: 8px;
+    background-color: var(--dashboard-input-bg);
+    color: var(--dashboard-text-dark);
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+
+  .event-create-scoped .sub-label {
+      font-size: 0.85rem;
+      color: var(--dashboard-text-medium);
+      margin-bottom: 5px;
+      display: block;
+  }
+
+  /* Birleşik Süre Girişi Stili */
+  .event-create-scoped .duration-input-group {
+      display: flex;
+      gap: 0; /* Boşluk yok, birleşik görünsün */
+  }
+
+  .event-create-scoped .duration-value {
+      flex: 2; /* Input daha geniş */
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-right: none !important;
+  }
+
+  .event-create-scoped .duration-unit {
+      flex: 1; /* Select daha dar */
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+      background-color: var(--background-secondary) !important;
+      cursor: pointer;
   }
 }

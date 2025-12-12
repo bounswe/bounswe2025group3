@@ -456,7 +456,7 @@
       "placeholderImage": "Image URL (Optional)",
       "labelDistrict": "District / Neighborhood",
       "placeholderDistrict": "e.g. Kadıköy",
-      "labelDuration": "Duration (hours)",
+      "labelDuration": "Duration",
       "placeholderDuration": "e.g. 2",
       "labelEquipment": "Equipment Needed",
       "placeholderEquipment": "e.g. Gloves, Bags, Water",
@@ -478,7 +478,13 @@
       "likeError": "Failed to toggle like",
       "backToEvents": "Back to Events",
       "hours": "hours",
-      "equipmentNeeded": "Equipment Needed"
+      "unitHoursShort": "h",
+      "unitMinutesShort": "m",
+      "unitHours": "Hours",
+      "unitMinutes": "Minutes",
+      "equipmentNeeded": "Equipment Needed",
+      "labelDescription": "Description",
+      "placeholderDurationExample": "e.g. 1.5"
     },
     "events_data": {
       "event_1_title": "Community Tree Planting Day",
