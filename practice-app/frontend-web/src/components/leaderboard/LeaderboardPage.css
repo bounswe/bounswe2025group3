@@ -214,6 +214,39 @@
   justify-content: center;
 }
 
+.leaderboard-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.leaderboard-filters .filter-btn {
+  background-color: transparent;
+  border: 1px solid var(--border-color-light, #ddd);
+  color: var(--dashboard-text-medium);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.leaderboard-filters .filter-btn:hover {
+  background-color: var(--background-secondary, #f8f9fa);
+  border-color: var(--nav-dashboard-logo-color);
+}
+
+.leaderboard-filters .filter-btn.active {
+  background-color: var(--nav-dashboard-logo-color);
+  color: var(--text-on-accent, #fff);
+  border-color: var(--nav-dashboard-logo-color);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
 /* --- Responsive (Scoped) --- */
 @media (max-width: 768px) {
   .leaderboard-page-scoped .leaderboard-main-content { padding: 1.5rem 1rem; }

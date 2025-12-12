@@ -357,6 +357,13 @@
         "player": "Player",
         "score": "Score"
       },
+      "filters": {
+        "all": "All Time",
+        "yearly": "Last Year",
+        "monthly": "Last Month",
+        "weekly": "Last Week",
+        "daily": "Today"
+      },
       "you_badge": "You",
       "score_suffix": "pts",
       "empty_state": "The leaderboard is currently empty. Start logging your activities to get on the board!"
@@ -514,6 +521,7 @@
           "last": "Last",
           "by_points": "By Points",
           "by_frequency": "By Frequency",
+          "week_suffix": "Week",
           "filters": {
             "daily": "Daily",
             "weekly": "Weekly",
@@ -525,7 +533,8 @@
         },
         "badges": {
           "title": "Badge Collection",
-          "empty": "Start logging to earn badges!"
+          "empty": "Start logging to earn badges!",
+          "view_all": "View All Badges"
         },
         "forest": {
           "title": "My Eco Forest",

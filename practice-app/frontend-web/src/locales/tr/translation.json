@@ -367,7 +367,14 @@
         "player": "Oyuncu",
         "score": "Puan"
       },
-      "you_badge": "Siz",
+      "filters": {
+        "all": "Tüm Zamanlar",
+        "yearly": "Son 1 Yıl",
+        "monthly": "Son 1 Ay",
+        "weekly": "Son 1 Hafta",
+        "daily": "Bugün"
+      },
+      "you_badge": "Sİz",
       "score_suffix": "puan",
       "empty_state": "Lider tablosu şu anda boş. Tahtaya çıkmak için aktivitelerinizi kaydetmeye başlayın!"
     },
@@ -513,6 +520,7 @@
           "last": "Son",
           "by_points": "Puana Göre",
           "by_frequency": "Sıklığa Göre",
+          "week_suffix": "Haftası",
           "filters": {
             "daily": "Günlük",
             "weekly": "Haftalık",
@@ -524,7 +532,8 @@
         },
         "badges": {
           "title": "Kupa Dolabı",
-          "empty": "Rozet kazanmak için atık kaydetmeye başla!"
+          "empty": "Rozet kazanmak için atık kaydetmeye başla!",
+          "view_all": "Tüm Rozetleri Gör"
         },
         "forest": {
           "title": "Eko Ormanım",

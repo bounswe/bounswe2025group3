@@ -193,7 +193,6 @@ const PersonalStats = () => {
         }
     }
 
-    // Dil ayarına göre tarih formatla
     const locale = i18n.language; 
 
     timePoints.forEach(d => {
@@ -203,8 +202,7 @@ const PersonalStats = () => {
              const day = d.getDay(); 
              const diff = d.getDate() - day + (day === 0 ? -6 : 1);
              const monday = new Date(d); monday.setDate(diff);
-             // Hafta gösterimi
-             key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.filters.weekly')}`; 
+             key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`; 
         }
         else if (period === 'monthly') key = d.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
         else if (period === 'yearly') key = d.getFullYear().toString();
@@ -221,7 +219,7 @@ const PersonalStats = () => {
             const day = date.getDay();
             const diff = date.getDate() - day + (day === 0 ? -6 : 1);
             const monday = new Date(date); monday.setDate(diff);
-            key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.filters.weekly')}`;
+            key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
         }
         else if (period === 'monthly') key = date.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
         else if (period === 'yearly') key = date.getFullYear().toString();
@@ -229,7 +227,7 @@ const PersonalStats = () => {
         if (dataMap.has(key)) {
             const entry = dataMap.get(key);
             const catName = log.sub_category_name || 'Other';
-            const safeKey = catName.replace(/\s+/g, ''); // Key olarak boşluksuz kullan
+            const safeKey = catName.replace(/\s+/g, ''); 
             
             categoriesSet.add(safeKey); 
             
@@ -240,7 +238,6 @@ const PersonalStats = () => {
             const unit = catMap[log.sub_category]?.unit || 'units';
             entry[`${safeKey}_unit`] = t(`units.${unit.toLowerCase()}`, {defaultValue: unit});
             
-            // Orijinal ismi sakla ama çeviriyi burada yapma, render anında yap
             entry[`${safeKey}_originalName`] = catName;
         }
     });

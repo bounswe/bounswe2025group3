@@ -10,7 +10,7 @@ const Icon = ({ name, className = "" }) => {
         logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆',
         profile: '👤', trophy: '🏆', star: '⭐', dashboard: '🏠',
         up: '🔼', down: '🔽', goal: '🎯', medalGold: '🥇',
-        medalSilver: '🥈', medalBronze: '🥉', alerts: '⚠️'
+        medalSilver: '🥈', medalBronze: '🥉', alerts: '⚠️', filter: '🔍'
     };
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
@@ -20,6 +20,11 @@ const LeaderboardPage = () => {
     const [leaderboardData, setLeaderboardData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    
+    // YENİ: Zaman dilimi state'i (Varsayılan: 'all')
+    // Seçenekler: 'all', 'yearly', 'monthly', 'weekly', 'daily'
+    const [timeframe, setTimeframe] = useState('all');
+
     const navigate = useNavigate();
     const currentUserId = localStorage.getItem('user_id'); 
     const token = localStorage.getItem('access_token');
@@ -29,28 +34,24 @@ const LeaderboardPage = () => {
             navigate('/login');
             return;
         }
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [token]);
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
             setLoading(true);
             try {
-                // 1. API'den ham veriyi al
-                const rawData = await getLeaderboard(); 
+                // YENİ: timeframe parametresini gönderiyoruz
+                const rawData = await getLeaderboard(timeframe); 
                 
-                // 2. Veriyi bileşenin beklediği formata dönüştür
                 let transformedData = rawData.map((user, index) => ({
                     id: user.id,
-                    // Backend artık 'username' yerine 'display_name' gönderiyor (Anonimlik için)
                     displayName: user.display_name, 
                     score: parseFloat(user.total_score), 
                     rank: index + 1, 
-                    // Avatar seed'i olarak da display_name kullanıyoruz
                     avatarSeed: user.display_name 
                 }));
 
-                // 3. Mevcut kullanıcıyı işaretle
                 if (currentUserId) {
                     transformedData = transformedData.map(user => ({
                         ...user,
@@ -69,7 +70,8 @@ const LeaderboardPage = () => {
         };
 
         fetchLeaderboard();
-    }, [navigate, currentUserId]);
+        // YENİ: timeframe değiştiğinde useEffect tekrar çalışsın
+    }, [navigate, currentUserId, timeframe]);
 
     const getRankIcon = (rank) => {
         if (rank === 1) return <Icon name="medalGold" className="rank-icon gold" />;
@@ -78,19 +80,15 @@ const LeaderboardPage = () => {
         return <span className="rank-number">{rank}</span>;
     };
 
-    // Basit avatar placeholder bileşeni
     const AvatarPlaceholder = ({ username, seed }) => {
-        // Eğer kullanıcı anonim ise '?' göster, değilse baş harfini göster
         const isAnonymous = username === 'anonymous_user';
         const initial = isAnonymous ? '?' : (username ? username.charAt(0).toUpperCase() : '?');
         
-        // Seed'e göre renk üret (Anonimler için sabit veya farklı bir renk mantığı olabilir)
         let hash = 0;
         const seedString = seed || 'default';
         for (let i = 0; i < seedString.length; i++) {
             hash = seedString.charCodeAt(i) + ((hash << 5) - hash);
         }
-        // Anonim kullanıcılar için gri ton, diğerleri için renkli
         const color = isAnonymous ? '#ccc' : `hsl(${hash % 360}, 60%, 70%)`;
         
         return (
@@ -108,6 +106,19 @@ const LeaderboardPage = () => {
                 <div className="leaderboard-header-section">
                     <h1><Icon name="trophy" /> {t('leaderboard_page.title')}</h1>
                     <p>{t('leaderboard_page.subtitle')}</p>
+                    
+                    {/* YENİ: Filtre Butonları */}
+                    <div className="leaderboard-filters">
+                        {['all', 'yearly', 'monthly', 'weekly', 'daily'].map((period) => (
+                            <button
+                                key={period}
+                                className={`filter-btn ${timeframe === period ? 'active' : ''}`}
+                                onClick={() => setTimeframe(period)}
+                            >
+                                {t(`leaderboard_page.filters.${period}`)}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {loading && (
@@ -142,7 +153,6 @@ const LeaderboardPage = () => {
                                                 seed={user.avatarSeed} 
                                             />
                                             <span className="player-name">
-                                                {/* Anonim Kontrolü: Backend 'anonymous_user' gönderirse çeviriyi göster */}
                                                 {user.displayName === 'anonymous_user' 
                                                     ? t('leaderboard_page.anonymous_user', 'Anonymous User') 
                                                     : user.displayName
@@ -159,7 +169,7 @@ const LeaderboardPage = () => {
                 )}
 
                 {!loading && !error && leaderboardData.length === 0 && (
-                     <div className="empty-leaderboard-message">
+                    <div className="empty-leaderboard-message">
                         <Icon name="leaderboard" />
                         <p>{t('leaderboard_page.empty_state')}</p>
                     </div>
