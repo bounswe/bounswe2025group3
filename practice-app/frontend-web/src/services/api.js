@@ -83,8 +83,8 @@ export const getUserScore = async () => {
     return response.data;
 };
 
-export const getLeaderboard = async () => {
-    const response = await api.get('v1/waste/leaderboard/');
+export const getLeaderboard = async (period = 'all') => {
+    const response = await api.get(`v1/waste/leaderboard/?period=${period}`);
     return response.data;
 };
 
