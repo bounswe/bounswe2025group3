@@ -360,6 +360,7 @@
       "subtitle": "Çevreye olumlu etki yaratmada kimin başı çektiğini görün!",
       "loading": "Şampiyonlar yükleniyor...",
       "error_load_failed": "Lider tablosu verileri yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+      "anonymous_user": "Anonim Kullanıcı", 
       "table": {
         "rank": "Sıra",
         "player": "Oyuncu",
@@ -377,6 +378,7 @@
       "error_fetch": "Profiliniz alınamadı. Lütfen tekrar deneyin.",
       "error_update_validation": "Profil güncellenemedi. Lütfen girdilerinizi kontrol edin.",
       "error_update_generic": "Profil güncellenemedi. Bilinmeyen bir hata oluştu.",
+      "preferences_title": "Tercihler",
       "form": {
         "first_name_label": "Ad",
         "last_name_label": "Soyad",
@@ -384,6 +386,7 @@
         "city_label": "Şehir",
         "country_label": "Ülke",
         "notifications_label": "E-posta Bildirimlerini Etkinleştir",
+        "anonymous_label": "Lider tablosunda ismimi gizle (Anonim Ol)",
         "first_name_placeholder": "Adınızı girin",
         "last_name_placeholder": "Soyadınızı girin",
         "bio_placeholder": "Bize biraz kendinizden ve eko-yolculuğunuzdan bahsedin...",

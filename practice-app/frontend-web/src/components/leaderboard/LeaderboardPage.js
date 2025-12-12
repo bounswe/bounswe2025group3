@@ -1,27 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { getLeaderboard } from '../../services/api'; // Assuming you have this API service
-import { useTranslation } from 'react-i18next'; // 1. Import hook
-import Navbar from '../common/Navbar'; // 2. Import shared Navbar
-import './LeaderboardPage.css'; // We'll create this
+import { useNavigate } from 'react-router-dom';
+import { getLeaderboard } from '../../services/api'; 
+import { useTranslation } from 'react-i18next'; 
+import Navbar from '../common/Navbar'; 
+import './LeaderboardPage.css'; 
 
-// Re-usable Icon component (or import if you've centralized it)
 const Icon = ({ name, className = "" }) => {
     const icons = {
-        logo: '🌿',
-        waste: '🗑️',
-        leaderboard: '📊',
-        challenges: '🏆',
-        profile: '👤',
-        trophy: '🏆',
-        star: '⭐',
-        dashboard: '🏠',
-        up: '🔼',
-        down: '🔽',
-        goal: '🎯',
-        medalGold: '🥇',
-        medalSilver: '🥈',
-        medalBronze: '🥉',
+        logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆',
+        profile: '👤', trophy: '🏆', star: '⭐', dashboard: '🏠',
+        up: '🔼', down: '🔽', goal: '🎯', medalGold: '🥇',
+        medalSilver: '🥈', medalBronze: '🥉', alerts: '⚠️'
     };
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
@@ -32,39 +21,36 @@ const LeaderboardPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const currentUserId = localStorage.getItem('user_id'); // Assuming you store user_id
-        const token = localStorage.getItem('access_token');
+    const currentUserId = localStorage.getItem('user_id'); 
+    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
-    if (!token) {
-        navigate('/login');
-        return;
+        if (!token) {
+            navigate('/login');
+            return;
         }
     // eslint-disable-next-line
-  }, [token]);
+    }, [token]);
 
     useEffect(() => {
-        const token = localStorage.getItem('access_token');
-        
         const fetchLeaderboard = async () => {
             setLoading(true);
             try {
-                // 1. Get raw data from API
+                // 1. API'den ham veriyi al
                 const rawData = await getLeaderboard(); 
                 
-                // 2. Transform raw data to match what the component expects
+                // 2. Veriyi bileşenin beklediği formata dönüştür
                 let transformedData = rawData.map((user, index) => ({
                     id: user.id,
-                    username: user.username,
-                    // Map total_waste_quantity to score and convert to number
+                    // Backend artık 'username' yerine 'display_name' gönderiyor (Anonimlik için)
+                    displayName: user.display_name, 
                     score: parseFloat(user.total_score), 
-                    // Add rank based on the API's sorted order
                     rank: index + 1, 
-                    // Add avatarSeed for the placeholder
-                    avatarSeed: user.username 
+                    // Avatar seed'i olarak da display_name kullanıyoruz
+                    avatarSeed: user.display_name 
                 }));
 
-                // 3. Mark the current user
+                // 3. Mevcut kullanıcıyı işaretle
                 if (currentUserId) {
                     transformedData = transformedData.map(user => ({
                         ...user,
@@ -72,11 +58,10 @@ const LeaderboardPage = () => {
                     }));
                 }
 
-                // 4. Set the final, correct data into state
                 setLeaderboardData(transformedData);
                 setError('');
             } catch (err) {
-                setError('Failed to load leaderboard data. Please try again later.');
+                setError('leaderboard_page.error_load_failed');
                 console.error('Error fetching leaderboard:', err);
             } finally {
                 setLoading(false);
@@ -93,15 +78,21 @@ const LeaderboardPage = () => {
         return <span className="rank-number">{rank}</span>;
     };
 
-    // Simple avatar placeholder using initials or a generated color
+    // Basit avatar placeholder bileşeni
     const AvatarPlaceholder = ({ username, seed }) => {
-        const initial = username ? username.charAt(0).toUpperCase() : '?';
-        // Basic hash function for a somewhat consistent color based on seed
+        // Eğer kullanıcı anonim ise '?' göster, değilse baş harfini göster
+        const isAnonymous = username === 'anonymous_user';
+        const initial = isAnonymous ? '?' : (username ? username.charAt(0).toUpperCase() : '?');
+        
+        // Seed'e göre renk üret (Anonimler için sabit veya farklı bir renk mantığı olabilir)
         let hash = 0;
-        for (let i = 0; i < (seed?.length || 0); i++) {
-            hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+        const seedString = seed || 'default';
+        for (let i = 0; i < seedString.length; i++) {
+            hash = seedString.charCodeAt(i) + ((hash << 5) - hash);
         }
-        const color = `hsl(${hash % 360}, 60%, 70%)`;
+        // Anonim kullanıcılar için gri ton, diğerleri için renkli
+        const color = isAnonymous ? '#ccc' : `hsl(${hash % 360}, 60%, 70%)`;
+        
         return (
             <div className="avatar-placeholder" style={{ backgroundColor: color }}>
                 {initial}
@@ -109,14 +100,11 @@ const LeaderboardPage = () => {
         );
     };
 
-
     return (
         <div className="leaderboard-page-scoped leaderboard-page-layout">
-            {/* 4. Use the shared Navbar component */}
             <Navbar isAuthenticated={true} />
 
             <main className="leaderboard-main-content">
-                {/* 5. Replace all static text with the t() function */}
                 <div className="leaderboard-header-section">
                     <h1><Icon name="trophy" /> {t('leaderboard_page.title')}</h1>
                     <p>{t('leaderboard_page.subtitle')}</p>
@@ -130,7 +118,7 @@ const LeaderboardPage = () => {
                 )}
                 {error && !loading && (
                     <div className="error-message-box-main">
-                         <Icon name="alerts" className="error-icon" /> {t(error)} {/* Translate the key */}
+                         <Icon name="alerts" className="error-icon" /> {t(error)}
                     </div>
                 )}
 
@@ -149,8 +137,17 @@ const LeaderboardPage = () => {
                                     <tr key={user.id} className={user.isCurrentUser ? 'current-user-row' : ''}>
                                         <td className="rank-cell">{getRankIcon(user.rank)}</td>
                                         <td className="player-cell">
-                                            <AvatarPlaceholder username={user.username} seed={user.avatarSeed || user.username} />
-                                            <span className="player-name">{user.username}</span>
+                                            <AvatarPlaceholder 
+                                                username={user.displayName} 
+                                                seed={user.avatarSeed} 
+                                            />
+                                            <span className="player-name">
+                                                {/* Anonim Kontrolü: Backend 'anonymous_user' gönderirse çeviriyi göster */}
+                                                {user.displayName === 'anonymous_user' 
+                                                    ? t('leaderboard_page.anonymous_user', 'Anonymous User') 
+                                                    : user.displayName
+                                                }
+                                            </span>
                                             {user.isCurrentUser && <span className="you-badge">{t('leaderboard_page.you_badge')}</span>}
                                         </td>
                                         <td className="score-cell">{user.score} {t('leaderboard_page.score_suffix')}</td>

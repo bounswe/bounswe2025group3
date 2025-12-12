@@ -350,6 +350,7 @@
       "subtitle": "See who's leading the charge in making a positive environmental impact!",
       "loading": "Loading champions...",
       "error_load_failed": "Failed to load leaderboard data. Please try again later.",
+      "anonymous_user": "Anonymous User",
       "table": {
         "rank": "Rank",
         "player": "Player",
@@ -367,6 +368,7 @@
       "error_fetch": "Failed to fetch your profile. Please try again.",
       "error_update_validation": "Failed to update profile. Please check your input.",
       "error_update_generic": "Failed to update profile. An unknown error occurred.",
+      "preferences_title": "Preferences",
       "form": {
         "first_name_label": "First Name",
         "last_name_label": "Last Name",
@@ -374,6 +376,7 @@
         "city_label": "City",
         "country_label": "Country",
         "notifications_label": "Enable Email Notifications",
+        "anonymous_label": "Hide my name on leaderboard (Go Anonymous)",
         "first_name_placeholder": "Enter your first name",
         "last_name_placeholder": "Enter your last name",
         "bio_placeholder": "Tell us a bit about yourself and your eco-journey...",
