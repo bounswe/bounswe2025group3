@@ -311,6 +311,7 @@
         },
         "notes_label": "Notlar (İsteğe Bağlı)",
         "notes_placeholder": "Herhangi bir detay, örn. belirli ürünler, kaynak...",
+        "score_per_item": "Birim Puan",
         "submit_button": "Kaydı Ekle",
         "submit_button_adding": "Ekleniyor..."
       },
@@ -460,7 +461,7 @@
       "placeholderDistrict": "Örn: Kadıköy",
       "labelDuration": "Süre (saat)",
       "placeholderDuration": "Örn: 2",
-      "labelEquipment": "Gereken Ekipman",
+      "labelEquipment": "Gereken Ekipman",  
       "placeholderEquipment": "Örn: Eldiven, Çanta, Su",
       "labelImage": "Etkinlik Resmi (İsteğe Bağlı)",
       "dragDropActive": "Resmi buraya bırakın...",
@@ -478,7 +479,9 @@
       "likeSuccess": "Etkinlik beğenildi!",
       "unlikeSuccess": "Beğeni geri alındı.",
       "likeError": "Beğeni durumu değiştirilemedi",
-      "backToEvents": "Etkinliklere Geri Dön"
+      "backToEvents": "Etkinliklere Geri Dön",
+      "hours": "saat", 
+      "equipmentNeeded": "Gereken Ekipman" 
     },
     "challenge_detail": {
       "not_found": "Meydan Okuma Bulunamadı",
@@ -530,6 +533,8 @@
         }
       },
       "waste_categories": {
+        "recyclable": "Geri Dönüştürülebilir",
+        "cooking_oil": "Atık Yağ (Genel)",
         "paper": "Kağıt",
         "plastic_bottles": "Plastik Şişe",
         "cardboard": "Karton",
@@ -544,7 +549,20 @@
         "plastic": "Plastik",
         "electronic": "Elektronik",
         "organic": "Organik",
-        "other": "Diğer"
+        "other": "Diğer",
+        "aa_batteries": "AA Pil",
+        "lithium-ion_batteries": "Lityum-iyon Pil",
+        "button_cell_batteries": "Düğme Pil",
+        "car_batteries": "Araba Aküsü",
+        "nimh_batteries": "NiMH Pil",
+        "glass_bottles": "Cam Şişe",
+        "broken_glass": "Kırık Cam",
+        "used_cooking_oil": "Kullanılmış Kızartma Yağı",
+        "clothing": "Kıyafet",
+        "used_clothing": "Kullanılmış Kıyafet",
+        "shoes": "Ayakkabı",
+        "hazardous_waste": "Tehlikeli Atık",
+        "bulky_items": "Hacimli Atıklar (Eşyalar)"
       },
       "units": {
         "kg": "kg",
@@ -578,7 +596,6 @@
           "name": "Sıfır Atık Efsanesi",
           "desc": "5000+ Puan"
         }
-      
     },
   "notifications": {
     "title": "Bildirimler",
