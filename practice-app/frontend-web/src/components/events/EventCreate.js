@@ -18,14 +18,20 @@ const EventCreate = () => {
   const navigate = useNavigate(); 
   const fileInputRef = useRef(null);
   
+  const getLocalDateTime = () => {
+    const now = new Date();
+    const localDate = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+    return localDate.toISOString().slice(0, 16);
+  };
+  
   const initialData = {
     title: '',
     description: '',
     location: '',
-    district: '',
-    duration: '',
+    district: '', 
+    duration: '', // Kullanıcı buraya saat girecek (örn: 1.5)
     equipment: '',
-    date: new Date().toISOString().substring(0, 16), 
+    date: getLocalDateTime(), 
     image: null, 
   };
   
@@ -53,47 +59,25 @@ const EventCreate = () => {
 
   const processFile = (file) => {
     if (file && file.type.startsWith('image/')) {
-      Object.assign(file, {
-        preview: URL.createObjectURL(file)
-      });
+      Object.assign(file, { preview: URL.createObjectURL(file) });
       setFormData(prev => ({ ...prev, image: file }));
       setFormError('');
     } else {
-      setFormError(t('eventsPage.errorImageOnly') || 'Please upload an image file (jpg, png).');
+      setFormError(t('eventsPage.errorImageOnly') || 'Lütfen sadece resim dosyası yükleyiniz.');
     }
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
+  const handleDragOver = (e) => { e.preventDefault(); setIsDragging(true); };
+  const handleDragLeave = (e) => { e.preventDefault(); setIsDragging(false); };
   const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
-      processFile(files[0]);
-    }
+    e.preventDefault(); setIsDragging(false);
+    if (e.dataTransfer.files.length > 0) processFile(e.dataTransfer.files[0]);
   };
-
-  const handleFileSelect = (e) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      processFile(files[0]);
-    }
-  };
-
+  const handleFileSelect = (e) => { if (e.target.files.length > 0) processFile(e.target.files[0]); };
+  
   const removeImage = (e) => {
     e.stopPropagation();
-    if (formData.image && formData.image.preview) {
-      URL.revokeObjectURL(formData.image.preview);
-    }
+    if (formData.image?.preview) URL.revokeObjectURL(formData.image.preview);
     setFormData(prev => ({ ...prev, image: null }));
   };
 
@@ -110,42 +94,63 @@ const EventCreate = () => {
     try {
       const dataToSend = new FormData();
       dataToSend.append('title', formData.title);
-      
-      let fullDescription = formData.description;
-      if (formData.district) fullDescription += `\n\nDistrict: ${formData.district}`;
-      if (formData.duration) fullDescription += `\nDuration: ${formData.duration} hours`;
-      if (formData.equipment) fullDescription += `\nEquipment Needed: ${formData.equipment}`;
-
-      dataToSend.append('description', fullDescription);
+      dataToSend.append('description', formData.description);
       dataToSend.append('location', formData.location);
       dataToSend.append('date', new Date(formData.date).toISOString());
       
+      if (formData.district) {
+          dataToSend.append('exact_location', formData.district);
+      }
+      
+      // --- SÜRE HESAPLAMA (SAAT -> DAKİKA) ---
+      if (formData.duration) {
+          // Gelen değer string "1.5" olabilir, bunu float'a çeviriyoruz.
+          const hours = parseFloat(formData.duration);
+          // Backend dakika (integer) bekliyor. (1.5 saat * 60 = 90 dakika)
+          const minutes = Math.round(hours * 60);
+          
+          dataToSend.append('duration', minutes);
+      }
+      // ---------------------------------------
+      
+      if (formData.equipment) {
+          dataToSend.append('equipment_needed', formData.equipment);
+      }
+
       if (formData.image) {
         dataToSend.append('image', formData.image, formData.image.name); 
       }
       
-      const response = await createEvent(dataToSend);
+      await createEvent(dataToSend);
       
       setFormData(initialData);
-      if (fileInputRef.current) fileInputRef.current.value = ""; 
+      setSelectedCountry(''); 
+      if (fileInputRef.current) fileInputRef.current.value = "";
       
-      showMessage(t('eventsPage.createSuccess'), 'success');
+      showMessage(t('eventsPage.createSuccess') || 'Etkinlik başarıyla oluşturuldu!', 'success');
 
     } catch (err) {
       console.error('Failed to create event:', err);
-      const errorMessage = err.response?.data?.detail || err.message;
-      showMessage(t('eventsPage.createError') + `: ${errorMessage}`, 'error');
+      let errorMessage = t('eventsPage.createError');
+      if (err.response?.data) {
+         const data = err.response.data;
+         if (typeof data === 'object' && !data.detail) {
+           const firstKey = Object.keys(data)[0];
+           const firstError = Array.isArray(data[firstKey]) ? data[firstKey][0] : data[firstKey];
+           errorMessage += `: ${firstKey} - ${firstError}`;
+         } else {
+           errorMessage += `: ${data.detail || err.message}`;
+         }
+      } else {
+         errorMessage += `: ${err.message}`;
+      }
+      showMessage(errorMessage, 'error');
     } finally {
       setIsSubmitting(false);
-      if (formData.image && formData.image.preview) {
-        URL.revokeObjectURL(formData.image.preview);
-      }
     }
   };
 
-  const handleGoBack = () => {
-    navigate('/events'); 
-  };
+  const handleGoBack = () => { navigate('/events'); };
 
   return (
     <div className="event-create-scoped event-create-layout">
@@ -167,191 +172,91 @@ const EventCreate = () => {
           <form onSubmit={handleSubmit} className="event-create-form">
             {formError && <p className="form-error">{formError}</p>}
             
-            {/* 1. BAŞLIK */}
             <div className="form-group">
               <label>{t('eventsPage.placeholderTitle')}</label>
-              <input 
-                name="title" 
-                type="text" 
-                value={formData.title} 
-                onChange={handleChange} 
-                required
-              />
+              <input name="title" type="text" value={formData.title} onChange={handleChange} required />
             </div>
 
-            {/* 2. AÇIKLAMA */}
             <div className="form-group">
               <label>{t('eventsPage.placeholderDescription')}</label>
-              <textarea
-                name="description" 
-                value={formData.description} 
-                onChange={handleChange} 
-                rows="4"
-                required
-              />
+              <textarea name="description" value={formData.description} onChange={handleChange} rows="4" required />
             </div>
 
-            {/* 3. KONUM SEÇİMİ (Ülke -> Şehir -> İlçe/Mahalle) */}
             <div className="form-group">
               <label>{t('eventsPage.placeholderLocation')}</label>
-              
-              {/* Ülke ve Şehir Yan Yana */}
               <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                <select
-                  value={selectedCountry}
-                  onChange={handleCountryChange}
-                  required
-                  style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--dashboard-input-border)', backgroundColor: 'var(--dashboard-input-bg)', color: 'var(--dashboard-text-primary)' }}
-                >
+                <select value={selectedCountry} onChange={handleCountryChange} required className="form-select">
                   <option value="">{t('profile_page.form.select_country')}</option>
-                  {Country.getAllCountries().map((country) => (
-                    <option key={country.isoCode} value={country.isoCode}>
-                      {country.name}
-                    </option>
-                  ))}
+                  {Country.getAllCountries().map((c) => <option key={c.isoCode} value={c.isoCode}>{c.name}</option>)}
                 </select>
-                <select
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  required
-                  disabled={!selectedCountry}
-                  style={{ flex: 1, padding: '12px', borderRadius: '8px', border: '1px solid var(--dashboard-input-border)', backgroundColor: 'var(--dashboard-input-bg)', color: 'var(--dashboard-text-primary)' }}
-                >
+                <select name="location" value={formData.location} onChange={handleChange} required disabled={!selectedCountry} className="form-select">
                   <option value="">{t('profile_page.form.select_city')}</option>
-                  {selectedCountry &&
-                    State.getStatesOfCountry(selectedCountry).map((state, index) => (
-                      <option key={`${state.name}-${index}`} value={state.name}>
-                        {state.name}
-                      </option>
-                    ))}
+                  {selectedCountry && State.getStatesOfCountry(selectedCountry).map((s, i) => <option key={`${s.name}-${i}`} value={s.name}>{s.name}</option>)}
                 </select>
               </div>
-
-              {/* İlçe/Mahalle (Alt Satır) */}
               <div style={{ marginTop: '10px' }}>
-                <label style={{ fontSize: '0.9em', color: 'var(--dashboard-text-medium)', marginBottom: '5px', display:'block' }}>
-                    {t('eventsPage.labelDistrict')}
-                </label>
-                <input 
-                    name="district" 
-                    type="text" 
-                    value={formData.district} 
-                    onChange={handleChange} 
-                    placeholder={t('eventsPage.placeholderDistrict')} 
-                />
+                <label className="sub-label">{t('eventsPage.labelDistrict') || 'İlçe / Semt'}</label>
+                <input name="district" type="text" value={formData.district} onChange={handleChange} placeholder={t('eventsPage.placeholderDistrict')} />
               </div>
             </div>
 
-            {/* 4. TARİH, SÜRE VE EKİPMAN */}
-            <div className="form-row">
-                {/* Tarih */}
-                <div className="form-field">
+            <div className="form-row-split">
+                <div className="form-group">
                     <label>{t('eventsPage.labelDateTime')}</label>
-                    <input 
-                        name="date" 
-                        type="datetime-local" 
-                        value={formData.date} 
-                        onChange={handleChange} 
-                        required
-                    />
+                    <input name="date" type="datetime-local" value={formData.date} onChange={handleChange} required />
                 </div>
-
-                {/* Süre */}
-                <div className="form-field">
-                    <label>{t('eventsPage.labelDuration')}</label>
+                
+                {/* --- SÜRE ALANI GÜNCELLENDİ --- */}
+                <div className="form-group">
+                    <label>{t('eventsPage.labelDuration')} ({t('eventsPage.unitHours') || 'Saat'})</label>
                     <input 
                         name="duration" 
                         type="number" 
                         value={formData.duration} 
                         onChange={handleChange} 
-                        placeholder={t('eventsPage.placeholderDuration')} 
+                        placeholder={t('eventsPage.placeholderDurationExample', 'Örn: 1.5')}
                         min="0"
+                        step="0.1" // 1.5, 2.5 gibi girişlere izin verir
                     />
                 </div>
             </div>
 
-            {/* Ekipman (Tam Genişlik) */}
-            <div className="form-group">
+            <div className="form-group equipment-group">
                 <label>{t('eventsPage.labelEquipment')}</label>
-                <input 
-                    name="equipment" 
-                    type="text" 
-                    value={formData.equipment} 
-                    onChange={handleChange} 
-                    placeholder={t('eventsPage.placeholderEquipment')} 
-                />
+                <input name="equipment" type="text" value={formData.equipment} onChange={handleChange} placeholder={t('eventsPage.placeholderEquipment')} />
             </div>
 
-            {/* 5. GÖRSEL YÜKLEME (EN SON) */}
             <div className="form-group image-upload-group">
               <label>{t('eventsPage.labelImage')}</label>
-              
               <div 
                 className={`dropzone ${isDragging ? 'active' : ''} ${formData.image ? 'has-file' : ''}`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
+                onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
                 onClick={() => fileInputRef.current.click()}
               >
-                <input 
-                  type="file" 
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  ref={fileInputRef}
-                  style={{ display: 'none' }} 
-                />
-                
+                <input type="file" accept="image/*" onChange={handleFileSelect} ref={fileInputRef} style={{ display: 'none' }} />
                 {formData.image ? (
                   <div className="file-preview">
                     <div className="file-info">
-                        {formData.image.preview && (
-                        <img src={formData.image.preview} alt="Preview" className="image-preview-thumb" />
-                        )}
-                        <div className="text-info">
-                            <strong>{formData.image.name}</strong> 
-                            <br/>
-                            <small>{Math.round(formData.image.size / 1024)} KB</small>
-                        </div>
+                        {formData.image.preview && <img src={formData.image.preview} alt="Preview" className="image-preview-thumb" />}
+                        <div className="text-info"><strong>{formData.image.name}</strong><br/><small>{Math.round(formData.image.size/1024)} KB</small></div>
                     </div>
-                    <button 
-                        type="button" 
-                        className="remove-btn" 
-                        onClick={removeImage}
-                        title={t('eventsPage.imageRemoveTitle')}
-                    >
-                        <Icon name="trash" />
-                    </button>
+                    <button type="button" className="remove-btn" onClick={removeImage}><Icon name="trash" /></button>
                   </div>
-                ) : isDragging ? (
-                  <p className="dropzone-text">
-                    <Icon name="upload" /> {t('eventsPage.dragDropActive')}
-                  </p>
                 ) : (
-                  <p className="dropzone-text">
-                    <Icon name="upload" /> {t('eventsPage.dragDropInactive')}
-                  </p>
+                  <p className="dropzone-text"><Icon name="upload" /> {isDragging ? t('eventsPage.dragDropActive') : t('eventsPage.dragDropInactive')}</p>
                 )}
               </div>
             </div>
 
             <div className="form-actions">
-              <button 
-                type="submit" 
-                className="btn-submit"
-                disabled={isSubmitting}
-              >
+              <button type="submit" className="btn-submit" disabled={isSubmitting}>
                 {isSubmitting ? t('eventsPage.buttonCreating') : t('eventsPage.buttonCreate')}
               </button>
             </div>
           </form>
         </div>
-        
         <div className="back-button-container">
-          <button onClick={handleGoBack} className="btn-back">
-            <Icon name="back" className="mr-2" />
-            {t('eventsPage.backToEvents')}
-          </button>
+          <button onClick={handleGoBack} className="btn-back"><Icon name="back" className="mr-2" />{t('eventsPage.backToEvents')}</button>
         </div>
       </main>
     </div>

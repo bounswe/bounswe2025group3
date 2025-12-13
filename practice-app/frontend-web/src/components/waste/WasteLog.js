@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getWasteLogs, addWasteLog, getSubCategories } from '../../services/api';
+// getWasteCategories fonksiyonunu import etmeyi unutmayın
+import { getWasteLogs, addWasteLog, getSubCategories, getWasteCategories } from '../../services/api';
 import Navbar from '../common/Navbar';
 import './WasteLog.css';
 
@@ -10,56 +11,86 @@ const Icon = ({ name, className = "" }) => {
         logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆',
         logNew: '➕', list: '📋', alerts: '⚠️', dashboard: '🏠',
         back: '↩️', category: '🏷️', quantity: '⚖️', disposal: '♻️',
-        notes: '📝', retry: '🔄', goal: '🎯', submit: '✔️'
+        notes: '📝', retry: '🔄', goal: '🎯', submit: '✔️',
+        // Yeni kategoriler için ikonlar
+        batteries: '🔋', 
+        electronic: '🔌',
+        glass: '🏺',
+        organic: '🍎',
+        paper: '📄',
+        plastic: '🥤',
+        metal: '🥫',
+        recyclable: '♻️',
+        cooking_oil: '🛢️'
     };
-    return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
+    
+    // API'den gelen isim büyük/küçük harf veya boşluk içerebilir, standardize ediyoruz
+    const key = name ? name.toLowerCase().replace(/ /g, '_') : 'category';
+    // Tam eşleşme yoksa 'category' ikonunu göster
+    return <span className={`icon ${className}`}>{icons[key] || icons['category']}</span>;
 };
 
 const WasteLog = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const token = localStorage.getItem('access_token');
+
     const [logs, setLogs] = useState([]);
     const [subCategories, setSubCategories] = useState([]);
+    const [categories, setCategories] = useState([]); // Ana kategoriler için state
+    
     const [form, setForm] = useState({ subcategory: '', quantity: '', disposal_method: '', notes: '' });
     const [loading, setLoading] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
-    const token = localStorage.getItem('access_token');
 
     useEffect(() => {
-    if (!token) {
-        navigate('/login');
-        return;
+        if (!token) {
+            navigate('/login');
+            return;
         }
-    // eslint-disable-next-line
-  }, [token]);
-    // --- YARDIMCI FONKSİYONLAR: Kategori ve Birim Çevirisi ---
+    }, [token]);
+
+    // --- Yardımcı Çeviri Fonksiyonları ---
     const getCategoryTrans = (apiName) => {
         if (!apiName) return "";
-        // Örn: "Plastic Bottles" -> "plastic_bottles"
         const key = apiName.toLowerCase().replace(/ /g, "_");
-        // Çeviri varsa getir, yoksa orijinal ismi göster
         return t(`waste_categories.${key}`, { defaultValue: apiName });
     };
 
     const getUnitTrans = (unit) => {
         if (!unit) return "";
-        // Örn: "kg" -> "kg", "pcs" -> "adet"
         return t(`units.${unit.toLowerCase()}`, { defaultValue: unit });
     };
-    // ----------------------------------------------------------
 
+    // --- Veri Çekme ---
     const fetchData = async () => {
         setLoading(true);
         setError(null);
         try {
-            const [logsData, subCategoriesData] = await Promise.all([ getWasteLogs(), getSubCategories() ]);
+            // Üç veriyi paralel çekiyoruz: Loglar, Alt Kategoriler ve Ana Kategoriler
+            const [logsRes, subCategoriesRes, categoriesRes] = await Promise.all([ 
+                getWasteLogs(), 
+                getSubCategories(),
+                getWasteCategories() 
+            ]);
+
+            // API dokümanına göre veriler "results" anahtarı içinde geliyor (Pagination)
+            // Eğer results yoksa (pagination kapalıysa) direkt datayı alıyoruz.
+            const logsData = logsRes.results || logsRes;
+            const subCatsData = subCategoriesRes.results || subCategoriesRes;
+            const catsData = categoriesRes.results || categoriesRes;
+
             setLogs(Array.isArray(logsData) ? logsData : []);
-            setSubCategories(Array.isArray(subCategoriesData) ? subCategoriesData : []);
-            if (!Array.isArray(subCategoriesData) || subCategoriesData.length === 0) {
-                setError('waste_log_page.error_no_categories'); 
+            setSubCategories(Array.isArray(subCatsData) ? subCatsData : []);
+            setCategories(Array.isArray(catsData) ? catsData : []);
+
+            if (!Array.isArray(subCatsData) || subCatsData.length === 0) {
+                // Sadece uyarı, engel değil
+                console.warn("No subcategories found"); 
             }
         } catch (err) {
+            console.error("Error fetching waste data:", err);
             setError('waste_log_page.error_fetch_failed');
         } finally {
             setLoading(false);
@@ -73,6 +104,34 @@ const WasteLog = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setForm(prevForm => ({ ...prevForm, [name]: value }));
+    };
+
+    // --- ID ve İsim Eşleştirme Mantığı ---
+    
+    // 1. Kategori ID'sinden Kategori İsmine ulaşmak için bir "Sözlük" (Map) oluşturuyoruz.
+    // Örn: { 1: "Recyclable", 3: "Batteries" }
+    const categoryMap = {};
+    categories.forEach(cat => {
+        categoryMap[cat.id] = cat.name;
+    });
+
+    // 2. Alt kategorileri, bulduğumuz bu isimlere göre grupluyoruz.
+    const groupedSubCategories = subCategories.reduce((acc, sc) => {
+        // sc.category API'den ID olarak geliyor (Örn: 3)
+        // categoryMap[3] bize "Batteries" ismini veriyor.
+        const categoryId = sc.category; 
+        const categoryName = categoryMap[categoryId] || 'Other'; 
+        
+        if (!acc[categoryName]) {
+            acc[categoryName] = [];
+        }
+        acc[categoryName].push(sc);
+        return acc;
+    }, {});
+
+    const getScoreForSubcategory = (subcategoryId) => {
+        const subcategory = subCategories.find(sc => sc.id === parseInt(subcategoryId));
+        return subcategory?.score_per_unit || 'N/A';
     };
 
     const handleSubmit = async (e) => {
@@ -97,10 +156,13 @@ const WasteLog = () => {
                 notes: form.notes || undefined,
             };
             await addWasteLog(payload);
-            const updatedLogsData = await getWasteLogs();
-            setLogs(Array.isArray(updatedLogsData) ? updatedLogsData : []);
+            
+            // Log eklendikten sonra sadece logları yenilemek yeterli olabilir ama
+            // tutarlılık için fetchData çağırıyoruz.
+            await fetchData();
+            
             setForm({ subcategory: '', quantity: '', disposal_method: '', notes: '' });
-            alert('Waste log added successfully!');
+            // alert('Waste log added successfully!'); 
         } catch (err) {
             setError('waste_log_page.error_add_log_failed');
             console.error('Error adding log:', err.response?.data || err.message);
@@ -131,28 +193,57 @@ const WasteLog = () => {
                 )}
 
                 <div className="wastelog-form-and-list-container">
+                    {/* --- FORM BÖLÜMÜ --- */}
                     <section className="wastelog-form-card">
                         <h3 className="form-card-title"><Icon name="logNew"/> {t('waste_log_page.form.title')}</h3>
                         <form onSubmit={handleSubmit} className="wastelog-form">
                             <div className="form-field">
                                 <label htmlFor="subcategory"><Icon name="category"/> {t('waste_log_page.form.category_label')}</label>
-                                <select id="subcategory" name="subcategory" value={form.subcategory} onChange={handleInputChange} disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0} required>
+                                <select 
+                                    id="subcategory" 
+                                    name="subcategory" 
+                                    value={form.subcategory} 
+                                    onChange={handleInputChange} 
+                                    disabled={loading || loadingSubmit || subCategories.length === 0} 
+                                    required
+                                >
                                     <option value="">{t('waste_log_page.form.category_placeholder')}</option>
-                                    {subCategories.map((sc) => (
-                                        <option key={sc.id} value={sc.id}>
-                                            {/* Çevrilmiş Kategori ve Birim */}
-                                            {getCategoryTrans(sc.name)} ({getUnitTrans(sc.unit)})
-                                        </option>
+                                    {Object.entries(groupedSubCategories).map(([mainCatName, items]) => (
+                                        <optgroup key={mainCatName} label={getCategoryTrans(mainCatName)}>
+                                            {items.map((sc) => (
+                                                <option key={sc.id} value={sc.id}>
+                                                    {getCategoryTrans(sc.name)} ({getUnitTrans(sc.unit)}) - {sc.score_per_unit || 0} pts
+                                                </option>
+                                            ))}
+                                        </optgroup>
                                     ))}
                                 </select>
+                                {form.subcategory && (
+                                    <div className="score-display">
+                                        <Icon name="goal" /> {t('waste_log_page.form.score_per_item', { defaultValue: 'Points per item' })}: <span className="score-value">{getScoreForSubcategory(form.subcategory)} pts</span>
+                                    </div>
+                                )}
                             </div>
+                            
                             <div className="form-field">
                                 <label htmlFor="quantity"><Icon name="quantity"/> {t('waste_log_page.form.quantity_label')}</label>
-                                <input id="quantity" name="quantity" type="number" placeholder={t('waste_log_page.form.quantity_placeholder')} value={form.quantity} onChange={handleInputChange} min="0.01" step="any" disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0} required />
+                                <input 
+                                    id="quantity" 
+                                    name="quantity" 
+                                    type="number" 
+                                    placeholder={t('waste_log_page.form.quantity_placeholder')} 
+                                    value={form.quantity} 
+                                    onChange={handleInputChange} 
+                                    min="0.01" 
+                                    step="any" 
+                                    disabled={loading || loadingSubmit || subCategories.length === 0} 
+                                    required 
+                                />
                             </div>
+
                             <div className="form-field">
                                 <label htmlFor="disposal_method"><Icon name="disposal"/> {t('waste_log_page.form.disposal_label')}</label>
-                                <select id="disposal_method" name="disposal_method" value={form.disposal_method} onChange={handleInputChange} disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0}>
+                                <select id="disposal_method" name="disposal_method" value={form.disposal_method} onChange={handleInputChange} disabled={loading || loadingSubmit}>
                                     <option value="">{t('waste_log_page.form.disposal_placeholder')}</option>
                                     <option value="recycled">{t('waste_log_page.form.disposal_options.recycled')}</option>
                                     <option value="composted">{t('waste_log_page.form.disposal_options.composted')}</option>
@@ -162,11 +253,13 @@ const WasteLog = () => {
                                     <option value="other">{t('waste_log_page.form.disposal_options.other')}</option>
                                 </select>
                             </div>
+
                             <div className="form-field">
                                 <label htmlFor="notes"><Icon name="notes"/> {t('waste_log_page.form.notes_label')}</label>
-                                <textarea id="notes" name="notes" placeholder={t('waste_log_page.form.notes_placeholder')} value={form.notes} onChange={handleInputChange} rows="3" disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0} />
+                                <textarea id="notes" name="notes" placeholder={t('waste_log_page.form.notes_placeholder')} value={form.notes} onChange={handleInputChange} rows="3" disabled={loading || loadingSubmit} />
                             </div>
-                            <button type="submit" className="submit-log-button" disabled={loading || loadingSubmit || !subCategories || subCategories.length === 0}>
+
+                            <button type="submit" className="submit-log-button" disabled={loading || loadingSubmit || subCategories.length === 0}>
                                 {loadingSubmit ? (
                                     <>{t('waste_log_page.form.submit_button_adding')}</>
                                 ) : (
@@ -175,16 +268,29 @@ const WasteLog = () => {
                             </button>
                         </form>
                     </section>
+
+                    {/* --- LİSTE BÖLÜMÜ --- */}
                     <section className="wastelog-list-card">
                         <h3 className="list-card-title"><Icon name="list"/> {t('waste_log_page.log_list.title')}</h3>
                         {loading && !loadingSubmit && <p className="loading-text">{t('waste_log_page.log_list.loading')}</p>}
                         {!loading && logs.length === 0 && <p className="no-logs-message">{t('waste_log_page.log_list.no_logs')}</p>}
+                        
                         {!loading && logs.length > 0 && (
                             <ul className="wastelog-items-list">
                                 {logs.slice(0, 10).map((log) => {
                                     const subCategoryDetails = subCategories.find(sc => sc.id === log.sub_category);
                                     
-                                    // İsimleri ve birimleri alıp çevirelim
+                                    // Log listesi için de ikon bulmamız lazım.
+                                    // Log -> sub_category ID -> category ID -> Category Name -> Icon
+                                    let categoryNameForIcon = 'category';
+                                    if (subCategoryDetails) {
+                                        // subCategoryDetails.category bir ID'dir (Örn: 3)
+                                        const catID = subCategoryDetails.category;
+                                        // Map'ten ismi buluyoruz (Örn: "Batteries")
+                                        categoryNameForIcon = categoryMap[catID] || 'category';
+                                    }
+
+                                    // API'de bazen sub_category_name dönüyor, dönmezse biz buluyoruz
                                     const rawName = log.sub_category_name || subCategoryDetails?.name;
                                     const rawUnit = subCategoryDetails?.unit;
 
@@ -192,7 +298,7 @@ const WasteLog = () => {
                                         <li key={log.id} className="wastelog-item">
                                             <div className="item-main-info">
                                                 <span className="item-category">
-                                                    <Icon name="category" /> 
+                                                    <Icon name={categoryNameForIcon} /> 
                                                     {rawName ? getCategoryTrans(rawName) : t('waste_log_page.log_list.unknown_category')}
                                                 </span>
                                                 <span className="item-quantity">

@@ -282,6 +282,10 @@
         "current_score": "Mevcut Puanınız",
         "items_needed": "Gerekli öğeler",
         "log_now": "Şimdi Atık Kaydet"
+      "forest_widget": {
+        "title": "Sizin Eko Ormanınız",
+        "info": "1 orman = 1000 puan",
+        "empty": "Ormanınızı büyütmek için atık kaydetmeye başlayın!"
       },
       "error_fetch_score": "Puanınız alınamadı. Lütfen daha sonra tekrar deneyin."
     },
@@ -312,6 +316,7 @@
         },
         "notes_label": "Notlar (İsteğe Bağlı)",
         "notes_placeholder": "Herhangi bir detay, örn. belirli ürünler, kaynak...",
+        "score_per_item": "Birim Puan",
         "submit_button": "Kaydı Ekle",
         "submit_button_adding": "Ekleniyor..."
       },
@@ -361,12 +366,20 @@
       "subtitle": "Çevreye olumlu etki yaratmada kimin başı çektiğini görün!",
       "loading": "Şampiyonlar yükleniyor...",
       "error_load_failed": "Lider tablosu verileri yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+      "anonymous_user": "Anonim Kullanıcı", 
       "table": {
         "rank": "Sıra",
         "player": "Oyuncu",
         "score": "Puan"
       },
-      "you_badge": "Siz",
+      "filters": {
+        "all": "Tüm Zamanlar",
+        "yearly": "Son 1 Yıl",
+        "monthly": "Son 1 Ay",
+        "weekly": "Son 1 Hafta",
+        "daily": "Bugün"
+      },
+      "you_badge": "Sİz",
       "score_suffix": "puan",
       "empty_state": "Lider tablosu şu anda boş. Tahtaya çıkmak için aktivitelerinizi kaydetmeye başlayın!"
     },
@@ -378,6 +391,7 @@
       "error_fetch": "Profiliniz alınamadı. Lütfen tekrar deneyin.",
       "error_update_validation": "Profil güncellenemedi. Lütfen girdilerinizi kontrol edin.",
       "error_update_generic": "Profil güncellenemedi. Bilinmeyen bir hata oluştu.",
+      "preferences_title": "Tercihler",
       "form": {
         "first_name_label": "Ad",
         "last_name_label": "Soyad",
@@ -385,6 +399,7 @@
         "city_label": "Şehir",
         "country_label": "Ülke",
         "notifications_label": "E-posta Bildirimlerini Etkinleştir",
+        "anonymous_label": "Lider tablosunda ismimi gizle (Anonim Ol)",
         "first_name_placeholder": "Adınızı girin",
         "last_name_placeholder": "Soyadınızı girin",
         "bio_placeholder": "Bize biraz kendinizden ve eko-yolculuğunuzdan bahsedin...",
@@ -447,7 +462,7 @@
       "noEvents": "Şu anda yaklaşan etkinlik bulunmamaktadır. Lütfen daha sonra tekrar kontrol edin!",
       "participationFeaturePending": "Katılım açma/kapama API özelliği bekleniyor.",
       "likeFeaturePending": "Beğenme API özelliği bekleniyor.",
-      "buttonAdd": "Yeni Etkinlik Ekle",
+      "buttonAdd": "Yeni Etkinlik Oluştur",
       "createTitle": "Yeni Etkinlik Oluştur",
       "labelDateTime": "Tarih ve Saat *",
       "placeholderTitle": "Etkinlik Başlığı *",
@@ -456,9 +471,9 @@
       "placeholderImage": "Resim URL'si (İsteğe Bağlı)",
       "labelDistrict": "İlçe / Mahalle",
       "placeholderDistrict": "Örn: Kadıköy",
-      "labelDuration": "Süre (saat)",
+      "labelDuration": "Süre",
       "placeholderDuration": "Örn: 2",
-      "labelEquipment": "Gereken Ekipman",
+      "labelEquipment": "Gereken Ekipman",  
       "placeholderEquipment": "Örn: Eldiven, Çanta, Su",
       "labelImage": "Etkinlik Resmi (İsteğe Bağlı)",
       "dragDropActive": "Resmi buraya bırakın...",
@@ -476,7 +491,15 @@
       "likeSuccess": "Etkinlik beğenildi!",
       "unlikeSuccess": "Beğeni geri alındı.",
       "likeError": "Beğeni durumu değiştirilemedi",
-      "backToEvents": "Etkinliklere Geri Dön"
+      "backToEvents": "Etkinliklere Geri Dön",
+      "hours": "saat", 
+      "equipmentNeeded": "Gereken Ekipman",
+      "unitHoursShort": "sa",
+      "unitMinutesShort": "dk",
+      "unitHours": "Saat",
+      "unitMinutes": "Dakika",
+      "labelDescription": "Açıklama",
+      "placeholderDurationExample": "Örn: 1.5"
     },
     "challenge_detail": {
       "not_found": "Meydan Okuma Bulunamadı",
@@ -508,6 +531,7 @@
           "last": "Son",
           "by_points": "Puana Göre",
           "by_frequency": "Sıklığa Göre",
+          "week_suffix": "Haftası",
           "filters": {
             "daily": "Günlük",
             "weekly": "Haftalık",
@@ -519,7 +543,8 @@
         },
         "badges": {
           "title": "Kupa Dolabı",
-          "empty": "Rozet kazanmak için atık kaydetmeye başla!"
+          "empty": "Rozet kazanmak için atık kaydetmeye başla!",
+          "view_all": "Tüm Rozetleri Gör"
         },
         "forest": {
           "title": "Eko Ormanım",
@@ -528,6 +553,8 @@
         }
       },
       "waste_categories": {
+        "recyclable": "Geri Dönüştürülebilir",
+        "cooking_oil": "Atık Yağ (Genel)",
         "paper": "Kağıt",
         "plastic_bottles": "Plastik Şişe",
         "cardboard": "Karton",
@@ -542,7 +569,20 @@
         "plastic": "Plastik",
         "electronic": "Elektronik",
         "organic": "Organik",
-        "other": "Diğer"
+        "other": "Diğer",
+        "aa_batteries": "AA Pil",
+        "lithium-ion_batteries": "Lityum-iyon Pil",
+        "button_cell_batteries": "Düğme Pil",
+        "car_batteries": "Araba Aküsü",
+        "nimh_batteries": "NiMH Pil",
+        "glass_bottles": "Cam Şişe",
+        "broken_glass": "Kırık Cam",
+        "used_cooking_oil": "Kullanılmış Kızartma Yağı",
+        "clothing": "Kıyafet",
+        "used_clothing": "Kullanılmış Kıyafet",
+        "shoes": "Ayakkabı",
+        "hazardous_waste": "Tehlikeli Atık",
+        "bulky_items": "Hacimli Atıklar (Eşyalar)"
       },
       "units": {
         "kg": "kg",
@@ -576,7 +616,6 @@
           "name": "Sıfır Atık Efsanesi",
           "desc": "5000+ Puan"
         }
-      
     },
   "notifications": {
     "title": "Bildirimler",

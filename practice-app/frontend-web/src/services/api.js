@@ -17,9 +17,49 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+// --- YARDIMCI FONKSİYON: TÜM SAYFALARI ÇEKME ---
+// Bu fonksiyon, "next" linki olduğu sürece istek atmaya devam eder.
+const fetchAllPages = async (endpoint) => {
+    let allResults = [];
+    let page = 1;
+    let hasNext = true;
+
+    while (hasNext) {
+        try {
+            // Sayfa parametresini ekleyerek istek atıyoruz
+            const response = await api.get(`${endpoint}?page=${page}`);
+            const data = response.data;
+
+            // Eğer API sayfalama kullanmıyorsa direkt diziyi dön
+            if (Array.isArray(data)) {
+                return data;
+            }
+
+            // Sayfalama varsa results kısmını ana diziye ekle
+            if (data.results) {
+                allResults = [...allResults, ...data.results];
+            }
+
+            // Eğer "next" (sonraki sayfa linki) yoksa döngüyü bitir
+            if (!data.next) {
+                hasNext = false;
+            } else {
+                page++; // Sonraki sayfaya geç
+            }
+        } catch (error) {
+            console.error(`Error fetching page ${page} for ${endpoint}`, error);
+            hasNext = false; // Hata durumunda sonsuz döngüye girmemek için bitir
+        }
+    }
+    return allResults;
+};
+
+// ---------------------------------------------------
+
 export const getWasteLogs = async () => {
+    // Loglar çok fazla olabileceği için hepsini çekmek yerine ilk sayfayı alıyoruz (şimdilik)
+    // İleride "Load More" butonu eklenebilir.
     const response = await api.get('v1/waste/logs/');
-    // Ensure response.data is an array
     return Array.isArray(response.data) ? response.data : response.data.results || [];
 };
 
@@ -28,9 +68,14 @@ export const addWasteLog = async (data) => {
     return response.data;
 };
 
+// GÜNCELLENDİ: Tüm kategorileri (sayfalarca olsa bile) çeker
+export const getWasteCategories = async () => {
+    return await fetchAllPages('v1/waste/categories/');
+};
+
+// GÜNCELLENDİ: Tüm alt kategorileri (sayfalarca olsa bile) çeker
 export const getSubCategories = async () => {
-    const response = await api.get('v1/waste/subcategories/');
-    return response.data.results || response.data;
+    return await fetchAllPages('v1/waste/subcategories/');
 };
 
 export const getUserScore = async () => {
@@ -38,9 +83,8 @@ export const getUserScore = async () => {
     return response.data;
 };
 
-export const getLeaderboard = async () => {
-    // This matches the new endpoint: /api/v1/waste/leaderboard/
-    const response = await api.get('v1/waste/leaderboard/');
+export const getLeaderboard = async (period = 'all') => {
+    const response = await api.get(`v1/waste/leaderboard/?period=${period}`);
     return response.data;
 };
 

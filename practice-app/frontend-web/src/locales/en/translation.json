@@ -272,6 +272,10 @@
         "current_score": "Current Score",
         "items_needed": "Items needed",
         "log_now": "Log Waste Now"
+      "forest_widget": {
+        "title": "Your Eco Forest",
+        "info": "1 forest = 1000 points",
+        "empty": "Start logging waste to grow your forest!"
       },
       "error_fetch_score": "Failed to fetch your score. Please try again later."
     },
@@ -302,6 +306,7 @@
         },
         "notes_label": "Notes (Optional)",
         "notes_placeholder": "Any details, e.g., specific items, source...",
+        "score_per_item": "Score per item",
         "submit_button": "Add Log Entry",
         "submit_button_adding": "Adding..."
       },
@@ -351,10 +356,18 @@
       "subtitle": "See who's leading the charge in making a positive environmental impact!",
       "loading": "Loading champions...",
       "error_load_failed": "Failed to load leaderboard data. Please try again later.",
+      "anonymous_user": "Anonymous User",
       "table": {
         "rank": "Rank",
         "player": "Player",
         "score": "Score"
+      },
+      "filters": {
+        "all": "All Time",
+        "yearly": "Last Year",
+        "monthly": "Last Month",
+        "weekly": "Last Week",
+        "daily": "Today"
       },
       "you_badge": "You",
       "score_suffix": "pts",
@@ -368,6 +381,7 @@
       "error_fetch": "Failed to fetch your profile. Please try again.",
       "error_update_validation": "Failed to update profile. Please check your input.",
       "error_update_generic": "Failed to update profile. An unknown error occurred.",
+      "preferences_title": "Preferences",
       "form": {
         "first_name_label": "First Name",
         "last_name_label": "Last Name",
@@ -375,6 +389,7 @@
         "city_label": "City",
         "country_label": "Country",
         "notifications_label": "Enable Email Notifications",
+        "anonymous_label": "Hide my name on leaderboard (Go Anonymous)",
         "first_name_placeholder": "Enter your first name",
         "last_name_placeholder": "Enter your last name",
         "bio_placeholder": "Tell us a bit about yourself and your eco-journey...",
@@ -446,7 +461,7 @@
       "placeholderImage": "Image URL (Optional)",
       "labelDistrict": "District / Neighborhood",
       "placeholderDistrict": "e.g. Kadıköy",
-      "labelDuration": "Duration (hours)",
+      "labelDuration": "Duration",
       "placeholderDuration": "e.g. 2",
       "labelEquipment": "Equipment Needed",
       "placeholderEquipment": "e.g. Gloves, Bags, Water",
@@ -466,7 +481,15 @@
       "likeSuccess": "Event liked!",
       "unlikeSuccess": "Event unliked.",
       "likeError": "Failed to toggle like",
-      "backToEvents": "Back to Events"
+      "backToEvents": "Back to Events",
+      "hours": "hours",
+      "unitHoursShort": "h",
+      "unitMinutesShort": "m",
+      "unitHours": "Hours",
+      "unitMinutes": "Minutes",
+      "equipmentNeeded": "Equipment Needed",
+      "labelDescription": "Description",
+      "placeholderDurationExample": "e.g. 1.5"
     },
     "events_data": {
       "event_1_title": "Community Tree Planting Day",
@@ -509,6 +532,7 @@
           "last": "Last",
           "by_points": "By Points",
           "by_frequency": "By Frequency",
+          "week_suffix": "Week",
           "filters": {
             "daily": "Daily",
             "weekly": "Weekly",
@@ -520,7 +544,8 @@
         },
         "badges": {
           "title": "Badge Collection",
-          "empty": "Start logging to earn badges!"
+          "empty": "Start logging to earn badges!",
+          "view_all": "View All Badges"
         },
         "forest": {
           "title": "My Eco Forest",
@@ -529,6 +554,8 @@
         }
       },
       "waste_categories": {
+        "recyclable": "Recyclable",
+        "cooking_oil": "Cooking Oil",
         "paper": "Paper",
         "plastic_bottles": "Plastic Bottles",
         "cardboard": "Cardboard",
@@ -543,7 +570,20 @@
         "plastic": "Plastic",
         "electronic": "Electronic",
         "organic": "Organic",
-        "other": "Other"
+        "other": "Other",
+        "aa_batteries": "AA Batteries",
+        "lithium-ion_batteries": "Lithium-ion Batteries",
+        "button_cell_batteries": "Button Cell Batteries",
+        "car_batteries": "Car Batteries",
+        "nimh_batteries": "NiMH Batteries",
+        "glass_bottles": "Glass Bottles",
+        "broken_glass": "Broken Glass",
+        "used_cooking_oil": "Used Cooking Oil",
+        "clothing": "Clothing",
+        "used_clothing": "Used Clothing",
+        "shoes": "Shoes",
+        "hazardous_waste": "Hazardous Waste",
+        "bulky_items": "Bulky Items"
       },
       "units": {
         "kg": "kg",
@@ -577,8 +617,7 @@
           "name": "Zero Waste Legend",
           "desc": "5000+ Score"
         }
-      
-    },
+      },
   "notifications": {
     "title": "Notifications",
     "mark_all_read": "Mark all read",

@@ -294,6 +294,77 @@
 }
 .dashboard-scoped .error-message-box-main .icon.error-icon { color: var(--dashboard-error-text); font-size: 1.3em; }
 
+/* Forest Widget */
+.dashboard-scoped .forest-widget .widget-header {
+  justify-content: space-between;
+  align-items: center;
+}
+.dashboard-scoped .forest-info {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--nav-dashboard-logo-color);
+  background: var(--stats-forest-text-bg);
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.dashboard-scoped .forest-visual {
+  min-height: 120px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-end;
+  align-content: flex-end;
+}
+.dashboard-scoped .forest-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.dashboard-scoped .trees-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.dashboard-scoped .forest-icon {
+  font-size: 2.5rem;
+  animation: growTree 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+  cursor: help;
+  transition: transform 0.2s;
+}
+.dashboard-scoped .forest-icon:hover {
+  transform: scale(1.15);
+}
+.dashboard-scoped .tree-icon {
+  font-size: 2rem;
+  animation: growTree 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+  cursor: help;
+  transition: transform 0.2s;
+}
+.dashboard-scoped .tree-icon:hover {
+  transform: scale(1.2);
+}
+.dashboard-scoped .empty-forest {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--dashboard-text-medium);
+  opacity: 0.8;
+  margin-top: 1rem;
+}
+.dashboard-scoped .seed-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+@keyframes growTree {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
 /* Responsive Adjustments */
 @media (max-width: 992px) {
   .dashboard-scoped .dashboard-body-content { flex-direction: column; }

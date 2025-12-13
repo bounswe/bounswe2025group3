@@ -11,7 +11,7 @@ const Icon = ({ name, className = "" }) => {
         logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆',
         profile: '👤', score: '🌟', actions: '🚀', tip: '💡',
         logout: '🚪', dashboard: '🏠', settings: '⚙️', edit: '✏️',
-        goal: '🎯', arrowRight: '→', alerts: '⚠️'
+        goal: '🎯', arrowRight: '→', alerts: '⚠️', forest: '🌳 ', seed: '🌱' 
     };
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
@@ -108,6 +108,9 @@ const Dashboard = () => {
             milestone: nextMilestone.label,
             message: nextMilestone.message
         };
+        const trees = 0;
+
+        return { forests, trees };
     };
 
     return (
@@ -246,6 +249,48 @@ const Dashboard = () => {
                                     <Link to="/blog" className="learn-more-inline">
                                         {t('dashboard.eco_tip_widget.discover_more')} <Icon name="arrowRight" />
                                     </Link>
+                                </div>
+                            </section>
+
+                            <section className="dashboard-widget forest-widget">
+                                <div className="widget-header">
+                                    <h4><Icon name="forest" /> {t('dashboard.forest_widget.title')}</h4>
+                                    <span className="forest-info">{t('dashboard.forest_widget.info')}</span>
+                                </div>
+                                <div className="forest-visual">
+                                    {(() => {
+                                        const { forests, trees } = getForestData(score);
+                                        
+                                        if (forests === 0 && trees === 0) {
+                                            return (
+                                                <div className="empty-forest">
+                                                    <Icon name="seed" className="seed-icon"/>
+                                                    <p>{t('dashboard.forest_widget.empty')}</p>
+                                                </div>
+                                            );
+                                        }
+
+                                        return (
+                                            <>
+                                                {/* Display Forests */}
+                                                {forests > 0 && (
+                                                    <div className="forest-group">
+                                                        {Array.from({ length: forests }).map((_, i) => (
+                                                            <span key={`forest-${i}`} className="forest-icon" title={`Forest ${i + 1}`}>🌳</span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                                {/* Display Individual Trees */}
+                                                {trees > 0 && (
+                                                    <div className="trees-group">
+                                                        {Array.from({ length: trees }).map((_, i) => (
+                                                            <span key={`tree-${i}`} className="tree-icon" title={`Tree ${i + 1}`}>🌲</span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </>
+                                        );
+                                    })()}
                                 </div>
                             </section>
                         </>

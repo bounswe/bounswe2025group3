@@ -52,6 +52,7 @@ class CustomUser(AbstractUser):
     # Settings & Stats
     notifications_enabled = models.BooleanField(_('notifications enabled'), default=True)
     total_score = models.IntegerField(default=0)
+    is_anonymous = models.BooleanField(default=False)
 
     # Use email as the unique identifier for authentication
     USERNAME_FIELD = 'email'
