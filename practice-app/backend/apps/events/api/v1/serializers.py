@@ -53,16 +53,6 @@ class EventSerializer(serializers.ModelSerializer):
                         field_name: f"{field_name.replace('_', ' ').capitalize()} contains banned word: '{word}'"
                     })
 
-            if w in lower_equip:
-                raise serializers.ValidationError({
-                    "equipment_needed": f"Equipment list contains banned word: '{word}'"
-                })
-            
-            if w in lower_loc:
-                 raise serializers.ValidationError({
-                    "exact_location": f"District/Location contains banned word: '{word}'"
-                })
-
         return data
 
     def get_i_am_participating(self, obj):
