@@ -277,6 +277,11 @@
         "content": "\"Yerel kaynaklı ve mevsimlik yiyecekleri seçerek karbon ayak izinizi azaltın. Bu, yerel çiftçileri destekler ve ulaşım emisyonlarını azaltır!\"",
         "discover_more": "Daha fazla ipucu keşfedin"
       },
+      "next_step_widget": {
+        "title": "Sonraki Adımınız",
+        "current_score": "Mevcut Puanınız",
+        "items_needed": "Gerekli öğeler",
+        "log_now": "Şimdi Atık Kaydet"
       "forest_widget": {
         "title": "Sizin Eko Ormanınız",
         "info": "1 orman = 1000 puan",

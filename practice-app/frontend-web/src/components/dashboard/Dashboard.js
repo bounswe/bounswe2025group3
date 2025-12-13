@@ -70,6 +70,44 @@ const Dashboard = () => {
         if (!score || score === null) return { forests: 0, trees: 0 };
         const forests = Math.floor(score / 1000);
         const remainingScore = score % 1000;
+        const trees = Math.floor(remainingScore / 500);
+        return { forests, trees };
+    };
+
+    const getNextMilestoneInfo = (currentScore) => {
+        if (!currentScore) currentScore = 0;
+        
+        const milestones = [
+            { score: 500, label: 'rising_star', message: 'Log waste to reach 500 points and earn Rising Star badge!' },
+            { score: 1000, label: 'tree_hugger', message: 'Log waste to reach 1000 points and plant your first tree!' },
+            { score: 1500, label: 'green_achiever', message: 'Log waste to reach 1500 points and earn Green Achiever badge!' },
+            { score: 2000, label: 'eco_champion', message: 'Log waste to reach 2000 points and become an Eco Champion!' },
+            { score: 3000, label: 'eco_master', message: 'Log waste to reach 3000 points and become an Eco Master!' },
+            { score: 5000, label: 'zero_waste_legend', message: 'Log waste to reach 5000 points and become a Zero Waste Legend!' }
+        ];
+
+        const nextMilestone = milestones.find(m => m.score > currentScore);
+        
+        if (!nextMilestone) {
+            return {
+                nextScore: 5000,
+                itemsNeeded: 0,
+                pointsNeeded: 0,
+                milestone: 'Complete',
+                message: 'You\'ve reached all major milestones! Keep going to maintain your achievements!'
+            };
+        }
+
+        const pointsNeeded = nextMilestone.score - currentScore;
+        const itemsNeeded = Math.ceil(pointsNeeded / 7);
+
+        return {
+            nextScore: nextMilestone.score,
+            pointsNeeded,
+            itemsNeeded,
+            milestone: nextMilestone.label,
+            message: nextMilestone.message
+        };
         const trees = 0;
 
         return { forests, trees };
@@ -134,6 +172,50 @@ const Dashboard = () => {
                                 </div>
                                 {score === null && <p className="widget-subtext">{t('dashboard.score_widget.prompt')}</p>}
                             </section>
+
+                            {score !== null && (
+                                <section className="dashboard-widget next-step-widget">
+                                    <div className="widget-header">
+                                        <h4><Icon name="arrowRight" /> {t('dashboard.next_step_widget.title')}</h4>
+                                    </div>
+                                    <div className="next-step-content">
+                                        {(() => {
+                                            const milestone = getNextMilestoneInfo(score);
+                                            return (
+                                                <>
+                                                    <p className="next-step-message">{milestone.message}</p>
+                                                    {milestone.pointsNeeded > 0 && (
+                                                        <div className="milestone-progress">
+                                                            <div className="progress-info">
+                                                                <span className="progress-label">
+                                                                    {t('dashboard.next_step_widget.current_score', { defaultValue: 'Current Score' })}: <strong>{score}</strong>
+                                                                </span>
+                                                                <span className="progress-points">
+                                                                    / {milestone.nextScore} {t('dashboard.score_widget.unit')}
+                                                                </span>
+                                                            </div>
+                                                            <div className="progress-bar-container">
+                                                                <div className="progress-bar">
+                                                                    <div 
+                                                                        className="progress-fill" 
+                                                                        style={{
+                                                                            width: `${Math.min((score / milestone.nextScore) * 100, 100)}%`
+                                                                        }}
+                                                                    ></div>
+                                                                </div>
+                                                                <span className="progress-text">{Math.round((score / milestone.nextScore) * 100)}% - Need {milestone.pointsNeeded} more {t('dashboard.score_widget.unit')}</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    <Link to="/waste" className="next-step-button">
+                                                        <Icon name="waste" /> {t('dashboard.next_step_widget.log_now', { defaultValue: 'Log Waste Now' })}
+                                                    </Link>
+                                                </>
+                                            );
+                                        })()}
+                                    </div>
+                                </section>
+                            )}
 
                             <section className="dashboard-widget quick-links-widget">
                                  <div className="widget-header">
