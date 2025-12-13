@@ -7,6 +7,7 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExampl
 from drf_spectacular.types import OpenApiTypes
 from rest_framework import serializers
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from apps.waste.models import (
     WasteCategory, SubCategory, WasteLog, CustomCategoryRequest, WasteSuggestion, SustainableAction
@@ -323,7 +324,8 @@ class UserWasteStatsView(APIView):
         tags=["User Stats"],
         summary="Get User Waste Statistics",
         description="Retrieves aggregated waste stats (score and log count) for the authenticated user. "
-                    "Stats can be grouped 'daily' (last 7 days) or 'weekly' (last 4 weeks).",
+                    "Stats can be grouped 'daily' (last 7 days), 'weekly' (last 4 weeks), "
+                    "'monthly' (last 12 months), or 'yearly' (last 3 years).",
 
         parameters=[
             OpenApiParameter(
@@ -331,7 +333,7 @@ class UserWasteStatsView(APIView):
                 type=str,
                 location=OpenApiParameter.QUERY,
                 description='Time period for aggregation. Defaults to "weekly".',
-                enum=['daily', 'weekly'],
+                enum=['daily', 'weekly', 'monthly', 'yearly'],
                 default='weekly',
                 required=False
             ),
@@ -362,9 +364,9 @@ class UserWasteStatsView(APIView):
     def get(self, request):
         # ----------- period parameter -----------
         period = request.query_params.get("period", "weekly")
-        if period not in ["daily", "weekly"]:
+        if period not in ["daily", "weekly", "monthly", "yearly"]:
             return Response(
-                {"detail": "Invalid or missing period. Use ?period=daily or weekly."},
+                {"detail": "Invalid or missing period. Use daily, weekly, monthly or yearly."},
                 status=400,
             )
 
@@ -376,7 +378,6 @@ class UserWasteStatsView(APIView):
             except ValueError:
                 return Response({"detail": "subcategory must be an integer ID."}, status=400)
 
-            # Optional: validate that subcategory actually exists
             if not SubCategory.objects.filter(id=subcat_id).exists():
                 return Response({"detail": "Subcategory not found."}, status=400)
 
@@ -387,16 +388,24 @@ class UserWasteStatsView(APIView):
         if period == "daily":
             start_date = today - timedelta(days=6)
             delta = timedelta(days=1)
-        else:
+
+        elif period == "weekly":
             start_date = today - timedelta(weeks=4)
             delta = timedelta(weeks=1)
+
+        elif period == "monthly":
+            start_date = today.replace(day=1) - relativedelta(months=11)
+            delta = relativedelta(months=1)
+
+        else:  # yearly
+            start_date = today.replace(month=1, day=1) - relativedelta(years=2)
+            delta = relativedelta(years=1)
 
         logs = WasteLog.objects.filter(
             user=user,
             date_logged__date__gte=start_date
         )
 
-        # Apply subcategory filter
         if subcat_id:
             logs = logs.filter(sub_category_id=subcat_id)
 
@@ -409,8 +418,15 @@ class UserWasteStatsView(APIView):
         while current_start <= today:
             if period == "daily":
                 current_end = current_start
-            else:
+
+            elif period == "weekly":
                 current_end = current_start + timedelta(days=6)
+
+            elif period == "monthly":
+                current_end = (current_start + relativedelta(months=1)) - timedelta(days=1)
+
+            else:  # yearly
+                current_end = current_start.replace(month=12, day=31)
 
             period_logs = [
                 log for log in logs
@@ -420,14 +436,32 @@ class UserWasteStatsView(APIView):
             total_score = sum(log.get_score() for log in period_logs)
             total_log = len(period_logs)
 
-            stats.append({
+            stats_item = {
                 "start_date": current_start,
                 "end_date": current_end,
                 "total_score": float(total_score),
-                "total_log": total_log
-            })
+                "total_log": total_log,
+            }
 
+            # ----------- per-subcategory aggregation (only if no filter) -----------
+            if not subcat_id:
+                subcat_stats = {}
+
+                for log in period_logs:
+                    sid = log.sub_category_id
+                    if sid not in subcat_stats:
+                        subcat_stats[sid] = {"score": 0.0, "log": 0}
+
+                    subcat_stats[sid]["score"] += float(log.get_score())
+                    subcat_stats[sid]["log"] += 1
+
+                for sid, values in subcat_stats.items():
+                    stats_item[f"subcategory_{sid}_score"] = values["score"]
+                    stats_item[f"subcategory_{sid}_log"] = values["log"]
+
+            stats.append(stats_item)
             current_start += delta
 
         serializer = self.serializer_class(stats, many=True)
         return Response({"period": period, "data": serializer.data})
+
