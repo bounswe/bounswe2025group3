@@ -103,9 +103,19 @@ class UserRankingSerializer(serializers.ModelSerializer):
         return obj.username
 
 
-
 class WasteStatsItemSerializer(serializers.Serializer):
     start_date = serializers.DateField()
     end_date = serializers.DateField()
     total_score = serializers.FloatField()
     total_log = serializers.IntegerField()
+
+    def to_representation(self, instance):
+        # Start with the default fields
+        rep = super().to_representation(instance)
+
+        # Add any dynamic fields (subcategory_* keys)
+        for key, value in instance.items():
+            if key not in rep:
+                rep[key] = value
+
+        return rep
