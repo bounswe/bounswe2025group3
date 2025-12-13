@@ -108,9 +108,6 @@ const Dashboard = () => {
             milestone: nextMilestone.label,
             message: nextMilestone.message
         };
-        const trees = 0;
-
-        return { forests, trees };
     };
 
     return (
