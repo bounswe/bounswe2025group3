@@ -53,19 +53,33 @@ class EventSerializer(serializers.ModelSerializer):
                         field_name: f"{field_name.replace('_', ' ').capitalize()} contains banned word: '{word}'"
                     })
 
+            if w in lower_equip:
+                raise serializers.ValidationError({
+                    "equipment_needed": f"Equipment list contains banned word: '{word}'"
+                })
+            
+            if w in lower_loc:
+                 raise serializers.ValidationError({
+                    "exact_location": f"District/Location contains banned word: '{word}'"
+                })
+
         return data
 
     def get_i_am_participating(self, obj):
-        user = self.context['request'].user
-        if user.is_anonymous:
+        request = self.context.get('request')
+
+        if not request or not request.user.is_authenticated:
             return False
-        return obj.participants.filter(pk=user.pk).exists()
+            
+        return request.user in obj.participants.all()
 
     def get_i_liked(self, obj):
-        user = self.context['request'].user
-        if user.is_anonymous:
+        request = self.context.get('request')
+        
+        if not request or not request.user.is_authenticated:
             return False
-        return obj.likes.filter(pk=user.pk).exists()
+
+        return request.user in obj.likes.all()
 
     def create(self, validated_data):
         # creator will be attached in view (or you can set here if available in context)
