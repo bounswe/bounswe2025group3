@@ -457,7 +457,7 @@
       "noEvents": "Şu anda yaklaşan etkinlik bulunmamaktadır. Lütfen daha sonra tekrar kontrol edin!",
       "participationFeaturePending": "Katılım açma/kapama API özelliği bekleniyor.",
       "likeFeaturePending": "Beğenme API özelliği bekleniyor.",
-      "buttonAdd": "Yeni Etkinlik Ekle",
+      "buttonAdd": "Yeni Etkinlik Oluştur",
       "createTitle": "Yeni Etkinlik Oluştur",
       "labelDateTime": "Tarih ve Saat *",
       "placeholderTitle": "Etkinlik Başlığı *",
@@ -466,7 +466,7 @@
       "placeholderImage": "Resim URL'si (İsteğe Bağlı)",
       "labelDistrict": "İlçe / Mahalle",
       "placeholderDistrict": "Örn: Kadıköy",
-      "labelDuration": "Süre (saat)",
+      "labelDuration": "Süre",
       "placeholderDuration": "Örn: 2",
       "labelEquipment": "Gereken Ekipman",  
       "placeholderEquipment": "Örn: Eldiven, Çanta, Su",
@@ -488,7 +488,13 @@
       "likeError": "Beğeni durumu değiştirilemedi",
       "backToEvents": "Etkinliklere Geri Dön",
       "hours": "saat", 
-      "equipmentNeeded": "Gereken Ekipman" 
+      "equipmentNeeded": "Gereken Ekipman",
+      "unitHoursShort": "sa",
+      "unitMinutesShort": "dk",
+      "unitHours": "Saat",
+      "unitMinutes": "Dakika",
+      "labelDescription": "Açıklama",
+      "placeholderDurationExample": "Örn: 1.5"
     },
     "challenge_detail": {
       "not_found": "Meydan Okuma Bulunamadı",
