@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 import { 
@@ -48,6 +46,16 @@ const WasteLog = () => {
     const [loading, setLoading] = useState(false);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [error, setError] = useState(null);
+    const [notifications, setNotifications] = useState([]);
+
+    // Notification helper
+    const addNotification = (message, type = 'success') => {
+        const id = Date.now();
+        setNotifications(prev => [...prev, { id, message, type }]);
+        setTimeout(() => {
+            setNotifications(prev => prev.filter(n => n.id !== id));
+        }, 5000);
+    };
 
     const TIERS = [
         { id: 'eco_explorer', min: 0 },
@@ -63,7 +71,7 @@ const WasteLog = () => {
             navigate('/login');
             return;
         }
-    }, [token]);
+    }, [token, navigate]);
 
     const getCategoryTrans = (apiName) => {
         if (!apiName) return "";
@@ -200,15 +208,7 @@ const WasteLog = () => {
         const newTrees = Math.floor(newScore / 500);
         
         if (newTrees > oldTrees) {
-            toast.success(
-                <div>
-                    <span style={{fontSize: '1.2em'}}>🌲</span> 
-                    <strong> {t('stats_page.new_tree_planted')}</strong>
-                    <br/>
-                    <small>{t('stats_page.new_tree_desc')}</small>
-                </div>, 
-                { icon: false, autoClose: 5000 }
-            );
+            addNotification(`🌲 ${t('stats_page.new_tree_planted')} - ${t('stats_page.new_tree_desc')}`, 'success');
         }
 
         // 2. Seviye Kontrolü (DÜZELTİLDİ)
@@ -220,16 +220,7 @@ const WasteLog = () => {
             // 'tiers.eco_explorer' gibi anahtarları çevirir
             const newTierName = t(`tiers.${tierKey}`);
             
-            toast.info(
-                <div>
-                    <span style={{fontSize: '1.2em'}}>🆙</span> 
-                    <strong> {t('stats_page.level_up')}</strong>
-                    <br/>
-                    {/* DÜZELTME: Rütbe ismini parametre olarak gönderiyoruz */}
-                    {t('stats_page.level_up_desc', { rank: newTierName })}
-                </div>,
-                { icon: false, autoClose: 6000, theme: "colored" }
-            );
+            addNotification(`🆙 ${t('stats_page.level_up')} - ${t('stats_page.level_up_desc', { rank: newTierName })}`, 'info');
         }
 
         // 3. Rozet Kontrolü
@@ -243,19 +234,7 @@ const WasteLog = () => {
                     const badgeName = t(`badges_data.${newBadge.id}.name`);
                     const badgeDesc = t(`badges_data.${newBadge.id}.desc`);
 
-                    toast.success(
-                        <div>
-                            <span style={{fontSize: '1.5em', marginRight: '8px'}}>{newBadge.icon}</span> 
-                            <div>
-                                <strong>{t('badges_page.badge_unlocked')}</strong>
-                                <br/>
-                                <span style={{fontWeight: 'bold', color: '#ffd700'}}>{badgeName}</span>
-                                <br/>
-                                <span style={{fontSize: '0.85em'}}>{badgeDesc}</span>
-                            </div>
-                        </div>,
-                        { icon: false, autoClose: 7000, className: "badge-toast" }
-                    );
+                    addNotification(`${newBadge.icon} ${t('badges_page.badge_unlocked')}: ${badgeName} - ${badgeDesc}`, 'success');
                 }
             }
         });
@@ -306,18 +285,14 @@ const WasteLog = () => {
             setCurrentTotalScore(newTotalScore);
             setCurrentStreakStats(newStreak);
             
-            toast.success(`✅ ${t('waste_log_page.log_added_success')}`, {
-                position: "bottom-right",
-                autoClose: 3000,
-                hideProgressBar: true
-            });
+            addNotification(`✅ ${t('waste_log_page.log_added_success')}`, 'success');
             
             setForm({ subcategory: '', quantity: '', disposal_method: '', notes: '' });
 
         } catch (err) {
             setError('waste_log_page.error_add_log_failed');
             console.error('Error adding log:', err.response?.data || err.message);
-            toast.error(`⚠️ ${t('waste_log_page.error_add_log_failed')}`);
+            addNotification(`⚠️ ${t('waste_log_page.error_add_log_failed')}`, 'error');
         } finally {
             setLoadingSubmit(false);
         }
@@ -326,7 +301,34 @@ const WasteLog = () => {
     return (
         <div className="wastelog-page-scoped wastelog-page-layout">
             <Navbar isAuthenticated={true} />
-            <ToastContainer position="top-right" newestOnTop={true} pauseOnFocusLoss draggable pauseOnHover />
+            {/* Notification Container */}
+            <div className="notification-container" style={{
+                position: 'fixed',
+                top: '80px',
+                right: '20px',
+                zIndex: 1000,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+            }}>
+                {notifications.map(notif => (
+                    <div 
+                        key={notif.id} 
+                        className={`notification notification-${notif.type}`}
+                        style={{
+                            padding: '12px 20px',
+                            borderRadius: '8px',
+                            backgroundColor: notif.type === 'error' ? '#fee2e2' : notif.type === 'info' ? '#dbeafe' : '#dcfce7',
+                            color: notif.type === 'error' ? '#991b1b' : notif.type === 'info' ? '#1e40af' : '#166534',
+                            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                            maxWidth: '350px',
+                            animation: 'slideIn 0.3s ease'
+                        }}
+                    >
+                        {notif.message}
+                    </div>
+                ))}
+            </div>
             <main className="wastelog-main-content">
                 <div className="wastelog-header-section">
                     <h1><Icon name="waste" /> {t('waste_log_page.title')}</h1>

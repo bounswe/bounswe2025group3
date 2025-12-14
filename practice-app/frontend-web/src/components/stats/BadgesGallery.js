@@ -294,6 +294,13 @@ const BadgesGallery = () => {
                 <div className="badges-header-section">
                     <h1><Icon name="badge" /> {t('badges_page.title', { defaultValue: 'Achievements' })}</h1>
                     <p>{t('badges_page.subtitle', { defaultValue: 'Collect badges by reaching sustainability goals' })}</p>
+                    <p className="badges-progress">
+                        {t('badges_page.progress', { 
+                            earned: earnedBadges.filter(b => b.earned).length, 
+                            total: earnedBadges.length,
+                            defaultValue: `${earnedBadges.filter(b => b.earned).length} / ${earnedBadges.length} badges earned`
+                        })}
+                    </p>
                 </div>
 
                 {loading && (
