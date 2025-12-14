@@ -1,623 +1,667 @@
 {
-    "common": {
-      "nav": {
-        "home": "Ana Sayfa",
-        "about": "Hakkımızda",
-        "blog": "Blog",
-        "login": "Giriş Yap",
-        "signup": "Kayıt Ol"
-      },
-      "footer": {
-        "rights": "Tüm hakları saklıdır."
-      }
+  "common": {
+    "nav": {
+      "home": "Ana Sayfa",
+      "about": "Hakkımızda",
+      "blog": "Blog",
+      "login": "Giriş Yap",
+      "signup": "Kayıt Ol"
     },
-    "home": {
-      "hero": {
-        "title": "Her Günü Sıfır Atık Günü Yapın",
-        "subtitle": "Atıkları izlemek, ödüller kazanmak ve sürdürülebilir yaşamak için topluluğumuza katılın!",
-        "journey_button": "Yolculuğuna Başla",
-        "login_button": "Giriş Yap"
-      },
-      "mission": {
-        "title": "Neden Sıfır Atık Mücadelesi?",
-        "subtitle": "Atıkları azaltmak, hedefler belirlemek ve sürdürülebilirlik için küresel bir harekete katılmak adına kendinizi güçlendirin.",
-        "features": {
-          "log": {
-            "title": "Atık Kaydet",
-            "description": "Atık azaltımınızı kategori ve miktara göre ayrıntılı günlüklerle takip edin."
-          },
-          "join": {
-            "title": "Meydan Okumalara Katıl",
-            "description": "Birlikte atıkları azaltmak için eğlenceli topluluk mücadelelerine katılın."
-          },
-          "earn": {
-            "title": "Ödüller Kazan",
-            "description": "Çabalarınız için rozetlerin ve sanal eko-dünya başarılarının kilidini açın."
-          }
+    "footer": {
+      "rights": "Tüm hakları saklıdır."
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Her Günü Sıfır Atık Günü Yapın",
+      "subtitle": "Atıkları izlemek, ödüller kazanmak ve sürdürülebilir yaşamak için topluluğumuza katılın!",
+      "journey_button": "Yolculuğuna Başla",
+      "login_button": "Giriş Yap"
+    },
+    "mission": {
+      "title": "Neden Sıfır Atık Mücadelesi?",
+      "subtitle": "Atıkları azaltmak, hedefler belirlemek ve sürdürülebilirlik için küresel bir harekete katılmak adına kendinizi güçlendirin.",
+      "features": {
+        "log": {
+          "title": "Atık Kaydet",
+          "description": "Atık azaltımınızı kategori ve miktara göre ayrıntılı günlüklerle takip edin."
+        },
+        "join": {
+          "title": "Meydan Okumalara Katıl",
+          "description": "Birlikte atıkları azaltmak için eğlenceli topluluk mücadelelerine katılın."
+        },
+        "earn": {
+          "title": "Ödüller Kazan",
+          "description": "Çabalarınız için rozetlerin ve sanal eko-dünya başarılarının kilidini açın."
         }
-      },
-      "tips": {
-        "title": "Sürdürülebilirlik İpuçları",
-        "category_prefix": "Kategori",
-        "topic_prefix": "Konu"
-      },
-      "eco_tips": [
-        { "id": 1, "text": "Plastik atıkları azaltmak için yeniden kullanılabilir torbalara geçin.", "related_category": "Plastik", "topic": "Atık Azaltma" },
-        { "id": 2, "text": "Bahçe toprağınızı zenginleştirmek için yiyecek artıklarını kompostlayın.", "related_category": "Organik", "topic": "Atık Azaltma" },
-        { "id": 3, "text": "Eski elektronik cihazları sertifikalı merkezlerde geri dönüştürün.", "related_category": "Elektronik", "topic": "Atık Azaltma" },
-        { "id": 4, "text": "Evde su tasarrufu yapmak için sızıntıları onarın.", "related_category": null, "topic": "Su Tasarrufu" }
-      ],
-      "rewards": {
-        "title": "Harika Ödüllerin Kilidini Açın",
-        "subtitle": "Atıkları azalttıkça rozetler kazanın ve sanal eko-dünyanızı inşa edin!"
-      },
-      "badges": [
-        { "name": "İlk Adım", "description": "İlk atık azaltımını kaydet", "icon": "/icons/first-step.png" },
-        { "name": "Plastik Avcısı", "description": "10 kg plastik atığı azalt", "icon": "/icons/plastic-buster.png" },
-        { "name": "Sürdürülebilirlik Serisi", "description": "7 gün boyunca atık azaltımını kaydet", "icon": "/icons/streak.png" }
-      ],
-      "testimonials": {
-        "title": "Topluluğumuz",
-        "quotes": [
-          {
-            "text": "\"Atıklarımı kaydetmek 10 kg plastik azaltmama ve Plastik Avcısı rozetimi kazanmama yardımcı oldu!\"",
-            "author": "- Emma, Eko Kaşif"
-          },
-          {
-            "text": "\"Meydan okumalar çok motive edici! Arkadaşlarımla rekabet etmeyi seviyorum.\"",
-            "author": "- Liam, Yeşil Başlangıç"
-          }
-        ]
-      },
-      "info_box": {
-        "recycling_title": "Geri Dönüşüm Nedir?",
-        "sustainable_title": "Sürdürülebilir Kalkınma Nedir?",
-        "circular_title": "Döngüsel Ekonomi Nedir?",
-        "loading": "Yükleniyor...",
-        "error": "Açıklama yüklenemedi."
-      },
-      "events_data": {
-        "event_1_title": "Topluluk Ağaç Dikme Günü",
-        "event_1_desc": "Willow Creek Park'ta yerli ağaçlar dikmek için bize katılın. Doğaya geri vermenin harika bir yolu.",
-        "event_2_title": "Sıfır Atık Atölyesi: Mutfak",
-        "event_2_desc": "Mutfağınızda gıda ve ambalaj atığını azaltmak için pratik ipuçları öğrenin.",
-        "event_3_title": "Sahil Temizleme Yarışması",
-        "event_3_desc": "Sunrise Sahili'ni temizlememize yardım edin. En çok çöpü toplamak için yarışın.",
-        "event_4_title": "Sürdürülebilir Moda Takası",
-        "event_4_desc": "Kullanmadığınız kıyafetleri getirin ve yenileriyle takas edin!"
       }
     },
-    "about": {
-      "header": {
-        "title": "Hikayemiz ve Misyonumuz",
-        "subtitle": "Teknoloji aracılığıyla sürdürülebilir bir gelecek yaratma konusunda tutkulu bir öğrenci grubuyuz."
-      },
-      "vision": {
-        "title": "GreenerLife Vizyonumuz",
-        "text": "Bilinçli tüketimin ve etkili atık yönetiminin alışkanlık haline geldiği bir dünya hayal ediyoruz. \"GreenerLife\", bireyleri ve toplulukları atığı en aza indirme, kaynakları koruma ve döngüsel bir ekonominin inşasına aktif olarak katılma konusunda güçlendiren, öğrenci odaklı bir girişimimizdir. Doğru araçlar ve içgörülerle herkesin önemli bir olumlu etki yaratabileceğine inanıyoruz."
-      },
-      "who_we_are": {
-        "title": "Biz Kimiz",
-        "text": "Çeşitli disiplinlerden gelen, çevresel sürdürülebilirliğe olan ortak bağlılığımız ve teknolojiye olan heyecanımızla birleşmiş bir üniversite öğrenci ekibiyiz. Bu proje, öğrendiklerimizi derinden önemsediğimiz gerçek bir dünya sorununa uygulama yolu olarak başladı. GreenerLife'ı geliştirirken, atık takibi ve geri dönüşümü teşvik etmek için sezgisel, etkili çözümler sunmayı hedefliyoruz."
-      },
-      "values": {
-        "title": "Temel Değerlerimiz",
-        "list": [
-          { "icon": "🌿", "name": "Sürdürülebilirlik:", "description": "Platformumuzun her alanında çevre dostu uygulamaları teşvik etmek ve kullanıcıları da aynısını yapmaya teşvik etmek." },
-          { "icon": "💡", "name": "İnovasyon:", "description": "Atık yönetimini daha basit ve daha etkili hale getirmek için sürekli olarak yeni teknolojileri ve yaklaşımları keşfetmek." },
-          { "icon": "🤝", "name": "Topluluk:", "description": "Kullanıcıların fikir paylaşabileceği, birbirlerini motive edebileceği ve daha yeşil bir gezegen için toplu olarak çalışabileceği destekleyici bir ağ oluşturmak." },
-          { "icon": "🎓", "name": "Öğrenme ve Gelişim:", "description": "Öğrenciler olarak bu projeyi bir öğrenme yolculuğu olarak görüyoruz. GreenerLife'ı geliştirmek için becerilerimizi ve bilgimizi artırmaya kararlıyız." }
-        ]
-      },
-      "team": {
-        "title": "Öğrenci Ekibiyle Tanışın",
-        "subtitle": "GreenerLife projesi size kendini adamış bir grup öğrenci tarafından sunulmaktadır:"
-      },
-      "simple_footer": "© {{year}} GreenerLife Öğrenci Projesi."
+    "tips": {
+      "title": "Sürdürülebilirlik İpuçları",
+      "category_prefix": "Kategori",
+      "topic_prefix": "Konu"
     },
-    "blog": {
-      "header": {
-        "title": "Blogumuzdan Son Haberler",
-        "subtitle": "Atık yönetimi ve geri dönüşümle ilgili en son haberler, ipuçları ve görüşlerle güncel kalın."
-      },
-      "meta_prefix": "Yayınlanma tarihi:",
-      "read_more_button": "Devamını Oku",
-      "posts": [
+    "eco_tips": [
+      { "id": 1, "text": "Plastik atıkları azaltmak için yeniden kullanılabilir torbalara geçin.", "related_category": "Plastik", "topic": "Atık Azaltma" },
+      { "id": 2, "text": "Bahçe toprağınızı zenginleştirmek için yiyecek artıklarını kompostlayın.", "related_category": "Organik", "topic": "Atık Azaltma" },
+      { "id": 3, "text": "Eski elektronik cihazları sertifikalı merkezlerde geri dönüştürün.", "related_category": "Elektronik", "topic": "Atık Azaltma" },
+      { "id": 4, "text": "Evde su tasarrufu yapmak için sızıntıları onarın.", "related_category": null, "topic": "Su Tasarrufu" }
+    ],
+    "rewards": {
+      "title": "Harika Ödüllerin Kilidini Açın",
+      "subtitle": "Atıkları azalttıkça rozetler kazanın ve sanal eko-dünyanızı inşa edin!"
+    },
+    "badges": [
+      { "name": "İlk Adım", "description": "İlk atık azaltımını kaydet", "icon": "/icons/first-step.png" },
+      { "name": "Plastik Avcısı", "description": "10 kg plastik atığı azalt", "icon": "/icons/plastic-buster.png" },
+      { "name": "Sürdürülebilirlik Serisi", "description": "7 gün boyunca atık azaltımını kaydet", "icon": "/icons/streak.png" }
+    ],
+    "testimonials": {
+      "title": "Topluluğumuz",
+      "quotes": [
         {
-          "title": "Geri Dönüştürülebilir Atıkları Ayırmanın Önemi",
-          "date": "26 Ekim 2023",
-          "excerpt": "Geri dönüştürülebilir malzemelerin doğru şekilde ayrılmasının etkili bir geri dönüşüm süreci için neden çok önemli olduğunu ve nasıl katkıda bulunabileceğinizi öğrenin..."
+          "text": "\"Atıklarımı kaydetmek 10 kg plastik azaltmama ve Plastik Avcısı rozetimi kazanmama yardımcı oldu!\"",
+          "author": "- Emma, Eko Kaşif"
         },
         {
-          "title": "Yaygın 5 Geri Dönüşüm Hatası ve Bunlardan Kaçınma Yolları",
-          "date": "15 Ekim 2023",
-          "excerpt": "İyi niyetli birçok geri dönüştürücü, partileri kirletebilecek yaygın hatalar yapar. İşte bunlardan nasıl kaçınılacağı..."
-        },
-        {
-          "title": "Atık Yönetimi Teknolojisindeki Yenilikler",
-          "date": "30 Eylül 2023",
-          "excerpt": "Dünya çapında atıkları yönetme ve azaltma şeklimizde devrim yaratan en son teknolojik gelişmeleri keşfedin..."
+          "text": "\"Meydan okumalar çok motive edici! Arkadaşlarımla rekabet etmeyi seviyorum.\"",
+          "author": "- Liam, Yeşil Başlangıç"
         }
       ]
     },
-    "blog_post": {
-      "loading": "Blog gönderisi yükleniyor...",
-      "error_title": "Hata",
-      "error_not_found": "Blog gönderisi bulunamadı.",
-      "back_to_blog": "Bloğa Geri Dön",
-      "meta_published_on": "Yayınlanma tarihi:",
-      "meta_by": "",
-      "posts": [
-        {
-          "title": "Geri Dönüştürülebilir Atıkları Ayırmanın Önemi",
-          "date": "26 Ekim 2023",
-          "author": "GreenerLife Ekibi",
-          "fullContent": "<p>Geri dönüşüm, modern atık yönetiminin temel taşlarından biridir, ancak etkinliği kritik bir şekilde tek bir basit eyleme bağlıdır: doğru ayırma. Geri dönüştürülebilir atıklar, geri dönüştürülemeyen malzemelerle veya yanlış ayrılmış öğelerle kirlendiğinde, tüm partiler reddedilebilir ve yeniden kullanılmak yerine çöp sahalarına gönderilebilir.</p><h2>Ayırma Neden Önemlidir?</h2><p>Farklı malzemeler farklı geri dönüşüm süreçleri gerektirir. Malzemeleri karıştırmak şunlara neden olabilir:</p><ul><li><strong>Ekipmana Zarar Verme:</strong> Plastik poşetler gibi öğeler makineleri sıkıştırabilir.</li><li><strong>Düşük Kalite:</strong> Kirleticiler, nihai geri dönüştürülmüş malzemenin kalitesini düşürerek onu daha az değerli veya kullanılamaz hale getirir.</li><li><strong>Maliyetleri Artırma:</strong> Ayırma tesisleri, kirleticileri temizlemek için fazladan zaman ve kaynak harcar.</li></ul><h2>Yaygın Ayırma Hataları</h2><p>Bu yaygın hatalara dikkat edin:</p><ul><li><strong>Umutla Geri Dönüşüm (Wishcycling):</strong> Geri dönüştürülebilir olduğunu umarak öğeleri geri dönüşüm kutusuna atmak (örneğin, yağlı pizza kutuları, belirli plastikler). Her zaman yerel yönergeleri kontrol edin!</li><li><strong>Kapları Durulamamak:</strong> Yiyecek artıkları kağıt ve diğer malzemeleri kirletebilir. Hızlı bir durulama genellikle yeterlidir.</li><li><strong>Geri Dönüştürülebilirleri Poşetlemek:</strong> Yerel programınız aksini belirtmedikçe, geri dönüştürülebilirler genellikle kutuya gevşek bir şekilde yerleştirilmelidir. Plastik poşetlerin kendisi genellikle kaldırım kenarında geri dönüştürülemez.</li></ul><h2>Nasıl Yardımcı Olabilirsiniz?</h2><p>1. <strong>Yerel Kurallarınızı Bilin:</strong> Geri dönüşüm yönergeleri belediyelere göre önemli ölçüde farklılık gösterir. Yerel atık yönetimi web sitenizi kontrol edin.<br>2. <strong>Geri Dönüştürülebilirlerinizi Temizleyin:</strong> Kapları durulayın ve kağıdın kuru ve temiz olduğundan emin olun.<br>3. <strong>Şüpheye Düştüğünüzde Atın:</strong> Şüpheli bir öğeyi atmak, bütün bir partiyi kirletmekten daha iyidir.</p><p>Doğru ayırmak için birkaç dakika daha ayırarak, geri dönüşümü verimli ve çevre için gerçekten faydalı hale getirmede hayati bir rol oynarsınız. Daha temiz bir gelecek için birlikte çalışalım!</p>"
-        },
-        {
-          "title": "Yaygın 5 Geri Dönüşüm Hatası ve Bunlardan Kaçınma Yolları",
-          "date": "15 Ekim 2023",
-          "author": "Jane Doe",
-          "fullContent": "<p>Hepimiz çevre için üzerimize düşeni yapmak istiyoruz, ancak bazen geri dönüşümdeki en iyi niyetlerimiz aslında sorunlara neden olabilir. Kirlilik, geri dönüşüm tesisleri için büyük bir sorundur. İşte beş yaygın hata ve bunları nasıl düzelteceğiniz:</p><ol><li><strong>Yağlı Pizza Kutularını Geri Dönüştürmek:</strong> Yağ ve yiyecek artıkları karton liflerini kirleterek onları geri dönüştürülemez hale getirir. Mümkünse kutu kapağının temiz kısımlarını yırtın ve yağlı alt kısmı kompost yapın veya atın.</li><li><strong>Plastik Şişelerde/Kavanozlarda Kapak Bırakmak:</strong> Bu durum değişiklik gösterse de, birçok tesis kapakların çıkarılmasını tercih eder. Küçük kapaklar ayıklama makinelerinden düşebilir. Yerel kuralları kontrol edin, ancak genellikle en iyisi onları çıkarıp atmak (veya mümkünse ayrı olarak geri dönüştürmek).</li><li><strong>Kaldırım Kenarında Plastik Poşetleri Geri Dönüştürmek:</strong> Plastik poşetler ve filmler ayıklama makinelerine dolanarak kapanmalara neden olur. Temiz plastik poşetleri belirlenmiş mağaza bırakma noktalarına geri götürün.</li><li><strong>Kapları Boşaltmamak ve Durulamamak:</strong> Arta kalan yiyecek veya sıvı, diğer geri dönüştürülebilir malzemeleri, özellikle kağıdı kirletebilir. Kapları hızlıca durulayın.</li><li><strong>Kutuya Küçük Öğeler Koymak:</strong> Kredi kartından küçük öğeler (şişe kapakları, parçalanmış kağıt parçaları gibi) genellikle ayıklama eleklerinden düşer. Parçalanmış kağıdı bir kağıt torbada tutun (yerel olarak izin veriliyorsa) ve küçük plastik parçalarını atın.</li></ol><p>Bu hatalardan kaçınarak, daha fazla malzemenin başarılı bir şekilde geri dönüştürülmesini sağlar, kaynakları korur ve çöp sahası atıklarını azaltırsınız. En doğru bilgi için daima yerel belediyenizin yönergelerini kontrol edin!</p>"
-        },
-        {
-          "title": "Atık Yönetimi Teknolojisindeki Yenilikler",
-          "date": "30 Eylül 2023",
-          "author": "Eko İnovasyon A.Ş.",
-          "fullContent": "<p>Dünya büyüyen bir atık kriziyle karşı karşıya, ancak teknoloji yenilikçi çözümler sunmak için devreye giriyor. Akıllı çöp kutularından gelişmiş ayırma ve kimyasal geri dönüşüme kadar, atık yönetiminin geleceği umut verici görünüyor.</p><h2>Akıllı Çöp Kutuları ve Toplama</h2><p>Halka açık ve ticari çöp kutularındaki IoT destekli sensörler, doluluk seviyelerini tespit ederek toplama rotalarını optimize edebilir. Bu, yakıt tasarrufu sağlar, emisyonları azaltır ve taşan çöp kutularını önler. GPS takibi ve veri analitiği verimliliği daha da artırır.</p><h2>Gelişmiş Ayırma Teknolojileri</h2><p>Modern Malzeme Geri Kazanım Tesisleri (MGK'lar) sofistike teknolojiler kullanır:</p><ul><li><strong>Optik Ayırıcılar:</strong> Farklı plastik ve malzeme türlerini yüksek hızda tanımlamak için yakın kızılötesi (NIR) ışık kullanır.</li><li><strong>Robotik ve Yapay Zeka:</strong> Yapay zeka ile donatılmış robotlar, karışık bir akıştan belirli öğeleri artan bir doğrulukla tanımlayıp alabilir ve geleneksel makineler için zor olan malzemeleri işleyebilir.</li><li><strong>Yoğunluk Ayırıcılar:</strong> Cam kırıkları gibi malzemelerin yoğunluklarına göre ayrılmasına yardımcı olur.</li></ul><h2>Kimyasal Geri Dönüşüm</h2><p>Geleneksel mekanik geri dönüşümün ötesinde, kimyasal geri dönüşüm (veya ileri geri dönüşüm) teknolojileri ortaya çıkmaktadır. Bu süreçler, plastikleri temel kimyasal yapı taşlarına ayırır ve bunlar daha sonra yeni plastikler veya diğer kimyasal ürünler oluşturmak için kullanılabilir. Bu, geri dönüştürülmesi zor plastikler için potansiyel bir çözüm sunar.</p><h2>Atıktan Enerji (WtE)</h2><p>Modern WtE tesisleri, geri dönüştürülemeyen atıklardan elektrik veya ısı üretmek için kontrollü yakma yöntemini kullanır, bu da çöp sahası hacmini önemli ölçüde azaltırken enerji geri kazanımı sağlar. Bu tesisler, gelişmiş kirlilik kontrol sistemleri içerir.</p><p>Zorluklar devam etse de, bu teknolojik gelişmeler dünya çapında atık yönetimine daha sürdürülebilir ve döngüsel bir yaklaşım için umut vaat etmektedir.</p>"
-        }
+    "info_box": {
+      "recycling_title": "Geri Dönüşüm Nedir?",
+      "sustainable_title": "Sürdürülebilir Kalkınma Nedir?",
+      "circular_title": "Döngüsel Ekonomi Nedir?",
+      "loading": "Yükleniyor...",
+      "error": "Açıklama yüklenemedi."
+    }
+  },
+  "about": {
+    "header": {
+      "title": "Hikayemiz ve Misyonumuz",
+      "subtitle": "Teknoloji aracılığıyla sürdürülebilir bir gelecek yaratma konusunda tutkulu bir öğrenci grubuyuz."
+    },
+    "vision": {
+      "title": "GreenerLife Vizyonumuz",
+      "text": "Bilinçli tüketimin ve etkili atık yönetiminin alışkanlık haline geldiği bir dünya hayal ediyoruz. \"GreenerLife\", bireyleri ve toplulukları atığı en aza indirme, kaynakları koruma ve döngüsel bir ekonominin inşasına aktif olarak katılma konusunda güçlendiren, öğrenci odaklı bir girişimimizdir. Doğru araçlar ve içgörülerle herkesin önemli bir olumlu etki yaratabileceğine inanıyoruz."
+    },
+    "who_we_are": {
+      "title": "Biz Kimiz",
+      "text": "Çeşitli disiplinlerden gelen, çevresel sürdürülebilirliğe olan ortak bağlılığımız ve teknolojiye olan heyecanımızla birleşmiş bir üniversite öğrenci ekibiyiz. Bu proje, öğrendiklerimizi derinden önemsediğimiz gerçek bir dünya sorununa uygulama yolu olarak başladı. GreenerLife'ı geliştirirken, atık takibi ve geri dönüşümü teşvik etmek için sezgisel, etkili çözümler sunmayı hedefliyoruz."
+    },
+    "values": {
+      "title": "Temel Değerlerimiz",
+      "list": [
+        { "icon": "🌿", "name": "Sürdürülebilirlik:", "description": "Platformumuzun her alanında çevre dostu uygulamaları teşvik etmek ve kullanıcıları da aynısını yapmaya teşvik etmek." },
+        { "icon": "💡", "name": "İnovasyon:", "description": "Atık yönetimini daha basit ve daha etkili hale getirmek için sürekli olarak yeni teknolojileri ve yaklaşımları keşfetmek." },
+        { "icon": "🤝", "name": "Topluluk:", "description": "Kullanıcıların fikir paylaşabileceği, birbirlerini motive edebileceği ve daha yeşil bir gezegen için toplu olarak çalışabileceği destekleyici bir ağ oluşturmak." },
+        { "icon": "🎓", "name": "Öğrenme ve Gelişim:", "description": "Öğrenciler olarak bu projeyi bir öğrenme yolculuğu olarak görüyoruz. GreenerLife'ı geliştirmek için becerilerimizi ve bilgimizi artırmaya kararlıyız." }
       ]
     },
-    "login": {
-      "title_line2": "Atıklarınızı Kaydedin ve Geri Dönüştürün",
-      "title_line1": "Daha İyi Bir Doğa İçin",
-      "welcome": "Tekrar hoş geldiniz! Lütfen hesabınıza giriş yapın.",
-      "email_section_title": "E-posta Bölümü",
-      "email_label": "E-posta Adresi",
-      "password_label": "Şifre",
-      "remember_me": "Beni Hatırla",
-      "forgot_password": "Şifremi Unuttum",
-      "login_button": "Giriş Yap",
-      "signup_button": "Kayıt Ol",
-      "social_login_prompt": "veya şununla giriş yapın:",
-      "github_button": "GitHub",
-      "linkedin_button": "LinkedIn",
-      "error_enter_credentials": "Lütfen hem E-posta hem de Şifre giriniz.",
-      "error_invalid_credentials": "Geçersiz E-posta veya Şifre.",
-      "error_google_failed": "Google ile giriş başarısız oldu.",
-      "error_login_failed": "Giriş başarısız: {message}"
+    "team": {
+      "title": "Öğrenci Ekibiyle Tanışın",
+      "subtitle": "GreenerLife projesi size kendini adamış bir grup öğrenci tarafından sunulmaktadır:"
     },
-    "signup": {
-      "title_part1": "", 
-      "title_part2": "Sıfır Atık",
-      "title_part3": "Hareketine Katılın",
-      "subtitle": "Atıklarınızı kaydetmeye ve geri dönüştürmeye başlamak için bir hesap oluşturun.",
-      "mandatory_note": "* ile işaretlenmiş alanlar zorunludur.",
-      "username_label": "Kullanıcı Adı",
-      "email_label": "E-posta",
-      "password_label": "Şifre",
-      "confirm_password_label": "Şifreyi Onayla",
+    "simple_footer": "© {{year}} GreenerLife Öğrenci Projesi."
+  },
+  "blog": {
+    "header": {
+      "title": "Blogumuzdan Son Haberler",
+      "subtitle": "Atık yönetimi ve geri dönüşümle ilgili en son haberler, ipuçları ve görüşlerle güncel kalın."
+    },
+    "meta_prefix": "Yayınlanma tarihi:",
+    "read_more_button": "Devamını Oku",
+    "posts": [
+      {
+        "title": "Geri Dönüştürülebilir Atıkları Ayırmanın Önemi",
+        "date": "26 Ekim 2023",
+        "excerpt": "Geri dönüştürülebilir malzemelerin doğru şekilde ayrılmasının etkili bir geri dönüşüm süreci için neden çok önemli olduğunu ve nasıl katkıda bulunabileceğinizi öğrenin..."
+      },
+      {
+        "title": "Yaygın 5 Geri Dönüşüm Hatası ve Bunlardan Kaçınma Yolları",
+        "date": "15 Ekim 2023",
+        "excerpt": "İyi niyetli birçok geri dönüştürücü, partileri kirletebilecek yaygın hatalar yapar. İşte bunlardan nasıl kaçınılacağı..."
+      },
+      {
+        "title": "Atık Yönetimi Teknolojisindeki Yenilikler",
+        "date": "30 Eylül 2023",
+        "excerpt": "Dünya çapında atıkları yönetme ve azaltma şeklimizde devrim yaratan en son teknolojik gelişmeleri keşfedin..."
+      }
+    ]
+  },
+  "blog_post": {
+    "loading": "Blog gönderisi yükleniyor...",
+    "error_title": "Hata",
+    "error_not_found": "Blog gönderisi bulunamadı.",
+    "back_to_blog": "Bloğa Geri Dön",
+    "meta_published_on": "Yayınlanma tarihi:",
+    "meta_by": "",
+    "posts": [
+      {
+        "title": "Geri Dönüştürülebilir Atıkları Ayırmanın Önemi",
+        "date": "26 Ekim 2023",
+        "author": "GreenerLife Ekibi",
+        "fullContent": "<p>Geri dönüşüm, modern atık yönetiminin temel taşlarından biridir, ancak etkinliği kritik bir şekilde tek bir basit eyleme bağlıdır: doğru ayırma. Geri dönüştürülebilir atıklar, geri dönüştürülemeyen malzemelerle veya yanlış ayrılmış öğelerle kirlendiğinde, tüm partiler reddedilebilir ve yeniden kullanılmak yerine çöp sahalarına gönderilebilir.</p><h2>Ayırma Neden Önemlidir?</h2><p>Farklı malzemeler farklı geri dönüşüm süreçleri gerektirir. Malzemeleri karıştırmak şunlara neden olabilir:</p><ul><li><strong>Ekipmana Zarar Verme:</strong> Plastik poşetler gibi öğeler makineleri sıkıştırabilir.</li><li><strong>Düşük Kalite:</strong> Kirleticiler, nihai geri dönüştürülmüş malzemenin kalitesini düşürerek onu daha az değerli veya kullanılamaz hale getirir.</li><li><strong>Maliyetleri Artırma:</strong> Ayırma tesisleri, kirleticileri temizlemek için fazladan zaman ve kaynak harcar.</li></ul><h2>Yaygın Ayırma Hataları</h2><p>Bu yaygın hatalara dikkat edin:</p><ul><li><strong>Umutla Geri Dönüşüm (Wishcycling):</strong> Geri dönüştürülebilir olduğunu umarak öğeleri geri dönüşüm kutusuna atmak (örneğin, yağlı pizza kutuları, belirli plastikler). Her zaman yerel yönergeleri kontrol edin!</li><li><strong>Kapları Durulamamak:</strong> Yiyecek artıkları kağıt ve diğer malzemeleri kirletebilir. Hızlı bir durulama genellikle yeterlidir.</li><li><strong>Geri Dönüştürülebilirleri Poşetlemek:</strong> Yerel programınız aksini belirtmedikçe, geri dönüştürülebilirler genellikle kutuya gevşek bir şekilde yerleştirilmelidir. Plastik poşetlerin kendisi genellikle kaldırım kenarında geri dönüştürülemez.</li></ul><h2>Nasıl Yardımcı Olabilirsiniz?</h2><p>1. <strong>Yerel Kurallarınızı Bilin:</strong> Geri dönüşüm yönergeleri belediyelere göre önemli ölçüde farklılık gösterir. Yerel atık yönetimi web sitenizi kontrol edin.<br>2. <strong>Geri Dönüştürülebilirlerinizi Temizleyin:</strong> Kapları durulayın ve kağıdın kuru ve temiz olduğundan emin olun.<br>3. <strong>Şüpheye Düştüğünüzde Atın:</strong> Şüpheli bir öğeyi atmak, bütün bir partiyi kirletmekten daha iyidir.</p><p>Doğru ayırmak için birkaç dakika daha ayırarak, geri dönüşümü verimli ve çevre için gerçekten faydalı hale getirmede hayati bir rol oynarsınız. Daha temiz bir gelecek için birlikte çalışalım!</p>"
+      },
+      {
+        "title": "Yaygın 5 Geri Dönüşüm Hatası ve Bunlardan Kaçınma Yolları",
+        "date": "15 Ekim 2023",
+        "author": "Jane Doe",
+        "fullContent": "<p>Hepimiz çevre için üzerimize düşeni yapmak istiyoruz, ancak bazen geri dönüşümdeki en iyi niyetlerimiz aslında sorunlara neden olabilir. Kirlilik, geri dönüşüm tesisleri için büyük bir sorundur. İşte beş yaygın hata ve bunları nasıl düzelteceğiniz:</p><ol><li><strong>Yağlı Pizza Kutularını Geri Dönüştürmek:</strong> Yağ ve yiyecek artıkları karton liflerini kirleterek onları geri dönüştürülemez hale getirir. Mümkünse kutu kapağının temiz kısımlarını yırtın ve yağlı alt kısmı kompost yapın veya atın.</li><li><strong>Plastik Şişelerde/Kavanozlarda Kapak Bırakmak:</strong> Bu durum değişiklik gösterse de, birçok tesis kapakların çıkarılmasını tercih eder. Küçük kapaklar ayıklama makinelerinden düşebilir. Yerel kuralları kontrol edin, ancak genellikle en iyisi onları çıkarıp atmak (veya mümkünse ayrı olarak geri dönüştürmek).</li><li><strong>Kaldırım Kenarında Plastik Poşetleri Geri Dönüştürmek:</strong> Plastik poşetler ve filmler ayıklama makinelerine dolanarak kapanmalara neden olur. Temiz plastik poşetleri belirlenmiş mağaza bırakma noktalarına geri götürün.</li><li><strong>Kapları Boşaltmamak ve Durulamamak:</strong> Arta kalan yiyecek veya sıvı, diğer geri dönüştürülebilir malzemeleri, özellikle kağıdı kirletebilir. Kapları hızlıca durulayın.</li><li><strong>Kutuya Küçük Öğeler Koymak:</strong> Kredi kartından küçük öğeler (şişe kapakları, parçalanmış kağıt parçaları gibi) genellikle ayıklama eleklerinden düşer. Parçalanmış kağıdı bir kağıt torbada tutun (yerel olarak izin veriliyorsa) ve küçük plastik parçalarını atın.</li></ol><p>Bu hatalardan kaçınarak, daha fazla malzemenin başarılı bir şekilde geri dönüştürülmesini sağlar, kaynakları korur ve çöp sahası atıklarını azaltırsınız. En doğru bilgi için daima yerel belediyenizin yönergelerini kontrol edin!</p>"
+      },
+      {
+        "title": "Atık Yönetimi Teknolojisindeki Yenilikler",
+        "date": "30 Eylül 2023",
+        "author": "Eko İnovasyon A.Ş.",
+        "fullContent": "<p>Dünya büyüyen bir atık kriziyle karşı karşıya, ancak teknoloji yenilikçi çözümler sunmak için devreye giriyor. Akıllı çöp kutularından gelişmiş ayırma ve kimyasal geri dönüşüme kadar, atık yönetiminin geleceği umut verici görünüyor.</p><h2>Akıllı Çöp Kutuları ve Toplama</h2><p>Halka açık ve ticari çöp kutularındaki IoT destekli sensörler, doluluk seviyelerini tespit ederek toplama rotalarını optimize edebilir. Bu, yakıt tasarrufu sağlar, emisyonları azaltır ve taşan çöp kutularını önler. GPS takibi ve veri analitiği verimliliği daha da artırır.</p><h2>Gelişmiş Ayırma Teknolojileri</h2><p>Modern Malzeme Geri Kazanım Tesisleri (MGK'lar) sofistike teknolojiler kullanır:</p><ul><li><strong>Optik Ayırıcılar:</strong> Farklı plastik ve malzeme türlerini yüksek hızda tanımlamak için yakın kızılötesi (NIR) ışık kullanır.</li><li><strong>Robotik ve Yapay Zeka:</strong> Yapay zeka ile donatılmış robotlar, karışık bir akıştan belirli öğeleri artan bir doğrulukla tanımlayıp alabilir ve geleneksel makineler için zor olan malzemeleri işleyebilir.</li><li><strong>Yoğunluk Ayırıcılar:</strong> Cam kırıkları gibi malzemelerin yoğunluklarına göre ayrılmasına yardımcı olur.</li></ul><h2>Kimyasal Geri Dönüşüm</h2><p>Geleneksel mekanik geri dönüşümün ötesinde, kimyasal geri dönüşüm (veya ileri geri dönüşüm) teknolojileri ortaya çıkmaktadır. Bu süreçler, plastikleri temel kimyasal yapı taşlarına ayırır ve bunlar daha sonra yeni plastikler veya diğer kimyasal ürünler oluşturmak için kullanılabilir. Bu, geri dönüştürülmesi zor plastikler için potansiyel bir çözüm sunar.</p><h2>Atıktan Enerji (WtE)</h2><p>Modern WtE tesisleri, geri dönüştürülemeyen atıklardan elektrik veya ısı üretmek için kontrollü yakma yöntemini kullanır, bu da çöp sahası hacmini önemli ölçüde azaltırken enerji geri kazanımı sağlar. Bu tesisler, gelişmiş kirlilik kontrol sistemleri içerir.</p><p>Zorluklar devam etse de, bu teknolojik gelişmeler dünya çapında atık yönetimine daha sürdürülebilir ve döngüsel bir yaklaşım için umut vaat etmektedir.</p>"
+      }
+    ]
+  },
+  "login": {
+    "title_line1": "Daha İyi Bir Doğa İçin",
+    "title_line2": "Atıklarınızı Kaydedin ve Geri Dönüştürün",
+    "welcome": "Tekrar hoş geldiniz! Lütfen hesabınıza giriş yapın.",
+    "email_section_title": "E-posta Bölümü",
+    "email_label": "E-posta Adresi",
+    "password_label": "Şifre",
+    "remember_me": "Beni Hatırla",
+    "forgot_password": "Şifremi Unuttum",
+    "login_button": "Giriş Yap",
+    "signup_button": "Kayıt Ol",
+    "social_login_prompt": "veya şununla giriş yapın:",
+    "github_button": "GitHub",
+    "linkedin_button": "LinkedIn",
+    "error_enter_credentials": "Lütfen hem E-posta hem de Şifre giriniz.",
+    "error_invalid_credentials": "Geçersiz E-posta veya Şifre.",
+    "error_google_failed": "Google ile giriş başarısız oldu.",
+    "error_login_failed": "Giriş başarısız: {message}"
+  },
+  "signup": {
+    "title_part1": "",
+    "title_part2": "Sıfır Atık",
+    "title_part3": "Hareketine Katılın",
+    "subtitle": "Atıklarınızı kaydetmeye ve geri dönüştürmeye başlamak için bir hesap oluşturun.",
+    "mandatory_note": "* ile işaretlenmiş alanlar zorunludur.",
+    "username_label": "Kullanıcı Adı",
+    "email_label": "E-posta",
+    "password_label": "Şifre",
+    "confirm_password_label": "Şifreyi Onayla",
+    "first_name_label": "Ad",
+    "last_name_label": "Soyad",
+    "city_label": "Şehir",
+    "city_state_label": "Şehir/Eyalet",
+    "country_label": "Ülke",
+    "bio_label": "Biyografi",
+    "placeholder_username": "Kullanıcı Adınızı Girin",
+    "error_username_invalid": "Geçersiz kullanıcı adı. Sadece harf, rakam ve @/./+/-/_ karakterleri kullanılabilir.",
+    "placeholder_email": "E-postanızı Girin",
+    "placeholder_password": "Şifrenizi Girin",
+    "placeholder_confirm_password": "Şifreyi Onaylayın",
+    "placeholder_first_name": "Adınızı Girin",
+    "placeholder_last_name": "Soyadınızı Girin",
+    "placeholder_city": "Şehrinizi Girin",
+    "placeholder_city_state": "Şehir/Eyalet Seçin",
+    "placeholder_country": "Ülkenizi Girin",
+    "placeholder_bio": "Bize kendinizden bahsedin (isteğe bağlı)",
+    "signup_button": "Kayıt Ol",
+    "back_to_login_button": "Giriş Ekranına Dön",
+    "alternate_action_prompt": "Zaten bir hesabınız var mı?",
+    "alternate_action_login": "Giriş Yap",
+    "error_passwords_no_match": "Şifreler uyuşmuyor.",
+    "error_banned_word": "Bu alan yasaklı kelime içeriyor.",
+    "accept_terms_prefix": "",
+    "accept_terms_link": "Şartlar ve Koşulları",
+    "accept_terms_suffix": " kabul ediyorum",
+    "error_required_field": "Lütfen bu alanı doldurun.",
+    "error_email_invalid": "Lütfen geçerli bir e-posta adresi girin.",
+    "error_terms_required": "Devam etmek için kutucuğu işaretlemelisiniz.",
+    "error_password_too_short": "Şifre en az 6 karakter uzunluğunda olmalıdır.",
+    "error_password_numeric": "Şifre tamamen sayılardan oluşamaz.",
+    "success_message": "Kayıt başarılı! Lütfen giriş yapın."
+  },
+  "forgot_password": {
+    "title": "Şifrenizi mi Unuttunuz?",
+    "subtitle": "Endişelenmeyin! Aşağıya e-posta adresinizi girin, size şifrenizi sıfırlamanız için bir bağlantı gönderelim.",
+    "email_label": "E-posta Adresi",
+    "placeholder_email": "Kayıtlı e-postanızı girin",
+    "button_send_link": "Sıfırlama Bağlantısı Gönder",
+    "button_sending": "Gönderiliyor...",
+    "alternate_action_prompt": "Şifrenizi hatırlıyor musunuz?",
+    "success_message": "Bu e-postaya sahip bir hesap varsa, bir şifre sıfırlama bağlantısı gönderilmiştir. Lütfen gelen kutunuzu (ve spam klasörünüzü) kontrol edin.",
+    "error_enter_email": "Lütfen e-posta adresinizi girin."
+  },
+  "dashboard_nav": {
+    "dashboard": "Kontrol Paneli",
+    "waste_log": "Atık Kaydı",
+    "goals": "Hedefler",
+    "leaderboard": "Lider Tablosu",
+    "challenges": "Meydan Okumalar",
+    "events": "Etkinlikler",
+    "my_stats": "İstatistiklerim",
+    "logout": "Çıkış Yap"
+  },
+  "dashboard": {
+    "profile_card": {
+      "role_prefix": "Rol",
+      "member": "Üye",
+      "view_profile_button": "Tüm Profili Görüntüle",
+      "logout_button": "Çıkış Yap"
+    },
+    "overview": {
+      "title": "Panele Genel Bakış",
+      "subtitle": "Sürdürülebilir bir yaşam tarzına yolculuğunuz burada başlıyor."
+    },
+    "loader": {
+      "message": "Eko-istatistikleriniz getiriliyor..."
+    },
+    "score_widget": {
+      "title": "Eko Puanınız",
+      "unit": "puan",
+      "not_available": "N/A",
+      "prompt": "Puanınızı hesaplamak için atık kaydedin!"
+    },
+    "quick_links_widget": {
+      "title": "Hızlı Bağlantılar",
+      "log_waste": "Atık Kaydet",
+      "log_waste_sub": "Etkinizi takip edin",
+      "join_challenges": "Meydan Okumalara Katıl",
+      "join_challenges_sub": "Yarışın ve geliştirin",
+      "view_leaderboard": "Lider Tablosunu Görüntüle",
+      "view_leaderboard_sub": "En iyi performans gösterenleri görün"
+    },
+    "eco_tip_widget": {
+      "title": "Günün Eko İpucu",
+      "content": "\"Yerel kaynaklı ve mevsimlik yiyecekleri seçerek karbon ayak izinizi azaltın. Bu, yerel çiftçileri destekler ve ulaşım emisyonlarını azaltır!\"",
+      "discover_more": "Daha fazla ipucu keşfedin"
+    },
+    "next_step_widget": {
+      "title": "Sonraki Adımınız",
+      "current_score": "Mevcut Puanınız",
+      "items_needed": "Gerekli öğeler",
+      "log_now": "Şimdi Atık Kaydet"
+    },
+    "forest_widget": {
+      "title": "Sizin Eko Ormanınız",
+      "info": "1 orman = 1000 puan",
+      "empty": "Ormanınızı büyütmek için atık kaydetmeye başlayın!"
+    },
+    "error_fetch_score": "Puanınız alınamadı. Lütfen daha sonra tekrar deneyin."
+  },
+  "waste_log_page": {
+    "title": "Atıklarınızı Kaydedin",
+    "subtitle": "Çevresel etkinizi anlamak ve azaltmak için atık üretiminizi takip edin.",
+    "error_no_categories": "Kaydedilecek atık kategorisi bulunamadı. Lütfen destekle iletişime geçin veya daha sonra tekrar deneyin.",
+    "error_fetch_failed": "Veriler yüklenirken hata oluştu. Lütfen internet bağlantınızı kontrol edin.",
+    "error_select_category_and_quantity": "Lütfen bir kategori seçin ve miktar girin.",
+    "error_quantity_positive": "Miktar pozitif bir sayı olmalıdır.",
+    "error_add_log_failed": "Atık kaydı eklenemedi.",
+    "log_added_success": "Atık kaydı başarıyla eklendi!",
+    "retry_button": "Yeniden Dene",
+    "form": {
+      "title": "Yeni Kayıt Ekle",
+      "category_label": "Kategori",
+      "category_placeholder": "Bir atık kategorisi seçin...",
+      "quantity_label": "Miktar",
+      "quantity_placeholder": "Örn: 2.5",
+      "disposal_label": "Bertaraf Yöntemi (İsteğe Bağlı)",
+      "disposal_placeholder": "Varsa seçin...",
+      "disposal_options": {
+        "recycled": "Geri Dönüştürüldü",
+        "composted": "Kompostlandı",
+        "landfill": "Çöp Sahasına Gönderildi",
+        "donated": "Bağışlandı / Yeniden Kullanıldı",
+        "incinerated": "Yakıldı (Enerji Geri Kazanımı)",
+        "other": "Diğer"
+      },
+      "notes_label": "Notlar (İsteğe Bağlı)",
+      "notes_placeholder": "Detay ekleyebilirsiniz (örn: marka, tür...)",
+      "score_per_item": "Birim Puanı",
+      "submit_button": "Kaydı Ekle",
+      "submit_button_adding": "Ekleniyor..."
+    },
+    "log_list": {
+      "title": "Son Kayıtlarınız",
+      "loading": "Kayıtlar yükleniyor...",
+      "no_logs": "Henüz bir atık kaydı girmediniz. Takip etmeye başlamak için formu kullanın!",
+      "unknown_category": "Bilinmeyen Kategori",
+      "score_prefix": "Puan",
+      "score_na": "Yok",
+      "method_prefix": "Yöntem",
+      "notes_prefix": "Notlar",
+      "logged_prefix": "Tarih",
+      "view_all_prompt": "Tüm kayıtları profilinizde görüntüleyebilirsiniz."
+    },
+    "back_to_dashboard_button": "Kontrol Paneline Dön"
+  },
+  "goals_page": {
+    "title": "Hedefleriniz",
+    "subtitle": "Hedefler belirleyin ve ilerlemenizi izleyin.",
+    "form_title": "Yeni Bir Hedef Ekle",
+    "error_no_categories": "Atık kategorisi bulunamadı – hedef oluşturulamaz.",
+    "form": {
+      "select_category": "Kategori Seçin…",
+      "timeframe_daily": "Günlük",
+      "timeframe_weekly": "Haftalık",
+      "timeframe_monthly": "Aylık",
+      "placeholder_target": "Hedef birim",
+      "button_saving": "Kaydediliyor…",
+      "button_create": "Hedef Oluştur"
+    },
+    "loading": "Yükleniyor…",
+    "error_load_failed": "Hedefler veya kategoriler yüklenemedi.",
+    "error_form_required": "Kategori ve hedef zorunludur.",
+    "error_create_failed": "Hedef oluşturulamadı: {apiMsg}",
+    "table": {
+      "header_category": "Kategori",
+      "header_timeframe": "Zaman Aralığı",
+      "header_target": "Hedef",
+      "header_progress": "İlerleme",
+      "unit": "birim"
+    },
+    "no_goals_message": "Henüz hedef yok – yukarıdan bir tane ekleyin."
+  },
+  "leaderboard_page": {
+    "title": "Topluluk Lider Tablosu",
+    "subtitle": "Çevreye olumlu etki yaratmada kimin başı çektiğini görün!",
+    "loading": "Şampiyonlar yükleniyor...",
+    "error_load_failed": "Lider tablosu verileri yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+    "anonymous_user": "Anonim Kullanıcı",
+    "table": {
+      "rank": "Sıra",
+      "player": "Oyuncu",
+      "score": "Puan"
+    },
+    "filters": {
+      "all": "Tüm Zamanlar",
+      "yearly": "Son 1 Yıl",
+      "monthly": "Son 1 Ay",
+      "weekly": "Son 1 Hafta",
+      "daily": "Bugün"
+    },
+    "you_badge": "Sİz",
+    "score_suffix": "puan",
+    "empty_state": "Lider tablosu şu anda boş. Tahtaya çıkmak için aktivitelerinizi kaydetmeye başlayın!"
+  },
+  "profile_page": {
+    "title": "Profiliniz",
+    "subtitle": "Kişisel bilgilerinizi ve tercihlerinizi yönetin.",
+    "loading": "Profiliniz yükleniyor...",
+    "success_update": "Profil başarıyla güncellendi!",
+    "error_fetch": "Profiliniz alınamadı. Lütfen tekrar deneyin.",
+    "error_update_validation": "Profil güncellenemedi. Lütfen girdilerinizi kontrol edin.",
+    "error_update_generic": "Profil güncellenemedi. Bilinmeyen bir hata oluştu.",
+    "error_banned_word": "Bu alan yasaklı kelime içeriyor.",
+    "preferences_title": "Tercihler",
+    "form": {
       "first_name_label": "Ad",
       "last_name_label": "Soyad",
-      "city_label": "Şehir",
-      "city_state_label": "Şehir/Eyalet",
-      "country_label": "Ülke",
       "bio_label": "Biyografi",
-      "placeholder_username": "Kullanıcı Adınızı Girin",
-      "placeholder_email": "E-postanızı Girin",
-      "placeholder_password": "Şifrenizi Girin",
-      "placeholder_confirm_password": "Şifreyi Onaylayın",
-      "placeholder_first_name": "Adınızı Girin",
-      "placeholder_last_name": "Soyadınızı Girin",
-      "placeholder_city": "Şehrinizi Girin",
-      "placeholder_city_state": "Şehir/Eyalet Seçin",
-      "placeholder_country": "Ülkenizi Girin",
-      "placeholder_bio": "Bize kendinizden bahsedin (isteğe bağlı)",
-      "signup_button": "Kayıt Ol",
-      "back_to_login_button": "Giriş Ekranına Dön",
-      "alternate_action_prompt": "Zaten bir hesabınız var mı?",
-      "alternate_action_login": "Giriş Yap",
-      "error_passwords_no_match": "Şifreler uyuşmuyor.",
-      "accept_terms_prefix": "",
-      "accept_terms_link": "Şartlar ve Koşulları",
-      "accept_terms_suffix": " kabul ediyorum"
+      "city_label": "Şehir",
+      "country_label": "Ülke",
+      "notifications_label": "E-posta Bildirimlerini Etkinleştir",
+      "anonymous_label": "Lider tablosunda ismimi gizle (Anonim Ol)",
+      "first_name_placeholder": "Adınızı girin",
+      "last_name_placeholder": "Soyadınızı girin",
+      "bio_placeholder": "Bize biraz kendinizden ve eko-yolculuğunuzdan bahsedin...",
+      "city_placeholder": "Şehriniz",
+      "country_placeholder": "Ülkeniz",
+      "select_country": "Ülke Seçin",
+      "select_city": "Şehir Seçin",
+      "button_update": "Profili Güncelle",
+      "button_updating": "Güncelleniyor..."
+    }
+  },
+  "challenges_page": {
+    "title": "Eko Meydan Okumalar",
+    "subtitle": "Meydan okumalara katılın, etki yaratın ve ödüller kazanın!",
+    "loading": "Meydan okumalar yükleniyor...",
+    "error_load_failed": "Meydan okumalar yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+    "filters": {
+      "all": "Tüm Meydan Okumalar",
+      "active": "Aktif",
+      "upcoming": "Yaklaşan",
+      "completed": "Tamamladıklarım",
+      "expired": "Geçmiş Meydan Okumalar"
     },
-    "forgot_password": {
-      "title": "Şifrenizi mi Unuttunuz?",
-      "subtitle": "Endişelenmeyin! Aşağıya e-posta adresinizi girin, size şifrenizi sıfırlamanız için bir bağlantı gönderelim.",
-      "email_label": "E-posta Adresi",
-      "placeholder_email": "Kayıtlı e-postanızı girin",
-      "button_send_link": "Sıfırlama Bağlantısı Gönder",
-      "button_sending": "Gönderiliyor...",
-      "alternate_action_prompt": "Şifrenizi hatırlıyor musunuz?",
-      "success_message": "Bu e-postaya sahip bir hesap varsa, bir şifre sıfırlama bağlantısı gönderilmiştir. Lütfen gelen kutunuzu (ve spam klasörünüzü) kontrol edin.",
-      "error_enter_email": "Lütfen e-posta adresinizi girin."
+    "no_challenges": "Seçilen filtre için meydan okuma bulunamadı. Başka bir tane deneyin!",
+    "join_success": "Meydan okumaya katıldınız!",
+    "join_error": "Meydan okumaya katılamadınız: {message}",
+    "challenges": [
+      { "title": "Plastiksiz Hafta", "description": "7 gün boyunca tek kullanımlık plastik kullanmamayı taahhüt edin. İlerlemenizi takip edin ve ipuçları paylaşın!", "category": "Atık Azaltma", "reward_badge": "Plastik Avcısı" },
+      { "title": "30 Günlük Kompost Meydan Okuması", "description": "30 gün boyunca bir kompost kutusu başlatın ve sürdürün. Organik atıklarınızı değerli toprağa dönüştürün.", "category": "Organik Atık", "reward_badge": "Kompost Kralı" },
+      { "title": "Etsiz Pazartesi Ustası", "description": "Karbon ayak izinizi azaltmak için bir ay boyunca her pazartesi et yemeyin.", "category": "Beslenme Etkisi", "reward_badge": null },
+      { "title": "Enerji Tasarrufu Sprinti", "description": "Bu ay evdeki enerji tüketiminizi %10 azaltın.", "category": "Enerji Koruma", "reward_badge": null },
+      { "title": "Yerel Ulaşım Şampiyonu", "description": "Günlük ulaşımınız için 5 gün üst üste toplu taşıma, bisiklet kullanın veya yürüyün.", "category": "Ulaşım", "reward_badge": null }
+    ]
+  },
+  "challenge_card": {
+    "status_upcoming": "Yaklaşan",
+    "status_active": "Aktif",
+    "status_completed": "Tamamlandı!",
+    "status_expired": "Süresi Doldu",
+    "status_view": "Görüntüle",
+    "points_suffix": "puan",
+    "meta_ends_on": "Bitiş:",
+    "meta_starts_on": "Başlangıç:",
+    "meta_participants": "katılımcı",
+    "action_join": "Meydan Okumaya Katıl",
+    "action_view_progress": "İlerlemeyi Görüntüle",
+    "action_completed": "Harika İş!",
+    "action_ended": "Sona Erdi",
+    "action_view_details": "Detayları Görüntüle"
+  },
+  "eventsPage": {
+    "title": "Yaklaşan Etkinlikler",
+    "subtitle": "Katılın, benzer düşünen insanlarla tanışın ve bir fark yaratın.",
+    "loading": "Etkinlikler Yükleniyor…",
+    "error": "Etkinlikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+    "participate": "Katıl",
+    "participating": "Katılıyorsunuz!",
+    "creator": "Oluşturan",
+    "participants": "katılımcı",
+    "noEvents": "Şu anda yaklaşan etkinlik bulunmamaktadır. Lütfen daha sonra tekrar kontrol edin!",
+    "participationFeaturePending": "Katılım açma/kapama API özelliği bekleniyor.",
+    "likeFeaturePending": "Beğenme API özelliği bekleniyor.",
+    "buttonAdd": "Yeni Etkinlik Oluştur",
+    "createTitle": "Yeni Etkinlik Oluştur",
+    "labelDateTime": "Tarih ve Saat *",
+    "placeholderTitle": "Etkinlik Başlığı *",
+    "placeholderDescription": "Açıklama *",
+    "placeholderLocation": "Konum *",
+    "placeholderImage": "Resim URL'si (İsteğe Bağlı)",
+    "labelDistrict": "İlçe / Mahalle",
+    "placeholderDistrict": "Örn: Kadıköy",
+    "labelDuration": "Süre",
+    "placeholderDuration": "Örn: 2",
+    "labelEquipment": "Gereken Ekipman",
+    "placeholderEquipment": "Örn: Eldiven, Çanta, Su",
+    "labelImage": "Etkinlik Resmi (İsteğe Bağlı)",
+    "dragDropActive": "Resmi buraya bırakın...",
+    "dragDropInactive": "Resmi buraya sürükleyin veya seçmek için tıklayın",
+    "imageRemoveTitle": "Resmi kaldır",
+    "buttonCancel": "İptal",
+    "buttonCreate": "Etkinlik Oluştur",
+    "buttonCreating": "Oluşturuluyor...",
+    "formRequired": "Lütfen tüm zorunlu alanları doldurun.",
+    "createSuccess": "Etkinlik başarıyla oluşturuldu!",
+    "createError": "Etkinlik oluşturulamadı.",
+    "error_banned_word": "İçerik yasaklı kelime barındırıyor.",
+    "participateSuccess": "Artık katılıyorsunuz!",
+    "unparticipateSuccess": "Artık katılmıyorsunuz.",
+    "participateError": "Katılım durumu değiştirilemedi",
+    "likeSuccess": "Etkinlik beğenildi!",
+    "unlikeSuccess": "Beğeni geri alındı.",
+    "likeError": "Beğeni durumu değiştirilemedi",
+    "backToEvents": "Etkinliklere Geri Dön",
+    "hours": "saat",
+    "equipmentNeeded": "Gereken Ekipman",
+    "unitHoursShort": "sa",
+    "unitMinutesShort": "dk",
+    "unitHours": "Saat",
+    "unitMinutes": "Dakika",
+    "labelDescription": "Açıklama",
+    "placeholderDurationExample": "Örn: 1.5"
+  },
+  "events_data": {
+    "event_1_title": "Topluluk Ağaç Dikme Günü",
+    "event_1_desc": "Willow Creek Park'ta yerli ağaçlar dikmek için bize katılın. Doğaya geri vermenin harika bir yolu.",
+    "event_2_title": "Sıfır Atık Atölyesi: Mutfak",
+    "event_2_desc": "Mutfağınızda gıda ve ambalaj atığını azaltmak için pratik ipuçları öğrenin.",
+    "event_3_title": "Sahil Temizleme Yarışması",
+    "event_3_desc": "Sunrise Sahili'ni temizlememize yardım edin. En çok çöpü toplamak için yarışın.",
+    "event_4_title": "Sürdürülebilir Moda Takası",
+    "event_4_desc": "Kullanmadığınız kıyafetleri getirin ve yenileriyle takas edin!"
+  },
+  "challenge_detail": {
+    "not_found": "Meydan Okuma Bulunamadı",
+    "back_button": "Meydan Okumalara Geri Dön",
+    "your_progress": "İlerlemeniz"
+  },
+  "stats_page": {
+    "title": "{{username}} Genel Bakış",
+    "loading": "İstatistikler yükleniyor...",
+    "error_load": "İstatistikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+    "next_level": "Sonraki Seviye",
+    "to_go": "kaldı",
+    "level_indicator": "(Seviye {{current}} / {{total}})",
+    "level_up": "Seviye Atladın!",
+    "level_up_desc": "{{rank}} seviyesine ulaştın!",
+    "new_tree_planted": "Yeni Ağaç Dikildi!",
+    "new_tree_desc": "Ormanını büyütmek için yeterli puana ulaştın!",
+    "max_level": "MAKSİMUM SEVİYE!",
+    "hero": {
+      "eco_score": "Eko Puan",
+      "global_rank": "Küresel Sıralama",
+      "event_rate": "Etkinlik Oranı",
+      "trees_planted": "Dikilen Ağaçlar",
+      "joined_subtext": "katılım"
     },
-    "dashboard_nav": {
-      "dashboard": "Kontrol Paneli",
-      "waste_log": "Atık Kaydı",
-      "goals": "Hedefler",
-      "leaderboard": "Lider Tablosu",
-      "challenges": "Meydan Okumalar",
-      "events": "Etkinlikler",
-      "my_stats": "İstatistiklerim",
-      "logout": "Çıkış Yap"
-    },
-    "dashboard": {
-      "profile_card": {
-        "role_prefix": "Rol",
-        "member": "Üye",
-        "view_profile_button": "Tüm Profili Görüntüle",
-        "logout_button": "Çıkış Yap"
-      },
-      "overview": {
-        "title": "Panele Genel Bakış",
-        "subtitle": "Sürdürülebilir bir yaşam tarzına yolculuğunuz burada başlıyor."
-      },
-      "loader": {
-        "message": "Eko-istatistikleriniz getiriliyor..."
-      },
-      "score_widget": {
-        "title": "Eko Puanınız",
-        "unit": "puan",
-        "not_available": "N/A",
-        "prompt": "Puanınızı hesaplamak için atık kaydedin!"
-      },
-      "quick_links_widget": {
-        "title": "Hızlı Bağlantılar",
-        "log_waste": "Atık Kaydet",
-        "log_waste_sub": "Etkinizi takip edin",
-        "join_challenges": "Meydan Okumalara Katıl",
-        "join_challenges_sub": "Yarışın ve geliştirin",
-        "view_leaderboard": "Lider Tablosunu Görüntüle",
-        "view_leaderboard_sub": "En iyi performans gösterenleri görün"
-      },
-      "eco_tip_widget": {
-        "title": "Günün Eko İpucu",
-        "content": "\"Yerel kaynaklı ve mevsimlik yiyecekleri seçerek karbon ayak izinizi azaltın. Bu, yerel çiftçileri destekler ve ulaşım emisyonlarını azaltır!\"",
-        "discover_more": "Daha fazla ipucu keşfedin"
-      },
-      "next_step_widget": {
-        "title": "Sonraki Adımınız",
-        "current_score": "Mevcut Puanınız",
-        "items_needed": "Gerekli öğeler",
-        "log_now": "Şimdi Atık Kaydet"
-      },
-      "forest_widget": {
-        "title": "Sizin Eko Ormanınız",
-        "info": "1 orman = 1000 puan",
-        "empty": "Ormanınızı büyütmek için atık kaydetmeye başlayın!"
-      },
-      "error_fetch_score": "Puanınız alınamadı. Lütfen daha sonra tekrar deneyin."
-    },
-    "waste_log_page": {
-      "title": "Atıklarınızı Kaydedin",
-      "subtitle": "Çevresel etkinizi anlamak ve azaltmak için atık üretiminizi takip edin.",
-      "error_no_categories": "Kaydedilecek atık kategorisi yok. Lütfen destekle iletişime geçin veya daha sonra tekrar deneyin.",
-      "error_fetch_failed": "İlk veriler alınamadı. Lütfen bağlantınızı kontrol edin.",
-      "error_select_category_and_quantity": "Lütfen bir kategori seçin ve bir miktar girin.",
-      "error_quantity_positive": "Miktar pozitif bir sayı olmalıdır.",
-      "error_add_log_failed": "Atık kaydı eklenemedi.",
-      "retry_button": "Kategorileri Tekrar Getir",
-      "form": {
-        "title": "Yeni Girdi Ekle",
-        "category_label": "Kategori",
-        "category_placeholder": "Bir atık kategorisi seçin...",
-        "quantity_label": "Miktar",
-        "quantity_placeholder": "örneğin, 2.5",
-        "disposal_label": "Yok Etme Yöntemi (İsteğe Bağlı)",
-        "disposal_placeholder": "Uygulanabilirse seçin...",
-        "disposal_options": {
-          "recycled": "Geri Dönüştürüldü",
-          "composted": "Kompostlandı",
-          "landfill": "Çöp Sahası",
-          "donated": "Bağışlandı/Yeniden Kullanıldı",
-          "incinerated": "Yakıldı (Enerji Geri Kazanımı)",
-          "other": "Diğer"
-        },
-        "notes_label": "Notlar (İsteğe Bağlı)",
-        "notes_placeholder": "Herhangi bir detay, örn. belirli ürünler, kaynak...",
-        "score_per_item": "Birim Puan",
-        "submit_button": "Kaydı Ekle",
-        "submit_button_adding": "Ekleniyor..."
-      },
-      "log_list": {
-        "title": "Son Kayıtlarınız",
-        "loading": "Kayıtlar yükleniyor...",
-        "no_logs": "Henüz hiç atık kaydetmediniz. Takip etmeye başlamak için formu kullanın!",
-        "unknown_category": "Bilinmeyen Kategori",
-        "score_prefix": "Puan",
-        "score_na": "N/A",
-        "method_prefix": "Yöntem",
-        "notes_prefix": "Notlar",
-        "logged_prefix": "Kaydedildi",
-        "view_all_prompt": "Tüm kayıtları profilinizde görüntüleyin (yakında!)."
-      },
-      "back_to_dashboard_button": "Kontrol Paneline Geri Dön"
-    },
-    "goals_page": {
-      "title": "Hedefleriniz",
-      "subtitle": "Hedefler belirleyin ve ilerlemenizi izleyin.",
-      "form_title": "Yeni Bir Hedef Ekle",
-      "error_no_categories": "Atık kategorisi bulunamadı – hedef oluşturulamaz.",
-      "form": {
-        "select_category": "Kategori Seçin…",
-        "timeframe_daily": "Günlük",
-        "timeframe_weekly": "Haftalık",
-        "timeframe_monthly": "Aylık",
-        "placeholder_target": "Hedef birim",
-        "button_saving": "Kaydediliyor…",
-        "button_create": "Hedef Oluştur"
-      },
-      "loading": "Yükleniyor…",
-      "error_load_failed": "Hedefler veya kategoriler yüklenemedi.",
-      "error_form_required": "Kategori ve hedef zorunludur.",
-      "error_create_failed": "Hedef oluşturulamadı: {apiMsg}",
-      "table": {
-        "header_category": "Kategori",
-        "header_timeframe": "Zaman Aralığı",
-        "header_target": "Hedef",
-        "header_progress": "İlerleme",
-        "unit": "birim"
-      },
-      "no_goals_message": "Henüz hedef yok – yukarıdan bir tane ekleyin."
-    },
-    "leaderboard_page": {
-      "title": "Topluluk Lider Tablosu",
-      "subtitle": "Çevreye olumlu etki yaratmada kimin başı çektiğini görün!",
-      "loading": "Şampiyonlar yükleniyor...",
-      "error_load_failed": "Lider tablosu verileri yüklenemedi. Lütfen daha sonra tekrar deneyin.",
-      "anonymous_user": "Anonim Kullanıcı", 
-      "table": {
-        "rank": "Sıra",
-        "player": "Oyuncu",
-        "score": "Puan"
-      },
+    "charts": {
+      "activity_trend": "Aktivite Trendi",
+      "points_history": "Puan Geçmişi",
+      "items_logged_frequency": "Kaydedilen Atıklar (Sıklık)",
+      "points": "Puanlar",
+      "items": "Öğeler",
+      "impact_breakdown": "Etki Dağılımı",
+      "no_breakdown_data": "Dağılımı görmek için atık kaydedin.",
+      "last": "Son",
+      "by_points": "Puana Göre",
+      "by_frequency": "Sıklığa Göre",
+      "week_suffix": "Haftası",
       "filters": {
-        "all": "Tüm Zamanlar",
-        "yearly": "Son 1 Yıl",
-        "monthly": "Son 1 Ay",
-        "weekly": "Son 1 Hafta",
-        "daily": "Bugün"
+        "daily": "Günlük",
+        "weekly": "Haftalık",
+        "monthly": "Aylık",
+        "yearly": "Yıllık"
       },
-      "you_badge": "Sİz",
-      "score_suffix": "puan",
-      "empty_state": "Lider tablosu şu anda boş. Tahtaya çıkmak için aktivitelerinizi kaydetmeye başlayın!"
+      "updating": "Güncelleniyor...",
+      "no_data": "Veri yok"
     },
-    "profile_page": {
-      "title": "Profiliniz",
-      "subtitle": "Kişisel bilgilerinizi ve tercihlerinizi yönetin.",
-      "loading": "Profiliniz yükleniyor...",
-      "success_update": "Profil başarıyla güncellendi!",
-      "error_fetch": "Profiliniz alınamadı. Lütfen tekrar deneyin.",
-      "error_update_validation": "Profil güncellenemedi. Lütfen girdilerinizi kontrol edin.",
-      "error_update_generic": "Profil güncellenemedi. Bilinmeyen bir hata oluştu.",
-      "preferences_title": "Tercihler",
-      "form": {
-        "first_name_label": "Ad",
-        "last_name_label": "Soyad",
-        "bio_label": "Biyografi",
-        "city_label": "Şehir",
-        "country_label": "Ülke",
-        "notifications_label": "E-posta Bildirimlerini Etkinleştir",
-        "anonymous_label": "Lider tablosunda ismimi gizle (Anonim Ol)",
-        "first_name_placeholder": "Adınızı girin",
-        "last_name_placeholder": "Soyadınızı girin",
-        "bio_placeholder": "Bize biraz kendinizden ve eko-yolculuğunuzdan bahsedin...",
-        "city_placeholder": "Şehriniz",
-        "country_placeholder": "Ülkeniz",
-        "select_country": "Ülke Seçin",
-        "select_city": "Şehir Seçin",
-        "button_update": "Profili Güncelle",
-        "button_updating": "Güncelleniyor..."
-      }
+    "badges": {
+      "title": "Kupa Dolabı",
+      "empty": "Rozet kazanmak için atık kaydetmeye başla!",
+      "view_all": "Tüm Rozetleri Gör"
     },
-    "challenges_page": {
-      "title": "Eko Meydan Okumalar",
-      "subtitle": "Meydan okumalara katılın, etki yaratın ve ödüller kazanın!",
-      "loading": "Meydan okumalar yükleniyor...",
-      "error_load_failed": "Meydan okumalar yüklenemedi. Lütfen daha sonra tekrar deneyin.",
-      "filters": {
-        "all": "Tüm Meydan Okumalar",
-        "active": "Aktif",
-        "upcoming": "Yaklaşan",
-        "completed": "Tamamladıklarım",
-        "expired": "Geçmiş Meydan Okumalar"
-      },
-      "no_challenges": "Seçilen filtre için meydan okuma bulunamadı. Başka bir tane deneyin!",
-      "join_success": "Meydan okumaya katıldınız!",
-      "join_error": "Meydan okumaya katılamadınız: {message}",
-      "challenges": [
-        { "title": "Plastiksiz Hafta", "description": "7 gün boyunca tek kullanımlık plastik kullanmamayı taahhüt edin. İlerlemenizi takip edin ve ipuçları paylaşın!", "category": "Atık Azaltma", "reward_badge": "Plastik Avcısı" },
-        { "title": "30 Günlük Kompost Meydan Okuması", "description": "30 gün boyunca bir kompost kutusu başlatın ve sürdürün. Organik atıklarınızı değerli toprağa dönüştürün.", "category": "Organik Atık", "reward_badge": "Kompost Kralı" },
-        { "title": "Etsiz Pazartesi Ustası", "description": "Karbon ayak izinizi azaltmak için bir ay boyunca her pazartesi et yemeyin.", "category": "Beslenme Etkisi", "reward_badge": null },
-        { "title": "Enerji Tasarrufu Sprinti", "description": "Bu ay evdeki enerji tüketiminizi %10 azaltın.", "category": "Enerji Koruma", "reward_badge": null },
-        { "title": "Yerel Ulaşım Şampiyonu", "description": "Günlük ulaşımınız için 5 gün üst üste toplu taşıma, bisiklet kullanın veya yürüyün.", "category": "Ulaşım", "reward_badge": null }
-      ]
+    "forest": {
+      "title": "Eko Ormanım",
+      "info": "1 Ağaç = 500 Puan",
+      "empty": "Ormanın büyümeyi bekliyor."
     },
-    "challenge_card": {
-      "status_upcoming": "Yaklaşan",
-      "status_active": "Aktif",
-      "status_completed": "Tamamlandı!",
-      "status_expired": "Süresi Doldu",
-      "status_view": "Görüntüle",
-      "points_suffix": "puan",
-      "meta_ends_on": "Bitiş:",
-      "meta_starts_on": "Başlangıç:",
-      "meta_participants": "katılımcı",
-      "action_join": "Meydan Okumaya Katıl",
-      "action_view_progress": "İlerlemeyi Görüntüle",
-      "action_completed": "Harika İş!",
-      "action_ended": "Sona Erdi",
-      "action_view_details": "Detayları Görüntüle"
-    },
-    "eventsPage": {
-      "title": "Yaklaşan Etkinlikler",
-      "subtitle": "Katılın, benzer düşünen insanlarla tanışın ve bir fark yaratın.",
-      "loading": "Etkinlikler Yükleniyor…",
-      "error": "Etkinlikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
-      "participate": "Katıl",
-      "participating": "Katılıyorsunuz!",
-      "creator": "Oluşturan",
-      "participants": "katılımcı",
-      "noEvents": "Şu anda yaklaşan etkinlik bulunmamaktadır. Lütfen daha sonra tekrar kontrol edin!",
-      "participationFeaturePending": "Katılım açma/kapama API özelliği bekleniyor.",
-      "likeFeaturePending": "Beğenme API özelliği bekleniyor.",
-      "buttonAdd": "Yeni Etkinlik Oluştur",
-      "createTitle": "Yeni Etkinlik Oluştur",
-      "labelDateTime": "Tarih ve Saat *",
-      "placeholderTitle": "Etkinlik Başlığı *",
-      "placeholderDescription": "Açıklama *",
-      "placeholderLocation": "Konum *",
-      "placeholderImage": "Resim URL'si (İsteğe Bağlı)",
-      "labelDistrict": "İlçe / Mahalle",
-      "placeholderDistrict": "Örn: Kadıköy",
-      "labelDuration": "Süre",
-      "placeholderDuration": "Örn: 2",
-      "labelEquipment": "Gereken Ekipman",  
-      "placeholderEquipment": "Örn: Eldiven, Çanta, Su",
-      "labelImage": "Etkinlik Resmi (İsteğe Bağlı)",
-      "dragDropActive": "Resmi buraya bırakın...",
-      "dragDropInactive": "Resmi buraya sürükleyin veya seçmek için tıklayın",
-      "imageRemoveTitle": "Resmi kaldır",
-      "buttonCancel": "İptal",
-      "buttonCreate": "Etkinlik Oluştur",
-      "buttonCreating": "Oluşturuluyor...",
-      "formRequired": "Lütfen tüm zorunlu alanları doldurun.",
-      "createSuccess": "Etkinlik başarıyla oluşturuldu!",
-      "createError": "Etkinlik oluşturulamadı.",
-      "participateSuccess": "Artık katılıyorsunuz!",
-      "unparticipateSuccess": "Artık katılmıyorsunuz.",
-      "participateError": "Katılım durumu değiştirilemedi",
-      "likeSuccess": "Etkinlik beğenildi!",
-      "unlikeSuccess": "Beğeni geri alındı.",
-      "likeError": "Beğeni durumu değiştirilemedi",
-      "backToEvents": "Etkinliklere Geri Dön",
-      "hours": "saat", 
-      "equipmentNeeded": "Gereken Ekipman",
-      "unitHoursShort": "sa",
-      "unitMinutesShort": "dk",
-      "unitHours": "Saat",
-      "unitMinutes": "Dakika",
-      "labelDescription": "Açıklama",
-      "placeholderDurationExample": "Örn: 1.5"
-    },
-    "challenge_detail": {
-      "not_found": "Meydan Okuma Bulunamadı",
-      "back_button": "Meydan Okumalara Geri Dön",
-      "your_progress": "İlerlemeniz"
-    },
-      "stats_page": {
-        "title": "{{username}} Genel Bakış",
-        "loading": "İstatistikler yükleniyor...",
-        "error_load": "İstatistikler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
-        "next_level": "Sonraki Seviye",
-        "to_go": "kaldı",
-        "level_indicator": "(Seviye {{current}} / {{total}})",
-        "hero": {
-          "eco_score": "Eko Puan",
-          "global_rank": "Küresel Sıralama",
-          "event_rate": "Etkinlik Oranı",
-          "trees_planted": "Dİkİlen Ağaçlar",
-          "joined_subtext": "katılım"
-        },
-        "charts": {
-          "activity_trend": "Aktivite Trendi",
-          "points_history": "Puan Geçmişi",
-          "items_logged_frequency": "Kaydedilen Atıklar (Sıklık)",
-          "points": "Puanlar",
-          "items": "Öğeler",
-          "impact_breakdown": "Etki Dağılımı",
-          "no_breakdown_data": "Dağılımı görmek için atık kaydedin.",
-          "last": "Son",
-          "by_points": "Puana Göre",
-          "by_frequency": "Sıklığa Göre",
-          "week_suffix": "Haftası",
-          "filters": {
-            "daily": "Günlük",
-            "weekly": "Haftalık",
-            "monthly": "Aylık",
-            "yearly": "Yıllık"
-          },
-          "updating": "Güncelleniyor...",
-          "no_data": "Veri yok"
-        },
-        "badges": {
-          "title": "Kupa Dolabı",
-          "empty": "Rozet kazanmak için atık kaydetmeye başla!",
-          "view_all": "Tüm Rozetleri Gör"
-        },
-        "forest": {
-          "title": "Eko Ormanım",
-          "info": "1 Ağaç = 500 Puan",
-          "empty": "Ormanın büyümeyi bekliyor."
-        }
-      },
-      "waste_categories": {
-        "recyclable": "Geri Dönüştürülebilir",
-        "paper": "Kağıt",
-        "plastic_bottles": "Plastik Şişe",
-        "cardboard": "Karton",
-        "metal_cans": "Metal Kutu",
-        "organic": "Organik",
-        "food_scraps": "Yemek Artığı",
-        "garden_waste": "Bahçe Atığı",
-        "coffee_grounds": "Kahve Telvesi",
-        "electronic": "Elektronik",
-        "batteries": "Pil",
-        "small_appliances": "Küçük Ev Aletleri",
-        "mobile_phones": "Cep Telefonu",
-        "glass": "Cam",
-        "glass_bottles": "Cam Şişe",
-        "broken_glass": "Kırık Cam",
-        "cooking_oil": "Atık Yağ (Genel)",
-        "used_cooking_oil": "Kullanılmış Kızartma Yağı",
-        "clothing": "Kıyafet",
-        "used_clothing": "Kullanılmış Kıyafet",
-        "shoes": "Ayakkabı",
-        "other": "Diğer",
-        "hazardous_waste": "Tehlikeli Atık",
-        "bulky_items": "Hacimli Atıklar (Eşyalar)",
-        "plastic": "Plastik",
-        "aa_batteries": "AA Pil",
-        "lithium_ion_batteries": "Lityum-iyon Pil",
-        "button_cell_batteries": "Düğme Pil",
-        "car_batteries": "Araba Aküsü",
-        "nimh_batteries": "NiMH Pil"
-      },
-      "units": {
-        "kg": "kg",
-        "pcs": "adet",
-        "l": "lt",
-        "pts": "puan",
-        "logs": "kayıt"
-      },
-      "tiers": {
-        "planet_guardian": "Gezegen Koruyucusu",
-        "zero_waste_champion": "Sıfır Atık Şampiyonu",
-        "sustainability_hero": "Sürdürülebilirlik Kahramanı",
-        "eco_advocate": "Eko Savunucu",
-        "green_starter": "Yeşil Başlangıç",
-        "eco_explorer": "Eko Kaşif"
-      },
-      "badges_data": {
-        "first_step": {
-          "name": "İlk Adım",
-          "desc": "İlk atığını kaydet"
-        },
-        "plastic_buster": {
-          "name": "Plastik Avcısı",
-          "desc": "10 kg plastik azalt"
-        },
-        "sustainability_streak": {
-          "name": "İstikrar Serisi",
-          "desc": "7 Günlük Seri"
-        },
-        "zero_waste_legend": {
-          "name": "Sıfır Atık Efsanesi",
-          "desc": "5000+ Puan"
-        }
-    },
+    "tiers": {
+      "planet_guardian": "Gezegen Koruyucusu",
+      "zero_waste_champion": "Sıfır Atık Şampiyonu",
+      "sustainability_hero": "Sürdürülebilirlik Kahramanı",
+      "eco_advocate": "Eko Savunucu",
+      "green_starter": "Yeşil Başlangıç",
+      "eco_explorer": "Eko Kaşif"
+    }
+  },
+  "waste_categories": {
+    "recyclable": "Geri Dönüştürülebilir",
+    "cooking_oil": "Atık Yağ (Genel)",
+    "paper": "Kağıt",
+    "plastic_bottles": "Plastik Şişe",
+    "cardboard": "Karton",
+    "metal_cans": "Metal Kutu",
+    "food_scraps": "Yemek Artığı",
+    "garden_waste": "Bahçe Atığı",
+    "coffee_grounds": "Kahve Telvesi",
+    "batteries": "Pil",
+    "small_appliances": "Küçük Ev Aletleri",
+    "mobile_phones": "Cep Telefonu",
+    "glass": "Cam",
+    "plastic": "Plastik",
+    "electronic": "Elektronik",
+    "organic": "Organik",
+    "other": "Diğer",
+    "aa_batteries": "AA Pil",
+    "lithium_ion_batteries": "Lityum-iyon Pil",
+    "button_cell_batteries": "Düğme Pil",
+    "car_batteries": "Araba Aküsü",
+    "nimh_batteries": "NiMH Pil",
+    "glass_bottles": "Cam Şişe",
+    "broken_glass": "Kırık Cam",
+    "used_cooking_oil": "Kullanılmış Kızartma Yağı",
+    "clothing": "Kıyafet",
+    "used_clothing": "Kullanılmış Kıyafet",
+    "shoes": "Ayakkabı",
+    "hazardous_waste": "Tehlikeli Atık",
+    "bulky_items": "Hacimli Atıklar (Eşyalar)"
+  },
+  "units": {
+    "kg": "kg",
+    "pcs": "adet",
+    "l": "lt",
+    "pts": "puan",
+    "logs": "kayıt"
+  },
+  "tiers": {
+    "planet_guardian": "Gezegen Koruyucusu",
+    "zero_waste_champion": "Sıfır Atık Şampiyonu",
+    "sustainability_hero": "Sürdürülebilirlik Kahramanı",
+    "eco_advocate": "Eko Savunucu",
+    "green_starter": "Yeşil Başlangıç",
+    "eco_explorer": "Eko Kaşif"
+  },
+  "badges_page": {
+    "title": "Başarılar",
+    "subtitle": "Sürdürülebilirlik hedeflerine ulaşarak rozetler topla",
+    "badge_unlocked": "Yeni Rozet Kazanıldı!",
+    "loading": "Rozetler yükleniyor...",
+    "error_load": "Rozetler yüklenemedi.",
+    "back_to_stats": "İstatistiklere Dön"
+  },
+  "badges_data": {
+    "first_step": { "name": "İlk Adım", "desc": "İlk atığını kaydet" },
+    "plastic_buster": { "name": "Plastik Avcısı", "desc": "10 birim plastik azalt" },
+    "sustainability_streak": { "name": "İstikrar Serisi", "desc": "14 gün üst üste kayıt" },
+    "zero_waste_legend": { "name": "Sıfır Atık Efsanesi", "desc": "5000+ Puan kazan" },
+    "eco_warrior": { "name": "Eko Savaşçı", "desc": "50 adet atık kaydet" },
+    "tree_hugger": { "name": "Ağaç Dostu", "desc": "1000 eko puan kazan" },
+    "recycling_master": { "name": "Geri Dönüşüm Ustası", "desc": "30 atığı geri dönüştür" },
+    "compost_champion": { "name": "Kompost Şampiyonu", "desc": "20 organik atığı kompostla" },
+    "milestone_100": { "name": "100'ler Kulübü", "desc": "100 adet atık kaydet" },
+    "score_1500": { "name": "Yeşil Başarı", "desc": "1500 eko puan kazan" },
+    "consistency_king": { "name": "İstikrar Kralı", "desc": "30 gün art arda atık kaydet" },
+    "metal_maven": { "name": "Metal Uzmanı", "desc": "15 metal atığı geri dönüştür" },
+    "paper_pride": { "name": "Kağıt Gururu", "desc": "25 kağıt atığı geri dönüştür" },
+    "glass_guru": { "name": "Cam Gurusu", "desc": "10 cam atığı geri dönüştür" },
+    "eco_score_500": { "name": "Yükselen Yıldız", "desc": "500 eko puan kazan" },
+    "score_2000": { "name": "Eko Şampiyon", "desc": "2000 eko puan kazan" },
+    "score_3000": { "name": "Eko Üstat", "desc": "3000 eko puan kazan" },
+    "logs_200": { "name": "Kayıt Profesyoneli", "desc": "200 adet atık kaydet" },
+    "logs_500": { "name": "Takip Uzmanı", "desc": "500 adet atık kaydet" },
+    "streak_60": { "name": "Durdurulamaz", "desc": "60 gün art arda atık kaydet" },
+    "plastic_50": { "name": "Plastik Savaşçısı", "desc": "50 birim plastik azalt" },
+    "organic_50": { "name": "Organik Öncüsü", "desc": "50 organik atık kaydet" },
+    "electronic_20": { "name": "E-Atık Uzmanı", "desc": "20 elektronik atığı geri dönüştür" },
+    "textile_30": { "name": "Moda Dostu", "desc": "30 tekstil atığı geri dönüştür" },
+    "donate_50": { "name": "Bağış Şampiyonu", "desc": "50 eşyayı bağışla veya yeniden kullan" },
+    "landfill_zero": { "name": "Sıfır Çöp", "desc": "Çöplüğe 0 atık gönder" },
+    "streak_7": { "name": "Haftanın Savaşçısı", "desc": "7 gün art arda atık kaydet" },
+    "streak_21": { "name": "Ayın Kahramanı", "desc": "21 gün art arda atık kaydet" }
+  },
   "notifications": {
     "title": "Bildirimler",
     "mark_all_read": "Tümünü okundu işaretle",

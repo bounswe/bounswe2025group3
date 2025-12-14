@@ -16,6 +16,38 @@ const COLORS = [
   '#FF4560', '#2ecc71', '#3498db', '#9b59b6', '#34495e'
 ];
 
+// --- Badges Definition List (Static Data) ---
+const BADGE_DEFINITIONS = [
+    { id: 'first_step', icon: '🎖' },
+    { id: 'plastic_buster', icon: '🥤' },
+    { id: 'sustainability_streak', icon: '🔥' },
+    { id: 'zero_waste_legend', icon: '🌍' },
+    { id: 'eco_warrior', icon: '⚔️' },
+    { id: 'tree_hugger', icon: '🌿' },
+    { id: 'recycling_master', icon: '♻️' },
+    { id: 'compost_champion', icon: '🌱' },
+    { id: 'milestone_100', icon: '💯' },
+    { id: 'score_1500', icon: '🏆' },
+    { id: 'consistency_king', icon: '👑' },
+    { id: 'metal_maven', icon: '🔧' },
+    { id: 'paper_pride', icon: '📄' },
+    { id: 'glass_guru', icon: '🥃' },
+    { id: 'eco_score_500', icon: '⭐' },
+    { id: 'score_2000', icon: '🥇' },
+    { id: 'score_3000', icon: '🥈' },
+    { id: 'logs_200', icon: '📋' },
+    { id: 'logs_500', icon: '🎯' },
+    { id: 'streak_60', icon: '🚀' },
+    { id: 'plastic_50', icon: '💪' },
+    { id: 'organic_50', icon: '🍃' },
+    { id: 'electronic_20', icon: '🔌' },
+    { id: 'textile_30', icon: '👕' },
+    { id: 'donate_50', icon: '🎁' },
+    { id: 'landfill_zero', icon: '✨' },
+    { id: 'streak_7', icon: '📅' },
+    { id: 'streak_21', icon: '🎖️' }
+];
+
 const Icon = ({ name, className = "" }) => {
     const icons = {
         stats: '📈', rank: '🏅', score: '🌟', events: '📅',
@@ -26,7 +58,7 @@ const Icon = ({ name, className = "" }) => {
 };
 
 const formatNumber = (num) => {
-  return new Intl.NumberFormat('tr-TR').format(num); // TR formatı (nokta ile ayrım)
+  return new Intl.NumberFormat('tr-TR').format(num); 
 };
 
 // --- Custom Bar/Area Tooltip ---
@@ -41,10 +73,9 @@ const CustomTooltip = ({ active, payload, label, type, t }) => {
         <div className="tooltip-items">
             {payload.map((entry, index) => {
                 const dataPoint = entry.payload; 
-                // dataKey örn: "PlasticBottles_score"
-                const rawKeyPrefix = entry.dataKey.split('_')[0]; 
+                // Extract key prefix (e.g., subcategory_15)
+                const rawKeyPrefix = entry.dataKey.split('_').slice(0, 2).join('_'); 
                 
-                // Orijinal ham miktarı ve birimi al
                 const rawQty = dataPoint[`${rawKeyPrefix}_rawQty`];
                 const unit = dataPoint[`${rawKeyPrefix}_unit`] || '';
 
@@ -102,7 +133,7 @@ const PersonalStats = () => {
   const [scoreData, setScoreData] = useState({ total_score: 0 });
   
   const [timeframe, setTimeframe] = useState('daily');
-  const DEFAULTS = { daily: 7, weekly: 10, monthly: 12, yearly: 3 };
+  const DEFAULTS = { daily: 10, weekly: 10, monthly: 12, yearly: 10 };
   const [rangeValue, setRangeValue] = useState(DEFAULTS['daily']); 
 
   const [pieMetric, setPieMetric] = useState('score'); 
@@ -110,21 +141,21 @@ const PersonalStats = () => {
   const [chartData, setChartData] = useState([]); 
   const [uniqueCategories, setUniqueCategories] = useState([]); 
   const [categoryStats, setCategoryStats] = useState([]); 
-  const [badges, setBadges] = useState([]);
+  
+  const [earnedBadgeIds, setEarnedBadgeIds] = useState([]);
+
   const [leaderboardRank, setLeaderboardRank] = useState('N/A');
   const [eventStats, setEventStats] = useState({ participating: 0, total: 0, rate: 0 });
   const [subCategoriesMap, setSubCategoriesMap] = useState({});
   const [rawLogsState, setRawLogsState] = useState([]);
-  const [categoryNameMap, setCategoryNameMap] = useState({}); // Store translated category names
 
-  // Tiers artık render içinde tanımlanmalı ki dil değişince güncellensin
   const TIERS = [
-    { name: t('tiers.eco_explorer'), min: 0, color: '#95a5a6', icon: '🌱' },
-    { name: t('tiers.green_starter'), min: 100, color: '#2ecc71', icon: '🍃' },
-    { name: t('tiers.eco_advocate'), min: 500, color: '#3498db', icon: '🌍' },
-    { name: t('tiers.sustainability_hero'), min: 1000, color: '#e67e22', icon: '🌿' },
-    { name: t('tiers.zero_waste_champion'), min: 2500, color: '#f1c40f', icon: '🌟' },
-    { name: t('tiers.planet_guardian'), min: 5000, color: '#8e44ad', icon: '🌎' }
+    { key: 'eco_explorer', min: 0, color: '#95a5a6', icon: '🌱' },
+    { key: 'green_starter', min: 100, color: '#2ecc71', icon: '🍃' },
+    { key: 'eco_advocate', min: 500, color: '#3498db', icon: '🌍' },
+    { key: 'sustainability_hero', min: 1000, color: '#e67e22', icon: '🌿' },
+    { key: 'zero_waste_champion', min: 2500, color: '#f1c40f', icon: '🌟' },
+    { key: 'planet_guardian', min: 5000, color: '#8e44ad', icon: '🌎' }
   ];
 
   const token = localStorage.getItem('access_token');
@@ -141,180 +172,231 @@ const PersonalStats = () => {
 
   useEffect(() => {
     setRangeValue(DEFAULTS[timeframe]);
-    // Fetch new stats when timeframe changes
+    // Fetch new stats from backend when timeframe changes
     if (token && !loading) {
       fetchStatsForTimeframe(timeframe);
     }
     // eslint-disable-next-line
   }, [timeframe]);
 
-  // Dil değiştiğinde grafikleri yeniden işle
   useEffect(() => {
-    if (!loading && chartData.length > 0) {
-        processCategoryPie(rawLogsState); // Pie chart isimlerini de güncelle
-        // Badges isimlerini güncelle
+    if (!loading && rawLogsState.length > 0) {
+        // Re-process Pie Chart and Badges when language changes or logs update
+        processCategoryPie(rawLogsState);
         calculateBadges(rawLogsState, scoreData.total_score);
     }
     // eslint-disable-next-line
-  }, [i18n.language]);
+  }, [rawLogsState, i18n.language]);
 
-  // --- Helper: Kategori İsmini Çevir ---
   const getCategoryTrans = (apiName) => {
       if (!apiName) return t('waste_categories.other');
-      
-      // Handle translation keys that start with "waste_categories."
-      if (apiName.startsWith('waste_categories.')) {
-        const key = apiName.replace('waste_categories.', '');
-        const translated = t(`waste_categories.${key}`, { defaultValue: null });
-        if (translated !== null && translated !== apiName) {
-          return translated;
-        }
-      }
-      
-      // "Plastic Bottles" -> "plastic_bottles"
-      // "Batteries" -> "batteries", "AA Batteries" -> "aa_batteries"
-      const key = apiName.toLowerCase().trim().replace(/\s+/g, "_").replace(/-/g, "_");
-      const translated = t(`waste_categories.${key}`, { defaultValue: null });
-      
-      // If translation not found, return the original name with better formatting
-      if (translated === null) {
-        console.warn(`Missing translation for: waste_categories.${key} (original: ${apiName})`);
-        return apiName; // Fallback to original name
-      }
-      return translated;
+      const key = apiName.toLowerCase().trim().replace(/\s+/g, "_");
+      return t(`waste_categories.${key}`, { defaultValue: apiName });
   };
 
-  // --- Grafik Verisi İşleme (from backend stats API) ---
+  // --- Helper: Real Streak Calculation (based on Logs) ---
+  const calculateRealStreak = (logs) => {
+    if (!logs || logs.length === 0) return 0;
 
-// --- Grafik Verisi İşleme (from backend stats API) ---
+    // 1. Get unique dates with reset hours
+    const uniqueDates = [...new Set(logs.map(log => {
+        const d = new Date(log.date_logged);
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+    }))];
+
+    // 2. Sort descending
+    uniqueDates.sort((a, b) => b - a);
+
+    if (uniqueDates.length === 0) return 0;
+
+    // 3. Check streak
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayTime = today.getTime();
+
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayTime = yesterday.getTime();
+
+    const lastLogDate = uniqueDates[0];
+    // If last log is not today or yesterday, streak is broken
+    if (lastLogDate !== todayTime && lastLogDate !== yesterdayTime) {
+        return 0; 
+    }
+
+    let streak = 1;
+    let currentCheck = lastLogDate;
+
+    for (let i = 1; i < uniqueDates.length; i++) {
+        const prevDate = uniqueDates[i];
+        const diffTime = Math.abs(currentCheck - prevDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+        if (diffDays === 1) {
+            streak++;
+            currentCheck = prevDate;
+        } else {
+            break; 
+        }
+    }
+    return streak;
+  };
+
+  // --- GRAPH DATA PROCESSING (USING BACKEND STATS API) ---
+  // This method avoids heavy frontend processing and aligns dates correctly based on backend data.
   const processStatsToChartData = (statsData, period, subCatMap = subCategoriesMap) => {
     const locale = i18n.language;
     const categoriesSet = new Set();
     const chartDataArray = [];
-    const categoryNameMap = {}; // Store translations for later use
+    const limit = rangeValue || DEFAULTS[period];
+    
+    // Create date range to show empty days as well
+    const now = new Date();
+    const timePoints = [];
+    const loopLimit = limit - 1;
 
-    console.log('Processing stats with subCatMap:', Object.keys(subCatMap).length, 'categories');
-
-    statsData.forEach(stat => {
-      const entry = { name: '' };
-      
-      // Format date range for display
-      if (period === 'daily') {
-        const date = new Date(stat.start_date);
-        entry.name = date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
-      } else if (period === 'weekly') {
-        const startDate = new Date(stat.start_date);
-        const endDate = new Date(stat.end_date);
-        entry.name = `${startDate.toLocaleDateString(locale, { month: 'short', day: 'numeric' })}-${endDate.toLocaleDateString(locale, { month: 'short', day: 'numeric' })}`;
-      } else if (period === 'monthly') {
-        const date = new Date(stat.start_date);
-        entry.name = date.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
-      } else if (period === 'yearly') {
-        const date = new Date(stat.start_date);
-        entry.name = date.getFullYear().toString();
-      }
-
-      entry.totalScore = stat.total_score;
-      entry.totalLog = stat.total_log;
-
-      // Process subcategory data - check ALL keys in the stat object
-      Object.keys(stat).forEach(key => {
-        if (key.match(/^subcategory_\d+_score$/)) {
-          const subcatId = key.match(/subcategory_(\d+)_score/)[1];
-          const scoreValue = stat[key];
-          const logValue = stat[`subcategory_${subcatId}_log`] || 0;
-          const rawQty = stat[`subcategory_${subcatId}_quantity`] || 0;
-          
-          // Only add if there's actual data
-          if (scoreValue > 0 || logValue > 0) {
-            const safeKey = `subcategory_${subcatId}`;
-            categoriesSet.add(safeKey);
-            
-            entry[`${safeKey}_score`] = scoreValue;
-            entry[`${safeKey}_count`] = logValue;
-            entry[`${safeKey}_rawQty`] = rawQty;
-            
-            // Get name and unit from subCatMap
-            const subCatData = subCatMap[subcatId];
-            if (subCatData && subCatData.name) {
-              const displayName = subCatData.name;
-              const unit = subCatData.unit || '';
-              categoryNameMap[safeKey] = displayName;
-              entry[`${safeKey}_originalName`] = displayName;
-              entry[`${safeKey}_unit`] = unit;
-              console.log(`Mapped ${safeKey} -> ${displayName} (${rawQty} ${unit})`);
-            } else {
-              const fallbackName = `Subcategory ${subcatId}`;
-              categoryNameMap[safeKey] = fallbackName;
-              entry[`${safeKey}_originalName`] = fallbackName;
-              entry[`${safeKey}_unit`] = '';
-              console.warn(`Missing subcategory ${subcatId} in map`);
-            }
-          }
+    if (period === 'daily') {
+        for (let i = loopLimit; i >= 0; i--) {
+            const d = new Date(); d.setDate(now.getDate() - i);
+            timePoints.push(d);
         }
-      });
+    } else if (period === 'weekly') {
+        for (let i = loopLimit; i >= 0; i--) {
+            const d = new Date(); d.setDate(now.getDate() - (i * 7));
+            timePoints.push(d);
+        }
+    } else if (period === 'monthly') {
+        for (let i = loopLimit; i >= 0; i--) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            timePoints.push(d);
+        }
+    } else if (period === 'yearly') {
+        for (let i = loopLimit; i >= 0; i--) {
+            const d = new Date(now.getFullYear() - i, 0, 1);
+            timePoints.push(d);
+        }
+    }
 
-      chartDataArray.push(entry);
+    // Map backend data by date key
+    const statsMap = {};
+    statsData.forEach(stat => {
+        let key = '';
+        if (period === 'daily') {
+             const date = new Date(stat.start_date);
+             key = date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+        } else if (period === 'weekly') {
+             const startDate = new Date(stat.start_date);
+             const day = startDate.getDay();
+             const diff = startDate.getDate() - day + (day === 0 ? -6 : 1);
+             const monday = new Date(startDate); monday.setDate(diff);
+             key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
+        } else if (period === 'monthly') {
+             const date = new Date(stat.start_date);
+             key = date.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+        } else if (period === 'yearly') {
+             const date = new Date(stat.start_date);
+             key = date.getFullYear().toString();
+        }
+        statsMap[key] = stat;
     });
 
-    const categoriesArray = Array.from(categoriesSet);
-    console.log('Found categories:', categoriesArray.length, categoriesArray);
-    console.log('Category name map:', categoryNameMap);
-    
-    setUniqueCategories(categoriesArray);
+    // Populate Chart Data Array
+    timePoints.forEach(d => {
+        let key = '';
+        let displayKey = '';
+        
+        if (period === 'daily') {
+            displayKey = d.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+        } else if (period === 'weekly') {
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(d); monday.setDate(diff);
+            displayKey = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
+        } else if (period === 'monthly') {
+            displayKey = d.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+        } else if (period === 'yearly') {
+            displayKey = d.getFullYear().toString();
+        }
+        
+        const stat = statsMap[displayKey];
+        const entry = { name: displayKey };
+
+        if (stat) {
+             entry.totalScore = stat.total_score;
+             entry.totalLog = stat.total_log;
+
+             Object.keys(stat).forEach(k => {
+                // Find keys like subcategory_15_score
+                if (k.match(/^subcategory_\d+_score$/)) {
+                    const subcatId = k.match(/subcategory_(\d+)_score/)[1];
+                    const safeKey = `subcategory_${subcatId}`;
+                    const scoreValue = stat[k];
+                    const logValue = stat[`subcategory_${subcatId}_log`] || 0;
+                    const rawQty = stat[`subcategory_${subcatId}_quantity`] || 0;
+
+                    if (scoreValue > 0 || logValue > 0) {
+                        categoriesSet.add(safeKey);
+                        entry[`${safeKey}_score`] = scoreValue;
+                        entry[`${safeKey}_count`] = logValue;
+                        entry[`${safeKey}_rawQty`] = rawQty;
+
+                        const subCatData = subCatMap[subcatId];
+                        const displayName = subCatData ? subCatData.name : `Subcategory ${subcatId}`;
+                        const unit = subCatData ? subCatData.unit : '';
+                        
+                        entry[`${safeKey}_originalName`] = displayName;
+                        entry[`${safeKey}_unit`] = unit;
+                    }
+                }
+             });
+        }
+        chartDataArray.push(entry);
+    });
+
+    setUniqueCategories(Array.from(categoriesSet));
     setChartData(chartDataArray);
-    setCategoryNameMap(categoryNameMap);
   };
 
   const fetchInitialData = async () => {
     try {
       const headers = { Authorization: `Bearer ${token}` };
-      const [profileRes, scoreRes, statsRes, eventsRes, leaderboardRes, subCatsRes] = await Promise.all([
+      
+      const [profileRes, scoreRes, logsRes, eventsRes, leaderboardRes, subCatsRes, statsRes] = await Promise.all([
         axios.get(`${apiUrl}/user/me/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/scores/me/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/user/stats/?period=${timeframe}`, { headers }), 
+        axios.get(`${apiUrl}/v1/waste/logs/`, { headers }), 
         axios.get(`${apiUrl}/v1/events/events/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/subcategories/?page_size=100`, { headers }) // Get all subcategories
+        axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers }),
+        // Stats data fetched specifically for charts
+        axios.get(`${apiUrl}/v1/waste/user/stats/?period=${timeframe}`, { headers }) 
       ]);
 
       setProfile(profileRes.data);
       setScoreData(scoreRes.data);
       
       const catMap = {};
-      // Handle both paginated and non-paginated responses
-      let subCatsList = subCatsRes.data.results || subCatsRes.data || [];
+      const subCats = subCatsRes.data.results || subCatsRes.data || [];
       
-      // If paginated and there's a next page, fetch all pages
-      if (subCatsRes.data.next) {
-        let nextUrl = subCatsRes.data.next;
-        while (nextUrl) {
-          const nextRes = await axios.get(nextUrl, { headers });
-          const nextList = nextRes.data.results || nextRes.data || [];
-          subCatsList = [...subCatsList, ...nextList];
-          nextUrl = nextRes.data.next;
-        }
-      }
+      // Pagination handling (To fetch all if there are many subcategories)
+      // Optional: Logic to fetch next pages if necessary can be added here
+      let allSubCats = [...(Array.isArray(subCats) ? subCats : [])];
       
-      (Array.isArray(subCatsList) ? subCatsList : []).forEach(sc => { 
-        catMap[sc.id] = sc; 
-      });
+      allSubCats.forEach(sc => { catMap[sc.id] = sc; });
       setSubCategoriesMap(catMap);
-      
-      // Debug: log loaded subcategories
-      console.log('SubCategoriesMap loaded:', Object.keys(catMap).length, 'categories:', catMap);
 
-      // Process stats data from the new backend endpoint
-      const statsData = statsRes.data.data || [];
-      processStatsToChartData(statsData, timeframe, catMap);
-      
-      // For pie chart, still need raw logs for category breakdown
-      const logsRes = await axios.get(`${apiUrl}/v1/waste/logs/`, { headers });
       const allLogs = logsRes.data.results || [];
+      const statsData = statsRes.data.data || [];
+
       setRawLogsState(allLogs);
       
+      // Use Backend Stats data for charts
+      processStatsToChartData(statsData, timeframe, catMap);
+      
+      // Use Raw Logs for Pie Chart and Badges
       processCategoryPie(allLogs);
       calculateBadges(allLogs, scoreRes.data.total_score);
+      
       calculateRank(leaderboardRes.data || [], userId);
       calculateEventStats(eventsRes.data.results || []);
 
@@ -356,53 +438,62 @@ const PersonalStats = () => {
     return { current, next, currentIndex };
   };
 
-  // Pie Chart verisini çevirili isimlerle oluştur
   const processCategoryPie = (logs) => {
     const categoryMap = {};
-    
     logs.forEach(log => {
-      let catName = log.sub_category_name || 'Other';
-      let displayName = catName;
-      
-      // If the category name is a translation key (starts with waste_categories. or subcategory_)
-      if (catName.startsWith('waste_categories.subcategory_') || catName.match(/^subcategory_\d+$/)) {
-        // Extract the numeric ID
-        const subcatId = catName.match(/(\d+)/)?.[1];
-        if (subcatId && subCategoriesMap[subcatId]) {
-          // Use the actual name from the map
-          displayName = subCategoriesMap[subcatId].name || catName;
-        }
-      } else if (catName.startsWith('waste_categories.')) {
-        // It's a partial translation key
-        const key = catName.replace('waste_categories.', '');
-        displayName = t(`waste_categories.${key}`, { defaultValue: catName });
-      } else {
-        // Normal category name - translate it
-        displayName = getCategoryTrans(catName);
-      }
+      const catName = log.sub_category_name || 'Other';
+      const transName = getCategoryTrans(catName);
 
-      if (!categoryMap[displayName]) {
-          categoryMap[displayName] = { 
-              name: displayName, 
+      if (!categoryMap[transName]) {
+          categoryMap[transName] = { 
+              name: transName, 
               score: 0, 
               count: 0 
           };
       }
-      categoryMap[displayName].score += parseFloat(log.score) || 0;
-      categoryMap[displayName].count += 1;
+      categoryMap[transName].score += parseFloat(log.score) || 0;
+      categoryMap[transName].count += 1;
     });
-    
     setCategoryStats(Object.values(categoryMap));
   };
 
   const calculateBadges = (logs, score) => {
-    const earned = [];
-    // Rozet isimleri çeviriden çekiliyor
-    if (logs.length > 0) earned.push({ name: t('badges_data.first_step.name'), icon: '🎖', desc: t('badges_data.first_step.desc') });
-    if (score >= 5000) earned.push({ name: t('badges_data.zero_waste_legend.name'), icon: '🌍', desc: t('badges_data.zero_waste_legend.desc') });
-    const plasticTotal = logs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, c) => acc + parseFloat(c.quantity), 0);
-    if (plasticTotal >= 10) earned.push({ name: t('badges_data.plastic_buster.name'), icon: '🥤', desc: t('badges_data.plastic_buster.desc') });
-    setBadges(earned);
+    const safeLogs = Array.isArray(logs) ? logs : [];
+    const currentStreak = calculateRealStreak(safeLogs);
+
+    const badgeChecks = {
+        'first_step': safeLogs.length > 0,
+        'plastic_buster': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 10,
+        'sustainability_streak': currentStreak >= 14, 
+        'zero_waste_legend': score >= 5000,
+        'eco_warrior': safeLogs.length >= 50,
+        'tree_hugger': score >= 1000,
+        'recycling_master': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('recycled') || l.disposal_location?.toLowerCase().includes('recycling')).length >= 30,
+        'compost_champion': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('compost')).length >= 20,
+        'milestone_100': safeLogs.length >= 100,
+        'score_1500': score >= 1500,
+        'consistency_king': currentStreak >= 30, 
+        'metal_maven': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('metal')).length >= 15,
+        'paper_pride': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('paper')).length >= 25,
+        'glass_guru': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('glass')).length >= 10,
+        'eco_score_500': score >= 500,
+        'score_2000': score >= 2000,
+        'score_3000': score >= 3000,
+        'logs_200': safeLogs.length >= 200,
+        'logs_500': safeLogs.length >= 500,
+        'streak_60': currentStreak >= 60,
+        'plastic_50': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 50,
+        'organic_50': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('organic') || l.sub_category_name?.toLowerCase().includes('food')).length >= 50,
+        'electronic_20': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('electronic') || l.sub_category_name?.toLowerCase().includes('e-waste')).length >= 20,
+        'textile_30': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('textile') || l.sub_category_name?.toLowerCase().includes('cloth')).length >= 30,
+        'donate_50': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('donated') || l.disposal_location?.toLowerCase().includes('reused')).length >= 50,
+        'landfill_zero': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('landfill')).length === 0 && safeLogs.length > 0,
+        'streak_7': currentStreak >= 7,
+        'streak_21': currentStreak >= 21
+    };
+
+    const earnedIds = Object.keys(badgeChecks).filter(id => badgeChecks[id]);
+    setEarnedBadgeIds(earnedIds);
   };
 
   const calculateEventStats = (eventsList) => {
@@ -452,14 +543,14 @@ const PersonalStats = () => {
                 <div className="level-progress-container">
                     <div className="tier-labels">
                         <span className="current-tier" style={{ color: currentTier.color }}>
-                            {currentTier.icon} {currentTier.name} 
+                            {currentTier.icon} {t(`stats_page.tiers.${currentTier.key}`, currentTier.key)} 
                             <span style={{ fontSize: '0.85rem', marginLeft: '10px', opacity: 0.8, fontWeight: 'normal', color: 'var(--dashboard-text-medium)' }}>
                                 {t('stats_page.level_indicator', { current: currentLevelIndex, total: TIERS.length })}
                             </span>
                         </span>
                         {nextTier && (
                             <span className="next-tier-hint">
-                                {t('stats_page.next_level')}: {nextTier.name} <Icon name="next"/>
+                                {t('stats_page.next_level')}: {t(`stats_page.tiers.${nextTier.key}`, nextTier.key)} <Icon name="next"/>
                             </span>
                         )}
                     </div>
@@ -470,7 +561,9 @@ const PersonalStats = () => {
                         <span className="current-points">{formatNumber(Math.round(scoreData.total_score))} {t('units.pts')}</span>
                         {nextTier ? (
                             <span className="points-needed">{formatNumber(pointsNeeded)} {t('units.pts')} {t('stats_page.to_go')}</span>
-                        ) : <span className="max-level">MAX LEVEL!</span>}
+                        ) : (
+                            <span className="max-level">{t('stats_page.max_level', 'MAX LEVEL!')}</span>
+                        )}
                     </div>
                 </div>
               </div>
@@ -536,20 +629,14 @@ const PersonalStats = () => {
                                 <Tooltip content={<CustomTooltip type="score" t={t} />} cursor={{fill: 'transparent'}}/>
                                 <Legend wrapperStyle={{paddingTop: '40px'}} />
                                 {uniqueCategories.map((safeKey, index) => {
-                                    // Extract subcategory ID from safeKey (e.g., "subcategory_13" -> 13)
-                                    const subcatId = safeKey.match(/\d+/)?.[0];
-                                    
-                                    // Get name directly from subCategoriesMap (same logic as pie chart)
-                                    let displayName = safeKey;
-                                    if (subcatId && subCategoriesMap[subcatId]) {
-                                      displayName = subCategoriesMap[subcatId].name || safeKey;
-                                    }
+                                    const originalName = chartData.find(d => d[`${safeKey}_originalName`])?.[`${safeKey}_originalName`] || safeKey;
+                                    const transName = getCategoryTrans(originalName);
                                     
                                     return (
                                         <Bar 
                                             key={safeKey} 
                                             dataKey={`${safeKey}_score`} 
-                                            name={displayName}
+                                            name={transName}
                                             stackId="a" 
                                             fill={COLORS[index % COLORS.length]} 
                                             barSize={25}
@@ -582,20 +669,14 @@ const PersonalStats = () => {
                             <Tooltip content={<CustomTooltip type="items" t={t} />} cursor={{fill: 'transparent'}}/>
                             <Legend wrapperStyle={{paddingTop: '40px'}} />
                             {uniqueCategories.map((safeKey, index) => {
-                                // Extract subcategory ID from safeKey (e.g., "subcategory_13" -> 13)
-                                const subcatId = safeKey.match(/\d+/)?.[0];
-                                
-                                // Get name directly from subCategoriesMap (same logic as pie chart)
-                                let displayName = safeKey;
-                                if (subcatId && subCategoriesMap[subcatId]) {
-                                  displayName = subCategoriesMap[subcatId].name || safeKey;
-                                }
+                                const originalName = chartData.find(d => d[`${safeKey}_originalName`])?.[`${safeKey}_originalName`] || safeKey;
+                                const transName = getCategoryTrans(originalName);
 
                                 return (
                                     <Bar 
                                         key={safeKey} 
                                         dataKey={`${safeKey}_count`} 
-                                        name={displayName}
+                                        name={transName}
                                         stackId="b" 
                                         fill={COLORS[index % COLORS.length]} 
                                         barSize={25}
@@ -641,7 +722,7 @@ const PersonalStats = () => {
                 </div>
               </div>
 
-              {/* ... Badges and Forest ... */}
+              {/* --- Badges and Forest --- */}
               <div className="stats-card wide">
                 <div className="badges-header-with-button">
                   <h2>{t('stats_page.badges.title')}</h2>
@@ -653,14 +734,17 @@ const PersonalStats = () => {
                   </button>
                 </div>
                 <div className="badges-grid">
-                  {badges.length > 0 ? (
-                    badges.map((badge, index) => (
-                      <div key={index} className="badge-item">
-                        <div className="badge-icon">{badge.icon}</div>
-                        <span className="badge-name">{badge.name}</span>
-                        <span className="badge-desc">{badge.desc}</span>
-                      </div>
-                    ))
+                  {earnedBadgeIds.length > 0 ? (
+                    earnedBadgeIds.map((badgeId, index) => {
+                        const def = BADGE_DEFINITIONS.find(d => d.id === badgeId) || { icon: '🏆' };
+                        return (
+                          <div key={index} className="badge-item">
+                            <div className="badge-icon">{def.icon}</div>
+                            <span className="badge-name">{t(`badges_data.${badgeId}.name`)}</span>
+                            <span className="badge-desc">{t(`badges_data.${badgeId}.desc`)}</span>
+                          </div>
+                        );
+                    })
                   ) : <div className="empty-badges"><p>{t('stats_page.badges.empty')}</p></div>}
                 </div>
               </div>
