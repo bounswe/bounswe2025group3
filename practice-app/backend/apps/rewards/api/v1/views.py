@@ -76,6 +76,26 @@ class BadgesView(APIView):
                 l for l in logs
                 if keyword in (l.get(field) or "").lower()
             ])
+        
+        def count_items_multi(keywords, field="sub_category_name"):
+            """Count items matching any of the keywords in the specified field"""
+            return len([
+                l for l in logs
+                if any(kw in (l.get(field) or "").lower() for kw in keywords)
+            ])
+
+        # Count recyclable items - check category name
+        recyclable_count = count_items_multi(
+            ["recycl", "plastic", "paper", "glass", "metal", "cardboard", "aluminum", "can", "bottle", 
+             "battery", "batteries", "electronic", "appliance", "phone", "oil", "cooking"],
+            "sub_category_name"
+        )
+        
+        # Count compost items - check category name
+        compost_count = count_items_multi(
+            ["organic", "food", "compost", "vegetable", "fruit", "coffee", "garden", "scrap"],
+            "sub_category_name"
+        )
 
         return [
             {
@@ -104,11 +124,11 @@ class BadgesView(APIView):
             },
             {
                 "id": "recycling_master",
-                "earned": count_items("recycled", "disposal_location") >= 30
+                "earned": recyclable_count >= 30
             },
             {
                 "id": "compost_champion",
-                "earned": count_items("compost", "disposal_location") >= 20
+                "earned": compost_count >= 20
             },
             {
                 "id": "milestone_100",
@@ -176,14 +196,14 @@ class BadgesView(APIView):
             },
             {
                 "id": "donate_50",
-                "earned": count_items("donated", "disposal_location") +
-                          count_items("reused", "disposal_location") >= 50
+                "earned": len(logs) >= 50  # Log 50 items (any category counts as eco-friendly action)
             },
             {
                 "id": "landfill_zero",
                 "earned": (
-                    count_items("landfill", "disposal_location") == 0
-                    and len(logs) > 0
+                    # All logs are in recyclable/compostable categories
+                    len(logs) > 0 and 
+                    recyclable_count + compost_count >= len(logs)
                 )
             },
             {

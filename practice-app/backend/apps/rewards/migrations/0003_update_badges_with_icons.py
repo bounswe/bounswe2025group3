@@ -1,6 +1,6 @@
 from django.db import migrations
 
-def create_badges(apps, schema_editor):
+def update_badges(apps, schema_editor):
     Badge = apps.get_model("rewards", "Badge")
 
     badges = [
@@ -34,55 +34,28 @@ def create_badges(apps, schema_editor):
         {"code": "streak_21", "name": "Monthly Hero", "icon": "🎖️", "description": "Log waste 21 days in a row"},
     ]
 
-    for badge in badges:
+    for badge_data in badges:
         Badge.objects.update_or_create(
-            code=badge["code"],
+            code=badge_data["code"],
             defaults={
-                "name": badge["name"],
-                "icon": badge["icon"],
-                "description": badge["description"],
+                "name": badge_data["name"],
+                "icon": badge_data["icon"],
+                "description": badge_data["description"],
             },
         )
 
-def reverse_badges(apps, schema_editor):
-    Badge = apps.get_model("rewards", "Badge")
-    Badge.objects.filter(code__in=[
-        "first_step",
-        "plastic_buster",
-        "sustainability_streak",
-        "zero_waste_legend",
-        "eco_warrior",
-        "tree_hugger",
-        "recycling_master",
-        "compost_champion",
-        "milestone_100",
-        "score_1500",
-        "consistency_king",
-        "metal_maven",
-        "paper_pride",
-        "glass_guru",
-        "eco_score_500",
-        "score_2000",
-        "score_3000",
-        "logs_200",
-        "logs_500",
-        "streak_60",
-        "plastic_50",
-        "organic_50",
-        "electronic_20",
-        "textile_30",
-        "donate_50",
-        "landfill_zero",
-        "streak_7",
-        "streak_21",
-    ]).delete()
+
+def reverse_update(apps, schema_editor):
+    # No reverse needed - just remove icons/descriptions
+    pass
+
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("rewards", "0001_initial"),
+        ("rewards", "0002_create_badges"),
     ]
 
     operations = [
-        migrations.RunPython(create_badges, reverse_badges),
+        migrations.RunPython(update_badges, reverse_update),
     ]

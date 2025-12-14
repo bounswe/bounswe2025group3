@@ -148,11 +148,17 @@ const PersonalStats = () => {
     if (!loading && rawLogsState.length > 0) {
         processLogsToChartData(rawLogsState, timeframe, subCategoriesMap, rangeValue);
         processCategoryPie(rawLogsState); // Pie chart isimlerini de güncelle
-        // Badges isimlerini güncelle
-        calculateBadges(rawLogsState, scoreData.total_score);
     }
     // eslint-disable-next-line
   }, [rangeValue, timeframe, rawLogsState, i18n.language]);
+
+  // Badges'i backend API'sinden çek
+  useEffect(() => {
+    if (token) {
+      fetchBadgesFromAPI();
+    }
+    // eslint-disable-next-line
+  }, [token]);
 
   // --- Helper: Kategori İsmini Çevir ---
   const getCategoryTrans = (apiName) => {
@@ -271,7 +277,6 @@ const PersonalStats = () => {
       
       processLogsToChartData(allLogs, timeframe, catMap, DEFAULTS[timeframe]);
       processCategoryPie(allLogs);
-      calculateBadges(allLogs, scoreRes.data.total_score);
       calculateRank(leaderboardRes.data || [], userId);
       calculateEventStats(eventsRes.data.results || []);
 
@@ -318,14 +323,26 @@ const PersonalStats = () => {
     setCategoryStats(Object.values(categoryMap));
   };
 
-  const calculateBadges = (logs, score) => {
-    const earned = [];
-    // Rozet isimleri çeviriden çekiliyor
-    if (logs.length > 0) earned.push({ name: t('badges_data.first_step.name'), icon: '🎖', desc: t('badges_data.first_step.desc') });
-    if (score >= 5000) earned.push({ name: t('badges_data.zero_waste_legend.name'), icon: '🌍', desc: t('badges_data.zero_waste_legend.desc') });
-    const plasticTotal = logs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, c) => acc + parseFloat(c.quantity), 0);
-    if (plasticTotal >= 10) earned.push({ name: t('badges_data.plastic_buster.name'), icon: '🥤', desc: t('badges_data.plastic_buster.desc') });
-    setBadges(earned);
+  const fetchBadgesFromAPI = async () => {
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      const response = await axios.get(`${apiUrl}/v1/rewards/badges/me/`, { headers });
+      const badgesData = response.data;
+      // Sadece kazanılan rozetleri göster
+      const earnedBadges = badgesData
+        .filter(b => b.earned)
+        .map(b => ({
+          id: b.id,
+          name: b.name,
+          icon: b.icon,
+          desc: b.description
+        }));
+      setBadges(earnedBadges);
+    } catch (err) {
+      console.error('Error fetching badges:', err);
+      // Hata durumunda boş bırak
+      setBadges([]);
+    }
   };
 
   const calculateEventStats = (eventsList) => {
