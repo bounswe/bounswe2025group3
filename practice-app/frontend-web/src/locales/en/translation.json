@@ -526,7 +526,7 @@
     "to_go": "to go",
     "level_indicator": "(Level {{current}} / {{total}})",
     "level_up": "Level Up!",
-    "level_up_desc": "You have reached the rank of",
+    "level_up_desc": "You have reached the rank of {{rank}}!",
     "new_tree_planted": "New Tree Planted!",
     "new_tree_desc": "You've earned enough points to grow your forest!",
     "max_level": "MAX LEVEL!",
