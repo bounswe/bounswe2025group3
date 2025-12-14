@@ -1,9 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from apps.rewards.models import Badge
+from apps.rewards.api.v1.serializers import BadgeGallerySerializer
+from django.db import models
+from django.db.models.functions import TruncDate
+from apps.waste.models import WasteLog
 
 class BadgesView(APIView):
     permission_classes = [IsAuthenticated]
+
 
     def get(self, request):
         user = request.user
@@ -12,12 +18,26 @@ class BadgesView(APIView):
         daily_stats = self.get_daily_stats(user)
         score = self.get_score(user)
 
-        return Response({
-            "logs_count": len(logs),
-            "days_logged": len(daily_stats),
-            "score": score,
-            # later: badges array here
-        })
+        calculated = {
+            b["id"]: b["earned"]
+            for b in self.calculate_badges(logs, daily_stats, score)
+        }
+
+        badges = Badge.objects.all().order_by("id")
+
+        serializer = BadgeGallerySerializer(
+            badges,
+            many=True,
+            context={"request": request}
+        )
+
+        data = serializer.data
+
+        # override earned flag with calculated result
+        for badge in data:
+            badge["earned"] = calculated.get(badge["code"], False)
+
+        return Response(data)
 
     def get_logs(self, user):
         return list(
@@ -175,3 +195,51 @@ class BadgesView(APIView):
                 "earned": len(daily_stats) >= 21
             },
         ]
+    
+    
+class BadgeGalleryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        # 1️⃣ Get earned badges for this user
+        earned_user_badges = UserBadge.objects.filter(user=user).select_related("badge")
+        earned_badges = [ub.badge for ub in earned_user_badges]
+
+        earned_badge_ids = [badge.id for badge in earned_badges]
+
+        # 2️⃣ Get locked badges (all badges user has NOT earned)
+        locked_badges = Badge.objects.exclude(id__in=earned_badge_ids)
+
+        # 3️⃣ Serialize manually (simple & explicit)
+        earned_data = [
+            {
+                "id": badge.id,
+                "name": badge.name,
+                "code": badge.code,
+                "icon": badge.icon,
+                "description": badge.description,
+                "earned": True,
+            }
+            for badge in earned_badges
+        ]
+
+        locked_data = [
+            {
+                "id": badge.id,
+                "name": badge.name,
+                "code": badge.code,
+                "icon": badge.icon,
+                "description": badge.description,
+                "earned": False,
+            }
+            for badge in locked_badges
+        ]
+
+        return Response({
+            "earned": earned_data,
+            "locked": locked_data,
+            "earned_count": len(earned_data),
+            "total_count": len(earned_data) + len(locked_data),
+        })
