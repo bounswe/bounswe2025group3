@@ -115,6 +115,7 @@ const PersonalStats = () => {
   const [eventStats, setEventStats] = useState({ participating: 0, total: 0, rate: 0 });
   const [subCategoriesMap, setSubCategoriesMap] = useState({});
   const [rawLogsState, setRawLogsState] = useState([]);
+  const [categoryNameMap, setCategoryNameMap] = useState({}); // Store translated category names
 
   // Tiers artık render içinde tanımlanmalı ki dil değişince güncellensin
   const TIERS = [
@@ -160,6 +161,16 @@ const PersonalStats = () => {
   // --- Helper: Kategori İsmini Çevir ---
   const getCategoryTrans = (apiName) => {
       if (!apiName) return t('waste_categories.other');
+      
+      // Handle translation keys that start with "waste_categories."
+      if (apiName.startsWith('waste_categories.')) {
+        const key = apiName.replace('waste_categories.', '');
+        const translated = t(`waste_categories.${key}`, { defaultValue: null });
+        if (translated !== null && translated !== apiName) {
+          return translated;
+        }
+      }
+      
       // "Plastic Bottles" -> "plastic_bottles"
       // "Batteries" -> "batteries", "AA Batteries" -> "aa_batteries"
       const key = apiName.toLowerCase().trim().replace(/\s+/g, "_").replace(/-/g, "_");
@@ -174,10 +185,15 @@ const PersonalStats = () => {
   };
 
   // --- Grafik Verisi İşleme (from backend stats API) ---
+
+// --- Grafik Verisi İşleme (from backend stats API) ---
   const processStatsToChartData = (statsData, period, subCatMap = subCategoriesMap) => {
     const locale = i18n.language;
     const categoriesSet = new Set();
     const chartDataArray = [];
+    const categoryNameMap = {}; // Store translations for later use
+
+    console.log('Processing stats with subCatMap:', Object.keys(subCatMap).length, 'categories');
 
     statsData.forEach(stat => {
       const entry = { name: '' };
@@ -201,28 +217,53 @@ const PersonalStats = () => {
       entry.totalScore = stat.total_score;
       entry.totalLog = stat.total_log;
 
-      // Process subcategory data
+      // Process subcategory data - check ALL keys in the stat object
       Object.keys(stat).forEach(key => {
         if (key.match(/^subcategory_\d+_score$/)) {
           const subcatId = key.match(/subcategory_(\d+)_score/)[1];
-          const safeKey = `subcategory_${subcatId}`;
-          categoriesSet.add(safeKey);
+          const scoreValue = stat[key];
+          const logValue = stat[`subcategory_${subcatId}_log`] || 0;
+          const rawQty = stat[`subcategory_${subcatId}_quantity`] || 0;
           
-          entry[`${safeKey}_score`] = stat[key];
-          entry[`${safeKey}_count`] = stat[`subcategory_${subcatId}_log`] || 0;
-          
-          // Get the actual subcategory name from the map
-          const subCatData = subCatMap[subcatId];
-          const subcatName = subCatData?.name || `Subcategory ${subcatId}`;
-          entry[`${safeKey}_originalName`] = subcatName;
+          // Only add if there's actual data
+          if (scoreValue > 0 || logValue > 0) {
+            const safeKey = `subcategory_${subcatId}`;
+            categoriesSet.add(safeKey);
+            
+            entry[`${safeKey}_score`] = scoreValue;
+            entry[`${safeKey}_count`] = logValue;
+            entry[`${safeKey}_rawQty`] = rawQty;
+            
+            // Get name and unit from subCatMap
+            const subCatData = subCatMap[subcatId];
+            if (subCatData && subCatData.name) {
+              const displayName = subCatData.name;
+              const unit = subCatData.unit || '';
+              categoryNameMap[safeKey] = displayName;
+              entry[`${safeKey}_originalName`] = displayName;
+              entry[`${safeKey}_unit`] = unit;
+              console.log(`Mapped ${safeKey} -> ${displayName} (${rawQty} ${unit})`);
+            } else {
+              const fallbackName = `Subcategory ${subcatId}`;
+              categoryNameMap[safeKey] = fallbackName;
+              entry[`${safeKey}_originalName`] = fallbackName;
+              entry[`${safeKey}_unit`] = '';
+              console.warn(`Missing subcategory ${subcatId} in map`);
+            }
+          }
         }
       });
 
       chartDataArray.push(entry);
     });
 
-    setUniqueCategories(Array.from(categoriesSet));
+    const categoriesArray = Array.from(categoriesSet);
+    console.log('Found categories:', categoriesArray.length, categoriesArray);
+    console.log('Category name map:', categoryNameMap);
+    
+    setUniqueCategories(categoriesArray);
     setChartData(chartDataArray);
+    setCategoryNameMap(categoryNameMap);
   };
 
   const fetchInitialData = async () => {
@@ -234,7 +275,7 @@ const PersonalStats = () => {
         axios.get(`${apiUrl}/v1/waste/user/stats/?period=${timeframe}`, { headers }), 
         axios.get(`${apiUrl}/v1/events/events/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers }) 
+        axios.get(`${apiUrl}/v1/waste/subcategories/?page_size=100`, { headers }) // Get all subcategories
       ]);
 
       setProfile(profileRes.data);
@@ -242,16 +283,26 @@ const PersonalStats = () => {
       
       const catMap = {};
       // Handle both paginated and non-paginated responses
-      const subCatsList = subCatsRes.data.results || subCatsRes.data || [];
+      let subCatsList = subCatsRes.data.results || subCatsRes.data || [];
+      
+      // If paginated and there's a next page, fetch all pages
+      if (subCatsRes.data.next) {
+        let nextUrl = subCatsRes.data.next;
+        while (nextUrl) {
+          const nextRes = await axios.get(nextUrl, { headers });
+          const nextList = nextRes.data.results || nextRes.data || [];
+          subCatsList = [...subCatsList, ...nextList];
+          nextUrl = nextRes.data.next;
+        }
+      }
+      
       (Array.isArray(subCatsList) ? subCatsList : []).forEach(sc => { 
         catMap[sc.id] = sc; 
       });
       setSubCategoriesMap(catMap);
       
-      // Debug: log missing IDs
-      if (Object.keys(catMap).length < 22) {
-        console.warn('Not all subcategories loaded. Have:', Object.keys(catMap), 'Expected at least 22');
-      }
+      // Debug: log loaded subcategories
+      console.log('SubCategoriesMap loaded:', Object.keys(catMap).length, 'categories:', catMap);
 
       // Process stats data from the new backend endpoint
       const statsData = statsRes.data.data || [];
@@ -308,20 +359,39 @@ const PersonalStats = () => {
   // Pie Chart verisini çevirili isimlerle oluştur
   const processCategoryPie = (logs) => {
     const categoryMap = {};
+    
     logs.forEach(log => {
-      const catName = log.sub_category_name || 'Other';
-      const transName = getCategoryTrans(catName); // Çeviriyi burada al
+      let catName = log.sub_category_name || 'Other';
+      let displayName = catName;
+      
+      // If the category name is a translation key (starts with waste_categories. or subcategory_)
+      if (catName.startsWith('waste_categories.subcategory_') || catName.match(/^subcategory_\d+$/)) {
+        // Extract the numeric ID
+        const subcatId = catName.match(/(\d+)/)?.[1];
+        if (subcatId && subCategoriesMap[subcatId]) {
+          // Use the actual name from the map
+          displayName = subCategoriesMap[subcatId].name || catName;
+        }
+      } else if (catName.startsWith('waste_categories.')) {
+        // It's a partial translation key
+        const key = catName.replace('waste_categories.', '');
+        displayName = t(`waste_categories.${key}`, { defaultValue: catName });
+      } else {
+        // Normal category name - translate it
+        displayName = getCategoryTrans(catName);
+      }
 
-      if (!categoryMap[transName]) {
-          categoryMap[transName] = { 
-              name: transName, 
+      if (!categoryMap[displayName]) {
+          categoryMap[displayName] = { 
+              name: displayName, 
               score: 0, 
               count: 0 
           };
       }
-      categoryMap[transName].score += parseFloat(log.score) || 0;
-      categoryMap[transName].count += 1;
+      categoryMap[displayName].score += parseFloat(log.score) || 0;
+      categoryMap[displayName].count += 1;
     });
+    
     setCategoryStats(Object.values(categoryMap));
   };
 
@@ -466,15 +536,20 @@ const PersonalStats = () => {
                                 <Tooltip content={<CustomTooltip type="score" t={t} />} cursor={{fill: 'transparent'}}/>
                                 <Legend wrapperStyle={{paddingTop: '40px'}} />
                                 {uniqueCategories.map((safeKey, index) => {
-                                    // Tooltip'te ve Lejantta çevrili ismi göstermek için
-                                    const originalName = chartData.find(d => d[`${safeKey}_originalName`])?.[`${safeKey}_originalName`] || safeKey;
-                                    const transName = getCategoryTrans(originalName);
+                                    // Extract subcategory ID from safeKey (e.g., "subcategory_13" -> 13)
+                                    const subcatId = safeKey.match(/\d+/)?.[0];
+                                    
+                                    // Get name directly from subCategoriesMap (same logic as pie chart)
+                                    let displayName = safeKey;
+                                    if (subcatId && subCategoriesMap[subcatId]) {
+                                      displayName = subCategoriesMap[subcatId].name || safeKey;
+                                    }
                                     
                                     return (
                                         <Bar 
                                             key={safeKey} 
                                             dataKey={`${safeKey}_score`} 
-                                            name={transName}
+                                            name={displayName}
                                             stackId="a" 
                                             fill={COLORS[index % COLORS.length]} 
                                             barSize={25}
@@ -507,14 +582,20 @@ const PersonalStats = () => {
                             <Tooltip content={<CustomTooltip type="items" t={t} />} cursor={{fill: 'transparent'}}/>
                             <Legend wrapperStyle={{paddingTop: '40px'}} />
                             {uniqueCategories.map((safeKey, index) => {
-                                const originalName = chartData.find(d => d[`${safeKey}_originalName`])?.[`${safeKey}_originalName`] || safeKey;
-                                const transName = getCategoryTrans(originalName);
+                                // Extract subcategory ID from safeKey (e.g., "subcategory_13" -> 13)
+                                const subcatId = safeKey.match(/\d+/)?.[0];
+                                
+                                // Get name directly from subCategoriesMap (same logic as pie chart)
+                                let displayName = safeKey;
+                                if (subcatId && subCategoriesMap[subcatId]) {
+                                  displayName = subCategoriesMap[subcatId].name || safeKey;
+                                }
 
                                 return (
                                     <Bar 
                                         key={safeKey} 
                                         dataKey={`${safeKey}_count`} 
-                                        name={transName}
+                                        name={displayName}
                                         stackId="b" 
                                         fill={COLORS[index % COLORS.length]} 
                                         barSize={25}
