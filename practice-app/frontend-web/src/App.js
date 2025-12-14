@@ -125,7 +125,7 @@ const App = () => {
                         <div key={notification.id} style={{ borderBottom: '1px solid #f5f5f5', padding: '10px 0' }}>
                             <p style={{ margin: '0 0 5px 0', fontSize: '14px' }}>
                                 {notification.notification_type === 'EVENT_CREATED' && notification.event_details ? 
-                                    `New event "${notification.event_details.title}" at ${notification.event_details.exact_location} on ${formatEventDate(notification.event_details.date)}` 
+                                    `A new event is created at your city! It will be at ${notification.event_details.exact_location} on ${formatEventDate(notification.event_details.date)}` 
                                     : notification.message}
                             </p>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
