@@ -296,9 +296,9 @@ const BadgesGallery = () => {
                     <p>{t('badges_page.subtitle', { defaultValue: 'Collect badges by reaching sustainability goals' })}</p>
                     <p className="badges-progress">
                         {t('badges_page.progress', { 
-                            earned: earnedCount, 
-                            total: totalCount,
-                            defaultValue: `${earnedCount} / ${totalCount} badges earned`
+                            earned: earnedBadges.filter(b => b.earned).length, 
+                            total: earnedBadges.length,
+                            defaultValue: `${earnedBadges.filter(b => b.earned).length} / ${earnedBadges.length} badges earned`
                         })}
                     </p>
                 </div>
