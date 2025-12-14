@@ -22,6 +22,7 @@ import EventCreate from './components/events/EventCreate';
 import './i18n';
 import PersonalStats from './components/stats/PersonalStats';
 import BadgesGallery from './components/stats/BadgesGallery';
+import CategoriesInfo from './components/waste/CategoriesInfo';
 import { getUnreadNotifications, markNotificationAsRead, markAllNotificationsAsRead } from './services/api';
 import { useTranslation } from 'react-i18next';
 
@@ -149,6 +150,7 @@ const App = () => {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/waste" element={<WasteLog />} />
+                <Route path="/categories" element={<CategoriesInfo />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/goals" element={<GoalsPage />} />
                 <Route path="/profile" element={<Profile />} />

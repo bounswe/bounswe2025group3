@@ -1,0 +1,443 @@
+/* Categories Info Page - Comprehensive Styling */
+
+.categories-info-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+}
+
+.categories-info-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+}
+
+/* Header */
+.categories-header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.back-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateX(-5px);
+}
+
+.categories-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #00d9ff, #00ff88);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.categories-header .subtitle {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.7);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Scoring Explanation */
+.scoring-explanation {
+    margin-bottom: 40px;
+}
+
+.explanation-card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.explanation-card h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    color: #00d9ff;
+}
+
+.explanation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.explanation-item {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.explanation-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.1);
+}
+
+.exp-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.explanation-item h4 {
+    color: #00ff88;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.explanation-item p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Categories Section */
+.categories-section {
+    margin-bottom: 40px;
+}
+
+.categories-section > h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Category Card */
+.category-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover {
+    border-color: var(--category-color, #00d9ff);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+}
+
+.category-card.expanded {
+    border-color: var(--category-color, #00d9ff);
+}
+
+.category-header-btn {
+    width: 100%;
+    padding: 20px 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.category-header-btn:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.category-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+}
+
+.category-title-area {
+    flex: 1;
+    text-align: left;
+}
+
+.category-name {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.category-score-badge {
+    display: inline-block;
+    background: var(--category-color, #00d9ff);
+    color: #000;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.expand-icon {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    transition: transform 0.3s ease;
+}
+
+/* Category Details */
+.category-details {
+    padding: 0 25px 25px;
+    animation: slideDown 0.3s ease-out;
+}
+
+.category-details > div {
+    background: rgba(0,0,0,0.2);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.category-details h4 {
+    color: var(--category-color, #00d9ff);
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.category-details p {
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.impact-section {
+    border-left: 4px solid #e74c3c;
+}
+
+.why-score-section {
+    border-left: 4px solid #f39c12;
+}
+
+.tip-section {
+    border-left: 4px solid #27ae60;
+}
+
+/* Subcategories Table */
+.subcategories-table {
+    border-left: 4px solid #3498db !important;
+}
+
+.subcategories-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.subcategories-table th,
+.subcategories-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.subcategories-table th {
+    color: #00d9ff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.subcategories-table td {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.9rem;
+}
+
+.score-cell {
+    color: #00ff88 !important;
+    font-weight: 600;
+}
+
+.decomp-cell {
+    color: #ff6b6b !important;
+    font-size: 0.85rem !important;
+}
+
+/* Fun Facts */
+.fun-facts {
+    margin-bottom: 40px;
+}
+
+.fun-facts h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #fff;
+}
+
+.facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.fact-card {
+    background: linear-gradient(135deg, rgba(0,217,255,0.1) 0%, rgba(0,255,136,0.1) 100%);
+    padding: 25px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid rgba(0,217,255,0.2);
+    transition: all 0.3s ease;
+}
+
+.fact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,217,255,0.2);
+}
+
+.fact-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.fact-card p {
+    color: rgba(255,255,255,0.9);
+    line-height: 1.6;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* CTA Section */
+.cta-section {
+    text-align: center;
+    background: linear-gradient(135deg, #00d9ff 0%, #00ff88 100%);
+    padding: 40px 30px;
+    border-radius: 20px;
+}
+
+.cta-section h2 {
+    color: #000;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.cta-section p {
+    color: rgba(0,0,0,0.7);
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+}
+
+.cta-btn {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        max-height: 2000px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .categories-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .explanation-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .category-header-btn {
+        padding: 15px;
+    }
+
+    .category-icon {
+        font-size: 1.5rem;
+        width: 40px;
+        height: 40px;
+    }
+
+    .category-name {
+        font-size: 1rem;
+    }
+
+    .subcategories-table th,
+    .subcategories-table td {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+
+    .facts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-section {
+        padding: 30px 20px;
+    }
+
+    .cta-section h2 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .explanation-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-title-area {
+        flex: 1;
+    }
+
+    .subcategories-table {
+        overflow-x: auto;
+    }
+}

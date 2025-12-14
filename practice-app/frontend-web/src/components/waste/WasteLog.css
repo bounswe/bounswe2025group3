@@ -47,6 +47,33 @@
   margin: 0 auto;
 }
 
+/* Info Guide Button */
+.wastelog-page-scoped .info-guide-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1.2rem;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.wastelog-page-scoped .info-guide-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.wastelog-page-scoped .info-guide-btn:active {
+  transform: translateY(-1px);
+}
+
 /* --- Error message box (Scoped) --- */
 .wastelog-page-scoped .error-message-box-main.wastelog-error {
   display: flex;
