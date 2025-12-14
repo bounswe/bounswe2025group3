@@ -292,41 +292,43 @@ const CategoriesInfo = () => {
 
                                 {expandedCategory === category.id && (
                                     <div className="category-details">
-                                        <div className="impact-section">
-                                            <h4>🌎 {t('categories_info.environmental_impact', { defaultValue: 'Environmental Impact' })}</h4>
-                                            <p>{category.environmentalImpact}</p>
-                                        </div>
-                                        
-                                        <div className="why-score-section">
-                                            <h4>⭐ {t('categories_info.why_this_score', { defaultValue: 'Why This Score?' })}</h4>
-                                            <p>{category.whyHighScore}</p>
-                                        </div>
+                                        <div className="category-details-content">
+                                            <div className="info-section">
+                                                <h4><span className="section-icon">🌎</span> {t('categories_info.environmental_impact', { defaultValue: 'Environmental Impact' })}</h4>
+                                                <p>{category.environmentalImpact}</p>
+                                            </div>
+                                            
+                                            <div className="info-section">
+                                                <h4><span className="section-icon">⭐</span> {t('categories_info.why_this_score', { defaultValue: 'Why This Score?' })}</h4>
+                                                <p>{category.whyHighScore}</p>
+                                            </div>
 
-                                        <div className="tip-section">
-                                            <h4>💡 {t('categories_info.disposal_tip', { defaultValue: 'Disposal Tip' })}</h4>
-                                            <p>{category.disposalTip}</p>
-                                        </div>
+                                            <div className="info-section">
+                                                <h4><span className="section-icon">💡</span> {t('categories_info.disposal_tip', { defaultValue: 'Disposal Tip' })}</h4>
+                                                <p>{category.disposalTip}</p>
+                                            </div>
 
-                                        <div className="subcategories-table">
-                                            <h4>📝 {t('categories_info.items_in_category', { defaultValue: 'Items in This Category' })}</h4>
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th>{t('categories_info.item', { defaultValue: 'Item' })}</th>
-                                                        <th>{t('categories_info.points', { defaultValue: 'Points' })}</th>
-                                                        <th>{t('categories_info.decomposition', { defaultValue: 'Decomposition Time' })}</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {category.subcategories.map((sub, idx) => (
-                                                        <tr key={idx}>
-                                                            <td>{sub.name}</td>
-                                                            <td className="score-cell">{sub.score} pts</td>
-                                                            <td className="decomp-cell">{sub.decomposition}</td>
+                                            <div className="subcategories-section">
+                                                <h4>📝 {t('categories_info.items_in_category', { defaultValue: 'Items in This Category' })}</h4>
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>{t('categories_info.item', { defaultValue: 'Item' })}</th>
+                                                            <th>{t('categories_info.points', { defaultValue: 'Points' })}</th>
+                                                            <th>{t('categories_info.decomposition', { defaultValue: 'Decomposition Time' })}</th>
                                                         </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        {category.subcategories.map((sub, idx) => (
+                                                            <tr key={idx}>
+                                                                <td>{sub.name}</td>
+                                                                <td className="score-cell">{sub.score} pts</td>
+                                                                <td className="decomp-cell">{sub.decomposition}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
