@@ -169,8 +169,8 @@
     ]
   },
   "login": {
-    "title_line2": "Atıklarınızı Kaydedin ve Geri Dönüştürün",
     "title_line1": "Daha İyi Bir Doğa İçin",
+    "title_line2": "Atıklarınızı Kaydedin ve Geri Dönüştürün",
     "welcome": "Tekrar hoş geldiniz! Lütfen hesabınıza giriş yapın.",
     "email_section_title": "E-posta Bölümü",
     "email_label": "E-posta Adresi",
@@ -204,6 +204,7 @@
     "country_label": "Ülke",
     "bio_label": "Biyografi",
     "placeholder_username": "Kullanıcı Adınızı Girin",
+    "error_username_invalid": "Geçersiz kullanıcı adı. Sadece harf, rakam ve @/./+/-/_ karakterleri kullanılabilir.",
     "placeholder_email": "E-postanızı Girin",
     "placeholder_password": "Şifrenizi Girin",
     "placeholder_confirm_password": "Şifreyi Onaylayın",
@@ -218,9 +219,16 @@
     "alternate_action_prompt": "Zaten bir hesabınız var mı?",
     "alternate_action_login": "Giriş Yap",
     "error_passwords_no_match": "Şifreler uyuşmuyor.",
+    "error_banned_word": "Bu alan yasaklı kelime içeriyor.",
     "accept_terms_prefix": "",
     "accept_terms_link": "Şartlar ve Koşulları",
-    "accept_terms_suffix": " kabul ediyorum"
+    "accept_terms_suffix": " kabul ediyorum",
+    "error_required_field": "Lütfen bu alanı doldurun.",
+    "error_email_invalid": "Lütfen geçerli bir e-posta adresi girin.",
+    "error_terms_required": "Devam etmek için kutucuğu işaretlemelisiniz.",
+    "error_password_too_short": "Şifre en az 6 karakter uzunluğunda olmalıdır.",
+    "error_password_numeric": "Şifre tamamen sayılardan oluşamaz.",
+    "success_message": "Kayıt başarılı! Lütfen giriş yapın."
   },
   "forgot_password": {
     "title": "Şifrenizi mi Unuttunuz?",
@@ -393,6 +401,7 @@
     "error_fetch": "Profiliniz alınamadı. Lütfen tekrar deneyin.",
     "error_update_validation": "Profil güncellenemedi. Lütfen girdilerinizi kontrol edin.",
     "error_update_generic": "Profil güncellenemedi. Bilinmeyen bir hata oluştu.",
+    "error_banned_word": "Bu alan yasaklı kelime içeriyor.",
     "preferences_title": "Tercihler",
     "form": {
       "first_name_label": "Ad",
@@ -487,6 +496,7 @@
     "formRequired": "Lütfen tüm zorunlu alanları doldurun.",
     "createSuccess": "Etkinlik başarıyla oluşturuldu!",
     "createError": "Etkinlik oluşturulamadı.",
+    "error_banned_word": "İçerik yasaklı kelime barındırıyor.",
     "participateSuccess": "Artık katılıyorsunuz!",
     "unparticipateSuccess": "Artık katılmıyorsunuz.",
     "participateError": "Katılım durumu değiştirilemedi",
@@ -615,7 +625,7 @@
     "error_load": "Rozetler yüklenemedi.",
     "back_to_stats": "İstatistiklere Dön"
   },
-"badges_data": {
+  "badges_data": {
     "first_step": { "name": "İlk Adım", "desc": "İlk atığını kaydet" },
     "plastic_buster": { "name": "Plastik Avcısı", "desc": "10 birim plastik azalt" },
     "sustainability_streak": { "name": "İstikrar Serisi", "desc": "14 gün üst üste kayıt" },
