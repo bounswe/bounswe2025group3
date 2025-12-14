@@ -141,6 +141,33 @@
     text-align: center;
 }
 
+.badges-footer-action {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.btn-back-stats {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-back-stats:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
 @media (max-width: 768px) {
     .badges-gallery-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

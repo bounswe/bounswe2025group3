@@ -288,6 +288,7 @@
       "error_select_category_and_quantity": "Please select a category and enter a quantity.",
       "error_quantity_positive": "Quantity must be a positive number.",
       "error_add_log_failed": "Failed to add waste log.",
+      "log_added_success": "Waste log entry added successfully!",
       "retry_button": "Retry Fetching Categories",
       "form": {
         "title": "Add New Entry",
@@ -307,7 +308,7 @@
         },
         "notes_label": "Notes (Optional)",
         "notes_placeholder": "Any details, e.g., specific items, source...",
-        "score_per_item": "Score per item",
+        "score_per_item": "Points per unit",
         "submit_button": "Add Log Entry",
         "submit_button_adding": "Adding..."
       },
@@ -321,7 +322,7 @@
         "method_prefix": "Method",
         "notes_prefix": "Notes",
         "logged_prefix": "Logged",
-        "view_all_prompt": "View all logs in your profile (coming soon!)"
+        "view_all_prompt": "View all logs in your profile"
       },
       "back_to_dashboard_button": "Back to Dashboard"
     },
@@ -507,53 +508,65 @@
       "back_button": "Back to Challenges",
       "your_progress": "Your Progress"
     },
-  
-      "stats_page": {
-        "title": "Overview for {{username}}",
-        "loading": "Loading statistics...",
-        "error_load": "Failed to load statistics. Please try again later.",
-        "next_level": "Next Level",
-        "to_go": "to go",
-        "level_indicator": "(Level {{current}} / {{total}})",
-        "hero": {
-          "eco_score": "Eco Score",
-          "global_rank": "Global Rank",
-          "event_rate": "Event Rate",
-          "trees_planted": "Trees Planted",
-          "joined_subtext": "joined"
-        },
-        "charts": {
-          "activity_trend": "Activity Trend",
-          "points_history": "Points History",
-          "items_logged_frequency": "Items Logged (Frequency)",
-          "points": "Points",
-          "items": "Items",
-          "impact_breakdown": "Impact Breakdown",
-          "no_breakdown_data": "Log waste to see breakdown.",
-          "last": "Last",
-          "by_points": "By Points",
-          "by_frequency": "By Frequency",
-          "week_suffix": "Week",
-          "filters": {
-            "daily": "Daily",
-            "weekly": "Weekly",
-            "monthly": "Monthly",
-            "yearly": "Yearly"
-          },
-          "updating": "Updating...",
-          "no_data": "No data available"
-        },
-        "badges": {
-          "title": "Badge Collection",
-          "empty": "Start logging to earn badges!",
-          "view_all": "View All Badges"
-        },
-        "forest": {
-          "title": "My Eco Forest",
-          "info": "1 Tree = 500 Points",
-          "empty": "Your forest is waiting to grow."
-        }
+    "stats_page": {
+      "title": "Overview for {{username}}",
+      "loading": "Loading statistics...",
+      "error_load": "Failed to load statistics. Please try again later.",
+      "next_level": "Next Level",
+      "to_go": "to go",
+      "level_indicator": "(Level {{current}} / {{total}})",
+      "level_up": "Level Up!",
+      "level_up_desc": "You have reached the rank of", 
+      "new_tree_planted": "New Tree Planted!",
+      "new_tree_desc": "You've earned enough points to grow your forest!",
+      "hero": {
+        "eco_score": "Eco Score",
+        "global_rank": "Global Rank",
+        "event_rate": "Event Rate",
+        "trees_planted": "Trees Planted",
+        "joined_subtext": "joined"
       },
+      "charts": {
+        "activity_trend": "Activity Trend",
+        "points_history": "Points History",
+        "items_logged_frequency": "Items Logged (Frequency)",
+        "points": "Points",
+        "items": "Items",
+        "impact_breakdown": "Impact Breakdown",
+        "no_breakdown_data": "Log waste to see breakdown.",
+        "last": "Last",
+        "by_points": "By Points",
+        "by_frequency": "By Frequency",
+        "week_suffix": "Week",
+        "filters": {
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "yearly": "Yearly"
+        },
+        "updating": "Updating...",
+        "no_data": "No data available"
+      },
+      "badges": {
+        "title": "Badge Collection",
+        "empty": "Start logging to earn badges!",
+        "view_all": "View All Badges"
+      },
+      "forest": {
+        "title": "My Eco Forest",
+        "info": "1 Tree = 500 Points",
+        "empty": "Your forest is waiting to grow."
+      },
+
+      "tiers": {
+        "planet_guardian": "Planet Guardian",
+        "zero_waste_champion": "Zero Waste Champion",
+        "sustainability_hero": "Sustainability Hero",
+        "eco_advocate": "Eco Advocate",
+        "green_starter": "Green Starter",
+        "eco_explorer": "Eco Explorer"
+      }
+    },
       "waste_categories": {
         "recyclable": "Recyclable",
         "cooking_oil": "Cooking Oil",
@@ -601,24 +614,44 @@
         "green_starter": "Green Starter",
         "eco_explorer": "Eco Explorer"
       },
-      "badges_data": {
-        "first_step": {
-          "name": "First Step",
-          "desc": "Log first waste"
-        },
-        "plastic_buster": {
-          "name": "Plastic Buster",
-          "desc": "Reduce 10kg plastic"
-        },
-        "sustainability_streak": {
-          "name": "Sustainability Streak",
-          "desc": "7 Days Streak"
-        },
-        "zero_waste_legend": {
-          "name": "Zero Waste Legend",
-          "desc": "5000+ Score"
-        }
+      "badges_page": {
+        "title": "Achievements",
+        "subtitle": "Collect badges by reaching sustainability goals",
+        "badge_unlocked": "New Badge Unlocked!",
+        "loading": "Loading badges...",
+        "error_load": "Failed to load badges.",
+        "back_to_stats": "Back to Statistics"
       },
+      "badges_data": {
+          "first_step": { "name": "First Step", "desc": "Log your first waste" },
+          "plastic_buster": { "name": "Plastic Buster", "desc": "Reduce 10 units of plastic" },
+          "sustainability_streak": { "name": "Sustainability Streak", "desc": "14 Days Streak" },
+          "zero_waste_legend": { "name": "Zero Waste Legend", "desc": "5000+ Score" },
+          "eco_warrior": { "name": "Eco Warrior", "desc": "Log 50 waste items" },
+          "tree_hugger": { "name": "Tree Hugger", "desc": "Earn 1000 eco score" },
+          "recycling_master": { "name": "Recycling Master", "desc": "Recycle 30 items" },
+          "compost_champion": { "name": "Compost Champion", "desc": "Compost 20 organic items" },
+          "milestone_100": { "name": "Century Club", "desc": "Log 100 waste items" },
+          "score_1500": { "name": "Green Achiever", "desc": "Earn 1500 eco score" },
+          "consistency_king": { "name": "Consistency King", "desc": "Log waste 30 days in a row" },
+          "metal_maven": { "name": "Metal Maven", "desc": "Recycle 15 metal items" },
+          "paper_pride": { "name": "Paper Pride", "desc": "Recycle 25 paper items" },
+          "glass_guru": { "name": "Glass Guru", "desc": "Recycle 10 glass items" },
+          "eco_score_500": { "name": "Rising Star", "desc": "Earn 500 eco score" },
+          "score_2000": { "name": "Eco Champion", "desc": "Earn 2000 eco score" },
+          "score_3000": { "name": "Eco Master", "desc": "Earn 3000 eco score" },
+          "logs_200": { "name": "Waste Logger Pro", "desc": "Log 200 waste items" },
+          "logs_500": { "name": "Waste Tracking Expert", "desc": "Log 500 waste items" },
+          "streak_60": { "name": "Unstoppable", "desc": "Log waste 60 days in a row" },
+          "plastic_50": { "name": "Plastic Warrior", "desc": "Reduce 50 units of plastic" },
+          "organic_50": { "name": "Organic Advocate", "desc": "Log 50 organic waste items" },
+          "electronic_20": { "name": "E-Waste Expert", "desc": "Recycle 20 electronic items" },
+          "textile_30": { "name": "Fashion Friend", "desc": "Recycle 30 textile items" },
+          "donate_50": { "name": "Donation Champion", "desc": "Donate or reuse 50 items" },
+          "landfill_zero": { "name": "Zero Landfill", "desc": "Send 0 items to landfill" },
+          "streak_7": { "name": "Week Warrior", "desc": "Log waste 7 days in a row" },
+          "streak_21": { "name": "Monthly Hero", "desc": "Log waste 21 days in a row" }
+        },
   "notifications": {
     "title": "Notifications",
     "mark_all_read": "Mark all read",
