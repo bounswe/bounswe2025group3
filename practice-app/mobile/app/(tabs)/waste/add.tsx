@@ -9,6 +9,7 @@ import { getSubcategories, createWasteLog, Subcategory } from '@/api/waste';
 import { useTranslation } from 'react-i18next';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
+import { useBadge } from '@/hooks/badgeContext';
 
 const formatDateToLocal = (date: Date) => {
   const year = date.getFullYear();
@@ -16,7 +17,6 @@ const formatDateToLocal = (date: Date) => {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
-
 
 export default function AddWasteLogScreen() {
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
@@ -28,12 +28,12 @@ export default function AddWasteLogScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
-
   const [successMessage, setSuccessMessage] = useState('');
 
   const router = useRouter();
   const colors = useColors();
   const { t } = useTranslation();
+  const { checkForNewBadges } = useBadge();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -166,6 +166,8 @@ export default function AddWasteLogScreen() {
         disposal_photo: selectedImage || undefined,
       });
       setSuccessMessage(t("waste.log_added_success"));
+      // Check for new badges immediately after successful waste log creation
+      checkForNewBadges();
       setTimeout(() => {
         router.back();
       }, 1500);
@@ -206,7 +208,9 @@ export default function AddWasteLogScreen() {
                 style={[styles.chipButton, selectedSubCategory?.id === cat.id && styles.chipButtonActive]}
                 onPress={() => handleSubCategorySelect(cat)}
               >
-                <Text style={[styles.chipButtonText, selectedSubCategory?.id === cat.id && styles.chipButtonTextActive]}>{cat.name}</Text>
+                <Text style={[styles.chipButtonText, selectedSubCategory?.id === cat.id && styles.chipButtonTextActive]}>
+                  {cat.name} {cat.unit ? `(${cat.unit})` : ''}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>

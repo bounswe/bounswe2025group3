@@ -8,15 +8,61 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { createEvent } from '@/api/events';
 import { useTranslation } from 'react-i18next';
 import ImagePicker from 'react-native-image-crop-picker';
+import { Picker } from '@react-native-picker/picker';
+import { Country, State } from 'country-state-city';
 
 const formatDateTimeToISO = (date: Date): string => {
   return date.toISOString();
+};
+
+const FormSelect = ({ label, value, onValueChange, items, enabled = true, placeholder, containerStyle }: any) => {
+  const colors = useColors();
+  
+  const styles = StyleSheet.create({
+    inputGroup: { marginBottom: 16 },
+    label: { fontSize: 16, fontWeight: '600', marginBottom: 12, color: colors.text },
+    pickerContainer: { 
+      backgroundColor: colors.cb1, 
+      borderRadius: 12, 
+      borderWidth: 1, 
+      borderColor: colors.primary,
+      overflow: 'hidden',
+    },
+    picker: { 
+      height: 50,
+      color: colors.text,
+    },
+    pickerDisabled: {
+      opacity: 0.5,
+    },
+  });
+
+  return (
+    <View style={[styles.inputGroup, containerStyle]}>
+      <Text style={styles.label}>{label}</Text>
+      <View style={[styles.pickerContainer, !enabled && styles.pickerDisabled]}>
+        <Picker
+          selectedValue={value}
+          onValueChange={onValueChange}
+          enabled={enabled}
+          style={styles.picker}
+          dropdownIconColor={colors.text}
+        >
+          <Picker.Item label={placeholder || 'Select...'} value="" />
+          {items.map((item: any) => (
+            <Picker.Item key={item.value} label={item.label} value={item.value} />
+          ))}
+        </Picker>
+      </View>
+    </View>
+  );
 };
 
 export default function AddEventScreen() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
+  const [selectedCountryCode, setSelectedCountryCode] = useState('');
   const [date, setDate] = useState(new Date());
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -49,7 +95,18 @@ export default function AddEventScreen() {
     submitButton: { backgroundColor: colors.primary, padding: 16, borderRadius: 16, alignItems: 'center', justifyContent: 'center', height: 52, marginTop: 16, marginBottom: "55%" },
     submitButtonDisabled: { backgroundColor: colors.cb4 },
     submitButtonText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
+    locationRow: { flexDirection: 'row', gap: 12 },
+    locationSelect: { flex: 1 },
   });
+
+  const handleCountryChange = (countryCode: string) => {
+    setSelectedCountryCode(countryCode);
+    setLocation(''); // Reset location when country changes
+  };
+
+  const handleCityChange = (cityName: string) => {
+    setLocation(cityName);
+  };
 
   const openDatePicker = () => {
     if (Platform.OS === 'android') {
@@ -213,14 +270,34 @@ export default function AddEventScreen() {
 
         <View style={styles.formGroup}>
           <Text style={styles.label}>Location *</Text>
-          <View style={styles.inputContainer}>
-            <TextInput 
-              style={styles.textInput} 
-              value={location} 
-              onChangeText={setLocation} 
-              placeholder="Enter event location" 
-              placeholderTextColor={colors.textSecondary} 
-            />
+          <View style={styles.locationRow}>
+            <View style={styles.locationSelect}>
+              <FormSelect
+                label=""
+                value={selectedCountryCode}
+                onValueChange={handleCountryChange}
+                items={Country.getAllCountries().map(country => ({
+                  label: country.name,
+                  value: country.isoCode,
+                }))}
+                placeholder="Select Country"
+                containerStyle={{ marginBottom: 0 }}
+              />
+            </View>
+            <View style={styles.locationSelect}>
+              <FormSelect
+                label=""
+                value={location}
+                onValueChange={handleCityChange}
+                items={selectedCountryCode ? State.getStatesOfCountry(selectedCountryCode).map(state => ({
+                  label: state.name,
+                  value: state.name,
+                })) : []}
+                enabled={!!selectedCountryCode}
+                placeholder="Select City"
+                containerStyle={{ marginBottom: 0 }}
+              />
+            </View>
           </View>
         </View>
 

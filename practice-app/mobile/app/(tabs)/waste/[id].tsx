@@ -211,7 +211,7 @@ export default function WasteLogDetailsScreen() {
                         <View style={styles.detailRow}>
                             <View style={styles.labelContainer}><Ionicons name="scale-outline" size={20} color={colors.textSecondary} /><Text style={styles.label}>{t("waste.quantity_label")}</Text></View>
                             {isEditing ? (<TextInput style={styles.input} value={editedQuantity} onChangeText={setEditedQuantity} keyboardType="decimal-pad" />)
-                                : (<Text style={styles.value}>{log.quantity} {log.unit}</Text>)}
+                                : (<Text style={styles.value}>{log.quantity} {log.unit || ''}</Text>)}
                         </View>
 
                         <View style={styles.detailRow}>

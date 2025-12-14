@@ -1,6 +1,7 @@
 import tokenManager from "@/services/tokenManager";
 import { API_ENDPOINTS } from "@/constants/api";
 import { fetchAllPages, parseJson } from "./utils";
+import i18n from "@/i18n";
 
 export type Subcategory = {
     id: number;
@@ -45,16 +46,41 @@ export interface CreateCategoryRequestData {
     unit: string;
 }
 
+export type WasteStatPeriod = {
+    start_date: string;
+    end_date: string;
+    total_score: number;
+    total_log: number;
+};
+
 export const getMyScore = async (): Promise<number> => {
     const response = await tokenManager.authenticatedFetch(API_ENDPOINTS.WASTE.MY_SCORE);
     const data = await parseJson<{ total_score: number }>(response, "Failed to load score.");
     return data.total_score;
 };
 
+// Helper function to translate category names
+const translateCategoryName = (apiName: string | undefined): string => {
+    if (!apiName) return "";
+    const key = apiName.toLowerCase().replace(/ /g, "_");
+    return i18n.t(`waste_categories.${key}`, { defaultValue: apiName });
+};
+
+// Helper function to translate units
+const translateUnit = (unit: string | undefined): string => {
+    if (!unit) return "";
+    return i18n.t(`units.${unit.toLowerCase()}`, { defaultValue: unit });
+};
+
 export const getSubcategories = async (): Promise<Subcategory[]> => {
     try {
         const subcategories = await fetchAllPages<Subcategory>(API_ENDPOINTS.WASTE.SUBCATEGORIES);
-        return subcategories;
+        // Translate category names and units
+        return subcategories.map(sub => ({
+            ...sub,
+            name: translateCategoryName(sub.name),
+            unit: translateUnit(sub.unit),
+        }));
     } catch (error) {
         console.error("Failed to get subcategories:", error);
         throw error;
@@ -64,7 +90,12 @@ export const getSubcategories = async (): Promise<Subcategory[]> => {
 export const getWasteLogs = async (): Promise<WasteLog[]> => {
     try {
         const wasteLogs = await fetchAllPages<WasteLog>(API_ENDPOINTS.WASTE.LOGS);
-        return wasteLogs;
+        // Translate category names and units
+        return wasteLogs.map(log => ({
+            ...log,
+            sub_category_name: translateCategoryName(log.sub_category_name),
+            unit: log.unit ? translateUnit(log.unit) : log.unit,
+        }));
     } catch (error) {
         console.error("Failed to get waste logs:", error);
         throw error;
@@ -73,7 +104,13 @@ export const getWasteLogs = async (): Promise<WasteLog[]> => {
 
 export const getWasteLogById = async (logId: number): Promise<WasteLog> => {
     const response = await tokenManager.authenticatedFetch(API_ENDPOINTS.WASTE.LOG_BY_ID(logId));
-    return parseJson<WasteLog>(response, "Failed to load waste log.");
+    const log = await parseJson<WasteLog>(response, "Failed to load waste log.");
+    // Translate category name and unit
+    return {
+        ...log,
+        sub_category_name: translateCategoryName(log.sub_category_name),
+        unit: log.unit ? translateUnit(log.unit) : log.unit,
+    };
 };
 
 export const createWasteLog = async (wasteLogData: CreateWasteLogData): Promise<WasteLog> => {
@@ -135,5 +172,21 @@ export const createCategoryRequest = async (requestData: CreateCategoryRequestDa
         body: JSON.stringify(requestData),
     });
     return parseJson(response, "Failed to create category request.");
+};
+
+export const getWasteStats = async (
+    period: 'daily' | 'weekly' = 'weekly',
+    subcategoryId?: number
+): Promise<WasteStatPeriod[]> => {
+    const params = new URLSearchParams();
+    params.append('period', period);
+    if (subcategoryId) {
+        params.append('subcategory', String(subcategoryId));
+    }
+
+    const endpoint = `${API_ENDPOINTS.WASTE.USER_STATS}?${params.toString()}`;
+    const response = await tokenManager.authenticatedFetch(endpoint);
+    const data = await parseJson<{ data?: WasteStatPeriod[] }>(response, "Failed to load waste stats.");
+    return data?.data ?? [];
 };
 
