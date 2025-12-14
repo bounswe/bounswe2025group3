@@ -37,7 +37,7 @@ const Profile = () => {
     // YENİ: Alan bazlı hatalar (Blacklist için)
     const [fieldErrors, setFieldErrors] = useState({});
 
-    const [allCountriesData, setAllCountriesData] = useState(Country.getAllCountries());
+    const allCountriesData = Country.getAllCountries();
     const [availableCities, setAvailableCities] = useState([]);
 
     useEffect(() => {

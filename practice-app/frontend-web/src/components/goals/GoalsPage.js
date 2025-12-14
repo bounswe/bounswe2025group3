@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'; // 1. Import hook
 import axios from 'axios';
 import Navbar from '../common/Navbar'; // 2. Import shared Navbar
 import './GoalsPage.css';
-import { Link, NavLink, useNavigate } from 'react-router-dom'; // Added Link, NavLink
+import { useNavigate } from 'react-router-dom';
 
 const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 

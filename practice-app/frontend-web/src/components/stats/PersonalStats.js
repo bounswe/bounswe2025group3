@@ -128,6 +128,7 @@ const PersonalStats = () => {
   const navigate = useNavigate();
   
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [chartLoading, setChartLoading] = useState(false);
   const [error, setError] = useState('');
   const [profile, setProfile] = useState(null);
@@ -147,10 +148,12 @@ const PersonalStats = () => {
   const [earnedBadgeIds, setEarnedBadgeIds] = useState([]);
 
   const [leaderboardRank, setLeaderboardRank] = useState('N/A');
+  // eslint-disable-next-line no-unused-vars
   const [eventStats, setEventStats] = useState({ participating: 0, total: 0, rate: 0 });
   const [subCategoriesMap, setSubCategoriesMap] = useState({});
   const [rawLogsState, setRawLogsState] = useState([]);
   // rawStreakState grafik için kullanılıyor olabilir ama rozet hesabı için logları kullanacağız
+  // eslint-disable-next-line no-unused-vars
   const [rawStreakState, setRawStreakState] = useState([]); 
 
   const TIERS = [
