@@ -2,110 +2,176 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from apps.rewards.models import Badge, UserBadge
-from apps.rewards.api.v1.serializers import UserBadgeSerializer
-from apps.waste.models import WasteLog
-
-from apps.events.models import Event  # adjust if needed
-
-
-class MyBadgesView(APIView):
+class BadgesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user = request.user
 
-        # ---- Ensure all badges exist ----
-        badges = {
-            "first_step": Badge.objects.get_or_create(
-                code="first_step",
-                defaults={
-                    "name": "First Step",
-                    "icon": "🎖",
-                    "description": "Log your first waste item"
-                }
-            )[0],
+        logs = self.get_logs(user)
+        daily_stats = self.get_daily_stats(user)
+        score = self.get_score(user)
 
-            "plastic_buster": Badge.objects.get_or_create(
-                code="plastic_buster",
-                defaults={
-                    "name": "Plastic Buster",
-                    "icon": "🥤",
-                    "description": "Recycle 10 plastic items"
-                }
-            )[0],
+        return Response({
+            "logs_count": len(logs),
+            "days_logged": len(daily_stats),
+            "score": score,
+            # later: badges array here
+        })
 
-            "zero_waste_legend": Badge.objects.get_or_create(
-                code="zero_waste_legend",
-                defaults={
-                    "name": "Zero Waste Legend",
-                    "icon": "🌍",
-                    "description": "Reach 5000 eco score"
-                }
-            )[0],
-
-            "first_event_created": Badge.objects.get_or_create(
-                code="first_event_created",
-                defaults={
-                    "name": "Event Pioneer",
-                    "icon": "🎉",
-                    "description": "Create your first event"
-                }
-            )[0],
-
-            "battery_hero": Badge.objects.get_or_create(
-                code="battery_hero",
-                defaults={
-                    "name": "Battery Hero",
-                    "icon": "🔋",
-                    "description": "Properly recycle a battery"
-                }
-            )[0],
-        }
-
-        # ---- Badge Conditions ----
-
-        # 1️⃣ First Step
-        if WasteLog.objects.filter(user=user).exists():
-            UserBadge.objects.get_or_create(user=user, badge=badges["first_step"])
-
-        # 2️⃣ Plastic Buster
-        total_plastic = sum(
-            WasteLog.objects.filter(
-                user=user,
-                sub_category__name__icontains="plastic"
-            ).values_list("quantity", flat=True)
+    def get_logs(self, user):
+        return list(
+            WasteLog.objects
+            .filter(user=user)
+            .select_related("sub_category")
+            .values(
+                "quantity",
+                "disposal_location",
+                sub_category_name=models.F("sub_category__name"),
+            )
         )
-        if total_plastic >= 10:
-            UserBadge.objects.get_or_create(user=user, badge=badges["plastic_buster"])
 
-        # 3️⃣ Zero Waste Legend
-        if user.total_score >= 5000:
-            UserBadge.objects.get_or_create(user=user, badge=badges["zero_waste_legend"])
-
-        # 4️⃣ First Event Created
-        if Event.objects.filter(created_by=user).exists():
-            UserBadge.objects.get_or_create(user=user, badge=badges["first_event_created"])
-
-        # 5️⃣ Battery Hero
-        if WasteLog.objects.filter(
-            user=user,
-            sub_category__name__icontains="battery"
-        ).exists():
-            UserBadge.objects.get_or_create(user=user, badge=badges["battery_hero"])
-
-        earned = UserBadge.objects.filter(user=user)
-        return Response(UserBadgeSerializer(earned, many=True).data)
-
-
-class BadgeGalleryView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        badges = Badge.objects.all().order_by("id")
-        serializer = BadgeGallerySerializer(
-            badges,
-            many=True,
-            context={"request": request}
+    def get_daily_stats(self, user):
+        return (
+            WasteLog.objects
+            .filter(user=user)
+            .annotate(day=TruncDate("date_logged"))
+            .values("day")
+            .distinct()
         )
-        return Response(serializer.data)
+
+    def get_score(self, user):
+        return float(user.total_score)
+
+    def calculate_badges(self, logs, daily_stats, score):
+        def count_quantity(keyword):
+            return sum(
+                float(l.get("quantity", 0))
+                for l in logs
+                if keyword in (l.get("sub_category_name") or "").lower()
+            )
+
+        def count_items(keyword, field="sub_category_name"):
+            return len([
+                l for l in logs
+                if keyword in (l.get(field) or "").lower()
+            ])
+
+        return [
+            {
+                "id": "first_step",
+                "earned": len(logs) > 0
+            },
+            {
+                "id": "plastic_buster",
+                "earned": count_quantity("plastic") >= 10
+            },
+            {
+                "id": "sustainability_streak",
+                "earned": len(daily_stats) >= 14
+            },
+            {
+                "id": "zero_waste_legend",
+                "earned": score >= 5000
+            },
+            {
+                "id": "eco_warrior",
+                "earned": len(logs) >= 50
+            },
+            {
+                "id": "tree_hugger",
+                "earned": score >= 1000
+            },
+            {
+                "id": "recycling_master",
+                "earned": count_items("recycled", "disposal_location") >= 30
+            },
+            {
+                "id": "compost_champion",
+                "earned": count_items("compost", "disposal_location") >= 20
+            },
+            {
+                "id": "milestone_100",
+                "earned": len(logs) >= 100
+            },
+            {
+                "id": "score_1500",
+                "earned": score >= 1500
+            },
+            {
+                "id": "consistency_king",
+                "earned": len(daily_stats) >= 30
+            },
+            {
+                "id": "metal_maven",
+                "earned": count_items("metal") >= 15
+            },
+            {
+                "id": "paper_pride",
+                "earned": count_items("paper") >= 25
+            },
+            {
+                "id": "glass_guru",
+                "earned": count_items("glass") >= 10
+            },
+            {
+                "id": "eco_score_500",
+                "earned": score >= 500
+            },
+            {
+                "id": "score_2000",
+                "earned": score >= 2000
+            },
+            {
+                "id": "score_3000",
+                "earned": score >= 3000
+            },
+            {
+                "id": "logs_200",
+                "earned": len(logs) >= 200
+            },
+            {
+                "id": "logs_500",
+                "earned": len(logs) >= 500
+            },
+            {
+                "id": "streak_60",
+                "earned": len(daily_stats) >= 60
+            },
+            {
+                "id": "plastic_50",
+                "earned": count_quantity("plastic") >= 50
+            },
+            {
+                "id": "organic_50",
+                "earned": count_items("organic") + count_items("food") >= 50
+            },
+            {
+                "id": "electronic_20",
+                "earned": count_items("electronic") + count_items("e-waste") >= 20
+            },
+            {
+                "id": "textile_30",
+                "earned": count_items("textile") + count_items("cloth") >= 30
+            },
+            {
+                "id": "donate_50",
+                "earned": count_items("donated", "disposal_location") +
+                          count_items("reused", "disposal_location") >= 50
+            },
+            {
+                "id": "landfill_zero",
+                "earned": (
+                    count_items("landfill", "disposal_location") == 0
+                    and len(logs) > 0
+                )
+            },
+            {
+                "id": "streak_7",
+                "earned": len(daily_stats) >= 7
+            },
+            {
+                "id": "streak_21",
+                "earned": len(daily_stats) >= 21
+            },
+        ]
