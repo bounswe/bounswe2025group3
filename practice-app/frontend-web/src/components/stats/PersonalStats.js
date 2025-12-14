@@ -102,7 +102,7 @@ const PersonalStats = () => {
   const [scoreData, setScoreData] = useState({ total_score: 0 });
   
   const [timeframe, setTimeframe] = useState('daily');
-  const DEFAULTS = { daily: 10, weekly: 10, monthly: 12, yearly: 10 };
+  const DEFAULTS = { daily: 7, weekly: 10, monthly: 12, yearly: 3 };
   const [rangeValue, setRangeValue] = useState(DEFAULTS['daily']); 
 
   const [pieMetric, setPieMetric] = useState('score'); 
@@ -140,119 +140,98 @@ const PersonalStats = () => {
 
   useEffect(() => {
     setRangeValue(DEFAULTS[timeframe]);
+    // Fetch new stats when timeframe changes
+    if (token && !loading) {
+      fetchStatsForTimeframe(timeframe);
+    }
     // eslint-disable-next-line
   }, [timeframe]);
 
-  // Dil değiştiğinde veya veriler değiştiğinde grafikleri yeniden işle
+  // Dil değiştiğinde grafikleri yeniden işle
   useEffect(() => {
-    if (!loading && rawLogsState.length > 0) {
-        processLogsToChartData(rawLogsState, timeframe, subCategoriesMap, rangeValue);
+    if (!loading && chartData.length > 0) {
         processCategoryPie(rawLogsState); // Pie chart isimlerini de güncelle
         // Badges isimlerini güncelle
         calculateBadges(rawLogsState, scoreData.total_score);
     }
     // eslint-disable-next-line
-  }, [rangeValue, timeframe, rawLogsState, i18n.language]);
+  }, [i18n.language]);
 
   // --- Helper: Kategori İsmini Çevir ---
   const getCategoryTrans = (apiName) => {
       if (!apiName) return t('waste_categories.other');
       // "Plastic Bottles" -> "plastic_bottles"
-      const key = apiName.toLowerCase().trim().replace(/\s+/g, "_");
-      return t(`waste_categories.${key}`, { defaultValue: apiName });
+      // "Batteries" -> "batteries", "AA Batteries" -> "aa_batteries"
+      const key = apiName.toLowerCase().trim().replace(/\s+/g, "_").replace(/-/g, "_");
+      const translated = t(`waste_categories.${key}`, { defaultValue: null });
+      
+      // If translation not found, return the original name with better formatting
+      if (translated === null) {
+        console.warn(`Missing translation for: waste_categories.${key} (original: ${apiName})`);
+        return apiName; // Fallback to original name
+      }
+      return translated;
   };
 
-  // --- Grafik Verisi İşleme ---
-  const processLogsToChartData = (logs, period, catMap, limit) => {
-    const now = new Date();
-    const dataMap = new Map();
+  // --- Grafik Verisi İşleme (from backend stats API) ---
+  const processStatsToChartData = (statsData, period, subCatMap = subCategoriesMap) => {
+    const locale = i18n.language;
     const categoriesSet = new Set();
+    const chartDataArray = [];
 
-    const timePoints = [];
-    const loopLimit = limit - 1; 
+    statsData.forEach(stat => {
+      const entry = { name: '' };
+      
+      // Format date range for display
+      if (period === 'daily') {
+        const date = new Date(stat.start_date);
+        entry.name = date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+      } else if (period === 'weekly') {
+        const startDate = new Date(stat.start_date);
+        const endDate = new Date(stat.end_date);
+        entry.name = `${startDate.toLocaleDateString(locale, { month: 'short', day: 'numeric' })}-${endDate.toLocaleDateString(locale, { month: 'short', day: 'numeric' })}`;
+      } else if (period === 'monthly') {
+        const date = new Date(stat.start_date);
+        entry.name = date.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+      } else if (period === 'yearly') {
+        const date = new Date(stat.start_date);
+        entry.name = date.getFullYear().toString();
+      }
 
-    if (period === 'daily') {
-        for (let i = loopLimit; i >= 0; i--) {
-            const d = new Date(); d.setDate(now.getDate() - i);
-            timePoints.push(d);
+      entry.totalScore = stat.total_score;
+      entry.totalLog = stat.total_log;
+
+      // Process subcategory data
+      Object.keys(stat).forEach(key => {
+        if (key.match(/^subcategory_\d+_score$/)) {
+          const subcatId = key.match(/subcategory_(\d+)_score/)[1];
+          const safeKey = `subcategory_${subcatId}`;
+          categoriesSet.add(safeKey);
+          
+          entry[`${safeKey}_score`] = stat[key];
+          entry[`${safeKey}_count`] = stat[`subcategory_${subcatId}_log`] || 0;
+          
+          // Get the actual subcategory name from the map
+          const subCatData = subCatMap[subcatId];
+          const subcatName = subCatData?.name || `Subcategory ${subcatId}`;
+          entry[`${safeKey}_originalName`] = subcatName;
         }
-    } else if (period === 'weekly') {
-        for (let i = loopLimit; i >= 0; i--) {
-            const d = new Date(); d.setDate(now.getDate() - (i * 7));
-            timePoints.push(d);
-        }
-    } else if (period === 'monthly') {
-        for (let i = loopLimit; i >= 0; i--) {
-            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-            timePoints.push(d);
-        }
-    } else if (period === 'yearly') {
-        for (let i = loopLimit; i >= 0; i--) {
-            const d = new Date(now.getFullYear() - i, 0, 1);
-            timePoints.push(d);
-        }
-    }
+      });
 
-    const locale = i18n.language; 
-
-    timePoints.forEach(d => {
-        let key = '';
-        if (period === 'daily') key = d.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
-        else if (period === 'weekly') {
-             const day = d.getDay(); 
-             const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-             const monday = new Date(d); monday.setDate(diff);
-             key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`; 
-        }
-        else if (period === 'monthly') key = d.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
-        else if (period === 'yearly') key = d.getFullYear().toString();
-        
-        if (!dataMap.has(key)) dataMap.set(key, { name: key });
-    });
-
-    logs.forEach(log => {
-        const date = new Date(log.date_logged);
-        let key = '';
-
-        if (period === 'daily') key = date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
-        else if (period === 'weekly') {
-            const day = date.getDay();
-            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-            const monday = new Date(date); monday.setDate(diff);
-            key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
-        }
-        else if (period === 'monthly') key = date.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
-        else if (period === 'yearly') key = date.getFullYear().toString();
-
-        if (dataMap.has(key)) {
-            const entry = dataMap.get(key);
-            const catName = log.sub_category_name || 'Other';
-            const safeKey = catName.replace(/\s+/g, ''); 
-            
-            categoriesSet.add(safeKey); 
-            
-            entry[`${safeKey}_score`] = (entry[`${safeKey}_score`] || 0) + (parseFloat(log.score) || 0);
-            entry[`${safeKey}_count`] = (entry[`${safeKey}_count`] || 0) + 1;
-            entry[`${safeKey}_rawQty`] = (entry[`${safeKey}_rawQty`] || 0) + (parseFloat(log.quantity) || 0);
-
-            const unit = catMap[log.sub_category]?.unit || 'units';
-            entry[`${safeKey}_unit`] = t(`units.${unit.toLowerCase()}`, {defaultValue: unit});
-            
-            entry[`${safeKey}_originalName`] = catName;
-        }
+      chartDataArray.push(entry);
     });
 
     setUniqueCategories(Array.from(categoriesSet));
-    setChartData(Array.from(dataMap.values()));
+    setChartData(chartDataArray);
   };
 
   const fetchInitialData = async () => {
     try {
       const headers = { Authorization: `Bearer ${token}` };
-      const [profileRes, scoreRes, logsRes, eventsRes, leaderboardRes, subCatsRes] = await Promise.all([
+      const [profileRes, scoreRes, statsRes, eventsRes, leaderboardRes, subCatsRes] = await Promise.all([
         axios.get(`${apiUrl}/user/me/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/scores/me/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/logs/`, { headers }), 
+        axios.get(`${apiUrl}/v1/waste/user/stats/?period=${timeframe}`, { headers }), 
         axios.get(`${apiUrl}/v1/events/events/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers }) 
@@ -262,14 +241,27 @@ const PersonalStats = () => {
       setScoreData(scoreRes.data);
       
       const catMap = {};
-      const subCats = subCatsRes.data.results || subCatsRes.data || [];
-      subCats.forEach(sc => { catMap[sc.id] = sc; });
+      // Handle both paginated and non-paginated responses
+      const subCatsList = subCatsRes.data.results || subCatsRes.data || [];
+      (Array.isArray(subCatsList) ? subCatsList : []).forEach(sc => { 
+        catMap[sc.id] = sc; 
+      });
       setSubCategoriesMap(catMap);
+      
+      // Debug: log missing IDs
+      if (Object.keys(catMap).length < 22) {
+        console.warn('Not all subcategories loaded. Have:', Object.keys(catMap), 'Expected at least 22');
+      }
 
+      // Process stats data from the new backend endpoint
+      const statsData = statsRes.data.data || [];
+      processStatsToChartData(statsData, timeframe, catMap);
+      
+      // For pie chart, still need raw logs for category breakdown
+      const logsRes = await axios.get(`${apiUrl}/v1/waste/logs/`, { headers });
       const allLogs = logsRes.data.results || [];
       setRawLogsState(allLogs);
       
-      processLogsToChartData(allLogs, timeframe, catMap, DEFAULTS[timeframe]);
       processCategoryPie(allLogs);
       calculateBadges(allLogs, scoreRes.data.total_score);
       calculateRank(leaderboardRes.data || [], userId);
@@ -280,6 +272,21 @@ const PersonalStats = () => {
       console.error(err);
       setError(t('stats_page.error_load'));
       setLoading(false);
+    }
+  };
+
+  const fetchStatsForTimeframe = async (period) => {
+    try {
+      setChartLoading(true);
+      const headers = { Authorization: `Bearer ${token}` };
+      const statsRes = await axios.get(`${apiUrl}/v1/waste/user/stats/?period=${period}`, { headers });
+      const statsData = statsRes.data.data || [];
+      processStatsToChartData(statsData, period, subCategoriesMap);
+      setChartLoading(false);
+    } catch (err) {
+      console.error(err);
+      setError(t('stats_page.error_load'));
+      setChartLoading(false);
     }
   };
 
