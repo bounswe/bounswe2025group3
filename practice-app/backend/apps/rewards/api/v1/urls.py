@@ -3,4 +3,5 @@ from .views import MyBadgesView
 
 urlpatterns = [
     path('badges/me/', MyBadgesView.as_view(), name='my_badges'),
+    path("badges/", BadgeGalleryView.as_view(), name="badge_gallery"),
 ]
