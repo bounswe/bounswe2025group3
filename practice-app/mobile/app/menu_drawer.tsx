@@ -1,4 +1,5 @@
 import { getUserProfile, type UserProfile as APIUserProfile } from "@/api/user";
+import { getMyScore } from "@/api/waste";
 import CustomAlert from "@/components/ui/custom-alert";
 import { useColors } from "@/constants/colors";
 import { useSession } from "@/hooks/authContext";
@@ -62,6 +63,39 @@ const calculateAccountAge = (dateJoined: string) => {
   }
 };
 
+const getTierInfo = (score: number, t: any): { name: string; gradientColors: [string, string]; borderColor: string } => {
+  if (score >= 5000) return { 
+    name: t('tiers.planet_guardian', { defaultValue: 'Planet Guardian' }), 
+    gradientColors: ["#6C3483", "#CE44AD"] as [string, string],
+    borderColor: "#7D3C98"
+  };
+  if (score >= 2500) return { 
+    name: t('tiers.zero_waste_champion', { defaultValue: 'Zero Waste Champion' }), 
+    gradientColors: ["#F4D03F", "#81C40F"] as [string, string],
+    borderColor: "#F7DC6F"
+  };
+  if (score >= 1000) return { 
+    name: t('tiers.sustainability_hero', { defaultValue: 'Sustainability Hero' }), 
+    gradientColors: ["#D35400", "#E67E22"] as [string, string],
+    borderColor: "#E74C3C"
+  };
+  if (score >= 500) return { 
+    name: t('tiers.eco_advocate', { defaultValue: 'Eco Advocate' }), 
+    gradientColors: ["#1ABC9C", "#3498DB"] as [string, string],
+    borderColor: "#2980B9"
+  };
+  if (score >= 100) return { 
+    name: t('tiers.green_starter', { defaultValue: 'Green Starter' }), 
+    gradientColors: ["#27AE60", "#2ECC71"] as [string, string],
+    borderColor: "#229954"
+  };
+  return { 
+    name: t('tiers.eco_explorer', { defaultValue: 'Eco Explorer' }), 
+    gradientColors: ["#5F8C8D", "#15A5A6"] as [string, string],
+    borderColor: "#85929E"
+  };
+};
+
 export default function MenuDrawerScreen() {
   const router = useRouter();
   const translateX = useRef(new Animated.Value(width)).current;
@@ -69,6 +103,7 @@ export default function MenuDrawerScreen() {
   const isClosing = useRef(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userRank, setUserRank] = useState<number | null>(null);
+  const [userScore, setUserScore] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [AlertVisible, setAlertVisible] = useState(false);
   const { userRole, signOut } = useSession();
@@ -86,7 +121,7 @@ export default function MenuDrawerScreen() {
     accountAgeContainer: { flexDirection: "row", alignItems: "center", marginTop: 6, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12 },
     accountAgeText: { fontSize: 12, color: colors.text, marginLeft: 4, fontWeight: "500" },
     divider: { height: 1, backgroundColor: colors.borders, marginBottom: 20 },
-    menuButton: { width: "100%", paddingVertical: 14, paddingHorizontal: 8, borderRadius: 12, marginBottom: 8, backgroundColor: "transparent", justifyContent: "center", alignItems: "flex-start" },
+    menuButton: { width: "100%", paddingVertical: 14, paddingHorizontal: 8, borderRadius: 12, marginBottom: 4, backgroundColor: "transparent", justifyContent: "center", alignItems: "flex-start" },
     menuButtonContent: { flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%" },
     menuText: { fontSize: 16, color: colors.black, fontWeight: "400", marginLeft: 12 },
   });
@@ -96,12 +131,14 @@ export default function MenuDrawerScreen() {
     accountAge,
     userId,
     userRank,
+    userScore,
     t,
   }: {
     role: "USER" | "MODERATOR" | "ADMIN";
     accountAge?: string;
     userId?: number;
     userRank?: number | null;
+    userScore?: number;
     t: any;
   }) => {
     const getRoleColors = (roleName: string) => {
@@ -109,7 +146,6 @@ export default function MenuDrawerScreen() {
         case "USER": return ["#1B3F17", "#23E925"];
         case "MODERATOR": return ["#1A273F", "#8A88EA"];
         case "ADMIN": return ["#5E1B07", "#F89707"];
-        case "ECO-WARRIOR": return ["#B7E3FA", "#61B2FA"];
         default: return ["#1B3F17", "#23E925"];
       }
     };
@@ -128,6 +164,26 @@ export default function MenuDrawerScreen() {
         >
           {roleName}
         </Text>
+      );
+    };
+
+    const renderTierPill = (score: number) => {
+      const tierInfo = getTierInfo(score, t);
+      return (
+        <LinearGradient
+          key="tierPill"
+          colors={tierInfo.gradientColors}
+          start={[0, 0]}
+          end={[1, 1]}
+          style={{
+            paddingVertical: 4, paddingHorizontal: 10, borderRadius: 16,
+            marginRight: 6, borderWidth: 1, borderColor: tierInfo.borderColor, marginBottom: 6,
+          }}
+        >
+          <Text style={{ color: "white", fontWeight: "600", fontSize: 13 }}>
+            {tierInfo.name}
+          </Text>
+        </LinearGradient>
       );
     };
 
@@ -172,13 +228,14 @@ export default function MenuDrawerScreen() {
       );
     };
 
-    const pills = [role, "ECO-WARRIOR"];
+    const pills = [role];
 
     return (
       <View style={{ alignItems: "center", marginTop: 8 }}>
         <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: 'center', paddingHorizontal: 10 }}>
           {userRank && renderRankPill(userRank)}
           {pills.map(renderPill)}
+          {userScore !== undefined && renderTierPill(userScore)}
           {userId && renderOriginPill(userId)}
         </View>
 
@@ -210,13 +267,15 @@ export default function MenuDrawerScreen() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const [profile, leaderboardData] = await Promise.all([
+        const [profile, leaderboardData, score] = await Promise.all([
             getUserProfile(),
-            getLeaderboard()
+            getLeaderboard(),
+            getMyScore()
         ]);
 
         if (profile) {
             setUserProfile(profile as UserProfile);
+            setUserScore(score || 0);
             if (leaderboardData && leaderboardData.length > 0) {
                 const userIndex = leaderboardData.findIndex(user => user.id === profile.id);
                 if (userIndex !== -1) {
@@ -278,6 +337,7 @@ export default function MenuDrawerScreen() {
               accountAge={userProfile.date_joined ? calculateAccountAge(userProfile.date_joined) : undefined}
               userId={userProfile.id}
               userRank={userRank}
+              userScore={userScore}
               t={t}
             />
           )}
@@ -285,10 +345,24 @@ export default function MenuDrawerScreen() {
 
         <View style={styles.divider} />
 
-        <TouchableOpacity style={styles.menuButton} onPress={() => router.replace("/(tabs)/home/achievements")}>
+        <TouchableOpacity style={styles.menuButton} onPress={() => router.replace("/notifications")}>
+          <View style={styles.menuButtonContent}>
+            <Ionicons name="notifications-outline" size={20} color={colors.black} />
+            <Text style={styles.menuText}>{t("menu_drawer.notifications")}</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuButton} onPress={() => router.replace("/badges")}>
           <View style={styles.menuButtonContent}>
             <Ionicons name="trophy" size={20} color={colors.black} />
-            <Text style={styles.menuText}>{t("menu_drawer.achievements")}</Text>
+            <Text style={styles.menuText}>{t("menu_drawer.badges")}</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.menuButton} onPress={() => router.replace("/stats")}>
+          <View style={styles.menuButtonContent}>
+            <Ionicons name="stats-chart" size={20} color={colors.black} />
+            <Text style={styles.menuText}>{t("menu_drawer.stats")}</Text>
           </View>
         </TouchableOpacity>
 
