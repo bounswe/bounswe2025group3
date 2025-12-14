@@ -16,9 +16,7 @@ const COLORS = [
   '#FF4560', '#2ecc71', '#3498db', '#9b59b6', '#34495e'
 ];
 
-// --- Badges Definition List (Statik Veri) ---
-// Rozet tanımlarını component dışına veya içine alabiliriz ama 
-// dinamik çeviri için render içinde kullanacağız.
+// --- Badges Definition List (Static Data) ---
 const BADGE_DEFINITIONS = [
     { id: 'first_step', icon: '🎖' },
     { id: 'plastic_buster', icon: '🥤' },
@@ -75,7 +73,8 @@ const CustomTooltip = ({ active, payload, label, type, t }) => {
         <div className="tooltip-items">
             {payload.map((entry, index) => {
                 const dataPoint = entry.payload; 
-                const rawKeyPrefix = entry.dataKey.split('_')[0]; 
+                // Extract key prefix (e.g., subcategory_15)
+                const rawKeyPrefix = entry.dataKey.split('_').slice(0, 2).join('_'); 
                 
                 const rawQty = dataPoint[`${rawKeyPrefix}_rawQty`];
                 const unit = dataPoint[`${rawKeyPrefix}_unit`] || '';
@@ -143,15 +142,12 @@ const PersonalStats = () => {
   const [uniqueCategories, setUniqueCategories] = useState([]); 
   const [categoryStats, setCategoryStats] = useState([]); 
   
-  // DÜZELTME: Artık tüm rozet objesini değil, sadece kazanılan rozetlerin ID'lerini tutuyoruz.
   const [earnedBadgeIds, setEarnedBadgeIds] = useState([]);
 
   const [leaderboardRank, setLeaderboardRank] = useState('N/A');
   const [eventStats, setEventStats] = useState({ participating: 0, total: 0, rate: 0 });
   const [subCategoriesMap, setSubCategoriesMap] = useState({});
   const [rawLogsState, setRawLogsState] = useState([]);
-  // rawStreakState grafik için kullanılıyor olabilir ama rozet hesabı için logları kullanacağız
-  const [rawStreakState, setRawStreakState] = useState([]); 
 
   const TIERS = [
     { key: 'eco_explorer', min: 0, color: '#95a5a6', icon: '🌱' },
@@ -176,18 +172,21 @@ const PersonalStats = () => {
 
   useEffect(() => {
     setRangeValue(DEFAULTS[timeframe]);
+    // Fetch new stats from backend when timeframe changes
+    if (token && !loading) {
+      fetchStatsForTimeframe(timeframe);
+    }
     // eslint-disable-next-line
   }, [timeframe]);
 
   useEffect(() => {
     if (!loading && rawLogsState.length > 0) {
-        processLogsToChartData(rawLogsState, timeframe, subCategoriesMap, rangeValue);
+        // Re-process Pie Chart and Badges when language changes or logs update
         processCategoryPie(rawLogsState);
-        // Dil bağımlılığını kaldırdık, sadece veri değişince hesaplar
         calculateBadges(rawLogsState, scoreData.total_score);
     }
     // eslint-disable-next-line
-  }, [rangeValue, timeframe, rawLogsState]);
+  }, [rawLogsState, i18n.language]);
 
   const getCategoryTrans = (apiName) => {
       if (!apiName) return t('waste_categories.other');
@@ -195,23 +194,22 @@ const PersonalStats = () => {
       return t(`waste_categories.${key}`, { defaultValue: apiName });
   };
 
-  // --- Yardımcı: Gerçek Streak Hesaplama ---
-  // API'den gelen dizi yerine raw loglardan gerçek ardışık günleri hesaplar
+  // --- Helper: Real Streak Calculation (based on Logs) ---
   const calculateRealStreak = (logs) => {
     if (!logs || logs.length === 0) return 0;
 
-    // 1. Tarihleri al ve saatleri sıfırla, benzersiz yap
+    // 1. Get unique dates with reset hours
     const uniqueDates = [...new Set(logs.map(log => {
         const d = new Date(log.date_logged);
         return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
     }))];
 
-    // 2. Yeniden eskiye sırala
+    // 2. Sort descending
     uniqueDates.sort((a, b) => b - a);
 
     if (uniqueDates.length === 0) return 0;
 
-    // 3. Streak kontrolü
+    // 3. Check streak
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayTime = today.getTime();
@@ -220,9 +218,8 @@ const PersonalStats = () => {
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayTime = yesterday.getTime();
 
-    // En son log bugün veya dün değilse streak bozulmuş demektir (0)
-    // Ancak kullanıcı "bugün" girmemiş olsa bile, dün girmişse streak devam ediyordur.
     const lastLogDate = uniqueDates[0];
+    // If last log is not today or yesterday, streak is broken
     if (lastLogDate !== todayTime && lastLogDate !== yesterdayTime) {
         return 0; 
     }
@@ -239,18 +236,24 @@ const PersonalStats = () => {
             streak++;
             currentCheck = prevDate;
         } else {
-            break; // Ardışıklık bozuldu
+            break; 
         }
     }
     return streak;
   };
 
-  const processLogsToChartData = (logs, period, catMap, limit) => {
-    const now = new Date();
-    const dataMap = new Map();
+  // --- GRAPH DATA PROCESSING (USING BACKEND STATS API) ---
+  // This method avoids heavy frontend processing and aligns dates correctly based on backend data.
+  const processStatsToChartData = (statsData, period, subCatMap = subCategoriesMap) => {
+    const locale = i18n.language;
     const categoriesSet = new Set();
+    const chartDataArray = [];
+    const limit = rangeValue || DEFAULTS[period];
+    
+    // Create date range to show empty days as well
+    const now = new Date();
     const timePoints = [];
-    const loopLimit = limit - 1; 
+    const loopLimit = limit - 1;
 
     if (period === 'daily') {
         for (let i = loopLimit; i >= 0; i--) {
@@ -274,71 +277,99 @@ const PersonalStats = () => {
         }
     }
 
-    const locale = i18n.language; 
-
-    timePoints.forEach(d => {
+    // Map backend data by date key
+    const statsMap = {};
+    statsData.forEach(stat => {
         let key = '';
-        if (period === 'daily') key = d.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
-        else if (period === 'weekly') {
-             const day = d.getDay(); 
-             const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-             const monday = new Date(d); monday.setDate(diff);
-             key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`; 
+        if (period === 'daily') {
+             const date = new Date(stat.start_date);
+             key = date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+        } else if (period === 'weekly') {
+             const startDate = new Date(stat.start_date);
+             const day = startDate.getDay();
+             const diff = startDate.getDate() - day + (day === 0 ? -6 : 1);
+             const monday = new Date(startDate); monday.setDate(diff);
+             key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
+        } else if (period === 'monthly') {
+             const date = new Date(stat.start_date);
+             key = date.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+        } else if (period === 'yearly') {
+             const date = new Date(stat.start_date);
+             key = date.getFullYear().toString();
         }
-        else if (period === 'monthly') key = d.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
-        else if (period === 'yearly') key = d.getFullYear().toString();
-        
-        if (!dataMap.has(key)) dataMap.set(key, { name: key });
+        statsMap[key] = stat;
     });
 
-    logs.forEach(log => {
-        const date = new Date(log.date_logged);
+    // Populate Chart Data Array
+    timePoints.forEach(d => {
         let key = '';
-
-        if (period === 'daily') key = date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
-        else if (period === 'weekly') {
-            const day = date.getDay();
-            const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-            const monday = new Date(date); monday.setDate(diff);
-            key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
+        let displayKey = '';
+        
+        if (period === 'daily') {
+            displayKey = d.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+        } else if (period === 'weekly') {
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(d); monday.setDate(diff);
+            displayKey = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
+        } else if (period === 'monthly') {
+            displayKey = d.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+        } else if (period === 'yearly') {
+            displayKey = d.getFullYear().toString();
         }
-        else if (period === 'monthly') key = date.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
-        else if (period === 'yearly') key = date.getFullYear().toString();
+        
+        const stat = statsMap[displayKey];
+        const entry = { name: displayKey };
 
-        if (dataMap.has(key)) {
-            const entry = dataMap.get(key);
-            const catName = log.sub_category_name || 'Other';
-            const safeKey = catName.replace(/\s+/g, ''); 
-            
-            categoriesSet.add(safeKey); 
-            
-            entry[`${safeKey}_score`] = (entry[`${safeKey}_score`] || 0) + (parseFloat(log.score) || 0);
-            entry[`${safeKey}_count`] = (entry[`${safeKey}_count`] || 0) + 1;
-            entry[`${safeKey}_rawQty`] = (entry[`${safeKey}_rawQty`] || 0) + (parseFloat(log.quantity) || 0);
+        if (stat) {
+             entry.totalScore = stat.total_score;
+             entry.totalLog = stat.total_log;
 
-            const unit = catMap[log.sub_category]?.unit || 'units';
-            entry[`${safeKey}_unit`] = t(`units.${unit.toLowerCase()}`, {defaultValue: unit});
-            
-            entry[`${safeKey}_originalName`] = catName;
+             Object.keys(stat).forEach(k => {
+                // Find keys like subcategory_15_score
+                if (k.match(/^subcategory_\d+_score$/)) {
+                    const subcatId = k.match(/subcategory_(\d+)_score/)[1];
+                    const safeKey = `subcategory_${subcatId}`;
+                    const scoreValue = stat[k];
+                    const logValue = stat[`subcategory_${subcatId}_log`] || 0;
+                    const rawQty = stat[`subcategory_${subcatId}_quantity`] || 0;
+
+                    if (scoreValue > 0 || logValue > 0) {
+                        categoriesSet.add(safeKey);
+                        entry[`${safeKey}_score`] = scoreValue;
+                        entry[`${safeKey}_count`] = logValue;
+                        entry[`${safeKey}_rawQty`] = rawQty;
+
+                        const subCatData = subCatMap[subcatId];
+                        const displayName = subCatData ? subCatData.name : `Subcategory ${subcatId}`;
+                        const unit = subCatData ? subCatData.unit : '';
+                        
+                        entry[`${safeKey}_originalName`] = displayName;
+                        entry[`${safeKey}_unit`] = unit;
+                    }
+                }
+             });
         }
+        chartDataArray.push(entry);
     });
 
     setUniqueCategories(Array.from(categoriesSet));
-    setChartData(Array.from(dataMap.values()));
+    setChartData(chartDataArray);
   };
 
   const fetchInitialData = async () => {
     try {
       const headers = { Authorization: `Bearer ${token}` };
       
-      const [profileRes, scoreRes, logsRes, eventsRes, leaderboardRes, subCatsRes, streakRes] = await Promise.all([
+      const [profileRes, scoreRes, logsRes, eventsRes, leaderboardRes, subCatsRes, statsRes] = await Promise.all([
         axios.get(`${apiUrl}/user/me/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/scores/me/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/logs/`, { headers }), 
         axios.get(`${apiUrl}/v1/events/events/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/user/stats/?period=daily`, { headers }) 
+        // Stats data fetched specifically for charts
+        axios.get(`${apiUrl}/v1/waste/user/stats/?period=${timeframe}`, { headers }) 
       ]);
 
       setProfile(profileRes.data);
@@ -346,18 +377,24 @@ const PersonalStats = () => {
       
       const catMap = {};
       const subCats = subCatsRes.data.results || subCatsRes.data || [];
-      subCats.forEach(sc => { catMap[sc.id] = sc; });
+      
+      // Pagination handling (To fetch all if there are many subcategories)
+      // Optional: Logic to fetch next pages if necessary can be added here
+      let allSubCats = [...(Array.isArray(subCats) ? subCats : [])];
+      
+      allSubCats.forEach(sc => { catMap[sc.id] = sc; });
       setSubCategoriesMap(catMap);
 
       const allLogs = logsRes.data.results || [];
-      const streakData = streakRes.data.data || []; 
+      const statsData = statsRes.data.data || [];
 
       setRawLogsState(allLogs);
-      setRawStreakState(streakData);
       
-      processLogsToChartData(allLogs, timeframe, catMap, DEFAULTS[timeframe]);
+      // Use Backend Stats data for charts
+      processStatsToChartData(statsData, timeframe, catMap);
+      
+      // Use Raw Logs for Pie Chart and Badges
       processCategoryPie(allLogs);
-      
       calculateBadges(allLogs, scoreRes.data.total_score);
       
       calculateRank(leaderboardRes.data || [], userId);
@@ -368,6 +405,21 @@ const PersonalStats = () => {
       console.error(err);
       setError(t('stats_page.error_load'));
       setLoading(false);
+    }
+  };
+
+  const fetchStatsForTimeframe = async (period) => {
+    try {
+      setChartLoading(true);
+      const headers = { Authorization: `Bearer ${token}` };
+      const statsRes = await axios.get(`${apiUrl}/v1/waste/user/stats/?period=${period}`, { headers });
+      const statsData = statsRes.data.data || [];
+      processStatsToChartData(statsData, period, subCategoriesMap);
+      setChartLoading(false);
+    } catch (err) {
+      console.error(err);
+      setError(t('stats_page.error_load'));
+      setChartLoading(false);
     }
   };
 
@@ -405,20 +457,14 @@ const PersonalStats = () => {
     setCategoryStats(Object.values(categoryMap));
   };
 
-  // --- DÜZELTME 1: Mantık Hatası Giderildi ---
-  // Artık API'den gelen streak listesinin uzunluğuna (ki bu boş günler de olabilir) bakmıyoruz.
-  // raw loglar üzerinden gerçek ardışık günleri hesaplıyoruz.
   const calculateBadges = (logs, score) => {
     const safeLogs = Array.isArray(logs) ? logs : [];
-    
-    // Gerçek streak sayısını hesapla
     const currentStreak = calculateRealStreak(safeLogs);
 
-    // Kontrol listesi - earned: true/false döner
     const badgeChecks = {
         'first_step': safeLogs.length > 0,
         'plastic_buster': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 10,
-        'sustainability_streak': currentStreak >= 14, // Düzeltilmiş Streak Kontrolü
+        'sustainability_streak': currentStreak >= 14, 
         'zero_waste_legend': score >= 5000,
         'eco_warrior': safeLogs.length >= 50,
         'tree_hugger': score >= 1000,
@@ -426,7 +472,7 @@ const PersonalStats = () => {
         'compost_champion': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('compost')).length >= 20,
         'milestone_100': safeLogs.length >= 100,
         'score_1500': score >= 1500,
-        'consistency_king': currentStreak >= 30, // Düzeltilmiş Streak Kontrolü
+        'consistency_king': currentStreak >= 30, 
         'metal_maven': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('metal')).length >= 15,
         'paper_pride': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('paper')).length >= 25,
         'glass_guru': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('glass')).length >= 10,
@@ -435,18 +481,17 @@ const PersonalStats = () => {
         'score_3000': score >= 3000,
         'logs_200': safeLogs.length >= 200,
         'logs_500': safeLogs.length >= 500,
-        'streak_60': currentStreak >= 60, // Düzeltilmiş Streak Kontrolü
+        'streak_60': currentStreak >= 60,
         'plastic_50': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 50,
         'organic_50': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('organic') || l.sub_category_name?.toLowerCase().includes('food')).length >= 50,
         'electronic_20': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('electronic') || l.sub_category_name?.toLowerCase().includes('e-waste')).length >= 20,
         'textile_30': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('textile') || l.sub_category_name?.toLowerCase().includes('cloth')).length >= 30,
         'donate_50': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('donated') || l.disposal_location?.toLowerCase().includes('reused')).length >= 50,
         'landfill_zero': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('landfill')).length === 0 && safeLogs.length > 0,
-        'streak_7': currentStreak >= 7, // Düzeltilmiş Streak Kontrolü (Haftanın Savaşçısı)
-        'streak_21': currentStreak >= 21 // Düzeltilmiş Streak Kontrolü
+        'streak_7': currentStreak >= 7,
+        'streak_21': currentStreak >= 21
     };
 
-    // Sadece kazanılanların ID'lerini bir diziye at
     const earnedIds = Object.keys(badgeChecks).filter(id => badgeChecks[id]);
     setEarnedBadgeIds(earnedIds);
   };
@@ -689,14 +734,12 @@ const PersonalStats = () => {
                   </button>
                 </div>
                 <div className="badges-grid">
-                  {/* DÜZELTME 2: Rozetler artık ID'ye göre basılıyor ve dinamik çevriliyor */}
                   {earnedBadgeIds.length > 0 ? (
                     earnedBadgeIds.map((badgeId, index) => {
                         const def = BADGE_DEFINITIONS.find(d => d.id === badgeId) || { icon: '🏆' };
                         return (
                           <div key={index} className="badge-item">
                             <div className="badge-icon">{def.icon}</div>
-                            {/* Dil değişiminde burası anında güncellenir */}
                             <span className="badge-name">{t(`badges_data.${badgeId}.name`)}</span>
                             <span className="badge-desc">{t(`badges_data.${badgeId}.desc`)}</span>
                           </div>
