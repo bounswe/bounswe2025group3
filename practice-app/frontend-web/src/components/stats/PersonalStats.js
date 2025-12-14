@@ -16,6 +16,40 @@ const COLORS = [
   '#FF4560', '#2ecc71', '#3498db', '#9b59b6', '#34495e'
 ];
 
+// --- Badges Definition List (Statik Veri) ---
+// Rozet tanımlarını component dışına veya içine alabiliriz ama 
+// dinamik çeviri için render içinde kullanacağız.
+const BADGE_DEFINITIONS = [
+    { id: 'first_step', icon: '🎖' },
+    { id: 'plastic_buster', icon: '🥤' },
+    { id: 'sustainability_streak', icon: '🔥' },
+    { id: 'zero_waste_legend', icon: '🌍' },
+    { id: 'eco_warrior', icon: '⚔️' },
+    { id: 'tree_hugger', icon: '🌿' },
+    { id: 'recycling_master', icon: '♻️' },
+    { id: 'compost_champion', icon: '🌱' },
+    { id: 'milestone_100', icon: '💯' },
+    { id: 'score_1500', icon: '🏆' },
+    { id: 'consistency_king', icon: '👑' },
+    { id: 'metal_maven', icon: '🔧' },
+    { id: 'paper_pride', icon: '📄' },
+    { id: 'glass_guru', icon: '🥃' },
+    { id: 'eco_score_500', icon: '⭐' },
+    { id: 'score_2000', icon: '🥇' },
+    { id: 'score_3000', icon: '🥈' },
+    { id: 'logs_200', icon: '📋' },
+    { id: 'logs_500', icon: '🎯' },
+    { id: 'streak_60', icon: '🚀' },
+    { id: 'plastic_50', icon: '💪' },
+    { id: 'organic_50', icon: '🍃' },
+    { id: 'electronic_20', icon: '🔌' },
+    { id: 'textile_30', icon: '👕' },
+    { id: 'donate_50', icon: '🎁' },
+    { id: 'landfill_zero', icon: '✨' },
+    { id: 'streak_7', icon: '📅' },
+    { id: 'streak_21', icon: '🎖️' }
+];
+
 const Icon = ({ name, className = "" }) => {
     const icons = {
         stats: '📈', rank: '🏅', score: '🌟', events: '📅',
@@ -26,7 +60,7 @@ const Icon = ({ name, className = "" }) => {
 };
 
 const formatNumber = (num) => {
-  return new Intl.NumberFormat('tr-TR').format(num); // TR formatı (nokta ile ayrım)
+  return new Intl.NumberFormat('tr-TR').format(num); 
 };
 
 // --- Custom Bar/Area Tooltip ---
@@ -41,10 +75,8 @@ const CustomTooltip = ({ active, payload, label, type, t }) => {
         <div className="tooltip-items">
             {payload.map((entry, index) => {
                 const dataPoint = entry.payload; 
-                // dataKey örn: "PlasticBottles_score"
                 const rawKeyPrefix = entry.dataKey.split('_')[0]; 
                 
-                // Orijinal ham miktarı ve birimi al
                 const rawQty = dataPoint[`${rawKeyPrefix}_rawQty`];
                 const unit = dataPoint[`${rawKeyPrefix}_unit`] || '';
 
@@ -110,20 +142,24 @@ const PersonalStats = () => {
   const [chartData, setChartData] = useState([]); 
   const [uniqueCategories, setUniqueCategories] = useState([]); 
   const [categoryStats, setCategoryStats] = useState([]); 
-  const [badges, setBadges] = useState([]);
+  
+  // DÜZELTME: Artık tüm rozet objesini değil, sadece kazanılan rozetlerin ID'lerini tutuyoruz.
+  const [earnedBadgeIds, setEarnedBadgeIds] = useState([]);
+
   const [leaderboardRank, setLeaderboardRank] = useState('N/A');
   const [eventStats, setEventStats] = useState({ participating: 0, total: 0, rate: 0 });
   const [subCategoriesMap, setSubCategoriesMap] = useState({});
   const [rawLogsState, setRawLogsState] = useState([]);
+  // rawStreakState grafik için kullanılıyor olabilir ama rozet hesabı için logları kullanacağız
+  const [rawStreakState, setRawStreakState] = useState([]); 
 
-  // Tiers artık render içinde tanımlanmalı ki dil değişince güncellensin
   const TIERS = [
-    { name: t('tiers.eco_explorer'), min: 0, color: '#95a5a6', icon: '🌱' },
-    { name: t('tiers.green_starter'), min: 100, color: '#2ecc71', icon: '🍃' },
-    { name: t('tiers.eco_advocate'), min: 500, color: '#3498db', icon: '🌍' },
-    { name: t('tiers.sustainability_hero'), min: 1000, color: '#e67e22', icon: '🌿' },
-    { name: t('tiers.zero_waste_champion'), min: 2500, color: '#f1c40f', icon: '🌟' },
-    { name: t('tiers.planet_guardian'), min: 5000, color: '#8e44ad', icon: '🌎' }
+    { key: 'eco_explorer', min: 0, color: '#95a5a6', icon: '🌱' },
+    { key: 'green_starter', min: 100, color: '#2ecc71', icon: '🍃' },
+    { key: 'eco_advocate', min: 500, color: '#3498db', icon: '🌍' },
+    { key: 'sustainability_hero', min: 1000, color: '#e67e22', icon: '🌿' },
+    { key: 'zero_waste_champion', min: 2500, color: '#f1c40f', icon: '🌟' },
+    { key: 'planet_guardian', min: 5000, color: '#8e44ad', icon: '🌎' }
   ];
 
   const token = localStorage.getItem('access_token');
@@ -143,37 +179,76 @@ const PersonalStats = () => {
     // eslint-disable-next-line
   }, [timeframe]);
 
-  // Dil değiştiğinde veya veriler değiştiğinde grafikleri yeniden işle
   useEffect(() => {
     if (!loading && rawLogsState.length > 0) {
         processLogsToChartData(rawLogsState, timeframe, subCategoriesMap, rangeValue);
-        processCategoryPie(rawLogsState); // Pie chart isimlerini de güncelle
+        processCategoryPie(rawLogsState);
+        // Dil bağımlılığını kaldırdık, sadece veri değişince hesaplar
+        calculateBadges(rawLogsState, scoreData.total_score);
     }
     // eslint-disable-next-line
-  }, [rangeValue, timeframe, rawLogsState, i18n.language]);
+  }, [rangeValue, timeframe, rawLogsState]);
 
-  // Badges'i backend API'sinden çek
-  useEffect(() => {
-    if (token) {
-      fetchBadgesFromAPI();
-    }
-    // eslint-disable-next-line
-  }, [token]);
-
-  // --- Helper: Kategori İsmini Çevir ---
   const getCategoryTrans = (apiName) => {
       if (!apiName) return t('waste_categories.other');
-      // "Plastic Bottles" -> "plastic_bottles"
       const key = apiName.toLowerCase().trim().replace(/\s+/g, "_");
       return t(`waste_categories.${key}`, { defaultValue: apiName });
   };
 
-  // --- Grafik Verisi İşleme ---
+  // --- Yardımcı: Gerçek Streak Hesaplama ---
+  // API'den gelen dizi yerine raw loglardan gerçek ardışık günleri hesaplar
+  const calculateRealStreak = (logs) => {
+    if (!logs || logs.length === 0) return 0;
+
+    // 1. Tarihleri al ve saatleri sıfırla, benzersiz yap
+    const uniqueDates = [...new Set(logs.map(log => {
+        const d = new Date(log.date_logged);
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+    }))];
+
+    // 2. Yeniden eskiye sırala
+    uniqueDates.sort((a, b) => b - a);
+
+    if (uniqueDates.length === 0) return 0;
+
+    // 3. Streak kontrolü
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayTime = today.getTime();
+
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayTime = yesterday.getTime();
+
+    // En son log bugün veya dün değilse streak bozulmuş demektir (0)
+    // Ancak kullanıcı "bugün" girmemiş olsa bile, dün girmişse streak devam ediyordur.
+    const lastLogDate = uniqueDates[0];
+    if (lastLogDate !== todayTime && lastLogDate !== yesterdayTime) {
+        return 0; 
+    }
+
+    let streak = 1;
+    let currentCheck = lastLogDate;
+
+    for (let i = 1; i < uniqueDates.length; i++) {
+        const prevDate = uniqueDates[i];
+        const diffTime = Math.abs(currentCheck - prevDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+
+        if (diffDays === 1) {
+            streak++;
+            currentCheck = prevDate;
+        } else {
+            break; // Ardışıklık bozuldu
+        }
+    }
+    return streak;
+  };
+
   const processLogsToChartData = (logs, period, catMap, limit) => {
     const now = new Date();
     const dataMap = new Map();
     const categoriesSet = new Set();
-
     const timePoints = [];
     const loopLimit = limit - 1; 
 
@@ -255,13 +330,15 @@ const PersonalStats = () => {
   const fetchInitialData = async () => {
     try {
       const headers = { Authorization: `Bearer ${token}` };
-      const [profileRes, scoreRes, logsRes, eventsRes, leaderboardRes, subCatsRes] = await Promise.all([
+      
+      const [profileRes, scoreRes, logsRes, eventsRes, leaderboardRes, subCatsRes, streakRes] = await Promise.all([
         axios.get(`${apiUrl}/user/me/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/scores/me/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/logs/`, { headers }), 
         axios.get(`${apiUrl}/v1/events/events/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers }) 
+        axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers }),
+        axios.get(`${apiUrl}/v1/waste/user/stats/?period=daily`, { headers }) 
       ]);
 
       setProfile(profileRes.data);
@@ -273,10 +350,16 @@ const PersonalStats = () => {
       setSubCategoriesMap(catMap);
 
       const allLogs = logsRes.data.results || [];
+      const streakData = streakRes.data.data || []; 
+
       setRawLogsState(allLogs);
+      setRawStreakState(streakData);
       
       processLogsToChartData(allLogs, timeframe, catMap, DEFAULTS[timeframe]);
       processCategoryPie(allLogs);
+      
+      calculateBadges(allLogs, scoreRes.data.total_score);
+      
       calculateRank(leaderboardRes.data || [], userId);
       calculateEventStats(eventsRes.data.results || []);
 
@@ -303,12 +386,11 @@ const PersonalStats = () => {
     return { current, next, currentIndex };
   };
 
-  // Pie Chart verisini çevirili isimlerle oluştur
   const processCategoryPie = (logs) => {
     const categoryMap = {};
     logs.forEach(log => {
       const catName = log.sub_category_name || 'Other';
-      const transName = getCategoryTrans(catName); // Çeviriyi burada al
+      const transName = getCategoryTrans(catName);
 
       if (!categoryMap[transName]) {
           categoryMap[transName] = { 
@@ -323,26 +405,50 @@ const PersonalStats = () => {
     setCategoryStats(Object.values(categoryMap));
   };
 
-  const fetchBadgesFromAPI = async () => {
-    try {
-      const headers = { Authorization: `Bearer ${token}` };
-      const response = await axios.get(`${apiUrl}/v1/rewards/badges/me/`, { headers });
-      const badgesData = response.data;
-      // Sadece kazanılan rozetleri göster
-      const earnedBadges = badgesData
-        .filter(b => b.earned)
-        .map(b => ({
-          id: b.id,
-          name: b.name,
-          icon: b.icon,
-          desc: b.description
-        }));
-      setBadges(earnedBadges);
-    } catch (err) {
-      console.error('Error fetching badges:', err);
-      // Hata durumunda boş bırak
-      setBadges([]);
-    }
+  // --- DÜZELTME 1: Mantık Hatası Giderildi ---
+  // Artık API'den gelen streak listesinin uzunluğuna (ki bu boş günler de olabilir) bakmıyoruz.
+  // raw loglar üzerinden gerçek ardışık günleri hesaplıyoruz.
+  const calculateBadges = (logs, score) => {
+    const safeLogs = Array.isArray(logs) ? logs : [];
+    
+    // Gerçek streak sayısını hesapla
+    const currentStreak = calculateRealStreak(safeLogs);
+
+    // Kontrol listesi - earned: true/false döner
+    const badgeChecks = {
+        'first_step': safeLogs.length > 0,
+        'plastic_buster': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 10,
+        'sustainability_streak': currentStreak >= 14, // Düzeltilmiş Streak Kontrolü
+        'zero_waste_legend': score >= 5000,
+        'eco_warrior': safeLogs.length >= 50,
+        'tree_hugger': score >= 1000,
+        'recycling_master': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('recycled') || l.disposal_location?.toLowerCase().includes('recycling')).length >= 30,
+        'compost_champion': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('compost')).length >= 20,
+        'milestone_100': safeLogs.length >= 100,
+        'score_1500': score >= 1500,
+        'consistency_king': currentStreak >= 30, // Düzeltilmiş Streak Kontrolü
+        'metal_maven': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('metal')).length >= 15,
+        'paper_pride': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('paper')).length >= 25,
+        'glass_guru': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('glass')).length >= 10,
+        'eco_score_500': score >= 500,
+        'score_2000': score >= 2000,
+        'score_3000': score >= 3000,
+        'logs_200': safeLogs.length >= 200,
+        'logs_500': safeLogs.length >= 500,
+        'streak_60': currentStreak >= 60, // Düzeltilmiş Streak Kontrolü
+        'plastic_50': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 50,
+        'organic_50': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('organic') || l.sub_category_name?.toLowerCase().includes('food')).length >= 50,
+        'electronic_20': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('electronic') || l.sub_category_name?.toLowerCase().includes('e-waste')).length >= 20,
+        'textile_30': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('textile') || l.sub_category_name?.toLowerCase().includes('cloth')).length >= 30,
+        'donate_50': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('donated') || l.disposal_location?.toLowerCase().includes('reused')).length >= 50,
+        'landfill_zero': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('landfill')).length === 0 && safeLogs.length > 0,
+        'streak_7': currentStreak >= 7, // Düzeltilmiş Streak Kontrolü (Haftanın Savaşçısı)
+        'streak_21': currentStreak >= 21 // Düzeltilmiş Streak Kontrolü
+    };
+
+    // Sadece kazanılanların ID'lerini bir diziye at
+    const earnedIds = Object.keys(badgeChecks).filter(id => badgeChecks[id]);
+    setEarnedBadgeIds(earnedIds);
   };
 
   const calculateEventStats = (eventsList) => {
@@ -392,14 +498,14 @@ const PersonalStats = () => {
                 <div className="level-progress-container">
                     <div className="tier-labels">
                         <span className="current-tier" style={{ color: currentTier.color }}>
-                            {currentTier.icon} {currentTier.name} 
+                            {currentTier.icon} {t(`stats_page.tiers.${currentTier.key}`, currentTier.key)} 
                             <span style={{ fontSize: '0.85rem', marginLeft: '10px', opacity: 0.8, fontWeight: 'normal', color: 'var(--dashboard-text-medium)' }}>
                                 {t('stats_page.level_indicator', { current: currentLevelIndex, total: TIERS.length })}
                             </span>
                         </span>
                         {nextTier && (
                             <span className="next-tier-hint">
-                                {t('stats_page.next_level')}: {nextTier.name} <Icon name="next"/>
+                                {t('stats_page.next_level')}: {t(`stats_page.tiers.${nextTier.key}`, nextTier.key)} <Icon name="next"/>
                             </span>
                         )}
                     </div>
@@ -410,7 +516,9 @@ const PersonalStats = () => {
                         <span className="current-points">{formatNumber(Math.round(scoreData.total_score))} {t('units.pts')}</span>
                         {nextTier ? (
                             <span className="points-needed">{formatNumber(pointsNeeded)} {t('units.pts')} {t('stats_page.to_go')}</span>
-                        ) : <span className="max-level">MAX LEVEL!</span>}
+                        ) : (
+                            <span className="max-level">{t('stats_page.max_level', 'MAX LEVEL!')}</span>
+                        )}
                     </div>
                 </div>
               </div>
@@ -476,7 +584,6 @@ const PersonalStats = () => {
                                 <Tooltip content={<CustomTooltip type="score" t={t} />} cursor={{fill: 'transparent'}}/>
                                 <Legend wrapperStyle={{paddingTop: '40px'}} />
                                 {uniqueCategories.map((safeKey, index) => {
-                                    // Tooltip'te ve Lejantta çevrili ismi göstermek için
                                     const originalName = chartData.find(d => d[`${safeKey}_originalName`])?.[`${safeKey}_originalName`] || safeKey;
                                     const transName = getCategoryTrans(originalName);
                                     
@@ -570,7 +677,7 @@ const PersonalStats = () => {
                 </div>
               </div>
 
-              {/* ... Badges and Forest ... */}
+              {/* --- Badges and Forest --- */}
               <div className="stats-card wide">
                 <div className="badges-header-with-button">
                   <h2>{t('stats_page.badges.title')}</h2>
@@ -582,14 +689,19 @@ const PersonalStats = () => {
                   </button>
                 </div>
                 <div className="badges-grid">
-                  {badges.length > 0 ? (
-                    badges.map((badge, index) => (
-                      <div key={index} className="badge-item">
-                        <div className="badge-icon">{badge.icon}</div>
-                        <span className="badge-name">{badge.name}</span>
-                        <span className="badge-desc">{badge.desc}</span>
-                      </div>
-                    ))
+                  {/* DÜZELTME 2: Rozetler artık ID'ye göre basılıyor ve dinamik çevriliyor */}
+                  {earnedBadgeIds.length > 0 ? (
+                    earnedBadgeIds.map((badgeId, index) => {
+                        const def = BADGE_DEFINITIONS.find(d => d.id === badgeId) || { icon: '🏆' };
+                        return (
+                          <div key={index} className="badge-item">
+                            <div className="badge-icon">{def.icon}</div>
+                            {/* Dil değişiminde burası anında güncellenir */}
+                            <span className="badge-name">{t(`badges_data.${badgeId}.name`)}</span>
+                            <span className="badge-desc">{t(`badges_data.${badgeId}.desc`)}</span>
+                          </div>
+                        );
+                    })
                   ) : <div className="empty-badges"><p>{t('stats_page.badges.empty')}</p></div>}
                 </div>
               </div>

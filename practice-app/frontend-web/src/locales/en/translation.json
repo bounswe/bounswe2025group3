@@ -1,617 +1,666 @@
 {
-    "common": {
-      "nav": {
-        "home": "Home",
-        "about": "About Us",
-        "blog": "Blog",
-        "login": "Login",
-        "signup": "Sign Up"
-      },
-      "footer": {
-        "rights": "All rights reserved."
-      }
+  "common": {
+    "nav": {
+      "home": "Home",
+      "about": "About Us",
+      "blog": "Blog",
+      "login": "Login",
+      "signup": "Sign Up"
     },
-    "home": {
-      "hero": {
-        "title": "Make Every Day a Zero Waste Day",
-        "subtitle": "Join our community to track waste, earn rewards, and live sustainably!",
-        "journey_button": "Start Your Journey",
-        "login_button": "Login"
-      },
-      "mission": {
-        "title": "Why Zero Waste Challenge?",
-        "subtitle": "Empower yourself to reduce waste, set goals, and join a global movement for sustainability.",
-        "features": {
-          "log": {
-            "title": "Log Waste",
-            "description": "Track your waste reduction with detailed logs by category and quantity."
-          },
-          "join": {
-            "title": "Join Challenges",
-            "description": "Participate in fun community challenges to reduce waste together."
-          },
-          "earn": {
-            "title": "Earn Rewards",
-            "description": "Unlock badges and virtual eco-world achievements for your efforts."
-          }
+    "footer": {
+      "rights": "All rights reserved."
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Make Every Day a Zero Waste Day",
+      "subtitle": "Join our community to track waste, earn rewards, and live sustainably!",
+      "journey_button": "Start Your Journey",
+      "login_button": "Login"
+    },
+    "mission": {
+      "title": "Why Zero Waste Challenge?",
+      "subtitle": "Empower yourself to reduce waste, set goals, and join a global movement for sustainability.",
+      "features": {
+        "log": {
+          "title": "Log Waste",
+          "description": "Track your waste reduction with detailed logs by category and quantity."
+        },
+        "join": {
+          "title": "Join Challenges",
+          "description": "Participate in fun community challenges to reduce waste together."
+        },
+        "earn": {
+          "title": "Earn Rewards",
+          "description": "Unlock badges and virtual eco-world achievements for your efforts."
         }
-      },
-      "tips": {
-        "title": "Sustainability Tips",
-        "category_prefix": "Category",
-        "topic_prefix": "Topic"
-      },
-      "eco_tips": [
-        { "id": 1, "text": "Switch to reusable bags to cut plastic waste.", "related_category": "Plastic", "topic": "Waste Reduction" },
-        { "id": 2, "text": "Compost food scraps to enrich your garden soil.", "related_category": "Organic", "topic": "Waste Reduction" },
-        { "id": 3, "text": "Recycle old electronics at certified centers.", "related_category": "Electronic", "topic": "Waste Reduction" },
-        { "id": 4, "text": "Fix leaks to conserve water at home.", "related_category": null, "topic": "Water Conservation" }
-      ],
-      "rewards": {
-        "title": "Unlock Amazing Rewards",
-        "subtitle": "Earn badges and build your virtual eco-world as you reduce waste!"
-      },
-      "badges": [
-        { "name": "First Step", "description": "Log your first waste reduction", "icon": "/icons/first-step.png" },
-        { "name": "Plastic Buster", "description": "Reduce 10 kg of plastic waste", "icon": "/icons/plastic-buster.png" },
-        { "name": "Sustainability Streak", "description": "Log waste reduction for 7 days", "icon": "/icons/streak.png" }
-      ],
-      "testimonials": {
-        "title": "Our Community",
-        "quotes": [
-          {
-            "text": "\"Logging my waste helped me reduce plastic by 10 kg and earn my Plastic Buster badge!\"",
-            "author": "- Emma, Eco Explorer"
-          },
-          {
-            "text": "\"The challenges are so motivating! I love competing with my friends.\"",
-            "author": "- Liam, Green Starter"
-          }
-        ]
-      },
-      "info_box": {
-        "recycling_title": "What is Recycling?",
-        "sustainable_title": "What is Sustainable Development?",
-        "circular_title": "What is Circular Economy?",
-        "loading": "Loading...",
-        "error": "Failed to load description."
       }
     },
-    "about": {
-      "header": {
-        "title": "Our Story & Mission",
-        "subtitle": "We are a group of students passionate about creating a sustainable future through technology."
-      },
-      "vision": {
-        "title": "Our Vision for GreenerLife",
-        "text": "We envision a world where conscious consumption and effective waste management are second nature. \"GreenerLife\" is our student-driven initiative to build a platform that empowers individuals and communities to minimize waste, conserve resources, and actively participate in building a circular economy. We believe that with the right tools and insights, everyone can make a significant positive impact."
-      },
-      "who_we_are": {
-        "title": "Who We Are",
-        "text": "We are a team of university students from various disciplines, united by our shared commitment to environmental sustainability and our enthusiasm for technology. This project began as a way to apply our learning to a real-world problem we care deeply about. As we develop GreenerLife, we aim to provide intuitive, impactful solutions for tracking waste and encouraging recycling."
-      },
-      "values": {
-        "title": "Our Core Values",
-        "list": [
-          { "icon": "🌿", "name": "Sustainability:", "description": "Promoting eco-friendly practices in all aspects of our platform and encouraging users to do the same." },
-          { "icon": "💡", "name": "Innovation:", "description": "Continuously exploring new technologies and approaches to make waste management simpler and more effective." },
-          { "icon": "🤝", "name": "Community:", "description": "Fostering a supportive network where users can share ideas, motivate each other, and collectively work towards a greener planet." },
-          { "icon": "🎓", "name": "Learning & Growth:", "description": "As students, this project is a journey of learning. We are committed to growing our skills and knowledge to improve GreenerLife." }
-        ]
-      },
-      "team": {
-        "title": "Meet the Student Team",
-        "subtitle": "The GreenerLife project is brought to you by a dedicated group of students:"
-      },
-      "simple_footer": "© {{year}} GreenerLife Student Project."
+    "tips": {
+      "title": "Sustainability Tips",
+      "category_prefix": "Category",
+      "topic_prefix": "Topic"
     },
-    "blog": {
-      "header": {
-        "title": "Latest From Our Blog",
-        "subtitle": "Stay updated with the latest news, tips, and insights on waste management and recycling."
-      },
-      "meta_prefix": "Published on",
-      "read_more_button": "Read More",
-      "posts": [
+    "eco_tips": [
+      { "id": 1, "text": "Switch to reusable bags to cut plastic waste.", "related_category": "Plastic", "topic": "Waste Reduction" },
+      { "id": 2, "text": "Compost food scraps to enrich your garden soil.", "related_category": "Organic", "topic": "Waste Reduction" },
+      { "id": 3, "text": "Recycle old electronics at certified centers.", "related_category": "Electronic", "topic": "Waste Reduction" },
+      { "id": 4, "text": "Fix leaks to conserve water at home.", "related_category": null, "topic": "Water Conservation" }
+    ],
+    "rewards": {
+      "title": "Unlock Amazing Rewards",
+      "subtitle": "Earn badges and build your virtual eco-world as you reduce waste!"
+    },
+    "badges": [
+      { "name": "First Step", "description": "Log your first waste reduction", "icon": "/icons/first-step.png" },
+      { "name": "Plastic Buster", "description": "Reduce 10 kg of plastic waste", "icon": "/icons/plastic-buster.png" },
+      { "name": "Sustainability Streak", "description": "Log waste reduction for 7 days", "icon": "/icons/streak.png" }
+    ],
+    "testimonials": {
+      "title": "Our Community",
+      "quotes": [
         {
-          "title": "The Importance of Sorting Your Recyclables",
-          "date": "October 26, 2023",
-          "excerpt": "Learn why proper sorting of recyclable materials is crucial for an effective recycling process and how you can contribute..."
+          "text": "\"Logging my waste helped me reduce plastic by 10 kg and earn my Plastic Buster badge!\"",
+          "author": "- Emma, Eco Explorer"
         },
         {
-          "title": "5 Common Recycling Mistakes and How to Avoid Them",
-          "date": "October 15, 2023",
-          "excerpt": "Many well-intentioned recyclers make common mistakes that can contaminate batches. Here's how to avoid them..."
-        },
-        {
-          "title": "Innovations in Waste Management Technology",
-          "date": "September 30, 2023",
-          "excerpt": "Discover the latest technological advancements that are revolutionizing how we manage and reduce waste globally..."
+          "text": "\"The challenges are so motivating! I love competing with my friends.\"",
+          "author": "- Liam, Green Starter"
         }
       ]
     },
-    "blog_post": {
-      "loading": "Loading blog post...",
-      "error_title": "Error",
-      "error_not_found": "Blog post not found.",
-      "back_to_blog": "Back to Blog",
-      "meta_published_on": "Published on",
-      "meta_by": "by",
-      "posts": [
-        {
-          "title": "The Importance of Sorting Your Recyclables",
-          "date": "October 26, 2023",
-          "author": "GreenerLife Team",
-          "fullContent": "<p>Recycling is a cornerstone of modern waste management, but its effectiveness hinges critically on one simple action: proper sorting. When recyclables are contaminated with non-recyclable materials or improperly sorted items, entire batches can be rejected, ending up in landfills instead of being repurposed.</p><h2>Why Sorting Matters</h2><p>Different materials require different recycling processes. Mixing materials can:</p><ul><li><strong>Damage Equipment:</strong> Items like plastic bags can jam machinery.</li><li><strong>Lower Quality:</strong> Contaminants reduce the quality of the final recycled material, making it less valuable or unusable.</li><li><strong>Increase Costs:</strong> Sorting facilities spend extra time and resources removing contaminants.</li></ul><h2>Common Sorting Mistakes</h2><p>Watch out for these common errors:</p><ul><li><strong>Wishcycling:</strong> Putting items in the recycling bin hoping they are recyclable (e.g., greasy pizza boxes, certain plastics). Always check local guidelines!</li><li><strong>Not Rinsing Containers:</strong> Food residue can contaminate paper and other materials. A quick rinse is usually sufficient.</li><li><strong>Bagging Recyclables:</strong> Recyclables should generally be placed loose in the bin unless your local program specifies otherwise. Plastic bags themselves are often not recyclable curbside.</li></ul><h2>How You Can Help</h2><p>1. <strong>Know Your Local Rules:</strong> Recycling guidelines vary significantly by municipality. Check your local waste management website.<br>2. <strong>Clean Your Recyclables:</strong> Rinse containers and ensure paper is dry and clean.<br>3. <strong>When in Doubt, Throw it Out:</strong> It's better to discard a questionable item than to contaminate a whole batch.</p><p>By taking a few extra moments to sort correctly, you play a vital role in making recycling efficient and truly beneficial for the environment. Let's work together for a cleaner future!</p>"
-        },
-        {
-          "title": "5 Common Recycling Mistakes and How to Avoid Them",
-          "date": "October 15, 2023",
-          "author": "Jane Doe",
-          "fullContent": "<p>We all want to do our part for the environment, but sometimes our best intentions in recycling can actually cause problems. Contamination is a major issue for recycling facilities. Here are five common mistakes and how to fix them:</p><ol><li><strong>Recycling Greasy Pizza Boxes:</strong> The grease and food residue contaminate the cardboard fibers, making them unrecyclable. Tear off the clean parts of the box lid if possible, and compost or discard the greasy bottom.</li><li><strong>Leaving Lids On Plastic Bottles/Jars:</strong> While this varies, many facilities prefer lids off. Small lids can fall through sorting machinery. Check local rules, but often it's best to remove and discard them (or recycle separately if possible).</li><li><strong>Recycling Plastic Bags Curbside:</strong> Plastic bags and film wrap around sorting machinery, causing shutdowns. Take clean plastic bags back to designated store drop-off points.</li><li><strong>Not Emptying and Rinsing Containers:</strong> Leftover food or liquid can contaminate other recyclables, especially paper. Give containers a quick rinse.</li><li><strong>Putting Small Items in the Bin:</strong> Items smaller than a credit card (like bottle caps, shredded paper bits) often fall through sorting screens. Keep shredded paper contained in a paper bag (if allowed locally) and discard tiny plastic bits.</li></ol><p>By avoiding these mistakes, you help ensure that more materials get successfully recycled, conserving resources and reducing landfill waste. Always check your local municipality's guidelines for the most accurate information!</p>"
-        },
-        {
-          "title": "Innovations in Waste Management Technology",
-          "date": "September 30, 2023",
-          "author": "Eco Innovations Inc.",
-          "fullContent": "<p>The world faces a growing waste crisis, but technology is stepping up to provide innovative solutions. From smart bins to advanced sorting and chemical recycling, the future of waste management looks promising.</p><h2>Smart Bins and Collection</h2><p>IoT-enabled sensors in public and commercial bins can detect fill levels, optimizing collection routes. This saves fuel, reduces emissions, and prevents overflowing bins. GPS tracking and data analytics further enhance efficiency.</p><h2>Advanced Sorting Technologies</h2><p>Modern Materials Recovery Facilities (MRFs) use sophisticated technology:</p><ul><li><strong>Optical Sorters:</strong> Use near-infrared (NIR) light to identify different types of plastics and materials at high speed.</li><li><strong>Robotics and AI:</strong> Robots equipped with AI can identify and pick specific items from a mixed stream with increasing accuracy, handling materials that are difficult for traditional machinery.</li><li><strong>Density Separators:</strong> Help separate materials like glass shards based on their density.</li></ul><h2>Chemical Recycling</h2><p>Beyond traditional mechanical recycling, chemical recycling (or advanced recycling) technologies are emerging. These processes break down plastics into their basic chemical building blocks, which can then be used to create new plastics or other chemical products. This offers a potential solution for hard-to-recycle plastics.</p><h2>Waste-to-Energy (WtE)</h2><p>Modern WtE plants use controlled combustion to generate electricity or heat from non-recyclable waste, significantly reducing landfill volume while recovering energy. These plants incorporate advanced pollution control systems.</p><p>While challenges remain, these technological advancements offer hope for a more sustainable and circular approach to waste management globally.</p>"
-        }
+    "info_box": {
+      "recycling_title": "What is Recycling?",
+      "sustainable_title": "What is Sustainable Development?",
+      "circular_title": "What is Circular Economy?",
+      "loading": "Loading...",
+      "error": "Failed to load description."
+    }
+  },
+  "about": {
+    "header": {
+      "title": "Our Story & Mission",
+      "subtitle": "We are a group of students passionate about creating a sustainable future through technology."
+    },
+    "vision": {
+      "title": "Our Vision for GreenerLife",
+      "text": "We envision a world where conscious consumption and effective waste management are second nature. \"GreenerLife\" is our student-driven initiative to build a platform that empowers individuals and communities to minimize waste, conserve resources, and actively participate in building a circular economy. We believe that with the right tools and insights, everyone can make a significant positive impact."
+    },
+    "who_we_are": {
+      "title": "Who We Are",
+      "text": "We are a team of university students from various disciplines, united by our shared commitment to environmental sustainability and our enthusiasm for technology. This project began as a way to apply our learning to a real-world problem we care deeply about. As we develop GreenerLife, we aim to provide intuitive, impactful solutions for tracking waste and encouraging recycling."
+    },
+    "values": {
+      "title": "Our Core Values",
+      "list": [
+        { "icon": "🌿", "name": "Sustainability:", "description": "Promoting eco-friendly practices in all aspects of our platform and encouraging users to do the same." },
+        { "icon": "💡", "name": "Innovation:", "description": "Continuously exploring new technologies and approaches to make waste management simpler and more effective." },
+        { "icon": "🤝", "name": "Community:", "description": "Fostering a supportive network where users can share ideas, motivate each other, and collectively work towards a greener planet." },
+        { "icon": "🎓", "name": "Learning & Growth:", "description": "As students, this project is a journey of learning. We are committed to growing our skills and knowledge to improve GreenerLife." }
       ]
     },
-    "login": {
-      "title_line1": "Log Your Wastes And Recycle",
-      "title_line2": "For A Better Nature",
-      "welcome": "Welcome back! Please login to your account.",
-      "email_section_title": "Email Section",
-      "email_label": "Email Address",
-      "password_label": "Password",
-      "remember_me": "Remember Me",
-      "forgot_password": "Forgot Password?",
-      "login_button": "Login",
-      "signup_button": "Sign Up",
-      "social_login_prompt": "Or login with",
-      "github_button": "GitHub",
-      "linkedin_button": "LinkedIn",
-      "error_enter_credentials": "Please enter both Email and Password.",
-      "error_invalid_credentials": "Invalid Email or Password.",
-      "error_google_failed": "Google login failed.",
-      "error_login_failed": "Login failed: {message}"
+    "team": {
+      "title": "Meet the Student Team",
+      "subtitle": "The GreenerLife project is brought to you by a dedicated group of students:"
     },
-    "signup": {
-      "title_part1": "Join the",
-      "title_part2": "Zero Waste",
-      "title_part3": "Movement",
-      "subtitle": "Create an account to start logging and recycling your waste.",
-      "mandatory_note": "Fields marked with * are mandatory.",
-      "username_label": "Username",
-      "email_label": "Email",
-      "password_label": "Password",
-      "confirm_password_label": "Confirm Password",
+    "simple_footer": "© {{year}} GreenerLife Student Project."
+  },
+  "blog": {
+    "header": {
+      "title": "Latest From Our Blog",
+      "subtitle": "Stay updated with the latest news, tips, and insights on waste management and recycling."
+    },
+    "meta_prefix": "Published on",
+    "read_more_button": "Read More",
+    "posts": [
+      {
+        "title": "The Importance of Sorting Your Recyclables",
+        "date": "October 26, 2023",
+        "excerpt": "Learn why proper sorting of recyclable materials is crucial for an effective recycling process and how you can contribute..."
+      },
+      {
+        "title": "5 Common Recycling Mistakes and How to Avoid Them",
+        "date": "October 15, 2023",
+        "excerpt": "Many well-intentioned recyclers make common mistakes that can contaminate batches. Here's how to avoid them..."
+      },
+      {
+        "title": "Innovations in Waste Management Technology",
+        "date": "September 30, 2023",
+        "excerpt": "Discover the latest technological advancements that are revolutionizing how we manage and reduce waste globally..."
+      }
+    ]
+  },
+  "blog_post": {
+    "loading": "Loading blog post...",
+    "error_title": "Error",
+    "error_not_found": "Blog post not found.",
+    "back_to_blog": "Back to Blog",
+    "meta_published_on": "Published on",
+    "meta_by": "by",
+    "posts": [
+      {
+        "title": "The Importance of Sorting Your Recyclables",
+        "date": "October 26, 2023",
+        "author": "GreenerLife Team",
+        "fullContent": "<p>Recycling is a cornerstone of modern waste management, but its effectiveness hinges critically on one simple action: proper sorting. When recyclables are contaminated with non-recyclable materials or improperly sorted items, entire batches can be rejected, ending up in landfills instead of being repurposed.</p><h2>Why Sorting Matters</h2><p>Different materials require different recycling processes. Mixing materials can:</p><ul><li><strong>Damage Equipment:</strong> Items like plastic bags can jam machinery.</li><li><strong>Lower Quality:</strong> Contaminants reduce the quality of the final recycled material, making it less valuable or unusable.</li><li><strong>Increase Costs:</strong> Sorting facilities spend extra time and resources removing contaminants.</li></ul><h2>Common Sorting Mistakes</h2><p>Watch out for these common errors:</p><ul><li><strong>Wishcycling:</strong> Putting items in the recycling bin hoping they are recyclable (e.g., greasy pizza boxes, certain plastics). Always check local guidelines!</li><li><strong>Not Rinsing Containers:</strong> Food residue can contaminate paper and other materials. A quick rinse is usually sufficient.</li><li><strong>Bagging Recyclables:</strong> Recyclables should generally be placed loose in the bin unless your local program specifies otherwise. Plastic bags themselves are often not recyclable curbside.</li></ul><h2>How You Can Help</h2><p>1. <strong>Know Your Local Rules:</strong> Recycling guidelines vary significantly by municipality. Check your local waste management website.<br>2. <strong>Clean Your Recyclables:</strong> Rinse containers and ensure paper is dry and clean.<br>3. <strong>When in Doubt, Throw it Out:</strong> It's better to discard a questionable item than to contaminate a whole batch.</p><p>By taking a few extra moments to sort correctly, you play a vital role in making recycling efficient and truly beneficial for the environment. Let's work together for a cleaner future!</p>"
+      },
+      {
+        "title": "5 Common Recycling Mistakes and How to Avoid Them",
+        "date": "October 15, 2023",
+        "author": "Jane Doe",
+        "fullContent": "<p>We all want to do our part for the environment, but sometimes our best intentions in recycling can actually cause problems. Contamination is a major issue for recycling facilities. Here are five common mistakes and how to fix them:</p><ol><li><strong>Recycling Greasy Pizza Boxes:</strong> The grease and food residue contaminate the cardboard fibers, making them unrecyclable. Tear off the clean parts of the box lid if possible, and compost or discard the greasy bottom.</li><li><strong>Leaving Lids On Plastic Bottles/Jars:</strong> While this varies, many facilities prefer lids off. Small lids can fall through sorting machinery. Check local rules, but often it's best to remove and discard them (or recycle separately if possible).</li><li><strong>Recycling Plastic Bags Curbside:</strong> Plastic bags and film wrap around sorting machinery, causing shutdowns. Take clean plastic bags back to designated store drop-off points.</li><li><strong>Not Emptying and Rinsing Containers:</strong> Leftover food or liquid can contaminate other recyclables, especially paper. Give containers a quick rinse.</li><li><strong>Putting Small Items in the Bin:</strong> Items smaller than a credit card (like bottle caps, shredded paper bits) often fall through sorting screens. Keep shredded paper contained in a paper bag (if allowed locally) and discard tiny plastic bits.</li></ol><p>By avoiding these mistakes, you help ensure that more materials get successfully recycled, conserving resources and reducing landfill waste. Always check your local municipality's guidelines for the most accurate information!</p>"
+      },
+      {
+        "title": "Innovations in Waste Management Technology",
+        "date": "September 30, 2023",
+        "author": "Eco Innovations Inc.",
+        "fullContent": "<p>The world faces a growing waste crisis, but technology is stepping up to provide innovative solutions. From smart bins to advanced sorting and chemical recycling, the future of waste management looks promising.</p><h2>Smart Bins and Collection</h2><p>IoT-enabled sensors in public and commercial bins can detect fill levels, optimizing collection routes. This saves fuel, reduces emissions, and prevents overflowing bins. GPS tracking and data analytics further enhance efficiency.</p><h2>Advanced Sorting Technologies</h2><p>Modern Materials Recovery Facilities (MRFs) use sophisticated technology:</p><ul><li><strong>Optical Sorters:</strong> Use near-infrared (NIR) light to identify different types of plastics and materials at high speed.</li><li><strong>Robotics and AI:</strong> Robots equipped with AI can identify and pick specific items from a mixed stream with increasing accuracy, handling materials that are difficult for traditional machinery.</li><li><strong>Density Separators:</strong> Help separate materials like glass shards based on their density.</li></ul><h2>Chemical Recycling</h2><p>Beyond traditional mechanical recycling, chemical recycling (or advanced recycling) technologies are emerging. These processes break down plastics into their basic chemical building blocks, which can then be used to create new plastics or other chemical products. This offers a potential solution for hard-to-recycle plastics.</p><h2>Waste-to-Energy (WtE)</h2><p>Modern WtE plants use controlled combustion to generate electricity or heat from non-recyclable waste, significantly reducing landfill volume while recovering energy. These plants incorporate advanced pollution control systems.</p><p>While challenges remain, these technological advancements offer hope for a more sustainable and circular approach to waste management globally.</p>"
+      }
+    ]
+  },
+  "login": {
+    "title_line1": "Log Your Wastes And Recycle",
+    "title_line2": "For A Better Nature",
+    "welcome": "Welcome back! Please login to your account.",
+    "email_section_title": "Email Section",
+    "email_label": "Email Address",
+    "password_label": "Password",
+    "remember_me": "Remember Me",
+    "forgot_password": "Forgot Password?",
+    "login_button": "Login",
+    "signup_button": "Sign Up",
+    "social_login_prompt": "Or login with",
+    "github_button": "GitHub",
+    "linkedin_button": "LinkedIn",
+    "error_enter_credentials": "Please enter both Email and Password.",
+    "error_invalid_credentials": "Invalid Email or Password.",
+    "error_google_failed": "Google login failed.",
+    "error_login_failed": "Login failed: {message}"
+  },
+  "signup": {
+    "title_part1": "Join the",
+    "title_part2": "Zero Waste",
+    "title_part3": "Movement",
+    "subtitle": "Create an account to start logging and recycling your waste.",
+    "mandatory_note": "Fields marked with * are mandatory.",
+    "username_label": "Username",
+    "email_label": "Email",
+    "password_label": "Password",
+    "confirm_password_label": "Confirm Password",
+    "first_name_label": "First Name",
+    "last_name_label": "Last Name",
+    "city_label": "City",
+    "city_state_label": "City/State",
+    "country_label": "Country",
+    "bio_label": "Bio",
+    "placeholder_username": "Enter Username",
+    "error_username_invalid": "Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.",
+    "placeholder_email": "Enter Email",
+    "placeholder_password": "Enter Password",
+    "placeholder_confirm_password": "Confirm Password",
+    "placeholder_first_name": "Enter First Name",
+    "placeholder_last_name": "Enter Last Name",
+    "placeholder_city": "Enter City",
+    "placeholder_city_state": "Select City/State",
+    "placeholder_country": "Enter Country",
+    "placeholder_bio": "Tell us about yourself (optional)",
+    "signup_button": "Sign Up",
+    "back_to_login_button": "Back to Login",
+    "alternate_action_prompt": "Already have an account?",
+    "alternate_action_login": "Log In",
+    "error_passwords_no_match": "Passwords do not match.",
+    "error_banned_word": "This field contains a banned word.",
+    "accept_terms_prefix": "I accept the ",
+    "accept_terms_link": "Terms and Conditions",
+    "accept_terms_suffix": "",
+    "error_required_field": "Please fill out this field.",
+    "error_email_invalid": "Please enter a valid email address.",
+    "error_terms_required": "You must check the box to proceed.",
+    "error_password_too_short": "Password must be at least 6 characters long.",
+    "error_password_numeric": "Password cannot be entirely numeric.",
+    "success_message": "Registration successful! Please log in."
+  },
+  "forgot_password": {
+    "title": "Forgot Your Password?",
+    "subtitle": "No worries! Enter your email address below, and we'll send you a link to reset your password.",
+    "email_label": "Email Address",
+    "placeholder_email": "Enter your registered email",
+    "button_send_link": "Send Reset Link",
+    "button_sending": "Sending...",
+    "alternate_action_prompt": "Remember your password?",
+    "success_message": "If an account with that email exists, a password reset link has been sent. Please check your inbox (and spam folder).",
+    "error_enter_email": "Please enter your email address."
+  },
+  "dashboard_nav": {
+    "dashboard": "Dashboard",
+    "waste_log": "Waste Log",
+    "goals": "Goals",
+    "leaderboard": "Leaderboard",
+    "challenges": "Challenges",
+    "events": "Events",
+    "my_stats": "My Stats",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "profile_card": {
+      "role_prefix": "Role",
+      "member": "Member",
+      "view_profile_button": "View Full Profile",
+      "logout_button": "Logout"
+    },
+    "overview": {
+      "title": "Dashboard Overview",
+      "subtitle": "Your journey to a sustainable lifestyle starts here."
+    },
+    "loader": {
+      "message": "Fetching your eco-stats..."
+    },
+    "score_widget": {
+      "title": "Your Eco Score",
+      "unit": "points",
+      "not_available": "N/A",
+      "prompt": "Log waste to calculate your score!"
+    },
+    "quick_links_widget": {
+      "title": "Quick Links",
+      "log_waste": "Log Waste",
+      "log_waste_sub": "Track your impact",
+      "join_challenges": "Join Challenges",
+      "join_challenges_sub": "Compete & improve",
+      "view_leaderboard": "View Leaderboard",
+      "view_leaderboard_sub": "See top performers"
+    },
+    "eco_tip_widget": {
+      "title": "Today's Eco Tip",
+      "content": "\"Reduce your carbon footprint by choosing locally sourced and seasonal foods. It supports local farmers and reduces transportation emissions!\"",
+      "discover_more": "Discover more tips"
+    },
+    "next_step_widget": {
+      "title": "Your Next Step",
+      "current_score": "Current Score",
+      "items_needed": "Items needed",
+      "log_now": "Log Waste Now"
+    },
+    "forest_widget": {
+      "title": "Your Eco Forest",
+      "info": "1 forest = 1000 points",
+      "empty": "Start logging waste to grow your forest!"
+    },
+    "error_fetch_score": "Failed to fetch your score. Please try again later."
+  },
+  "waste_log_page": {
+    "title": "Log Your Waste",
+    "subtitle": "Track your waste generation to understand and reduce your environmental impact.",
+    "error_no_categories": "No waste categories available to log. Please contact support or try again later.",
+    "error_fetch_failed": "Failed to fetch initial data. Please check your connection.",
+    "error_select_category_and_quantity": "Please select a category and enter a quantity.",
+    "error_quantity_positive": "Quantity must be a positive number.",
+    "error_add_log_failed": "Failed to add waste log.",
+    "log_added_success": "Waste log entry added successfully!",
+    "retry_button": "Retry Fetching Categories",
+    "form": {
+      "title": "Add New Entry",
+      "category_label": "Category",
+      "category_placeholder": "Select a waste category...",
+      "quantity_label": "Quantity",
+      "quantity_placeholder": "e.g., 2.5",
+      "disposal_label": "Disposal Method (Optional)",
+      "disposal_placeholder": "Select if applicable...",
+      "disposal_options": {
+        "recycled": "Recycled",
+        "composted": "Composted",
+        "landfill": "Landfill",
+        "donated": "Donated/Reused",
+        "incinerated": "Incinerated (Energy Recovery)",
+        "other": "Other"
+      },
+      "notes_label": "Notes (Optional)",
+      "notes_placeholder": "Any details, e.g., specific items, source...",
+      "score_per_item": "Points per unit",
+      "submit_button": "Add Log Entry",
+      "submit_button_adding": "Adding..."
+    },
+    "log_list": {
+      "title": "Your Recent Logs",
+      "loading": "Loading logs...",
+      "no_logs": "You haven't logged any waste yet. Use the form to start tracking!",
+      "unknown_category": "Unknown Category",
+      "score_prefix": "Score",
+      "score_na": "N/A",
+      "method_prefix": "Method",
+      "notes_prefix": "Notes",
+      "logged_prefix": "Logged",
+      "view_all_prompt": "View all logs in your profile"
+    },
+    "back_to_dashboard_button": "Back to Dashboard"
+  },
+  "goals_page": {
+    "title": "Your Goals",
+    "subtitle": "Set targets and watch your progress.",
+    "form_title": "Add a New Goal",
+    "error_no_categories": "No waste categories available – cannot create goals.",
+    "form": {
+      "select_category": "Select Category…",
+      "timeframe_daily": "Daily",
+      "timeframe_weekly": "Weekly",
+      "timeframe_monthly": "Monthly",
+      "placeholder_target": "Target units",
+      "button_saving": "Saving…",
+      "button_create": "Create Goal"
+    },
+    "loading": "Loading…",
+    "error_load_failed": "Failed to load goals or categories.",
+    "error_form_required": "Category and target are required.",
+    "error_create_failed": "Unable to create goal: {apiMsg}",
+    "table": {
+      "header_category": "Category",
+      "header_timeframe": "Timeframe",
+      "header_target": "Target",
+      "header_progress": "Progress",
+      "unit": "units"
+    },
+    "no_goals_message": "No goals yet – add one above."
+  },
+  "leaderboard_page": {
+    "title": "Community Leaderboard",
+    "subtitle": "See who's leading the charge in making a positive environmental impact!",
+    "loading": "Loading champions...",
+    "error_load_failed": "Failed to load leaderboard data. Please try again later.",
+    "anonymous_user": "Anonymous User",
+    "table": {
+      "rank": "Rank",
+      "player": "Player",
+      "score": "Score"
+    },
+    "filters": {
+      "all": "All Time",
+      "yearly": "Last Year",
+      "monthly": "Last Month",
+      "weekly": "Last Week",
+      "daily": "Today"
+    },
+    "you_badge": "You",
+    "score_suffix": "pts",
+    "empty_state": "The leaderboard is currently empty. Start logging your activities to get on the board!"
+  },
+  "profile_page": {
+    "title": "Your Profile",
+    "subtitle": "Manage your personal information and preferences.",
+    "loading": "Loading your profile...",
+    "success_update": "Profile updated successfully!",
+    "error_fetch": "Failed to fetch your profile. Please try again.",
+    "error_update_validation": "Failed to update profile. Please check your input.",
+    "error_update_generic": "Failed to update profile. An unknown error occurred.",
+    "error_banned_word": "This field contains a banned word.",
+    "preferences_title": "Preferences",
+    "form": {
       "first_name_label": "First Name",
       "last_name_label": "Last Name",
-      "city_label": "City",
-      "city_state_label": "City/State",
-      "country_label": "Country",
       "bio_label": "Bio",
-      "placeholder_username": "Enter Username",
-      "placeholder_email": "Enter Email",
-      "placeholder_password": "Enter Password",
-      "placeholder_confirm_password": "Confirm Password",
-      "placeholder_first_name": "Enter First Name",
-      "placeholder_last_name": "Enter Last Name",
-      "placeholder_city": "Enter City",
-      "placeholder_city_state": "Select City/State",
-      "placeholder_country": "Enter Country",
-      "placeholder_bio": "Tell us about yourself (optional)",
-      "signup_button": "Sign Up",
-      "back_to_login_button": "Back to Login",
-      "alternate_action_prompt": "Already have an account?",
-      "alternate_action_login": "Log In",
-      "error_passwords_no_match": "Passwords do not match.",
-      "accept_terms_prefix": "I accept the ",
-      "accept_terms_link": "Terms and Conditions",
-      "accept_terms_suffix": ""
+      "city_label": "City",
+      "country_label": "Country",
+      "notifications_label": "Enable Email Notifications",
+      "anonymous_label": "Hide my name on leaderboard (Go Anonymous)",
+      "first_name_placeholder": "Enter your first name",
+      "last_name_placeholder": "Enter your last name",
+      "bio_placeholder": "Tell us a bit about yourself and your eco-journey...",
+      "city_placeholder": "Your city",
+      "country_placeholder": "Your country",
+      "select_country": "Select Country",
+      "select_city": "Select City",
+      "button_update": "Update Profile",
+      "button_updating": "Updating..."
+    }
+  },
+  "challenges_page": {
+    "title": "Eco Challenges",
+    "subtitle": "Join challenges, make an impact, and earn rewards!",
+    "loading": "Loading challenges...",
+    "error_load_failed": "Failed to load challenges. Please try again later.",
+    "filters": {
+      "all": "All Challenges",
+      "active": "Active",
+      "upcoming": "Upcoming",
+      "completed": "My Completed",
+      "expired": "Past Challenges"
     },
-    "forgot_password": {
-      "title": "Forgot Your Password?",
-      "subtitle": "No worries! Enter your email address below, and we'll send you a link to reset your password.",
-      "email_label": "Email Address",
-      "placeholder_email": "Enter your registered email",
-      "button_send_link": "Send Reset Link",
-      "button_sending": "Sending...",
-      "alternate_action_prompt": "Remember your password?",
-      "success_message": "If an account with that email exists, a password reset link has been sent. Please check your inbox (and spam folder).",
-      "error_enter_email": "Please enter your email address."
+    "no_challenges": "No challenges found for the selected filter. Try another one!",
+    "join_success": "You've joined the challenge!",
+    "join_error": "Could not join challenge: {message}",
+    "challenges": [
+      { "title": "Plastic-Free Week", "description": "Commit to using no single-use plastics for 7 days. Track your progress and share tips!", "category": "Waste Reduction", "reward_badge": "Plastic Buster" },
+      { "title": "30-Day Composting Challenge", "description": "Start and maintain a compost bin for 30 days. Turn your organic waste into valuable soil.", "category": "Organic Waste", "reward_badge": "Compost King" },
+      { "title": "Meatless Monday Master", "description": "Go meat-free every Monday for a month to reduce your carbon footprint.", "category": "Dietary Impact", "reward_badge": null },
+      { "title": "Energy Saver Sprint", "description": "Reduce your household energy consumption by 10% this month.", "category": "Energy Conservation", "reward_badge": null },
+      { "title": "Local Commute Champion", "description": "Use public transport, bike, or walk for your daily commute for 5 consecutive days.", "category": "Transportation", "reward_badge": null }
+    ]
+  },
+  "challenge_card": {
+    "status_upcoming": "Upcoming",
+    "status_active": "Active",
+    "status_completed": "Completed!",
+    "status_expired": "Expired",
+    "status_view": "View",
+    "points_suffix": "pts",
+    "meta_ends_on": "Ends:",
+    "meta_starts_on": "Starts:",
+    "meta_participants": "participants",
+    "action_join": "Join Challenge",
+    "action_view_progress": "View Progress",
+    "action_completed": "Nicely Done!",
+    "action_ended": "Ended",
+    "action_view_details": "View Details"
+  },
+  "eventsPage": {
+    "title": "Upcoming Events",
+    "subtitle": "Get involved, meet like-minded people, and make a difference.",
+    "loading": "Loading Events…",
+    "error": "Failed to load events. Please try again later.",
+    "participate": "Participate",
+    "participating": "You are going!",
+    "creator": "Creator",
+    "participants": "participants",
+    "noEvents": "There are no upcoming events right now. Check back soon!",
+    "participationFeaturePending": "API feature for participation toggle is pending.",
+    "likeFeaturePending": "API feature for liking an event is pending.",
+    "buttonAdd": "Add New Event",
+    "createTitle": "Create New Event",
+    "labelDateTime": "Date and Time *",
+    "placeholderTitle": "Event Title *",
+    "placeholderDescription": "Description *",
+    "placeholderLocation": "Location *",
+    "placeholderImage": "Image URL (Optional)",
+    "labelDistrict": "District / Neighborhood",
+    "placeholderDistrict": "e.g. Kadıköy",
+    "labelDuration": "Duration",
+    "placeholderDuration": "e.g. 2",
+    "labelEquipment": "Equipment Needed",
+    "placeholderEquipment": "e.g. Gloves, Bags, Water",
+    "labelImage": "Event Image (Optional)",
+    "dragDropActive": "Drop the image here ...",
+    "dragDropInactive": "Drag and drop an image here, or click to select",
+    "imageRemoveTitle": "Remove image",
+    "buttonCancel": "Cancel",
+    "buttonCreate": "Create Event",
+    "buttonCreating": "Creating...",
+    "formRequired": "Please fill in all mandatory fields.",
+    "createSuccess": "Event created successfully!",
+    "createError": "Failed to create event.",
+    "error_banned_word": "Content contains a banned word.",
+    "participateSuccess": "You are now participating!",
+    "unparticipateSuccess": "You are no longer participating.",
+    "participateError": "Failed to toggle participation",
+    "likeSuccess": "Event liked!",
+    "unlikeSuccess": "Event unliked.",
+    "likeError": "Failed to toggle like",
+    "backToEvents": "Back to Events",
+    "hours": "hours",
+    "unitHoursShort": "h",
+    "unitMinutesShort": "m",
+    "unitHours": "Hours",
+    "unitMinutes": "Minutes",
+    "equipmentNeeded": "Equipment Needed",
+    "labelDescription": "Description",
+    "placeholderDurationExample": "e.g. 1.5"
+  },
+  "events_data": {
+    "event_1_title": "Community Tree Planting Day",
+    "event_1_desc": "Join us to plant native trees in Willow Creek Park. A great way to give back to nature and beautify our community.",
+    "event_2_title": "Zero-Waste Workshop: Kitchen Edition",
+    "event_2_desc": "Learn practical tips and tricks to reduce food and packaging waste in your kitchen. Includes a free starter kit!",
+    "event_3_title": "Beach Cleanup Challenge",
+    "event_3_desc": "Help us clean up Sunrise Beach. Compete with teams to collect the most trash and win eco-friendly prizes.",
+    "event_4_title": "Sustainable Fashion Swap",
+    "event_4_desc": "Bring your gently used clothes and swap them for something new-to-you! A fun way to refresh your wardrobe without waste."
+  },
+  "challenge_detail": {
+    "not_found": "Challenge Not Found",
+    "back_button": "Back to Challenges",
+    "your_progress": "Your Progress"
+  },
+  "stats_page": {
+    "title": "Overview for {{username}}",
+    "loading": "Loading statistics...",
+    "error_load": "Failed to load statistics. Please try again later.",
+    "next_level": "Next Level",
+    "to_go": "to go",
+    "level_indicator": "(Level {{current}} / {{total}})",
+    "level_up": "Level Up!",
+    "level_up_desc": "You have reached the rank of", 
+    "new_tree_planted": "New Tree Planted!",
+    "new_tree_desc": "You've earned enough points to grow your forest!",
+    "hero": {
+      "eco_score": "Eco Score",
+      "global_rank": "Global Rank",
+      "event_rate": "Event Rate",
+      "trees_planted": "Trees Planted",
+      "joined_subtext": "joined"
     },
-    "dashboard_nav": {
-      "dashboard": "Dashboard",
-      "waste_log": "Waste Log",
-      "goals": "Goals",
-      "leaderboard": "Leaderboard",
-      "challenges": "Challenges",
-      "events": "Events",
-      "my_stats": "My Stats",
-      "logout": "Logout"
-    },
-    "dashboard": {
-      "profile_card": {
-        "role_prefix": "Role",
-        "member": "Member",
-        "view_profile_button": "View Full Profile",
-        "logout_button": "Logout"
-      },
-      "overview": {
-        "title": "Dashboard Overview",
-        "subtitle": "Your journey to a sustainable lifestyle starts here."
-      },
-      "loader": {
-        "message": "Fetching your eco-stats..."
-      },
-      "score_widget": {
-        "title": "Your Eco Score",
-        "unit": "points",
-        "not_available": "N/A",
-        "prompt": "Log waste to calculate your score!"
-      },
-      "quick_links_widget": {
-        "title": "Quick Links",
-        "log_waste": "Log Waste",
-        "log_waste_sub": "Track your impact",
-        "join_challenges": "Join Challenges",
-        "join_challenges_sub": "Compete & improve",
-        "view_leaderboard": "View Leaderboard",
-        "view_leaderboard_sub": "See top performers"
-      },
-      "eco_tip_widget": {
-        "title": "Today's Eco Tip",
-        "content": "\"Reduce your carbon footprint by choosing locally sourced and seasonal foods. It supports local farmers and reduces transportation emissions!\"",
-        "discover_more": "Discover more tips"
-      },
-      "forest_widget": {
-        "title": "Your Eco Forest",
-        "info": "1 forest = 1000 points",
-        "empty": "Start logging waste to grow your forest!"
-      },
-      "error_fetch_score": "Failed to fetch your score. Please try again later."
-    },
-    "waste_log_page": {
-      "title": "Log Your Waste",
-      "subtitle": "Track your waste generation to understand and reduce your environmental impact.",
-      "error_no_categories": "No waste categories available to log. Please contact support or try again later.",
-      "error_fetch_failed": "Failed to fetch initial data. Please check your connection.",
-      "error_select_category_and_quantity": "Please select a category and enter a quantity.",
-      "error_quantity_positive": "Quantity must be a positive number.",
-      "error_add_log_failed": "Failed to add waste log.",
-      "retry_button": "Retry Fetching Categories",
-      "form": {
-        "title": "Add New Entry",
-        "category_label": "Category",
-        "category_placeholder": "Select a waste category...",
-        "quantity_label": "Quantity",
-        "quantity_placeholder": "e.g., 2.5",
-        "disposal_label": "Disposal Method (Optional)",
-        "disposal_placeholder": "Select if applicable...",
-        "disposal_options": {
-          "recycled": "Recycled",
-          "composted": "Composted",
-          "landfill": "Landfill",
-          "donated": "Donated/Reused",
-          "incinerated": "Incinerated (Energy Recovery)",
-          "other": "Other"
-        },
-        "notes_label": "Notes (Optional)",
-        "notes_placeholder": "Any details, e.g., specific items, source...",
-        "score_per_item": "Score per item",
-        "submit_button": "Add Log Entry",
-        "submit_button_adding": "Adding..."
-      },
-      "log_list": {
-        "title": "Your Recent Logs",
-        "loading": "Loading logs...",
-        "no_logs": "You haven't logged any waste yet. Use the form to start tracking!",
-        "unknown_category": "Unknown Category",
-        "score_prefix": "Score",
-        "score_na": "N/A",
-        "method_prefix": "Method",
-        "notes_prefix": "Notes",
-        "logged_prefix": "Logged",
-        "view_all_prompt": "View all logs in your profile (coming soon!)"
-      },
-      "back_to_dashboard_button": "Back to Dashboard"
-    },
-    "goals_page": {
-      "title": "Your Goals",
-      "subtitle": "Set targets and watch your progress.",
-      "form_title": "Add a New Goal",
-      "error_no_categories": "No waste categories available – cannot create goals.",
-      "form": {
-        "select_category": "Select Category…",
-        "timeframe_daily": "Daily",
-        "timeframe_weekly": "Weekly",
-        "timeframe_monthly": "Monthly",
-        "placeholder_target": "Target units",
-        "button_saving": "Saving…",
-        "button_create": "Create Goal"
-      },
-      "loading": "Loading…",
-      "error_load_failed": "Failed to load goals or categories.",
-      "error_form_required": "Category and target are required.",
-      "error_create_failed": "Unable to create goal: {apiMsg}",
-      "table": {
-        "header_category": "Category",
-        "header_timeframe": "Timeframe",
-        "header_target": "Target",
-        "header_progress": "Progress",
-        "unit": "units"
-      },
-      "no_goals_message": "No goals yet – add one above."
-    },
-    "leaderboard_page": {
-      "title": "Community Leaderboard",
-      "subtitle": "See who's leading the charge in making a positive environmental impact!",
-      "loading": "Loading champions...",
-      "error_load_failed": "Failed to load leaderboard data. Please try again later.",
-      "anonymous_user": "Anonymous User",
-      "table": {
-        "rank": "Rank",
-        "player": "Player",
-        "score": "Score"
-      },
+    "charts": {
+      "activity_trend": "Activity Trend",
+      "points_history": "Points History",
+      "items_logged_frequency": "Items Logged (Frequency)",
+      "points": "Points",
+      "items": "Items",
+      "impact_breakdown": "Impact Breakdown",
+      "no_breakdown_data": "Log waste to see breakdown.",
+      "last": "Last",
+      "by_points": "By Points",
+      "by_frequency": "By Frequency",
+      "week_suffix": "Week",
       "filters": {
-        "all": "All Time",
-        "yearly": "Last Year",
-        "monthly": "Last Month",
-        "weekly": "Last Week",
-        "daily": "Today"
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "yearly": "Yearly"
       },
-      "you_badge": "You",
-      "score_suffix": "pts",
-      "empty_state": "The leaderboard is currently empty. Start logging your activities to get on the board!"
+      "updating": "Updating...",
+      "no_data": "No data available"
     },
-    "profile_page": {
-      "title": "Your Profile",
-      "subtitle": "Manage your personal information and preferences.",
-      "loading": "Loading your profile...",
-      "success_update": "Profile updated successfully!",
-      "error_fetch": "Failed to fetch your profile. Please try again.",
-      "error_update_validation": "Failed to update profile. Please check your input.",
-      "error_update_generic": "Failed to update profile. An unknown error occurred.",
-      "preferences_title": "Preferences",
-      "form": {
-        "first_name_label": "First Name",
-        "last_name_label": "Last Name",
-        "bio_label": "Bio",
-        "city_label": "City",
-        "country_label": "Country",
-        "notifications_label": "Enable Email Notifications",
-        "anonymous_label": "Hide my name on leaderboard (Go Anonymous)",
-        "first_name_placeholder": "Enter your first name",
-        "last_name_placeholder": "Enter your last name",
-        "bio_placeholder": "Tell us a bit about yourself and your eco-journey...",
-        "city_placeholder": "Your city",
-        "country_placeholder": "Your country",
-        "select_country": "Select Country",
-        "select_city": "Select City",
-        "button_update": "Update Profile",
-        "button_updating": "Updating..."
-      }
+    "badges": {
+      "title": "Badge Collection",
+      "empty": "Start logging to earn badges!",
+      "view_all": "View All Badges"
     },
-    "challenges_page": {
-      "title": "Eco Challenges",
-      "subtitle": "Join challenges, make an impact, and earn rewards!",
-      "loading": "Loading challenges...",
-      "error_load_failed": "Failed to load challenges. Please try again later.",
-      "filters": {
-        "all": "All Challenges",
-        "active": "Active",
-        "upcoming": "Upcoming",
-        "completed": "My Completed",
-        "expired": "Past Challenges"
-      },
-      "no_challenges": "No challenges found for the selected filter. Try another one!",
-      "join_success": "You've joined the challenge!",
-      "join_error": "Could not join challenge: {message}",
-      "challenges": [
-        { "title": "Plastic-Free Week", "description": "Commit to using no single-use plastics for 7 days. Track your progress and share tips!", "category": "Waste Reduction", "reward_badge": "Plastic Buster" },
-        { "title": "30-Day Composting Challenge", "description": "Start and maintain a compost bin for 30 days. Turn your organic waste into valuable soil.", "category": "Organic Waste", "reward_badge": "Compost King" },
-        { "title": "Meatless Monday Master", "description": "Go meat-free every Monday for a month to reduce your carbon footprint.", "category": "Dietary Impact", "reward_badge": null },
-        { "title": "Energy Saver Sprint", "description": "Reduce your household energy consumption by 10% this month.", "category": "Energy Conservation", "reward_badge": null },
-        { "title": "Local Commute Champion", "description": "Use public transport, bike, or walk for your daily commute for 5 consecutive days.", "category": "Transportation", "reward_badge": null }
-      ]
+    "forest": {
+      "title": "My Eco Forest",
+      "info": "1 Tree = 500 Points",
+      "empty": "Your forest is waiting to grow."
     },
-    "challenge_card": {
-      "status_upcoming": "Upcoming",
-      "status_active": "Active",
-      "status_completed": "Completed!",
-      "status_expired": "Expired",
-      "status_view": "View",
-      "points_suffix": "pts",
-      "meta_ends_on": "Ends:",
-      "meta_starts_on": "Starts:",
-      "meta_participants": "participants",
-      "action_join": "Join Challenge",
-      "action_view_progress": "View Progress",
-      "action_completed": "Nicely Done!",
-      "action_ended": "Ended",
-      "action_view_details": "View Details"
+
+    "tiers": {
+      "planet_guardian": "Planet Guardian",
+      "zero_waste_champion": "Zero Waste Champion",
+      "sustainability_hero": "Sustainability Hero",
+      "eco_advocate": "Eco Advocate",
+      "green_starter": "Green Starter",
+      "eco_explorer": "Eco Explorer"
+    }
+  },
+    "waste_categories": {
+      "recyclable": "Recyclable",
+      "cooking_oil": "Cooking Oil",
+      "paper": "Paper",
+      "plastic_bottles": "Plastic Bottles",
+      "cardboard": "Cardboard",
+      "metal_cans": "Metal Cans",
+      "food_scraps": "Food Scraps",
+      "garden_waste": "Garden Waste",
+      "coffee_grounds": "Coffee Grounds",
+      "batteries": "Batteries",
+      "small_appliances": "Small Appliances",
+      "mobile_phones": "Mobile Phones",
+      "glass": "Glass",
+      "plastic": "Plastic",
+      "electronic": "Electronic",
+      "organic": "Organic",
+      "other": "Other",
+      "aa_batteries": "AA Batteries",
+      "lithium-ion_batteries": "Lithium-ion Batteries",
+      "button_cell_batteries": "Button Cell Batteries",
+      "car_batteries": "Car Batteries",
+      "nimh_batteries": "NiMH Batteries",
+      "glass_bottles": "Glass Bottles",
+      "broken_glass": "Broken Glass",
+      "used_cooking_oil": "Used Cooking Oil",
+      "clothing": "Clothing",
+      "used_clothing": "Used Clothing",
+      "shoes": "Shoes",
+      "hazardous_waste": "Hazardous Waste",
+      "bulky_items": "Bulky Items"
     },
-    "eventsPage": {
-      "title": "Upcoming Events",
-      "subtitle": "Get involved, meet like-minded people, and make a difference.",
-      "loading": "Loading Events…",
-      "error": "Failed to load events. Please try again later.",
-      "participate": "Participate",
-      "participating": "You are going!",
-      "creator": "Creator",
-      "participants": "participants",
-      "noEvents": "There are no upcoming events right now. Check back soon!",
-      "participationFeaturePending": "API feature for participation toggle is pending.",
-      "likeFeaturePending": "API feature for liking an event is pending.",
-      "buttonAdd": "Add New Event",
-      "createTitle": "Create New Event",
-      "labelDateTime": "Date and Time *",
-      "placeholderTitle": "Event Title *",
-      "placeholderDescription": "Description *",
-      "placeholderLocation": "Location *",
-      "placeholderImage": "Image URL (Optional)",
-      "labelDistrict": "District / Neighborhood",
-      "placeholderDistrict": "e.g. Kadıköy",
-      "labelDuration": "Duration",
-      "placeholderDuration": "e.g. 2",
-      "labelEquipment": "Equipment Needed",
-      "placeholderEquipment": "e.g. Gloves, Bags, Water",
-      "labelImage": "Event Image (Optional)",
-      "dragDropActive": "Drop the image here ...",
-      "dragDropInactive": "Drag and drop an image here, or click to select",
-      "imageRemoveTitle": "Remove image",
-      "buttonCancel": "Cancel",
-      "buttonCreate": "Create Event",
-      "buttonCreating": "Creating...",
-      "formRequired": "Please fill in all mandatory fields.",
-      "createSuccess": "Event created successfully!",
-      "createError": "Failed to create event.",
-      "participateSuccess": "You are now participating!",
-      "unparticipateSuccess": "You are no longer participating.",
-      "participateError": "Failed to toggle participation",
-      "likeSuccess": "Event liked!",
-      "unlikeSuccess": "Event unliked.",
-      "likeError": "Failed to toggle like",
-      "backToEvents": "Back to Events",
-      "hours": "hours",
-      "unitHoursShort": "h",
-      "unitMinutesShort": "m",
-      "unitHours": "Hours",
-      "unitMinutes": "Minutes",
-      "equipmentNeeded": "Equipment Needed",
-      "labelDescription": "Description",
-      "placeholderDurationExample": "e.g. 1.5"
+    "units": {
+      "kg": "kg",
+      "pcs": "pcs",
+      "l": "l",
+      "pts": "pts",
+      "logs": "logs"
     },
-    "events_data": {
-      "event_1_title": "Community Tree Planting Day",
-      "event_1_desc": "Join us to plant native trees in Willow Creek Park. A great way to give back to nature and beautify our community.",
-      "event_2_title": "Zero-Waste Workshop: Kitchen Edition",
-      "event_2_desc": "Learn practical tips and tricks to reduce food and packaging waste in your kitchen. Includes a free starter kit!",
-      "event_3_title": "Beach Cleanup Challenge",
-      "event_3_desc": "Help us clean up Sunrise Beach. Compete with teams to collect the most trash and win eco-friendly prizes.",
-      "event_4_title": "Sustainable Fashion Swap",
-      "event_4_desc": "Bring your gently used clothes and swap them for something new-to-you! A fun way to refresh your wardrobe without waste."
+    "tiers": {
+      "planet_guardian": "Planet Guardian",
+      "zero_waste_champion": "Zero Waste Champion",
+      "sustainability_hero": "Sustainability Hero",
+      "eco_advocate": "Eco Advocate",
+      "green_starter": "Green Starter",
+      "eco_explorer": "Eco Explorer"
     },
-    "challenge_detail": {
-      "not_found": "Challenge Not Found",
-      "back_button": "Back to Challenges",
-      "your_progress": "Your Progress"
+    "badges_page": {
+      "title": "Achievements",
+      "subtitle": "Collect badges by reaching sustainability goals",
+      "badge_unlocked": "New Badge Unlocked!",
+      "loading": "Loading badges...",
+      "error_load": "Failed to load badges.",
+      "back_to_stats": "Back to Statistics"
     },
-  
-      "stats_page": {
-        "title": "Overview for {{username}}",
-        "loading": "Loading statistics...",
-        "error_load": "Failed to load statistics. Please try again later.",
-        "next_level": "Next Level",
-        "to_go": "to go",
-        "level_indicator": "(Level {{current}} / {{total}})",
-        "hero": {
-          "eco_score": "Eco Score",
-          "global_rank": "Global Rank",
-          "event_rate": "Event Rate",
-          "trees_planted": "Trees Planted",
-          "joined_subtext": "joined"
-        },
-        "charts": {
-          "activity_trend": "Activity Trend",
-          "points_history": "Points History",
-          "items_logged_frequency": "Items Logged (Frequency)",
-          "points": "Points",
-          "items": "Items",
-          "impact_breakdown": "Impact Breakdown",
-          "no_breakdown_data": "Log waste to see breakdown.",
-          "last": "Last",
-          "by_points": "By Points",
-          "by_frequency": "By Frequency",
-          "week_suffix": "Week",
-          "filters": {
-            "daily": "Daily",
-            "weekly": "Weekly",
-            "monthly": "Monthly",
-            "yearly": "Yearly"
-          },
-          "updating": "Updating...",
-          "no_data": "No data available"
-        },
-        "badges": {
-          "title": "Badge Collection",
-          "empty": "Start logging to earn badges!",
-          "view_all": "View All Badges"
-        },
-        "forest": {
-          "title": "My Eco Forest",
-          "info": "1 Tree = 500 Points",
-          "empty": "Your forest is waiting to grow."
-        }
-      },
-      "waste_categories": {
-        "recyclable": "Recyclable",
-        "paper": "Paper",
-        "plastic_bottles": "Plastic Bottles",
-        "cardboard": "Cardboard",
-        "metal_cans": "Metal Cans",
-        "organic": "Organic",
-        "food_scraps": "Food Scraps",
-        "garden_waste": "Garden Waste",
-        "coffee_grounds": "Coffee Grounds",
-        "electronic": "Electronic",
-        "batteries": "Batteries",
-        "small_appliances": "Small Appliances",
-        "mobile_phones": "Mobile Phones",
-        "glass": "Glass",
-        "glass_bottles": "Glass Bottles",
-        "broken_glass": "Broken Glass",
-        "cooking_oil": "Cooking Oil",
-        "used_cooking_oil": "Used Cooking Oil",
-        "clothing": "Clothing",
-        "used_clothing": "Used Clothing",
-        "shoes": "Shoes",
-        "other": "Other",
-        "hazardous_waste": "Hazardous Waste",
-        "bulky_items": "Bulky Items",
-        "plastic": "Plastic",
-        "aa_batteries": "AA Batteries",
-        "lithium_ion_batteries": "Lithium-ion Batteries",
-        "button_cell_batteries": "Button Cell Batteries",
-        "car_batteries": "Car Batteries",
-        "nimh_batteries": "NiMH Batteries"
-      },
-      "units": {
-        "kg": "kg",
-        "pcs": "pcs",
-        "l": "l",
-        "pts": "pts",
-        "logs": "logs"
-      },
-      "tiers": {
-        "planet_guardian": "Planet Guardian",
-        "zero_waste_champion": "Zero Waste Champion",
-        "sustainability_hero": "Sustainability Hero",
-        "eco_advocate": "Eco Advocate",
-        "green_starter": "Green Starter",
-        "eco_explorer": "Eco Explorer"
-      },
-      "badges_data": {
-        "first_step": {
-          "name": "First Step",
-          "desc": "Log first waste"
-        },
-        "plastic_buster": {
-          "name": "Plastic Buster",
-          "desc": "Reduce 10kg plastic"
-        },
-        "sustainability_streak": {
-          "name": "Sustainability Streak",
-          "desc": "7 Days Streak"
-        },
-        "zero_waste_legend": {
-          "name": "Zero Waste Legend",
-          "desc": "5000+ Score"
-        }
+    "badges_data": {
+        "first_step": { "name": "First Step", "desc": "Log your first waste" },
+        "plastic_buster": { "name": "Plastic Buster", "desc": "Reduce 10 units of plastic" },
+        "sustainability_streak": { "name": "Sustainability Streak", "desc": "14 Days Streak" },
+        "zero_waste_legend": { "name": "Zero Waste Legend", "desc": "5000+ Score" },
+        "eco_warrior": { "name": "Eco Warrior", "desc": "Log 50 waste items" },
+        "tree_hugger": { "name": "Tree Hugger", "desc": "Earn 1000 eco score" },
+        "recycling_master": { "name": "Recycling Master", "desc": "Recycle 30 items" },
+        "compost_champion": { "name": "Compost Champion", "desc": "Compost 20 organic items" },
+        "milestone_100": { "name": "Century Club", "desc": "Log 100 waste items" },
+        "score_1500": { "name": "Green Achiever", "desc": "Earn 1500 eco score" },
+        "consistency_king": { "name": "Consistency King", "desc": "Log waste 30 days in a row" },
+        "metal_maven": { "name": "Metal Maven", "desc": "Recycle 15 metal items" },
+        "paper_pride": { "name": "Paper Pride", "desc": "Recycle 25 paper items" },
+        "glass_guru": { "name": "Glass Guru", "desc": "Recycle 10 glass items" },
+        "eco_score_500": { "name": "Rising Star", "desc": "Earn 500 eco score" },
+        "score_2000": { "name": "Eco Champion", "desc": "Earn 2000 eco score" },
+        "score_3000": { "name": "Eco Master", "desc": "Earn 3000 eco score" },
+        "logs_200": { "name": "Waste Logger Pro", "desc": "Log 200 waste items" },
+        "logs_500": { "name": "Waste Tracking Expert", "desc": "Log 500 waste items" },
+        "streak_60": { "name": "Unstoppable", "desc": "Log waste 60 days in a row" },
+        "plastic_50": { "name": "Plastic Warrior", "desc": "Reduce 50 units of plastic" },
+        "organic_50": { "name": "Organic Advocate", "desc": "Log 50 organic waste items" },
+        "electronic_20": { "name": "E-Waste Expert", "desc": "Recycle 20 electronic items" },
+        "textile_30": { "name": "Fashion Friend", "desc": "Recycle 30 textile items" },
+        "donate_50": { "name": "Donation Champion", "desc": "Donate or reuse 50 items" },
+        "landfill_zero": { "name": "Zero Landfill", "desc": "Send 0 items to landfill" },
+        "streak_7": { "name": "Week Warrior", "desc": "Log waste 7 days in a row" },
+        "streak_21": { "name": "Monthly Hero", "desc": "Log waste 21 days in a row" }
       },
   "notifications": {
     "title": "Notifications",
