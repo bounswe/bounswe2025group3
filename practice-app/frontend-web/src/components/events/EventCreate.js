@@ -29,7 +29,7 @@ const EventCreate = () => {
     description: '',
     location: '',
     district: '', 
-    duration: '', // Kullanıcı buraya saat girecek (örn: 1.5)
+    duration: '', 
     equipment: '',
     date: getLocalDateTime(), 
     image: null, 
@@ -38,7 +38,9 @@ const EventCreate = () => {
   const [formData, setFormData] = useState(initialData);
   const [selectedCountry, setSelectedCountry] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formError, setFormError] = useState('');
+  
+  // Alan bazlı hatalar için state
+  const [fieldErrors, setFieldErrors] = useState({});
   const [message, setMessage] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -49,7 +51,19 @@ const EventCreate = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setFormError('');
+    
+    // Kullanıcı değiştirdiğinde o alanın hatasını temizle
+    if (fieldErrors[e.target.name]) {
+        setFieldErrors(prev => ({...prev, [e.target.name]: null}));
+    }
+    // District için özel kontrol (backend ismi exact_location)
+    if (e.target.name === 'district' && fieldErrors.exact_location) {
+        setFieldErrors(prev => ({...prev, exact_location: null}));
+    }
+    // Equipment için özel kontrol (backend ismi equipment_needed)
+    if (e.target.name === 'equipment' && fieldErrors.equipment_needed) {
+        setFieldErrors(prev => ({...prev, equipment_needed: null}));
+    }
   };
 
   const handleCountryChange = (e) => {
@@ -61,9 +75,9 @@ const EventCreate = () => {
     if (file && file.type.startsWith('image/')) {
       Object.assign(file, { preview: URL.createObjectURL(file) });
       setFormData(prev => ({ ...prev, image: file }));
-      setFormError('');
+      setFieldErrors(prev => ({ ...prev, image: null }));
     } else {
-      setFormError(t('eventsPage.errorImageOnly') || 'Lütfen sadece resim dosyası yükleyiniz.');
+      setFieldErrors(prev => ({ ...prev, image: t('eventsPage.errorImageOnly') || 'Lütfen sadece resim dosyası yükleyiniz.' }));
     }
   };
 
@@ -83,13 +97,14 @@ const EventCreate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFieldErrors({}); // Reset errors
+
     if (!formData.title || !formData.description || !formData.location || !formData.date) {
-      setFormError(t('eventsPage.formRequired'));
+      setFieldErrors({ general: t('eventsPage.formRequired') });
       return;
     }
     
     setIsSubmitting(true);
-    setFormError('');
 
     try {
       const dataToSend = new FormData();
@@ -102,16 +117,11 @@ const EventCreate = () => {
           dataToSend.append('exact_location', formData.district);
       }
       
-      // --- SÜRE HESAPLAMA (SAAT -> DAKİKA) ---
       if (formData.duration) {
-          // Gelen değer string "1.5" olabilir, bunu float'a çeviriyoruz.
           const hours = parseFloat(formData.duration);
-          // Backend dakika (integer) bekliyor. (1.5 saat * 60 = 90 dakika)
           const minutes = Math.round(hours * 60);
-          
           dataToSend.append('duration', minutes);
       }
-      // ---------------------------------------
       
       if (formData.equipment) {
           dataToSend.append('equipment_needed', formData.equipment);
@@ -131,20 +141,55 @@ const EventCreate = () => {
 
     } catch (err) {
       console.error('Failed to create event:', err);
-      let errorMessage = t('eventsPage.createError');
-      if (err.response?.data) {
-         const data = err.response.data;
-         if (typeof data === 'object' && !data.detail) {
-           const firstKey = Object.keys(data)[0];
-           const firstError = Array.isArray(data[firstKey]) ? data[firstKey][0] : data[firstKey];
-           errorMessage += `: ${firstKey} - ${firstError}`;
-         } else {
-           errorMessage += `: ${data.detail || err.message}`;
-         }
+      
+      const data = err.response?.data;
+      if (err.response?.status === 400 && data) {
+          const newErrors = {};
+          
+          Object.keys(data).forEach(key => {
+             let errorContent = data[key];
+             let errorMessage = "";
+
+             // Hata içeriğini string'e dönüştürme (Nested object koruması)
+             if (Array.isArray(errorContent)) {
+                 errorMessage = errorContent[0];
+             } else if (typeof errorContent === 'object' && errorContent !== null) {
+                 // Eğer { title: { title: "Error" } } gibi gelirse
+                 if (errorContent[key]) {
+                     const nested = errorContent[key];
+                     errorMessage = Array.isArray(nested) ? nested[0] : nested;
+                 } else {
+                     const firstVal = Object.values(errorContent)[0];
+                     errorMessage = Array.isArray(firstVal) ? firstVal[0] : firstVal;
+                 }
+             } else {
+                 errorMessage = errorContent;
+             }
+
+             // React child hatası almamak için string'e çevir
+             if (typeof errorMessage === 'object') {
+                 errorMessage = JSON.stringify(errorMessage);
+             }
+
+             // --- TRANSLATION LOGIC (BLACKLIST) ---
+             // Backend'den "banned word" içeren bir mesaj gelirse çeviriyle değiştir
+             if (typeof errorMessage === 'string' && errorMessage.toLowerCase().includes("banned word")) {
+                 errorMessage = t('eventsPage.error_banned_word');
+             }
+             // -------------------------------------
+
+             newErrors[key] = errorMessage;
+          });
+          
+          setFieldErrors(newErrors);
+          
+          if (Object.keys(newErrors).length === 0) {
+             showMessage(t('eventsPage.createError'), 'error');
+          }
       } else {
-         errorMessage += `: ${err.message}`;
+         showMessage(`${t('eventsPage.createError')}: ${err.message}`, 'error');
       }
-      showMessage(errorMessage, 'error');
+
     } finally {
       setIsSubmitting(false);
     }
@@ -170,16 +215,34 @@ const EventCreate = () => {
         
         <div className="create-form-container">
           <form onSubmit={handleSubmit} className="event-create-form">
-            {formError && <p className="form-error">{formError}</p>}
+            {fieldErrors.general && <p className="form-error">{fieldErrors.general}</p>}
             
             <div className="form-group">
               <label>{t('eventsPage.placeholderTitle')}</label>
-              <input name="title" type="text" value={formData.title} onChange={handleChange} required />
+              <input 
+                name="title" 
+                type="text" 
+                value={formData.title} 
+                onChange={handleChange} 
+                required 
+                style={fieldErrors.title ? {borderColor: '#dc3545'} : {}}
+              />
+              {/* Blacklist hatası */}
+              {fieldErrors.title && <small style={{color: '#dc3545'}}>{fieldErrors.title}</small>}
             </div>
 
             <div className="form-group">
               <label>{t('eventsPage.placeholderDescription')}</label>
-              <textarea name="description" value={formData.description} onChange={handleChange} rows="4" required />
+              <textarea 
+                name="description" 
+                value={formData.description} 
+                onChange={handleChange} 
+                rows="4" 
+                required 
+                style={fieldErrors.description ? {borderColor: '#dc3545'} : {}}
+              />
+               {/* Blacklist hatası */}
+               {fieldErrors.description && <small style={{color: '#dc3545'}}>{fieldErrors.description}</small>}
             </div>
 
             <div className="form-group">
@@ -196,7 +259,16 @@ const EventCreate = () => {
               </div>
               <div style={{ marginTop: '10px' }}>
                 <label className="sub-label">{t('eventsPage.labelDistrict') || 'İlçe / Semt'}</label>
-                <input name="district" type="text" value={formData.district} onChange={handleChange} placeholder={t('eventsPage.placeholderDistrict')} />
+                <input 
+                    name="district" 
+                    type="text" 
+                    value={formData.district} 
+                    onChange={handleChange} 
+                    placeholder={t('eventsPage.placeholderDistrict')} 
+                    style={fieldErrors.exact_location ? {borderColor: '#dc3545'} : {}}
+                />
+                {/* Blacklist hatası (Backend exact_location döner) */}
+                {fieldErrors.exact_location && <small style={{color: '#dc3545'}}>{fieldErrors.exact_location}</small>}
               </div>
             </div>
 
@@ -206,7 +278,6 @@ const EventCreate = () => {
                     <input name="date" type="datetime-local" value={formData.date} onChange={handleChange} required />
                 </div>
                 
-                {/* --- SÜRE ALANI GÜNCELLENDİ --- */}
                 <div className="form-group">
                     <label>{t('eventsPage.labelDuration')} ({t('eventsPage.unitHours') || 'Saat'})</label>
                     <input 
@@ -216,14 +287,23 @@ const EventCreate = () => {
                         onChange={handleChange} 
                         placeholder={t('eventsPage.placeholderDurationExample', 'Örn: 1.5')}
                         min="0"
-                        step="0.1" // 1.5, 2.5 gibi girişlere izin verir
+                        step="0.1" 
                     />
                 </div>
             </div>
 
             <div className="form-group equipment-group">
                 <label>{t('eventsPage.labelEquipment')}</label>
-                <input name="equipment" type="text" value={formData.equipment} onChange={handleChange} placeholder={t('eventsPage.placeholderEquipment')} />
+                <input 
+                    name="equipment" 
+                    type="text" 
+                    value={formData.equipment} 
+                    onChange={handleChange} 
+                    placeholder={t('eventsPage.placeholderEquipment')} 
+                    style={fieldErrors.equipment_needed ? {borderColor: '#dc3545'} : {}}
+                />
+                {/* Blacklist hatası (Backend equipment_needed döner) */}
+                {fieldErrors.equipment_needed && <small style={{color: '#dc3545'}}>{fieldErrors.equipment_needed}</small>}
             </div>
 
             <div className="form-group image-upload-group">
@@ -246,6 +326,7 @@ const EventCreate = () => {
                   <p className="dropzone-text"><Icon name="upload" /> {isDragging ? t('eventsPage.dragDropActive') : t('eventsPage.dragDropInactive')}</p>
                 )}
               </div>
+              {fieldErrors.image && <small style={{color: '#dc3545'}}>{fieldErrors.image}</small>}
             </div>
 
             <div className="form-actions">

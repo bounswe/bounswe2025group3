@@ -26,15 +26,18 @@ const Profile = () => {
         city: '',
         country: '',
         notifications_enabled: false,
-        is_anonymous: false // YENİ ALAN: Anonimlik tercihi
+        is_anonymous: false 
     });
 
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    // YENİ: Alan bazlı hatalar (Blacklist için)
+    const [fieldErrors, setFieldErrors] = useState({});
 
-    const [allCountriesData, setAllCountriesData] = useState(Country.getAllCountries());
+    const allCountriesData = Country.getAllCountries();
     const [availableCities, setAvailableCities] = useState([]);
 
     useEffect(() => {
@@ -45,7 +48,6 @@ const Profile = () => {
         // eslint-disable-next-line
     }, [token]);
 
-    // Şehirleri ülke seçimine göre güncelle
     useEffect(() => {
         if (profile.country) {
             const countryObj = allCountriesData.find(c => c.name === profile.country);
@@ -59,7 +61,6 @@ const Profile = () => {
         }
     }, [profile.country, allCountriesData]);
 
-    // Profil verilerini çek
     useEffect(() => {
         const fetchProfile = async () => {
             setLoading(true);
@@ -73,7 +74,7 @@ const Profile = () => {
                     city: data.city || '',
                     country: data.country || '',
                     notifications_enabled: data.notifications_enabled || false,
-                    is_anonymous: data.is_anonymous || false // Backend'den gelen değeri al
+                    is_anonymous: data.is_anonymous || false 
                 });
             } catch (err) {
                 setError(t('profile_page.error_fetch'));
@@ -97,15 +98,20 @@ const Profile = () => {
             }
             return updated;
         });
+        
+        // YENİ: Kullanıcı yazarken hatayı temizle
+        if (fieldErrors[name]) {
+            setFieldErrors(prev => ({ ...prev, [name]: null }));
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
         setSuccessMessage('');
+        setFieldErrors({}); // Reset
         setIsSubmitting(true);
         try {
-            // Gereksiz alanları çıkarıp sadece güncellenecekleri gönderelim
             const { email, username, id, date_joined, role, ...updatePayload } = profile;
             
             await updateUserProfile(updatePayload);
@@ -115,11 +121,56 @@ const Profile = () => {
 
         } catch (err) {
             const errorData = err.response?.data;
-            if (errorData && typeof errorData === 'object') {
-                 const messages = Object.entries(errorData)
-                    .map(([key, val]) => `${key.replace(/_/g, ' ')}: ${Array.isArray(val) ? val.join(', ') : val}`)
-                    .join('; ');
-                    setError(t('profile_page.error_update_validation'));
+            
+            if (err.response?.status === 400 && errorData && typeof errorData === 'object') {
+                 const newErrors = {};
+                 const genericMessages = [];
+
+                 Object.keys(errorData).forEach(key => {
+                     let errorContent = errorData[key];
+                     let msg = "";
+
+                     // İç içe obje kontrolü (Nested object protection)
+                     if (Array.isArray(errorContent)) {
+                         msg = errorContent[0];
+                     } else if (typeof errorContent === 'object' && errorContent !== null) {
+                         // Nested obje: { bio: { bio: "Error" } } durumu
+                         if (errorContent[key]) {
+                             const nested = errorContent[key];
+                             msg = Array.isArray(nested) ? nested[0] : nested;
+                         } else {
+                             const firstVal = Object.values(errorContent)[0];
+                             msg = Array.isArray(firstVal) ? firstVal[0] : firstVal;
+                         }
+                     } else {
+                         msg = errorContent;
+                     }
+
+                     // React child hatası almamak için string olduğundan emin ol
+                     if (typeof msg === 'object') {
+                         msg = JSON.stringify(msg);
+                     }
+
+                     // --- TRANSLATION LOGIC (BLACKLIST) ---
+                     if (typeof msg === 'string' && msg.toLowerCase().includes("banned word")) {
+                         msg = t('profile_page.error_banned_word');
+                     }
+                     // -------------------------------------
+
+                     if (['first_name', 'last_name', 'bio'].includes(key)) {
+                         newErrors[key] = msg;
+                     } else {
+                         genericMessages.push(`${key.replace(/_/g, ' ')}: ${msg}`);
+                     }
+                 });
+
+                 setFieldErrors(newErrors);
+                 
+                 if (genericMessages.length > 0) {
+                     setError(genericMessages.join('; '));
+                 } else {
+                     setError(t('profile_page.error_update_validation')); 
+                 }
             } else {
                 setError(t('profile_page.error_update_generic'));
             }
@@ -157,17 +208,50 @@ const Profile = () => {
                             <div className="form-row">
                                 <div className="form-field">
                                     <label htmlFor="first_name"><Icon name="firstName" /> {t('profile_page.form.first_name_label')}</label>
-                                    <input id="first_name" name="first_name" type="text" placeholder={t('profile_page.form.first_name_placeholder')} value={profile.first_name || ''} onChange={handleChange} disabled={isSubmitting}/>
+                                    <input 
+                                        id="first_name" 
+                                        name="first_name" 
+                                        type="text" 
+                                        placeholder={t('profile_page.form.first_name_placeholder')} 
+                                        value={profile.first_name || ''} 
+                                        onChange={handleChange} 
+                                        disabled={isSubmitting}
+                                        style={fieldErrors.first_name ? {borderColor: '#dc3545'} : {}}
+                                    />
+                                    {/* Blacklist hatası */}
+                                    {fieldErrors.first_name && <small style={{color: '#dc3545'}}>{fieldErrors.first_name}</small>}
                                 </div>
                                 <div className="form-field">
                                     <label htmlFor="last_name"><Icon name="lastName" /> {t('profile_page.form.last_name_label')}</label>
-                                    <input id="last_name" name="last_name" type="text" placeholder={t('profile_page.form.last_name_placeholder')} value={profile.last_name || ''} onChange={handleChange} disabled={isSubmitting}/>
+                                    <input 
+                                        id="last_name" 
+                                        name="last_name" 
+                                        type="text" 
+                                        placeholder={t('profile_page.form.last_name_placeholder')} 
+                                        value={profile.last_name || ''} 
+                                        onChange={handleChange} 
+                                        disabled={isSubmitting}
+                                        style={fieldErrors.last_name ? {borderColor: '#dc3545'} : {}}
+                                    />
+                                    {/* Blacklist hatası */}
+                                    {fieldErrors.last_name && <small style={{color: '#dc3545'}}>{fieldErrors.last_name}</small>}
                                 </div>
                             </div>
 
                             <div className="form-field">
                                 <label htmlFor="bio"><Icon name="bio" /> {t('profile_page.form.bio_label')}</label>
-                                <textarea id="bio" name="bio" placeholder={t('profile_page.form.bio_placeholder')} value={profile.bio || ''} onChange={handleChange} rows="4" disabled={isSubmitting}/>
+                                <textarea 
+                                    id="bio" 
+                                    name="bio" 
+                                    placeholder={t('profile_page.form.bio_placeholder')} 
+                                    value={profile.bio || ''} 
+                                    onChange={handleChange} 
+                                    rows="4" 
+                                    disabled={isSubmitting}
+                                    style={fieldErrors.bio ? {borderColor: '#dc3545'} : {}}
+                                />
+                                {/* Blacklist hatası */}
+                                {fieldErrors.bio && <small style={{color: '#dc3545'}}>{fieldErrors.bio}</small>}
                             </div>
 
                             <div className="form-row">
@@ -207,12 +291,9 @@ const Profile = () => {
 
                             <hr className="form-divider" />
 
-                            {/* --- TERCİHLER / AYARLAR --- */}
                             <div className="preferences-section">
-                                {/* Sabit "Preferences" yerine t('profile_page.preferences_title') kullanıldı */}
                                 <h3 className="section-title"><Icon name="settings" /> {t('profile_page.preferences_title')}</h3>
                                 
-                                {/* 1. Bildirimler */}
                                 <div className="form-field form-field-checkbox">
                                     <input type="checkbox" id="notifications_enabled" name="notifications_enabled" checked={profile.notifications_enabled || false} onChange={handleChange} disabled={isSubmitting}/>
                                     <label htmlFor="notifications_enabled" className="checkbox-label">
@@ -220,7 +301,6 @@ const Profile = () => {
                                     </label>
                                 </div>
 
-                                {/* 2. YENİ: Anonimlik */}
                                 <div className="form-field form-field-checkbox">
                                     <input type="checkbox" id="is_anonymous" name="is_anonymous" checked={profile.is_anonymous || false} onChange={handleChange} disabled={isSubmitting}/>
                                     <label htmlFor="is_anonymous" className="checkbox-label">

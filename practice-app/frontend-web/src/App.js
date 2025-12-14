@@ -58,6 +58,16 @@ const App = () => {
         }
     };
 
+    const formatEventDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleString('default', { month: 'long' });
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        
+        return `${day} ${month}, ${hours}:${minutes}`;
+    };
+
     useEffect(() => {
         const pollNotifications = async () => {
             try {
@@ -67,7 +77,8 @@ const App = () => {
                     return;
                 }
 
-                const results = await getUnreadNotifications();
+                const response = await getUnreadNotifications();
+                const results = response.results || response;
                 setNotifications(results);
 
             } catch (error) {
@@ -112,7 +123,11 @@ const App = () => {
                     </div>
                     {notifications.map(notification => (
                         <div key={notification.id} style={{ borderBottom: '1px solid #f5f5f5', padding: '10px 0' }}>
-                            <p style={{ margin: '0 0 5px 0', fontSize: '14px' }}>{notification.message}</p>
+                            <p style={{ margin: '0 0 5px 0', fontSize: '14px' }}>
+                                {notification.notification_type === 'EVENT_CREATED' && notification.event_details ? 
+                                    `A new event is created at your city! It will be at ${notification.event_details.exact_location} on ${formatEventDate(notification.event_details.date)}` 
+                                    : notification.message}
+                            </p>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <small style={{ color: '#888', fontSize: '11px' }}>
                                     {new Date(notification.created_at).toLocaleString()}
