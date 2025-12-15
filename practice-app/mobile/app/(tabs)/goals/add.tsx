@@ -9,6 +9,7 @@ import { getSubcategories } from '@/api/waste';
 import { getUserProfile } from '@/api/user';
 import { createGoal } from '@/api/goals';
 import { useTranslation } from 'react-i18next';
+import { useBadge } from '@/hooks/badgeContext';
 
 interface SubCategory {
   id: number;
@@ -42,6 +43,7 @@ export default function AddGoalScreen() {
   const router = useRouter();
   const colors = useColors();
   const { t } = useTranslation();
+  const { checkForNewBadges } = useBadge();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -132,6 +134,8 @@ export default function AddGoalScreen() {
         status: 'pending',
       });
       Alert.alert(t("waste.success_title"), t("goals.goal_created"));
+      // Check for new badges immediately after successful goal creation
+      checkForNewBadges();
       router.back();
     } catch (error) {
       console.error('Error creating goal:', error);
@@ -168,7 +172,9 @@ export default function AddGoalScreen() {
                 style={[styles.chipButton, selectedSubCategory?.id === cat.id && styles.chipButtonActive]}
                 onPress={() => handleSubCategorySelect(cat)}
               >
-                <Text style={[styles.chipButtonText, selectedSubCategory?.id === cat.id && styles.chipButtonTextActive]}>{cat.name}</Text>
+                <Text style={[styles.chipButtonText, selectedSubCategory?.id === cat.id && styles.chipButtonTextActive]}>
+                  {cat.name} {cat.unit ? `(${cat.unit})` : ''}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>

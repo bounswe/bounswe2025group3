@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'; // 1. Import hook
 import axios from 'axios';
 import Navbar from '../common/Navbar'; // 2. Import shared Navbar
 import './GoalsPage.css';
-import { Link, NavLink, useNavigate } from 'react-router-dom'; // Added Link, NavLink
+import { useNavigate } from 'react-router-dom';
 
 const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 
@@ -42,8 +42,8 @@ const GoalsPage = () => {
       setLoading(true);
       try {
         const [goalRes, catRes] = await Promise.all([
-          axios.get(`${apiUrl}/v1/goals/goals/`, { headers: authHeader }),
-          axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers: authHeader })
+          axios.get(`${apiUrl}/api/v1/goals/goals/`, { headers: authHeader }),
+          axios.get(`${apiUrl}/api/v1/waste/subcategories/`, { headers: authHeader })
         ]);
         setGoals(Array.isArray(goalRes.data) ? goalRes.data : goalRes.data.results ?? []);
         setCategories(Array.isArray(catRes.data) ? catRes.data : catRes.data.results ?? []);
@@ -73,8 +73,8 @@ const GoalsPage = () => {
         timeframe: newGoal.timeframe,
         target: Number(newGoal.target)
         }; 
-        await axios.post(`${apiUrl}/v1/goals/goals/`, payload, { headers: authHeader });
-        const fresh = await axios.get(`${apiUrl}/v1/goals/goals/`, { headers: authHeader });
+        await axios.post(`${apiUrl}/api/v1/goals/goals/`, payload, { headers: authHeader });
+        const fresh = await axios.get(`${apiUrl}/api/v1/goals/goals/`, { headers: authHeader });
         setGoals(Array.isArray(fresh.data) ? fresh.data : fresh.data.results ?? []);
         setNewGoal({ category_id: '', timeframe: 'daily', target: '' });
         setError('');

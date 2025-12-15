@@ -98,11 +98,29 @@ export const parseJson = async <T>(response: Response, fallbackMessage: string):
   }
   
   let data: ErrorPayload | null = null;
+  const responseText = await response.text();
 
   try {
-    data = (await response.json()) as ErrorPayload;
+    if (!responseText) {
+      // Empty response
+      if (!response.ok) {
+        const error = new Error(`${fallbackMessage} (Status: ${response.status})`) as ApiError;
+        error.status = response.status;
+        throw error;
+      }
+      return {} as T;
+    }
+    data = JSON.parse(responseText) as ErrorPayload;
   } catch (jsonError) {
-    throw jsonError;
+    // If it's not valid JSON and response is not ok, throw a more informative error
+    if (!response.ok) {
+      const error = new Error(`${fallbackMessage} (Status: ${response.status}, Invalid JSON response)`) as ApiError;
+      error.status = response.status;
+      throw error;
+    }
+    // If response is ok but not valid JSON, return empty object
+    console.warn(`Response OK but invalid JSON for ${fallbackMessage}`);
+    return {} as T;
   }
 
   if (!response.ok) {

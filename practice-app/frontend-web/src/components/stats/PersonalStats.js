@@ -2,114 +2,148 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Legend
+} from 'recharts';
 import Navbar from '../common/Navbar';
 import './PersonalStats.css';
 
-const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+const apiUrl = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/api';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF4560'];
+const COLORS = [
+  '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', 
+  '#FF4560', '#2ecc71', '#3498db', '#9b59b6', '#34495e'
+];
+
+// --- Badges Definition List (Static Data) ---
+const BADGE_DEFINITIONS = [
+    { id: 'first_step', icon: '🎖' },
+    { id: 'plastic_buster', icon: '🥤' },
+    { id: 'sustainability_streak', icon: '🔥' },
+    { id: 'zero_waste_legend', icon: '🌍' },
+    { id: 'eco_warrior', icon: '⚔️' },
+    { id: 'tree_hugger', icon: '🌿' },
+    { id: 'recycling_master', icon: '♻️' },
+    { id: 'compost_champion', icon: '🌱' },
+    { id: 'milestone_100', icon: '💯' },
+    { id: 'score_1500', icon: '🏆' },
+    { id: 'consistency_king', icon: '👑' },
+    { id: 'metal_maven', icon: '🔧' },
+    { id: 'paper_pride', icon: '📄' },
+    { id: 'glass_guru', icon: '🥃' },
+    { id: 'eco_score_500', icon: '⭐' },
+    { id: 'score_2000', icon: '🥇' },
+    { id: 'score_3000', icon: '🥈' },
+    { id: 'logs_200', icon: '📋' },
+    { id: 'logs_500', icon: '🎯' },
+    { id: 'streak_60', icon: '🚀' },
+    { id: 'plastic_50', icon: '💪' },
+    { id: 'organic_50', icon: '🍃' },
+    { id: 'electronic_20', icon: '🔌' },
+    { id: 'textile_30', icon: '👕' },
+    { id: 'donate_50', icon: '🎁' },
+    { id: 'landfill_zero', icon: '✨' },
+    { id: 'streak_7', icon: '📅' },
+    { id: 'streak_21', icon: '🎖️' }
+];
 
 const Icon = ({ name, className = "" }) => {
     const icons = {
         stats: '📈', rank: '🏅', score: '🌟', events: '📅',
-        tree: '🌲', seed: '🌱', badge: '🎖️', loading: '⏳', alerts: '⚠️'
+        tree: '🌲', seed: '🌱', badge: '🎖️', loading: '⏳', alerts: '⚠️',
+        next: '➡️', filter: '🔍'
     };
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
-// Basit Bar Chart Component
-const SimpleBarChart = ({ data, t }) => {
-  if (!data || data.length === 0) {
-    return <div className="empty-state-chart"><Icon name="loading" /><p>{t('stats_page.charts.no_data')}</p></div>;
-  }
-
-  const maxScore = Math.max(...data.map(d => d.Score), 1);
-  const maxLogs = Math.max(...data.map(d => d.Logs), 1);
-  const maxValue = Math.max(maxScore, maxLogs);
-
-  return (
-    <div className="simple-chart">
-      <div className="chart-legend">
-        <span><span className="legend-box" style={{backgroundColor: '#4CAF50'}}></span> {t('stats_page.charts.points')}</span>
-        <span><span className="legend-box" style={{backgroundColor: '#2196F3'}}></span> {t('stats_page.charts.items')}</span>
-      </div>
-      <div className="bar-chart-container">
-        {data.map((item, idx) => (
-          <div key={idx} className="bar-group">
-            <div className="bar-pair">
-              <div 
-                className="bar bar-score" 
-                style={{ height: `${(item.Score / maxValue) * 200}px` }}
-                title={`${t('stats_page.charts.points')}: ${item.Score}`}
-              >
-                <span className="bar-value">{item.Score}</span>
-              </div>
-              <div 
-                className="bar bar-logs" 
-                style={{ height: `${(item.Logs / maxValue) * 200}px` }}
-                title={`${t('stats_page.charts.items')}: ${item.Logs}`}
-              >
-                <span className="bar-value">{item.Logs}</span>
-              </div>
-            </div>
-            <div className="bar-label">{item.date}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+const formatNumber = (num) => {
+  return new Intl.NumberFormat('tr-TR').format(num); 
 };
 
-// Basit Pie Chart Component
-const SimplePieChart = ({ data }) => {
-  if (!data || data.length === 0) return null;
+// --- Custom Bar/Area Tooltip ---
+const CustomTooltip = ({ active, payload, label, type, t }) => {
+  // Helper to translate units
+  const getUnitTrans = (u) => {
+      if(!u) return '';
+      const key = u.toLowerCase().trim();
+      return t(`units.${key}`, { defaultValue: u });
+  };
 
-  const total = data.reduce((sum, item) => sum + item.value, 0);
-  let currentAngle = 0;
+  if (active && payload && payload.length) {
+    const total = payload.reduce((sum, entry) => sum + (entry.value || 0), 0);
+    const unitText = type === 'score' ? t('units.pts') : t('units.logs');
 
-  return (
-    <div className="simple-pie-container">
-      <svg viewBox="0 0 200 200" className="pie-chart-svg">
-        {data.map((item, idx) => {
-          const percentage = item.value / total;
-          const angle = percentage * 360;
-          const startAngle = currentAngle;
-          currentAngle += angle;
+    return (
+      <div className="custom-tooltip" style={{
+          backgroundColor: '#fff', 
+          padding: '10px', 
+          border: '1px solid #ccc', 
+          borderRadius: '5px',
+          boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+          zIndex: 1000,
+          pointerEvents: 'none' 
+      }}>
+        <p className="label" style={{marginBottom: '5px', borderBottom:'1px solid #eee', paddingBottom:'3px'}}>
+            <strong>{label}</strong>
+        </p>
+        <div className="tooltip-items">
+            {payload.map((entry, index) => {
+                const dataPoint = entry.payload; 
+                const rawKeyPrefix = entry.dataKey.split('_').slice(0, 2).join('_'); 
+                
+                const rawQty = dataPoint[`${rawKeyPrefix}_rawQty`];
+                const unit = dataPoint[`${rawKeyPrefix}_unit`] || '';
+                const translatedUnit = getUnitTrans(unit);
 
-          const startRad = (startAngle - 90) * Math.PI / 180;
-          const endRad = (currentAngle - 90) * Math.PI / 180;
-          
-          const x1 = 100 + 80 * Math.cos(startRad);
-          const y1 = 100 + 80 * Math.sin(startRad);
-          const x2 = 100 + 80 * Math.cos(endRad);
-          const y2 = 100 + 80 * Math.sin(endRad);
-          
-          const largeArc = angle > 180 ? 1 : 0;
-          const pathData = `M 100 100 L ${x1} ${y1} A 80 80 0 ${largeArc} 1 ${x2} ${y2} Z`;
-
-          return (
-            <g key={idx}>
-              <path
-                d={pathData}
-                fill={COLORS[idx % COLORS.length]}
-                stroke="#fff"
-                strokeWidth="2"
-              />
-            </g>
-          );
-        })}
-        <circle cx="100" cy="100" r="50" fill="var(--background-primary)" />
-      </svg>
-      <div className="pie-legend">
-        {data.map((item, idx) => (
-          <div key={idx} className="legend-item">
-            <span className="legend-color" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></span>
-            <span>{item.name}: {Math.round((item.value / total) * 100)}%</span>
-          </div>
-        ))}
+                return (
+                    <p key={index} style={{ color: entry.color, margin: '2px 0', fontSize: '0.85rem' }}>
+                        <span style={{fontWeight: '600'}}>{entry.name}:</span>{' '}
+                        {type === 'score' 
+                            ? `${formatNumber(entry.value)} ${t('units.pts')}` 
+                            : `${formatNumber(rawQty)} ${translatedUnit} (${entry.value} ${t('units.logs')})`
+                        }
+                    </p>
+                );
+            })}
+        </div>
+        <div className="tooltip-total" style={{ borderTop: '1px solid #eee', marginTop: '8px', paddingTop: '5px' }}>
+            <p><strong>{t('stats_page.tooltips.total', 'Total')}: {formatNumber(total)} {unitText}</strong></p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  return null;
+};
+
+// --- Custom Pie Tooltip ---
+const CustomPieTooltip = ({ active, payload, totalValue, t }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      const value = payload[0].value; 
+      const percent = totalValue > 0 ? (value / totalValue) * 100 : 0;
+
+      return (
+        <div className="custom-tooltip" style={{
+            backgroundColor: '#fff', 
+            padding: '10px', 
+            border: '1px solid #ccc', 
+            borderRadius: '5px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+            zIndex: 1000
+        }}>
+          <p className="label" style={{color: payload[0].fill, marginBottom: '5px'}}><strong>{data.name}</strong></p>
+          <div className="tooltip-items">
+              <p>{t('stats_page.tooltips.impact', 'Impact')}: <strong>{formatNumber(Math.round(data.score))} {t('units.pts')}</strong></p>
+              <p>{t('stats_page.tooltips.frequency', 'Frequency')}: <strong>{data.count} {t('units.logs')}</strong></p>
+              <p className="highlight-info" style={{marginTop: '5px', borderTop: '1px dashed #ddd', paddingTop: '3px'}}>
+                  {t('stats_page.tooltips.share', 'Share')}: <strong>{percent.toFixed(1)}%</strong>
+              </p>
+          </div>
+        </div>
+      );
+    }
+    return null;
 };
 
 const PersonalStats = () => {
@@ -121,18 +155,31 @@ const PersonalStats = () => {
   const [error, setError] = useState('');
   const [profile, setProfile] = useState(null);
   const [scoreData, setScoreData] = useState({ total_score: 0 });
-  const [timeframe, setTimeframe] = useState('daily');
-  const [leaderboardRank, setLeaderboardRank] = useState('N/A');
-  const [eventStats, setEventStats] = useState({ participating: 0, total: 0, rate: 0 });
-
-  const [rawLogs, setRawLogs] = useState([]);
-  const [rawChartData, setRawChartData] = useState([]);
-  const [rawStreakStats, setRawStreakStats] = useState([]);
-
-  const [statsData, setStatsData] = useState([]); 
-  const [categoryStats, setCategoryStats] = useState([]);
-  const [badges, setBadges] = useState([]);
   
+  const [timeframe, setTimeframe] = useState('daily');
+  const [pieMetric, setPieMetric] = useState('score'); 
+
+  const [chartData, setChartData] = useState([]); 
+  const [uniqueCategories, setUniqueCategories] = useState([]); 
+  const [categoryStats, setCategoryStats] = useState([]); 
+  
+  const [earnedBadgeIds, setEarnedBadgeIds] = useState([]);
+  const [leaderboardRank, setLeaderboardRank] = useState('N/A');
+  
+  const [subCategoriesMap, setSubCategoriesMap] = useState({});
+  const [rawLogsState, setRawLogsState] = useState([]);
+  
+  const [rawStatsData, setRawStatsData] = useState([]);
+
+  const TIERS = [
+    { key: 'eco_explorer', min: 0, color: '#95a5a6', icon: '🌱' },
+    { key: 'green_starter', min: 100, color: '#2ecc71', icon: '🍃' },
+    { key: 'eco_advocate', min: 500, color: '#3498db', icon: '🌍' },
+    { key: 'sustainability_hero', min: 1000, color: '#e67e22', icon: '🌿' },
+    { key: 'zero_waste_champion', min: 2500, color: '#f1c40f', icon: '🌟' },
+    { key: 'planet_guardian', min: 5000, color: '#8e44ad', icon: '🌎' }
+  ];
+
   const token = localStorage.getItem('access_token');
   const userId = localStorage.getItem('user_id');
 
@@ -146,175 +193,235 @@ const PersonalStats = () => {
   }, [token]);
 
   useEffect(() => {
-    if (token) {
-        fetchChartData(timeframe);
+    if (token && !loading) {
+      fetchStatsForTimeframe(timeframe);
     }
     // eslint-disable-next-line
-  }, [timeframe, token]);
+  }, [timeframe]);
 
   useEffect(() => {
-      if (rawChartData.length > 0) processChartData(rawChartData);
-      if (rawLogs.length > 0) processCategoryPie(rawLogs);
-      if (rawLogs.length > 0 || rawStreakStats.length > 0) {
-          calculateBadges(rawLogs, scoreData.total_score, rawStreakStats);
-      }
-      // eslint-disable-next-line
-  }, [i18n.language, rawChartData, rawLogs, rawStreakStats, scoreData.total_score]);
+    if (!loading && rawLogsState.length > 0) {
+        calculateBadges(rawLogsState, scoreData.total_score);
+    }
+    // eslint-disable-next-line
+  }, [rawLogsState]);
 
+  useEffect(() => {
+    if (!loading && rawStatsData.length > 0) {
+        processStatsData(rawStatsData, timeframe, subCategoriesMap, rawLogsState);
+    }
+    // eslint-disable-next-line
+  }, [i18n.language]);
+
+  const getCategoryTrans = (apiName) => {
+      if (!apiName) return t('waste_categories.other');
+      const key = apiName.toLowerCase().trim().replace(/[\s-]+/g, "_");
+      return t(`waste_categories.${key}`, { defaultValue: apiName });
+  };
+
+  // --- HELPER: Recursively Fetch All Pages ---
+  // This ensures we get ALL data regardless of pagination limits (e.g. 10 items)
+  const fetchAllPages = async (endpoint, headers) => {
+    let allResults = [];
+    let nextUrl = `${apiUrl}${endpoint}`;
+    
+    // Add page_size param safely
+    if (nextUrl.includes('?')) nextUrl += '&page_size=1000';
+    else nextUrl += '?page_size=1000';
+
+    try {
+        while (nextUrl) {
+            const res = await axios.get(nextUrl, { headers });
+            const data = res.data;
+
+            if (Array.isArray(data)) {
+                // If backend does not paginate and returns list
+                allResults = data;
+                nextUrl = null;
+            } else if (data.results) {
+                // If backend paginates
+                allResults = [...allResults, ...data.results];
+                nextUrl = data.next; // Go to next page
+            } else {
+                // Unknown format or single object (shouldn't happen for lists)
+                nextUrl = null;
+            }
+        }
+    } catch (error) {
+        console.warn("Error fetching pages:", error);
+    }
+    return allResults;
+  };
+
+  // --- GRAPH DATA PROCESSING ---
+  const processStatsData = (statsData, period, subCatMap = subCategoriesMap, logs = rawLogsState) => {
+    const locale = i18n.language; 
+    const categoriesSet = new Set();
+    const chartDataArray = [];
+    const pieAggregates = {};
+
+    statsData.forEach(stat => {
+        const startDate = new Date(stat.start_date);
+        let displayKey = '';
+
+        if (period === 'daily') {
+             displayKey = startDate.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+        } else if (period === 'weekly') {
+             const day = startDate.getDay();
+             const diff = startDate.getDate() - day + (day === 0 ? -6 : 1);
+             const monday = new Date(startDate); monday.setDate(diff);
+             displayKey = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
+        } else if (period === 'monthly') {
+             displayKey = startDate.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+        } else if (period === 'yearly') {
+             displayKey = startDate.getFullYear().toString();
+        }
+
+        const entry = { name: displayKey };
+        entry.totalScore = stat.total_score;
+        entry.totalLog = stat.total_log;
+
+        Object.keys(stat).forEach(k => {
+             if (k.match(/^subcategory_\d+_score$/)) {
+                 const subcatId = k.match(/subcategory_(\d+)_score/)[1];
+                 const safeKey = `subcategory_${subcatId}`;
+                 const scoreValue = stat[k];
+                 const logValue = stat[`subcategory_${subcatId}_log`] || 0;
+
+                 const rawQty = logs
+                    .filter(l => {
+                        if (l.sub_category !== parseInt(subcatId)) return false;
+                        const logDate = new Date(l.date_logged).toISOString().split('T')[0];
+                        return logDate >= stat.start_date && logDate <= stat.end_date;
+                    })
+                    .reduce((sum, l) => sum + (parseFloat(l.quantity) || 0), 0);
+
+                 if (scoreValue > 0 || logValue > 0) {
+                     categoriesSet.add(safeKey);
+                     entry[`${safeKey}_score`] = scoreValue;
+                     entry[`${safeKey}_count`] = logValue;
+                     entry[`${safeKey}_rawQty`] = parseFloat(rawQty.toFixed(2)); 
+
+                     let displayName = `Subcategory ${subcatId}`;
+                     let unit = '';
+
+                     // Map lookup - now guaranteed to be populated for all active categories
+                     const subCatData = subCatMap[subcatId];
+                     if (subCatData) {
+                       displayName = subCatData.name;
+                       unit = subCatData.unit; 
+                     } else {
+                       // Fallback only if really missing (e.g. inactive category)
+                       const fallbackLog = logs.find(l => l.sub_category === parseInt(subcatId));
+                       if (fallbackLog && fallbackLog.sub_category_name) {
+                           displayName = fallbackLog.sub_category_name;
+                       }
+                     }
+                     
+                     entry[`${safeKey}_originalName`] = displayName;
+                     entry[`${safeKey}_unit`] = unit;
+
+                     const transName = getCategoryTrans(displayName);
+                     if (!pieAggregates[transName]) {
+                         pieAggregates[transName] = { name: transName, score: 0, count: 0 };
+                     }
+                     pieAggregates[transName].score += scoreValue;
+                     pieAggregates[transName].count += logValue;
+                 }
+             }
+        });
+
+        chartDataArray.push(entry);
+    });
+
+    setUniqueCategories(Array.from(categoriesSet));
+    setChartData(chartDataArray);
+    setCategoryStats(Object.values(pieAggregates));
+  };
 
   const fetchInitialData = async () => {
     try {
       const headers = { Authorization: `Bearer ${token}` };
-
-      const [
-        profileRes, 
-        scoreRes, 
-        dailyStatsRes,
-        logsRes,
-        eventsRes,
-        leaderboardRes
-      ] = await Promise.all([
+      
+      // We fetch independent endpoints in parallel, but handle SubCategories & Logs with the fetchAllPages helper
+      // to ensure we get ALL data despite pagination.
+      const [profileRes, scoreRes, leaderboardRes, eventsRes] = await Promise.all([
         axios.get(`${apiUrl}/user/me/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/scores/me/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/user/stats/?period=daily`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/logs/`, { headers }),
-        axios.get(`${apiUrl}/v1/events/events/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers })
+        axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers }),
+        axios.get(`${apiUrl}/v1/events/events/`, { headers })
       ]);
+
+      // Fetch ALL Subcategories (Recursively)
+      const allSubCats = await fetchAllPages('/v1/waste/subcategories/', headers);
+      
+      // Fetch ALL Logs (Recursively) - just in case logs also paginate heavily
+      const allLogs = await fetchAllPages('/v1/waste/logs/', headers);
+
+      // Fetch Stats (Standard fetch, usually returns fixed list)
+      const statsRes = await axios.get(`${apiUrl}/v1/waste/user/stats/?period=${timeframe}`, { headers });
 
       setProfile(profileRes.data);
       setScoreData(scoreRes.data);
-      setRawLogs(logsRes.data.results || []);
-      setRawStreakStats(dailyStatsRes.data.data || []);
-      setRawChartData(dailyStatsRes.data.data || []);
+      
+      const catMap = {};
+      allSubCats.forEach(sc => { catMap[sc.id] = sc; });
+      setSubCategoriesMap(catMap);
 
-      calculateEventStats(eventsRes.data.results || []);
+      const statsData = statsRes.data.data || [];
+
+      setRawLogsState(allLogs);
+      setRawStatsData(statsData);
+
+      processStatsData(statsData, timeframe, catMap, allLogs);
+      calculateBadges(allLogs, scoreRes.data.total_score);
       calculateRank(leaderboardRes.data || [], userId);
 
       setLoading(false);
     } catch (err) {
-      console.error("Error fetching initial stats:", err);
+      console.error(err);
       setError(t('stats_page.error_load'));
       setLoading(false);
     }
   };
 
-  const fetchChartData = async (selectedPeriod) => {
-    setChartLoading(true);
+  const fetchStatsForTimeframe = async (period) => {
     try {
-        const headers = { Authorization: `Bearer ${token}` };
-        const response = await axios.get(`${apiUrl}/v1/waste/user/stats/`, { 
-            params: { period: selectedPeriod },
-            headers 
-        });
-        
-        setRawChartData(response.data.data || []);
+      setChartLoading(true);
+      const headers = { Authorization: `Bearer ${token}` };
+      const statsRes = await axios.get(`${apiUrl}/v1/waste/user/stats/?period=${period}`, { headers });
+      const statsData = statsRes.data.data || [];
+      
+      setRawStatsData(statsData);
+      processStatsData(statsData, period, subCategoriesMap, rawLogsState);
+      setChartLoading(false);
     } catch (err) {
-        console.error("Error fetching chart data:", err);
-        setRawChartData([]);
-    } finally {
-        setChartLoading(false);
+      console.error(err);
+      setError(t('stats_page.error_load'));
+      setChartLoading(false);
     }
-  };
-
-  const getCategoryTrans = (apiName) => {
-      if (!apiName) return t('waste_categories.other');
-      const key = apiName.toLowerCase().replace(/ /g, "_");
-      return t(`waste_categories.${key}`, { defaultValue: apiName });
   };
 
   const getTierInfo = (score) => {
-    if (score >= 5000) return { name: t('tiers.planet_guardian'), color: '#8e44ad', icon: '🌎' };
-    if (score >= 2500) return { name: t('tiers.zero_waste_champion'), color: '#f1c40f', icon: '🌟' };
-    if (score >= 1000) return { name: t('tiers.sustainability_hero'), color: '#e67e22', icon: '🌿' };
-    if (score >= 500) return { name: t('tiers.eco_advocate'), color: '#3498db', icon: '🌍' };
-    if (score >= 100) return { name: t('tiers.green_starter'), color: '#2ecc71', icon: '🍃' };
-    return { name: t('tiers.eco_explorer'), color: '#95a5a6', icon: '🌱' };
-  };
-
-  const processChartData = (data) => {
-    const formatted = data.map(item => ({
-      date: new Date(item.start_date).toLocaleDateString(i18n.language, { 
-          weekday: timeframe === 'daily' ? 'short' : undefined, 
-          day: 'numeric', 
-          month: 'short',
-          year: timeframe === 'yearly' ? 'numeric' : undefined
-      }),
-      Score: item.total_score,
-      Logs: item.total_log
-    })).reverse(); 
-    setStatsData(formatted);
-  };
-
-  // Login kontrolü - token yoksa login'e yönlendir
-  useEffect(() => {
-    if (!token) {
-      navigate('/login', { replace: true });
-      return;
-    }
-    fetchInitialData();
-    // eslint-disable-next-line
-  }, [token, navigate]);
-
-
-  
-
-  const processCategoryPie = (logs) => {
-    const categoryMap = {};
-    logs.forEach(log => {
-      const catName = log.sub_category_name || 'Other';
-      if (!categoryMap[catName]) categoryMap[catName] = 0;
-      categoryMap[catName] += parseFloat(log.quantity);
-    });
+    let current = TIERS[0];
+    let currentIndex = 1;
+    let next = null;
     
-    const data = Object.keys(categoryMap).map((key) => ({
-      name: getCategoryTrans(key), 
-      value: categoryMap[key]
-    }));
-    setCategoryStats(data);
+    for (let i = 0; i < TIERS.length; i++) {
+      if (score >= TIERS[i].min) {
+        current = TIERS[i];
+        currentIndex = i + 1;
+        next = TIERS[i+1] || null;
+      }
+    }
+    return { current, next, currentIndex };
   };
 
-  const calculateBadges = (logs, score, dailyStats) => {
-    const earned = [];
-    
-    if (logs.length > 0) {
-        earned.push({ 
-            name: t('badges_data.first_step.name'), 
-            icon: '🎖', 
-            desc: t('badges_data.first_step.desc') 
-        });
-    }
-    const plasticTotal = logs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic'))
-                             .reduce((acc, curr) => acc + parseFloat(curr.quantity), 0);
-    if (plasticTotal >= 10) {
-        earned.push({ 
-            name: t('badges_data.plastic_buster.name'), 
-            icon: '🥤', 
-            desc: t('badges_data.plastic_buster.desc') 
-        });
-    }
-    if (dailyStats.length >= 14) {
-        earned.push({ 
-            name: t('badges_data.sustainability_streak.name'), 
-            icon: '🔥', 
-            desc: t('badges_data.sustainability_streak.desc') 
-        });
-    }
-    if (score >= 5000) {
-        earned.push({ 
-            name: t('badges_data.zero_waste_legend.name'), 
-            icon: '🌍', 
-            desc: t('badges_data.zero_waste_legend.desc') 
-        });
-    }
-    setBadges(earned);
-  };
-
-  const calculateEventStats = (eventsList) => {
-    const participating = eventsList.filter(e => String(e.i_am_participating) === 'true' || e.i_am_participating === true).length;
-    const total = eventsList.length;
-    const rate = total > 0 ? Math.round((participating / total) * 100) : 0;
-    setEventStats({ participating, total, rate });
+  const calculateBadges = async () => {
+      const headers = { Authorization: `Bearer ${token}` };
+      const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me`, { headers });
+      const earnedBadges = badges.data.filter(badge => badge.earned === true).map(badge => badge.code);
+      setEarnedBadgeIds(earnedBadges);
   };
 
   const calculateRank = (leaderboard, myId) => {
@@ -323,58 +430,87 @@ const PersonalStats = () => {
   };
 
   const treeCount = Math.floor(scoreData.total_score / 500); 
-  const tier = getTierInfo(scoreData.total_score);
+  const { current: currentTier, next: nextTier, currentIndex: currentLevelIndex } = getTierInfo(scoreData.total_score);
+  
+  let progressPercent = 100;
+  let pointsNeeded = 0;
+  if (nextTier) {
+      const range = nextTier.min - currentTier.min;
+      const progress = scoreData.total_score - currentTier.min;
+      progressPercent = Math.min(100, Math.max(0, (progress / range) * 100));
+      pointsNeeded = nextTier.min - scoreData.total_score;
+  }
+
+  const pieTotal = categoryStats.reduce((acc, item) => acc + (item[pieMetric] || 0), 0);
 
   return (
     <div className="personal-stats-page-scoped personal-stats-layout">
       <Navbar isAuthenticated={true} />
       
       <main className="stats-main-content">
-        {loading && (
+        {loading ? (
             <div className="loader-container-main">
                 <div className="loader-spinner-main"></div>
                 <p>{t('stats_page.loading')}</p>
             </div>
-        )}
-
-        {error && !loading && (
-            <div className="error-message-box-main">
-                 <Icon name="alerts" className="error-icon" /> {error}
-            </div>
-        )}
-
-        {!loading && !error && (
+        ) : error ? (
+            <div className="error-message-box-main"><Icon name="alerts" /> {error}</div>
+        ) : (
           <>
             <section className="stats-hero-section">
-              <div className="hero-welcome">
+              <div className="hero-header">
                 <h1>{t('stats_page.title', { username: profile?.username || 'User' })}</h1>
-                <span className="tier-badge" style={{ backgroundColor: tier.color }}>
-                  {tier.icon} {tier.name}
-                </span>
+                
+                <div className="level-progress-container">
+                    <div className="tier-labels">
+                        <span className="current-tier" style={{ color: currentTier.color }}>
+                            {currentTier.icon} {t(`stats_page.tiers.${currentTier.key}`, currentTier.key)} 
+                            <span style={{ fontSize: '0.85rem', marginLeft: '10px', opacity: 0.8, fontWeight: 'normal', color: 'var(--dashboard-text-medium)' }}>
+                                {t('stats_page.level_indicator', { current: currentLevelIndex, total: TIERS.length })}
+                            </span>
+                        </span>
+                        {nextTier && (
+                            <span className="next-tier-hint">
+                                {t('stats_page.next_level')}: {t(`stats_page.tiers.${nextTier.key}`, nextTier.key)} <Icon name="next"/>
+                            </span>
+                        )}
+                    </div>
+                    <div className="progress-track">
+                        <div className="progress-fill" style={{ width: `${progressPercent}%`, backgroundColor: currentTier.color }}></div>
+                    </div>
+                    <div className="progress-stats">
+                        <span className="current-points">{formatNumber(Math.round(scoreData.total_score))} {t('units.pts')}</span>
+                        {nextTier ? (
+                            <span className="points-needed">{formatNumber(pointsNeeded)} {t('units.pts')} {t('stats_page.to_go')}</span>
+                        ) : (
+                            <span className="max-level">{t('stats_page.max_level', 'MAX LEVEL!')}</span>
+                        )}
+                    </div>
+                </div>
               </div>
               
               <div className="hero-metrics-grid">
                 <div className="metric-card">
                   <h3><Icon name="score" /> {t('stats_page.hero.eco_score')}</h3>
-                  <div className="value">{Math.round(scoreData.total_score)}</div>
+                  <div className="value">{formatNumber(Math.round(scoreData.total_score))}</div>
+                </div>
+                <div className="metric-card">
+                  <h3><Icon name="tree" /> {t('stats_page.hero.trees_planted')}</h3>
+                  <div className="value">{formatNumber(treeCount)}</div>
                 </div>
                 <div className="metric-card">
                   <h3><Icon name="rank" /> {t('stats_page.hero.global_rank')}</h3>
                   <div className="value">{leaderboardRank}</div>
-                </div>
-                <div className="metric-card">
-                  <h3><Icon name="events" /> {t('stats_page.hero.event_rate')}</h3>
-                  <div className="value">{eventStats.rate}%</div>
-                  <small>{eventStats.participating} / {eventStats.total} {t('stats_page.hero.joined_subtext')}</small>
                 </div>
               </div>
             </section>
 
             <div className="stats-grid-layout">
               
+              {/* --- CHART 1: Points History --- */}
               <div className="stats-card wide">
                 <div className="chart-header">
-                    <h2>{t('stats_page.charts.activity_trend')}</h2>
+                    <h2>{t('stats_page.charts.points_history')}</h2>
                     <div className="stats-filter-group">
                         {['daily', 'weekly', 'monthly', 'yearly'].map((p) => (
                             <button 
@@ -387,48 +523,150 @@ const PersonalStats = () => {
                         ))}
                     </div>
                 </div>
-
                 <div className="chart-container">
-                  {chartLoading ? (
-                      <div className="chart-loader">
-                          <Icon name="loading" /> {t('stats_page.charts.updating')}
-                      </div>
-                  ) : (
-                    <SimpleBarChart data={statsData} t={t} />
-                  )}
+                    {chartLoading ? <div className="chart-loader"><Icon name="loading"/></div> : (
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 80 }}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                <XAxis 
+                                    dataKey="name" 
+                                    interval={0} 
+                                    angle={-45}  
+                                    textAnchor="end" 
+                                    tick={{ fontSize: 10, dy: 10 }}
+                                />
+                                <YAxis tick={{ fontSize: 11 }} />
+                                <Tooltip 
+                                    content={<CustomTooltip type="score" t={t} />} 
+                                    cursor={{fill: 'transparent'}}
+                                    wrapperStyle={{ zIndex: 1000 }}
+                                />
+                                <Legend wrapperStyle={{paddingTop: '40px'}} />
+                                {uniqueCategories.map((safeKey, index) => {
+                                    const originalName = chartData.find(d => d[`${safeKey}_originalName`])?.[`${safeKey}_originalName`] || safeKey;
+                                    const transName = getCategoryTrans(originalName);
+                                    
+                                    return (
+                                        <Bar 
+                                            key={safeKey} 
+                                            dataKey={`${safeKey}_score`} 
+                                            name={transName}
+                                            stackId="a" 
+                                            fill={COLORS[index % COLORS.length]} 
+                                            barSize={25}
+                                        />
+                                    );
+                                })}
+                            </BarChart>
+                        </ResponsiveContainer>
+                    )}
                 </div>
               </div>
 
-              <div className="stats-card">
-                <h2>{t('stats_page.charts.impact_breakdown')}</h2>
-                <div className="chart-container">
-                  {categoryStats.length > 0 ? (
-                    <SimplePieChart data={categoryStats} />
-                  ) : (
-                    <div className="empty-state-chart">
-                        <Icon name="loading" />
-                        <p>{t('stats_page.charts.no_breakdown_data')}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
+              {/* --- CHART 2: Items Logged --- */}
               <div className="stats-card wide">
-                <h2>{t('stats_page.badges.title')}</h2>
+                <div className="chart-header">
+                    <h2>{t('stats_page.charts.items_logged_frequency')}</h2>
+                </div>
+                <div className="chart-container">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 80 }}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <XAxis 
+                                dataKey="name" 
+                                interval={0} 
+                                angle={-45}
+                                textAnchor="end"
+                                tick={{ fontSize: 10, dy: 10 }}
+                            />
+                            <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
+                            <Tooltip 
+                                content={<CustomTooltip type="items" t={t} />} 
+                                cursor={{fill: 'transparent'}}
+                                wrapperStyle={{ zIndex: 1000 }}
+                            />
+                            <Legend wrapperStyle={{paddingTop: '40px'}} />
+                            {uniqueCategories.map((safeKey, index) => {
+                                const originalName = chartData.find(d => d[`${safeKey}_originalName`])?.[`${safeKey}_originalName`] || safeKey;
+                                const transName = getCategoryTrans(originalName);
+
+                                return (
+                                    <Bar 
+                                        key={safeKey} 
+                                        dataKey={`${safeKey}_count`} 
+                                        name={transName}
+                                        stackId="b" 
+                                        fill={COLORS[index % COLORS.length]} 
+                                        barSize={25}
+                                    />
+                                );
+                            })}
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* --- PIE CHART --- */}
+              <div className="stats-card">
+                <div className="chart-header" style={{marginBottom: 0, border: 'none'}}>
+                    <h2>{t('stats_page.charts.impact_breakdown')}</h2>
+                </div>
+                <div className="pie-toggle-group">
+                    <button className={`filter-btn ${pieMetric === 'score' ? 'active' : ''}`} onClick={() => setPieMetric('score')}>{t('stats_page.charts.by_points')}</button>
+                    <button className={`filter-btn ${pieMetric === 'count' ? 'active' : ''}`} onClick={() => setPieMetric('count')}>{t('stats_page.charts.by_frequency')}</button>
+                </div>
+
+                <div className="chart-container pie-container">
+                  {categoryStats.length > 0 ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie 
+                            data={categoryStats} 
+                            cx="50%" cy="50%" 
+                            innerRadius={60} 
+                            outerRadius={80} 
+                            paddingAngle={5} 
+                            dataKey={pieMetric} 
+                        >
+                          {categoryStats.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                            content={<CustomPieTooltip totalValue={pieTotal} t={t} />} 
+                            wrapperStyle={{ zIndex: 1000 }}
+                        />
+                        <Legend verticalAlign="bottom" height={36} wrapperStyle={{fontSize: '12px'}} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : <div className="empty-state-chart"><p>{t('stats_page.charts.no_breakdown_data')}</p></div>}
+                </div>
+              </div>
+
+              {/* --- Badges and Forest --- */}
+              <div className="stats-card wide">
+                <div className="badges-header-with-button">
+                  <h2>{t('stats_page.badges.title')}</h2>
+                  <button 
+                    className="view-all-badges-btn"
+                    onClick={() => navigate('/badges')}
+                  >
+                    {t('stats_page.badges.view_all', { defaultValue: 'View All Badges' })} →
+                  </button>
+                </div>
                 <div className="badges-grid">
-                  {badges.length > 0 ? (
-                    badges.map((badge, index) => (
-                      <div key={index} className="badge-item">
-                        <div className="badge-icon">{badge.icon}</div>
-                        <span className="badge-name">{badge.name}</span>
-                        <span className="badge-desc">{badge.desc}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="empty-badges">
-                        <p>{t('stats_page.badges.empty')}</p>
-                    </div>
-                  )}
+                  {earnedBadgeIds.length > 0 ? (
+                    earnedBadgeIds.map((badgeId, index) => {
+                        const def = BADGE_DEFINITIONS.find(d => d.id === badgeId) || { icon: '🏆' };
+                        return (
+                          <div key={index} className="badge-item">
+                            <div className="badge-icon">{def.icon}</div>
+                            <span className="badge-name">{t(`badges_data.${badgeId}.name`)}</span>
+                            <span className="badge-desc">{t(`badges_data.${badgeId}.desc`)}</span>
+                          </div>
+                        );
+                    })
+                  ) : <div className="empty-badges"><p>{t('stats_page.badges.empty')}</p></div>}
                 </div>
               </div>
 
@@ -439,15 +677,10 @@ const PersonalStats = () => {
                 </div>
                 <div className="forest-visual">
                   {treeCount > 0 ? (
-                    Array.from({ length: treeCount }).map((_, i) => (
-                      <span key={i} className="tree-icon" title="Virtual Tree">🌲</span>
+                    Array.from({ length: Math.min(treeCount, 50) }).map((_, i) => (
+                      <span key={i} className="tree-icon">🌲</span>
                     ))
-                  ) : (
-                    <div className="empty-forest">
-                      <Icon name="seed" className="seed-icon"/>
-                      <p>{t('stats_page.forest.empty')}</p>
-                    </div>
-                  )}
+                  ) : <div className="empty-forest"><Icon name="seed" className="seed-icon"/><p>{t('stats_page.forest.empty')}</p></div>}
                 </div>
               </div>
 

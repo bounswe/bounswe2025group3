@@ -1,61 +1,95 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-// Ensure useNavigate is imported cleanly from react-router-dom
 import { useNavigate, NavLink } from 'react-router-dom'; 
 import Navbar from '../common/Navbar';
-import './EventsPage.css'; // Assuming this CSS file contains the necessary styles
+import './EventsPage.css'; 
+import { getEvents, toggleParticipation, toggleLike, deleteEvent } from '../../services/api';
+import axios from "axios";
 
-// 1. Import all necessary API functions for display and actions (excluding createEvent)
-import { getEvents, toggleParticipation, toggleLike } from '../../services/api'; 
+const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
-// --- Component Definitions ---
-
-// Reusable Icon component - ADDED 'plus' ICON
 const Icon = ({ name, className = '' }) => {
   const icons = {
-    events: '📅', like: '❤️', location: '📍', date: '🗓️', alerts: '⚠️', user: '👤', plus: '➕'
+    events: '📅', like: '❤️', location: '📍', date: '🗓️', alerts: '⚠️', user: '👤', plus: '➕',
+    time: '⏱️', tool: '🔧', district: '🏙️', delete: '🗑️'
   };
   return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
 
 const EventsPage = () => {
-
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate(); // Hook call is correct
-    const token = localStorage.getItem('access_token');
+  const navigate = useNavigate(); 
+  const token = localStorage.getItem('access_token');
 
-    useEffect(() => {
-    if (!token) {
-        navigate('/login');
-        return;
-        }
-    // eslint-disable-next-line
-  }, [token]);
-  
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  // 2. Add state for user feedback messages
-  const [message, setMessage] = useState(null); 
-  
-  // Helper function for user feedback (Not a hook)
+  const [message, setMessage] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const currentUserId = Number(localStorage.getItem('user_id'));
+
+  useEffect(() => {
+    if (!token) {
+        navigate('/login');
+        return;
+    }
+
+    // Theme detection - check for blue-high-contrast class on body
+    const checkTheme = () => {
+      const isDark = document.body.classList.contains('blue-high-contrast');
+      setIsDarkTheme(isDark);
+    };
+
+    // Initial check
+    checkTheme();
+
+    // Listen for theme changes via MutationObserver on body
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    // Listen to custom themeChanged event
+    const handleThemeChange = () => {
+      checkTheme();
+    };
+    document.addEventListener('themeChanged', handleThemeChange);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('themeChanged', handleThemeChange);
+    };
+    // eslint-disable-next-line
+  }, [token]);
+
   const showMessage = (text, type = 'success') => {
     setMessage({ text, type });
-    setTimeout(() => setMessage(null), 3000); // Clear message after 3 seconds
+    setTimeout(() => setMessage(null), 3000); 
   };
 
-  // Function to fetch events (Not a hook)
+  // SÜRE FORMATLAMA (DÜZELTİLMİŞ)
+  const formatDuration = (minutes) => {
+    if (!minutes) return '';
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    
+    // Varsayılan değerler (sa, dk) eklendi
+    if (h > 0 && m > 0) return `${h} ${t('eventsPage.unitHoursShort', 'sa')} ${m} ${t('eventsPage.unitMinutesShort', 'dk')}`;
+    if (h > 0) return `${h} ${t('eventsPage.unitHours', 'Saat')}`;
+    return `${m} ${t('eventsPage.unitMinutes', 'Dakika')}`;
+  };
+
   const fetchEvents = async () => {
     setLoading(true);
     setError('');
     try {
-      // 3. Use the centralized getEvents function
       const data = await getEvents();
-      
       setEvents(data);
     } catch (err) {
       console.error('Failed to fetch events:', err);
-      // Axios errors often contain response details in err.response
       const errorMessage = err.response?.data?.detail || err.message;
       setError(t('eventsPage.error') + `: ${errorMessage}`);
     } finally {
@@ -63,127 +97,174 @@ const EventsPage = () => {
     }
   };
   
-  // useEffect hook is called unconditionally
   useEffect(() => {
     fetchEvents();
-  }, [t]); // Add 't' as a dependency in case the language changes
+  }, [t]); 
 
-  // 4. Refactor handleParticipate to use toggleParticipation API
   const handleParticipate = async (eventId) => {
-    const eventToUpdate = events.find(e => e.id === eventId);
-    if (!eventToUpdate) return;
-    
+    const originalEvents = [...events];
+    const eventIndex = events.findIndex(e => e.id === eventId);
+    if (eventIndex === -1) return;
+    const event = events[eventIndex];
+    const newStatus = !event.i_am_participating;
+    const updatedEvents = [...events];
+    updatedEvents[eventIndex] = { ...event, i_am_participating: newStatus, participants_count: event.participants_count + (newStatus ? 1 : -1) };
+    setEvents(updatedEvents);
     try {
-      // Call the centralized API function
+      const oldEarnedBadges = await getEarnedBadges();
       await toggleParticipation(eventId);
-      
-      // Update local state based on the assumption the action was successful
-      setEvents(prevEvents => prevEvents.map(event => {
-        if (event.id === eventId) {
-          const isParticipating = !event.i_am_participating;
-          
-          // Use hardcoded text if translation keys are missing, but rely on t()
-          const successKey = isParticipating ? 'eventsPage.participateSuccess' : 'eventsPage.unparticipateSuccess';
-          showMessage(t(successKey) || (isParticipating ? 'You are now participating!' : 'You are no longer participating.'), 'success');
-
-          return { 
-            ...event, 
-            i_am_participating: isParticipating,
-            // Update the count locally
-            participants_count: event.participants_count + (isParticipating ? 1 : -1)
-          };
-        }
-        return event;
-      }));
-
+      const newEarnedBadges = await getEarnedBadges();
+      showFirstEventPopup(oldEarnedBadges, newEarnedBadges);
+      showMessage(newStatus ? t('eventsPage.participateSuccess') : t('eventsPage.unparticipateSuccess'), 'success');
     } catch (err) {
-      console.error('Failed to toggle participation:', err);
-      const errorMessage = err.response?.data?.detail || err.message;
-      const errorKey = 'eventsPage.participateError';
-      showMessage(t(errorKey) + `: ${errorMessage}`, 'error');
+      setEvents(originalEvents);
+      showMessage(t('eventsPage.participateError'), 'error');
     }
   };
 
-  // 5. Refactor handleLike to use toggleLike API
+    const getEarnedBadges = async () => {
+        const headers = { Authorization: `Bearer ${token}` };
+        const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me`, { headers });
+        return badges.data.filter(badge => badge.earned === true).map(badge => badge.code);
+    }
+
+  const showFirstEventPopup = (oldBadges, newBadges) => {
+      const badgeKey = "event_joiner";
+      if (newBadges.includes(badgeKey) && !oldBadges.includes(badgeKey)) {
+        const badgeName = t(`badges_data.${badgeKey}.name`);
+        const badgeDesc = t(`badges_data.${badgeKey}.desc`);
+
+        addNotification(
+            `🏅 ${t('badges_page.badge_unlocked')}: ${badgeName} - ${badgeDesc}`,
+            'success'
+        );
+      }
+  }
+
+  const addNotification = (message, type = 'success') => {
+    const id = Date.now();
+    setNotifications(prev => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }, 5000);
+  };
+
   const handleLike = async (eventId) => {
-    const eventToUpdate = events.find(e => e.id === eventId);
-    if (!eventToUpdate) return;
+    const originalEvents = [...events];
+    const eventIndex = events.findIndex(e => e.id === eventId);
+    if (eventIndex === -1) return;
+    const event = events[eventIndex];
+    const newStatus = !event.i_liked;
+    const updatedEvents = [...events];
+    updatedEvents[eventIndex] = { ...event, i_liked: newStatus, likes_count: event.likes_count + (newStatus ? 1 : -1) };
+    setEvents(updatedEvents);
+    try {
+      await toggleLike(eventId);
+      showMessage(newStatus ? t('eventsPage.likeSuccess') : t('eventsPage.unlikeSuccess'), 'success');
+    } catch (err) {
+      setEvents(originalEvents);
+      showMessage(t('eventsPage.likeError'), 'error');
+    }
+  };
+
+  const handleDelete = async (eventId) => {
+    setDeleteConfirm(eventId);
+  };
+
+  const confirmDelete = async (eventId) => {
+    setDeleteConfirm(null);
+    const originalEvents = [...events];
+    const updatedEvents = events.filter(e => e.id !== eventId);
+    setEvents(updatedEvents);
 
     try {
-      // Call the centralized API function
-      await toggleLike(eventId);
-
-      setEvents(prevEvents => prevEvents.map(event => {
-        if (event.id === eventId) {
-          const isLiked = !event.i_liked;
-          
-          // Use hardcoded text if translation keys are missing, but rely on t()
-          const successKey = isLiked ? 'eventsPage.likeSuccess' : 'eventsPage.unlikeSuccess';
-          showMessage(t(successKey) || (isLiked ? 'Event liked!' : 'Event unliked.'), 'success');
-
-          return { 
-            ...event, 
-            i_liked: isLiked,
-            // Update the count locally
-            likes_count: event.likes_count + (isLiked ? 1 : -1)
-          };
-        }
-        return event;
-      }));
-      
+      await deleteEvent(eventId);
+      showMessage(t('eventsPage.deleteSuccess'), 'success');
     } catch (err) {
-      console.error('Failed to toggle like:', err);
-      const errorMessage = err.response?.data?.detail || err.message;
-      const errorKey = 'eventsPage.likeError';
-      showMessage(t(errorKey) + `: ${errorMessage}`, 'error');
+      setEvents(originalEvents);
+      const errorMessage = err.response?.data?.detail || t('eventsPage.deleteError');
+      showMessage(errorMessage, 'error');
     }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirm(null);
   };
 
   return (
     <div className="events-page-scoped events-page-layout">
       <Navbar isAuthenticated={true} />
+      {/* Notification Container */}
+      <div className="notification-container" style={{
+        position: 'fixed',
+        top: '80px',
+        right: '20px',
+        zIndex: 1000,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px'
+      }}>
+        {notifications.map(notif => (
+            <div
+                key={notif.id}
+                className={`notification notification-${notif.type}`}
+                style={{
+                  padding: '12px 20px',
+                  borderRadius: '8px',
+                  backgroundColor: notif.type === 'error' ? '#fee2e2' : notif.type === 'info' ? '#dbeafe' : '#dcfce7',
+                  color: notif.type === 'error' ? '#991b1b' : notif.type === 'info' ? '#1e40af' : '#166534',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                  maxWidth: '350px',
+                  animation: 'slideIn 0.3s ease'
+                }}
+            >
+              {notif.message}
+            </div>
+        ))}
+      </div>
+
+      {message && (
+        <div className={`feedback-toast ${message.type}`}>
+          <div className="toast-content">{message.type === 'success' ? '✅' : '⚠️'} {message.text}</div>
+        </div>
+      )}
+
+      {deleteConfirm && (
+        <div className="delete-modal-overlay">
+          <div className={`delete-modal ${isDarkTheme ? 'dark-theme' : ''}`}>
+            <div className={`delete-modal-header ${isDarkTheme ? 'dark-theme' : ''}`}>
+              <Icon name="delete" /> {t('eventsPage.confirmDelete')}
+            </div>
+            <div className={`delete-modal-body ${isDarkTheme ? 'dark-theme' : ''}`}>
+              <p>{t('eventsPage.deleteConfirmMessage', 'Bu etkinliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')}</p>
+            </div>
+            <div className={`delete-modal-footer ${isDarkTheme ? 'dark-theme' : ''}`}>
+              <button className={`btn-cancel ${isDarkTheme ? 'dark-theme' : ''}`} onClick={cancelDelete}>
+                {t('common.cancel', 'İptal Et')}
+              </button>
+              <button className="btn-delete" onClick={() => confirmDelete(deleteConfirm)}>
+                {t('common.delete', 'Evet, Sil')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="events-main-content">
         <div className="events-header-section">
           <h1><Icon name="events" /> {t('eventsPage.title')}</h1>
           <p>{t('eventsPage.subtitle')}</p>
-
-          {/* UPDATED: Use NavLink for declarative navigation */}
-          <NavLink 
-            to="/events/create"
-            // NavLink uses the 'className' prop for styling, treating it like the 'add-event-btn'
-            className="add-event-btn"
-          >
-            <Icon name="plus" className="mr-2" />
-            {t('eventsPage.buttonAdd') || 'Add New Event'}
+          <NavLink to="/events/create" className="add-event-btn">
+            <Icon name="plus" className="mr-2" /> {t('eventsPage.buttonAdd')}
           </NavLink>
         </div>
 
-        {/* 6. Display feedback message */}
-        {message && (
-          <div className={`p-4 mb-4 rounded-lg shadow-md text-center ${message.type === 'success' ? 'success-message-box' : 'error-message-box'}`}>
-            {message.text}
-          </div>
-        )}
-        {/* End feedback message */}
-
-        {loading && (
-          <div className="loader-container-main">
-            <div className="loader-spinner-main" />
-            <p>{t('eventsPage.loading')}</p>
-          </div>
-        )}
-        
-        {error && !loading && (
-          <div className="error-message-box-main">
-            <Icon name="alerts" /> {error}
-          </div>
-        )}
+        {loading && <div className="loader-container-main"><div className="loader-spinner-main" /><p>{t('eventsPage.loading')}</p></div>}
+        {error && !loading && <div className="error-message-box-main"><Icon name="alerts" /> {error}</div>}
 
         {!loading && !error && (
           <div className="events-grid">
             {events.map(event => (
-              // Using the API data properties: title, description, location, date, image, i_am_participating, participants_count, likes_count
               <div key={event.id} className="event-card">
                 {/* Use 'event.image_url' property (can be null) */}
                 <img 
@@ -192,45 +273,70 @@ const EventsPage = () => {
                   className="event-card-image" 
                 />
                 <div className="event-card-content">
-                  <h2>{event.title}</h2>
-                  <div className="event-card-info">
-                    <span>
-                      <Icon name="date" /> 
-                      {/* Format the ISO date string '2025-11-19T14:32:24.788000Z' */}
-                      {new Date(event.date).toLocaleDateString(i18n.language, { 
-                        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                      })}
-                    </span>
-                    <span><Icon name="location" /> {event.location}</span>
-                  </div>
-                  <p className="event-card-description">{event.description}</p>
                   
-                  <div className="event-card-creator">
-                    <Icon name="user" /> {t('eventsPage.creator')}: <strong>{event.creator_username}</strong>
+                  <h2>{event.title}</h2>
+                  
+                  <div className="event-card-info">
+                    <span className="info-item">
+                      <Icon name="date" /> 
+                      {new Date(event.date).toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                    <span className="info-item">
+                        <Icon name="location" /> {event.location}
+                    </span>
                   </div>
+
+                  {/* --- GÜNCELLENEN KISIM: BAŞLIKLI FORMAT --- */}
+                  <div className="event-details-grid">
+                      {/* İlçe */}
+                      {event.exact_location && (
+                          <div className="detail-tag">
+                              <Icon name="district" /> 
+                              {/* Başlık: Veri */}
+                              <span>{t('eventsPage.labelDistrict', 'İlçe')}: {event.exact_location}</span>
+                          </div>
+                      )}
+                      
+                      {/* Süre */}
+                      {(event.duration !== null && event.duration !== undefined) && (
+                          <div className="detail-tag">
+                              <Icon name="time" /> 
+                              {/* Başlık: Veri */}
+                              <span>{t('eventsPage.labelDuration', 'Süre')}: {formatDuration(event.duration)}</span>
+                          </div>
+                      )}
+
+                      {/* Ekipman */}
+                      {event.equipment_needed && (
+                          <div className="detail-tag full-width">
+                              <Icon name="tool" /> 
+                              {/* Başlık: Veri */}
+                              <span>{t('eventsPage.labelEquipment', 'Gereken Ekipman')}: {event.equipment_needed}</span>
+                          </div>
+                      )}
+                  </div>
+                  {/* ------------------------------------------- */}
+
+                  <p className="event-card-description">
+                      <strong>{t('eventsPage.labelDescription', 'Açıklama')}: </strong>
+                      {event.description}
+                  </p>
                   
                   <div className="event-card-actions">
-                    <button
-                      // Use 'event.i_am_participating'
-                      className={`participate-btn ${event.i_am_participating ? 'participating' : ''}`}
-                      // 7. Attach refactored handler
-                      onClick={() => handleParticipate(event.id)}
-                    >
-                      {/* Use t() for button text */}
-                      {event.i_am_participating ? t('eventsPage.participating') : t('eventsPage.participate')}
+                    <button className={`participate-btn ${event.i_am_participating ? 'participating' : ''}`} onClick={() => handleParticipate(event.id)}>
+                      {event.i_am_participating ? `✓ ${t('eventsPage.participating')}` : t('eventsPage.participate')}
                     </button>
-                    <button 
-                      // Add 'liked' class for visual feedback if the user liked it
-                      className={`like-btn ${event.i_liked ? 'liked' : ''}`} 
-                      // 8. Attach refactored handler
-                      onClick={() => handleLike(event.id)}
-                    >
-                      {/* Use 'event.likes_count' */}
-                      <Icon name="like" /> {event.likes_count}
-                    </button>
-                    <span className="participants-count">
-                      <Icon name="user" /> {event.participants_count} {t('eventsPage.participants')}
-                    </span>
+                    <div className="right-actions">
+                        <button className={`like-btn ${event.i_liked ? 'liked' : ''}`} onClick={() => handleLike(event.id)}>
+                            <Icon name="like" /> {event.likes_count}
+                        </button>
+                        <span className="participants-count"><Icon name="user" /> {event.participants_count}</span>
+                        {currentUserId === event.creator && (
+                          <button className="delete-btn" onClick={() => handleDelete(event.id)} title={t('eventsPage.deleteButton', 'Etkinliği Sil')}>
+                            <Icon name="delete" />
+                          </button>
+                        )}
+                    </div>
                   </div>
                 </div>
               </div>

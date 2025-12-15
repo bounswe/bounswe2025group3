@@ -6,7 +6,7 @@ from apps.events.api.v1.serializers import EventSerializer  # Assuming EventSeri
 class EventTitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification.event.field.related_model
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'date', 'location', 'exact_location']
 
 
 class NotificationSerializer(serializers.ModelSerializer):

@@ -30,6 +30,7 @@ export const API_ENDPOINTS = {
     LOGS: '/api/v1/waste/logs/',
     LOG_BY_ID: (id: number) => `/api/v1/waste/logs/${id}/`,
     MY_SCORE: '/api/v1/waste/scores/me/',
+    USER_STATS: '/api/v1/waste/user/stats/',
     SUGGESTIONS: '/api/v1/waste/suggestions/',
     SUSTAINABLE_ACTIONS: '/api/v1/waste/sustainable-actions/',
     ADMIN: {
@@ -50,6 +51,10 @@ export const API_ENDPOINTS = {
     TEMPLATES: '/api/v1/goals/templates/',
   },
 
+  REWARDS: {
+    BADGES_ME: '/api/v1/rewards/badges/me/',
+  },
+
   CHALLENGES: {
     LIST: '/v1/challenges/api/v1/challenges/',
     DETAIL: (id: number) => `/v1/challenges/api/v1/challenges/${id}/`,
@@ -63,5 +68,11 @@ export const API_ENDPOINTS = {
     CREATE: '/api/v1/events/events/',
     LIKE: (id: number) => `/api/v1/events/events/${id}/like/`,
     PARTICIPATE: (id: number) => `/api/v1/events/events/${id}/participate/`,
+  },
+
+  NOTIFICATIONS: {
+    LIST: '/api/v1/notifications/',
+    MARK_READ: (id: number) => `/api/v1/notifications/${id}/read/`,
+    MARK_ALL_READ: '/api/v1/notifications/mark-all-read/',
   },
 };

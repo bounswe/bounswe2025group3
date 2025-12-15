@@ -10,6 +10,7 @@ class Event(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     location = models.CharField(max_length=255, blank=True)
+    exact_location = models.CharField(max_length=255, null=True, blank=True)
     date = models.DateTimeField()  # when the event happens
     image_url = models.URLField(blank=True, null=True, max_length=500)  # Supabase Storage URL
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_events')

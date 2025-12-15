@@ -7,7 +7,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 from django.shortcuts import get_object_or_404
 from apps.events.models import Event
 from apps.events.api.v1.serializers import EventSerializer
-from apps.events.api.v1.permissions import IsCreatorOrAdmin, IsAdminForDelete
+from apps.events.api.v1.permissions import IsCreatorOrAdmin, IsCreatorOrAdminForDelete
 from rest_framework.decorators import action
 
 
@@ -18,7 +18,7 @@ from rest_framework.decorators import action
         "This viewset handles event creation, listing, updating, and retrieving.\n"
         "Only authenticated users can create events.\n"
         "Updating is restricted to the creator or an admin.\n"
-        "Deleting events is restricted to admins only."
+        "Deleting events is restricted to the creator or an admin."
     )
 )
 class EventViewSet(viewsets.ModelViewSet):
