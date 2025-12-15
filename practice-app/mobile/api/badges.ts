@@ -51,7 +51,10 @@ export const getMyBadges = async (): Promise<Badge[]> => {
     // Handle empty 200/204 responses gracefully
     const rawText = await response.text();
     if (!rawText) {
-      if (!response.ok) throw new Error("Failed to load badges.");
+      if (!response.ok) {
+        console.warn(`Badges endpoint returned status ${response.status}. Badges may not be available on this backend.`);
+        return []; // Fail gracefully
+      }
       return [];
     }
 
@@ -59,18 +62,29 @@ export const getMyBadges = async (): Promise<Badge[]> => {
     try {
       parsed = JSON.parse(rawText);
     } catch {
-      if (!response.ok) throw new Error("Failed to load badges.");
+      if (!response.ok) {
+        console.warn(`Badges endpoint returned status ${response.status}. Badges may not be available on this backend.`);
+        return []; // Fail gracefully
+      }
       return [];
     }
 
     if (!response.ok) {
-      throw buildError(parsed, "Failed to load badges.");
+      console.warn(`Badges endpoint error: ${response.status}. Badges may not be available on this backend.`);
+      return []; // Fail gracefully instead of throwing
     }
 
     return extractBadgeList(parsed);
   } catch (error) {
-    console.error("Failed to fetch badges", error);
-    throw error;
+    // If authentication error or network error, silently fail
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (errorMessage.includes('No access token') || 
+        errorMessage.includes('Session expired') || 
+        errorMessage.includes('Authentication')) {
+      return [];
+    }
+    console.warn("Badges feature may not be available:", error);
+    return []; // Fail gracefully
   }
 };
 
