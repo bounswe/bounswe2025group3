@@ -5,13 +5,18 @@
 # Uses x86_64 platform to ensure Android SDK compatibility across all host architectures.
 #
 # Build Arguments:
-#   BACKEND_IP   - IP address of your backend server (default: 10.0.2.2)
-#   BACKEND_PORT - Port of your backend server (default: 8000)
+#   BACKEND_URL  - Full backend URL (default: http://10.0.2.2:8000 for emulator)
+#                  For live: https://ecochallenge-backend.onrender.com
+#                  For local: http://192.168.1.65:8000
 #
 # Usage:
-#   docker build --build-arg BACKEND_IP=192.168.1.100 -t mobile-app-builder .
-#   docker run --name mobile-build mobile-app-builder
-#   docker cp mobile-build:/app/android/app/build/outputs/apk/release/app-release.apk .
+#   Live Backend:
+#     docker build --build-arg BACKEND_URL=https://ecochallenge-backend.onrender.com -t mobile-app-builder .
+#   Local Backend:
+#     docker build --build-arg BACKEND_URL=http://192.168.1.65:8000 -t mobile-app-builder .
+#   Then:
+#     docker run --name mobile-build mobile-app-builder
+#     docker cp mobile-build:/app/android/app/build/outputs/apk/release/app-release.apk .
 #
 # Note: On Apple Silicon Macs, the build runs via Rosetta 2 emulation.
 #       First build may take 30-45 minutes; subsequent builds are faster.
@@ -22,8 +27,7 @@
 FROM --platform=linux/amd64 ubuntu:22.04
 
 # Build arguments for backend configuration
-ARG BACKEND_IP=10.0.2.2
-ARG BACKEND_PORT=8000
+ARG BACKEND_URL=http://10.0.2.2:8000
 
 # Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -121,8 +125,8 @@ COPY . .
 # CONFIGURE API BASE URL
 # ==============================================================================
 # Dynamically inject the backend URL into the constants file
-RUN echo "Configuring API_BASE_URL to http://${BACKEND_IP}:${BACKEND_PORT}" && \
-    sed -i "s|export const API_BASE_URL = .*|export const API_BASE_URL = 'http://${BACKEND_IP}:${BACKEND_PORT}';|g" constants/api.ts && \
+RUN echo "Configuring API_BASE_URL to ${BACKEND_URL}" && \
+    sed -i "s|export const API_BASE_URL = .*|export const API_BASE_URL = '${BACKEND_URL}';|g" constants/api.ts && \
     echo "API configuration complete. Verifying:" && \
     grep "API_BASE_URL" constants/api.ts
 
