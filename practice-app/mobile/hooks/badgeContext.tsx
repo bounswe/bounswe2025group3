@@ -159,7 +159,11 @@ export const BadgeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         await saveShownBadgeId(badgeId);
       }
     } catch (error) {
-      console.error('Error checking for new badges:', error);
+      // Silently fail for authentication errors (user not logged in)
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (!errorMessage.includes('Session expired') && !errorMessage.includes('Authentication')) {
+        console.error('Error checking for new badges:', error);
+      }
     } finally {
       setIsChecking(false);
     }

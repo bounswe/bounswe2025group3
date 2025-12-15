@@ -140,7 +140,11 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         await saveShownNotificationId(notificationId);
       }
     } catch (error) {
-      console.error('Error checking for new notifications:', error);
+      // Silently fail for authentication errors (user not logged in)
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (!errorMessage.includes('Session expired') && !errorMessage.includes('Authentication')) {
+        console.error('Error checking for new notifications:', error);
+      }
     } finally {
       setIsChecking(false);
     }
