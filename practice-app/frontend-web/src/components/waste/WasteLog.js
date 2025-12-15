@@ -167,42 +167,7 @@ const WasteLog = () => {
         return subcategory?.score_per_unit || 'N/A';
     };
 
-    const getEarnedBadgesList = (logsData, scoreData, streakData) => {
-        // ... Mevcut kodunuzdaki badge listesi aynı kalacak ...
-        const badgesDef = [
-             { id: 'first_step', earned: logsData.length > 0, icon: '🎖' },
-             { id: 'plastic_buster', earned: logsData.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 10, icon: '🥤' },
-             { id: 'sustainability_streak', earned: streakData.length >= 14, icon: '🔥' },
-             { id: 'zero_waste_legend', earned: scoreData >= 5000, icon: '🌍' },
-             { id: 'eco_warrior', earned: logsData.length >= 50, icon: '⚔️' },
-             { id: 'tree_hugger', earned: scoreData >= 1000, icon: '🌿' },
-             { id: 'recycling_master', earned: logsData.filter(l => l.disposal_location?.toLowerCase().includes('recycled') || l.disposal_location?.toLowerCase().includes('recycling')).length >= 30, icon: '♻️' },
-             { id: 'compost_champion', earned: logsData.filter(l => l.disposal_location?.toLowerCase().includes('compost')).length >= 20, icon: '🌱' },
-             { id: 'milestone_100', earned: logsData.length >= 100, icon: '💯' },
-             { id: 'score_1500', earned: scoreData >= 1500, icon: '🏆' },
-             { id: 'consistency_king', earned: streakData.length >= 30, icon: '👑' },
-             { id: 'metal_maven', earned: logsData.filter(l => l.sub_category_name?.toLowerCase().includes('metal')).length >= 15, icon: '🔧' },
-             { id: 'paper_pride', earned: logsData.filter(l => l.sub_category_name?.toLowerCase().includes('paper')).length >= 25, icon: '📄' },
-             { id: 'glass_guru', earned: logsData.filter(l => l.sub_category_name?.toLowerCase().includes('glass')).length >= 10, icon: '🥃' },
-             { id: 'eco_score_500', earned: scoreData >= 500, icon: '⭐' },
-             { id: 'score_2000', earned: scoreData >= 2000, icon: '🥇' },
-             { id: 'score_3000', earned: scoreData >= 3000, icon: '🥈' },
-             { id: 'logs_200', earned: logsData.length >= 200, icon: '📋' },
-             { id: 'logs_500', earned: logsData.length >= 500, icon: '🎯' },
-             { id: 'streak_60', earned: streakData.length >= 60, icon: '🚀' },
-             { id: 'plastic_50', earned: logsData.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 50, icon: '💪' },
-             { id: 'organic_50', earned: logsData.filter(l => l.sub_category_name?.toLowerCase().includes('organic') || l.sub_category_name?.toLowerCase().includes('food')).length >= 50, icon: '🍃' },
-             { id: 'electronic_20', earned: logsData.filter(l => l.sub_category_name?.toLowerCase().includes('electronic') || l.sub_category_name?.toLowerCase().includes('e-waste')).length >= 20, icon: '🔌' },
-             { id: 'textile_30', earned: logsData.filter(l => l.sub_category_name?.toLowerCase().includes('textile') || l.sub_category_name?.toLowerCase().includes('cloth')).length >= 30, icon: '👕' },
-             { id: 'donate_50', earned: logsData.filter(l => l.disposal_location?.toLowerCase().includes('donated') || l.disposal_location?.toLowerCase().includes('reused')).length >= 50, icon: '🎁' },
-             { id: 'landfill_zero', earned: logsData.filter(l => l.disposal_location?.toLowerCase().includes('landfill')).length === 0 && logsData.length > 0, icon: '✨' },
-             { id: 'streak_7', earned: streakData.length >= 7, icon: '📅' },
-             { id: 'streak_21', earned: streakData.length >= 21, icon: '🎖️' }
-        ];
-        return badgesDef;
-    };
-
-    const checkMilestones = (oldScore, newScore, oldLogs, newLogs, oldStreak, newStreak) => {
+    const checkMilestones = (oldScore, newScore, oldBadges, newBadges) => {
         // 1. Ağaç Kontrolü
         const oldTrees = Math.floor(oldScore / 500);
         const newTrees = Math.floor(newScore / 500);
@@ -223,22 +188,25 @@ const WasteLog = () => {
             addNotification(`🆙 ${t('stats_page.level_up')} - ${t('stats_page.level_up_desc', { rank: newTierName })}`, 'info');
         }
 
-        // 3. Rozet Kontrolü
-        const oldBadges = getEarnedBadgesList(oldLogs, oldScore, oldStreak);
-        const newBadges = getEarnedBadgesList(newLogs, newScore, newStreak);
+        newBadges.forEach(badgeKey => {
+            if (!oldBadges.includes(badgeKey)) {
+                const badgeName = t(`badges_data.${badgeKey}.name`);
+                const badgeDesc = t(`badges_data.${badgeKey}.desc`);
 
-        newBadges.forEach(newBadge => {
-            if (newBadge.earned) {
-                const wasEarnedBefore = oldBadges.find(old => old.id === newBadge.id)?.earned;
-                if (!wasEarnedBefore) {
-                    const badgeName = t(`badges_data.${newBadge.id}.name`);
-                    const badgeDesc = t(`badges_data.${newBadge.id}.desc`);
-
-                    addNotification(`${newBadge.icon} ${t('badges_page.badge_unlocked')}: ${badgeName} - ${badgeDesc}`, 'success');
-                }
+                addNotification(
+                    `🏅 ${t('badges_page.badge_unlocked')}: ${badgeName} - ${badgeDesc}`,
+                    'success'
+                );
             }
         });
+
     };
+
+    const getEarnedBadges = async () => {
+        const headers = { Authorization: `Bearer ${token}` };
+        const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me`, { headers });
+        return badges.data.filter(badge => badge.earned === true).map(badge => badge.code);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -262,12 +230,13 @@ const WasteLog = () => {
                 disposal_method: form.disposal_method || undefined,
                 notes: form.notes || undefined,
             };
-            
-            const oldLogs = [...logs];
+
             const oldScore = currentTotalScore;
-            const oldStreak = [...currentStreakStats];
+            const oldEarnedBadges = await getEarnedBadges();
 
             await addWasteLog(payload);
+
+            const newEarnedBadges = await getEarnedBadges();
             
             const [newLogsRes, newScoreRes, newStreakRes] = await Promise.all([
                 getWasteLogs(),
@@ -279,7 +248,7 @@ const WasteLog = () => {
             const newTotalScore = newScoreRes.total_score || 0;
             const newStreak = newStreakRes || [];
 
-            checkMilestones(oldScore, newTotalScore, oldLogs, newLogs, oldStreak, newStreak);
+            checkMilestones(oldScore, newTotalScore, oldEarnedBadges, newEarnedBadges);
 
             setLogs(newLogs);
             setCurrentTotalScore(newTotalScore);
