@@ -16,28 +16,142 @@
     right: 20px;
     z-index: 9999; /* En üstte durması için */
     padding: 1rem 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    animation: slideIn 0.3s ease-out;
-    max-width: 300px;
-    font-weight: 500;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 350px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
 }
 
 .feedback-toast.success {
-    background-color: #d4edda;
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
     color: #155724;
-    border-left: 5px solid #28a745;
+    box-shadow: 0 8px 24px rgba(40, 167, 69, 0.25);
 }
 
 .feedback-toast.error {
-    background-color: #f8d7da;
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
     color: #721c24;
-    border-left: 5px solid #dc3545;
+    box-shadow: 0 8px 24px rgba(220, 53, 69, 0.25);
 }
 
-@keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+.feedback-toast .toast-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+@keyframes slideInRight {
+    from { 
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to { 
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* --- Delete Modal --- */
+.delete-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.delete-modal {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+    width: 90%;
+    overflow: hidden;
+    animation: popUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.delete-modal-header {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    padding: 1.5rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.delete-modal-body {
+    padding: 2rem 1.5rem;
+    color: var(--dashboard-text-dark);
+    line-height: 1.6;
+    text-align: center;
+}
+
+.delete-modal-footer {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color-light);
+    justify-content: flex-end;
+}
+
+.btn-cancel,
+.btn-delete {
+    padding: 0.65rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.btn-cancel {
+    background-color: var(--background-secondary);
+    color: var(--dashboard-text-dark);
+    border: 1px solid var(--border-color-light);
+}
+
+.btn-cancel:hover {
+    background-color: var(--border-color-light);
+    transform: translateY(-2px);
+}
+
+.btn-delete {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popUp {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* --- Main Content --- */
@@ -285,6 +399,27 @@
     align-items: center;
     gap: 4px;
     white-space: nowrap;
+}
+
+.events-page-scoped .delete-btn {
+  background: transparent;
+  border: 1px solid var(--events-border-color);
+  color: var(--dashboard-text-medium);
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.events-page-scoped .delete-btn:hover {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  border-color: #e74c3c;
+  transform: scale(1.1);
 }
 
 /* --- Responsive --- */

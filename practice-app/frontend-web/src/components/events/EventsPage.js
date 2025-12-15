@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, NavLink } from 'react-router-dom'; 
 import Navbar from '../common/Navbar';
 import './EventsPage.css'; 
-import { getEvents, toggleParticipation, toggleLike } from '../../services/api'; 
+import { getEvents, toggleParticipation, toggleLike, deleteEvent } from '../../services/api'; 
 
 const Icon = ({ name, className = '' }) => {
   const icons = {
     events: '📅', like: '❤️', location: '📍', date: '🗓️', alerts: '⚠️', user: '👤', plus: '➕',
-    time: '⏱️', tool: '🔧', district: '🏙️'
+    time: '⏱️', tool: '🔧', district: '🏙️', delete: '🗑️'
   };
   return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
@@ -29,7 +29,9 @@ const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [message, setMessage] = useState(null); 
+  const [message, setMessage] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const currentUserId = Number(localStorage.getItem('user_id')); 
   
   const showMessage = (text, type = 'success') => {
     setMessage({ text, type });
@@ -103,6 +105,30 @@ const EventsPage = () => {
     }
   };
 
+  const handleDelete = async (eventId) => {
+    setDeleteConfirm(eventId);
+  };
+
+  const confirmDelete = async (eventId) => {
+    setDeleteConfirm(null);
+    const originalEvents = [...events];
+    const updatedEvents = events.filter(e => e.id !== eventId);
+    setEvents(updatedEvents);
+
+    try {
+      await deleteEvent(eventId);
+      showMessage(t('eventsPage.deleteSuccess', '✨ Etkinlik başarıyla silindi'), 'success');
+    } catch (err) {
+      setEvents(originalEvents);
+      const errorMessage = err.response?.data?.detail || t('eventsPage.deleteError', 'Etkinlik silinirken hata oluştu');
+      showMessage(errorMessage, 'error');
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirm(null);
+  };
+
   return (
     <div className="events-page-scoped events-page-layout">
       <Navbar isAuthenticated={true} />
@@ -110,6 +136,27 @@ const EventsPage = () => {
       {message && (
         <div className={`feedback-toast ${message.type}`}>
           <div className="toast-content">{message.type === 'success' ? '✅' : '⚠️'} {message.text}</div>
+        </div>
+      )}
+
+      {deleteConfirm && (
+        <div className="delete-modal-overlay">
+          <div className="delete-modal">
+            <div className="delete-modal-header">
+              <Icon name="delete" /> Etkinliği Sil
+            </div>
+            <div className="delete-modal-body">
+              <p>Bu etkinliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+            </div>
+            <div className="delete-modal-footer">
+              <button className="btn-cancel" onClick={cancelDelete}>
+                İptal Et
+              </button>
+              <button className="btn-delete" onClick={() => confirmDelete(deleteConfirm)}>
+                Evet, Sil
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -189,6 +236,11 @@ const EventsPage = () => {
                             <Icon name="like" /> {event.likes_count}
                         </button>
                         <span className="participants-count"><Icon name="user" /> {event.participants_count}</span>
+                        {currentUserId === event.creator && (
+                          <button className="delete-btn" onClick={() => handleDelete(event.id)} title={t('eventsPage.deleteButton', 'Etkinliği Sil')}>
+                            <Icon name="delete" />
+                          </button>
+                        )}
                     </div>
                   </div>
                 </div>
