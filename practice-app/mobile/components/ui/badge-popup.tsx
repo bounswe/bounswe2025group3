@@ -63,7 +63,13 @@ const BadgePopup: React.FC<BadgePopupProps> = ({
   const badgeInfo = badge.badge || badge;
   const badgeId = badgeInfo.id || badge.id;
   
-  const imageUri =
+  // Check for emoji icon first (single character emoji or short string)
+  const emojiIcon = 
+    (typeof badgeInfo.icon === "string" && badgeInfo.icon.length <= 2 && badgeInfo.icon) ||
+    (typeof badge.icon === "string" && badge.icon.length <= 2 && badge.icon);
+  
+  // Then check for image URLs
+  const imageUri = emojiIcon ? null :
     (typeof badgeInfo.icon === "string" && badgeInfo.icon.startsWith("http") && badgeInfo.icon) ||
     (typeof badge.icon === "string" && badge.icon.startsWith("http") && badge.icon) ||
     (typeof badge.icon_url === "string" && badge.icon_url) ||
@@ -191,7 +197,9 @@ const BadgePopup: React.FC<BadgePopupProps> = ({
           </View>
 
           <View style={styles.iconContainer}>
-            {imageUri ? (
+            {emojiIcon ? (
+              <Text style={{ fontSize: 48 }}>{emojiIcon}</Text>
+            ) : imageUri ? (
               <Image source={{ uri: imageUri }} style={styles.badgeIcon} />
             ) : (
               <Ionicons

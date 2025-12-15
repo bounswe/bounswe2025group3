@@ -7,9 +7,10 @@ import { ActivityIndicator, Alert, Image, PermissionsAndroid, Platform, ScrollVi
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createEvent } from '@/api/events';
 import { useTranslation } from 'react-i18next';
-import ImagePicker from 'react-native-image-crop-picker';
+import * as ExpoImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { Country, State } from 'country-state-city';
+import { useBadge } from '@/hooks/badgeContext';
 
 const formatDateTimeToISO = (date: Date): string => {
   return date.toISOString();
@@ -70,6 +71,7 @@ export default function AddEventScreen() {
   const router = useRouter();
   const colors = useColors();
   const { t } = useTranslation();
+  const { checkForNewBadges } = useBadge();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -168,36 +170,28 @@ export default function AddEventScreen() {
   };
 
   const pickImage = async () => {
-    // Request permission first on Android
-    const hasPermission = await requestGalleryPermission();
-    if (!hasPermission) {
+    // Request permission for Expo Image Picker
+    const permissionResult = await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
+    
+    if (!permissionResult.granted) {
       Alert.alert('İzin Gerekli', 'Fotoğraf seçmek için galeri erişim izni vermeniz gerekmektedir.');
       return;
     }
 
     try {
-      const image = await ImagePicker.openPicker({
-        width: 1280,
-        height: 720,
-        cropping: true,
-        mediaType: 'photo',
-        cropperCircleOverlay: false,
-        aspectRatio: { width: 16, height: 9 },
-        
-        cropperToolbarTitle: 'Fotoğrafı Düzenle',
-        cropperToolbarColor: colors.cb1,       
-        cropperStatusBarColor: colors.primary,     
-        cropperToolbarWidgetColor: '#FFFFFF',      
-        cropperActiveWidgetColor: colors.primary,  
-        freeStyleCropEnabled: false,
+      const result = await ExpoImagePicker.launchImageLibraryAsync({
+        mediaTypes: 'images',
+        allowsEditing: true,
+        aspect: [16, 9],
+        quality: 0.8,
       });
 
-      setImageUri(image.path);
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        setImageUri(result.assets[0].uri);
+      }
 
     } catch (error: any) {
-      if (error.code !== 'E_PICKER_CANCELLED') {
-        Alert.alert('Hata', 'Fotoğraf seçilemedi: ' + error.message);
-      }
+      Alert.alert('Hata', 'Fotoğraf seçilemedi: ' + error.message);
     }
   };
 
@@ -219,6 +213,12 @@ export default function AddEventScreen() {
         date: formatDateTimeToISO(date),
         image: imageUri || undefined,
       });
+      
+      // Check for new badges after creating event
+      setTimeout(() => {
+        checkForNewBadges();
+      }, 1000);
+      
       Alert.alert("Success", "Event created successfully!");
       router.back();
     } catch (error) {

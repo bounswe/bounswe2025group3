@@ -101,7 +101,8 @@ export default function LeaderboardScreen() {
       return <Text style={styles.rankText}>{rank}</Text>;
     };
 
-    const initial = name.charAt(0).toUpperCase();
+    const displayName = name || 'Anonymous';
+    const initial = displayName.charAt(0).toUpperCase();
     const initialColor = getColorForInitial(initial);
 
     return (
@@ -118,7 +119,7 @@ export default function LeaderboardScreen() {
               <Text style={styles.initialText}>{initial}</Text>
             </View>
           )}
-          <Text style={styles.playerName}>{name}</Text>
+          <Text style={styles.playerName}>{displayName}</Text>
           {isCurrentUser && (
             <View style={styles.youTag}>
               <Text style={styles.youTagText}>{t("leaderboard.you")}</Text>
