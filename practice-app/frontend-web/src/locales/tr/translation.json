@@ -1,15 +1,17 @@
 {
   "common": {
     "nav": {
-      "home": "Ana Sayfa",
-      "about": "Hakkımızda",
+      "home": "Anasayfa",
+      "about": "Hakkında",
       "blog": "Blog",
       "login": "Giriş Yap",
-      "signup": "Kayıt Ol"
+      "signup": "Kaydol"
     },
     "footer": {
       "rights": "Tüm hakları saklıdır."
-    }
+    },
+    "cancel": "İptal Et",
+    "delete": "Sil"
   },
   "home": {
     "hero": {
@@ -508,6 +510,11 @@
     "likeSuccess": "Etkinlik beğenildi!",
     "unlikeSuccess": "Beğeni geri alındı.",
     "likeError": "Beğeni durumu değiştirilemedi",
+    "deleteSuccess": "Etkinlik başarıyla silindi",
+    "deleteError": "Etkinlik silinirken hata oluştu",
+    "deleteButton": "Etkinliği Sil",
+    "confirmDelete": "Etkinliği Sil",
+    "deleteConfirmMessage": "Bu etkinliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
     "backToEvents": "Etkinliklere Geri Dön",
     "hours": "saat",
     "equipmentNeeded": "Gereken Ekipman",

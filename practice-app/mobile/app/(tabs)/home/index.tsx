@@ -9,6 +9,7 @@ import { useColors } from '@/constants/colors';
 import { getMyScore } from "@/api/waste";
 import { getGoals, Goal } from "@/api/goals";
 import { formatDateShort } from "@/i18n/utils";
+import { getUnreadNotifications } from "@/api/notifications";
 
 const { width } = Dimensions.get('window');
 const GOAL_CARD_WIDTH = width * 0.45;
@@ -79,6 +80,7 @@ export default function HomeScreen() {
   const [activeGoals, setActiveGoals] = useState<Goal[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
   const router = useRouter();
   const colors = useColors();
   const isInitialLoad = useRef(true);
@@ -107,8 +109,13 @@ export default function HomeScreen() {
   const fetchData = async (showLoader = true) => {
     if (showLoader) setIsLoading(true);
     try {
-      const [scoreData, allGoals] = await Promise.all([getMyScore(), getGoals()]);
+      const [scoreData, allGoals, unreadNotifs] = await Promise.all([
+        getMyScore(), 
+        getGoals(),
+        getUnreadNotifications().catch(() => []) // Silently fail if user not logged in
+      ]);
       setUserScore(scoreData);
+      setUnreadCount(unreadNotifs.length);
 
       const now = new Date();
       const active = allGoals
@@ -154,6 +161,23 @@ export default function HomeScreen() {
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
     headerBar: { height: "7%", paddingHorizontal: "4%", flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', backgroundColor: colors.background, borderBottomWidth: 1, borderBottomColor: colors.borders },
     headerBarLogo: { width: 52, height: 52 },
+    notificationBadge: {
+      position: 'absolute',
+      top: -4,
+      right: -4,
+      backgroundColor: colors.sun,
+      borderRadius: 10,
+      minWidth: 18,
+      height: 18,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 4,
+    },
+    notificationBadgeText: {
+      color: 'white',
+      fontSize: 11,
+      fontWeight: '700',
+    },
     content: { flex: 1 },
     scrollContent: { paddingBottom: 40 },
     statsCard: { marginHorizontal: "2%", marginTop: "4%", paddingHorizontal: "5%", paddingVertical: "3%", backgroundColor: colors.cb1, borderRadius: 16 },
@@ -218,7 +242,24 @@ export default function HomeScreen() {
       <View style={styles.headerBar}>
         <Image source={require('@/assets/images/reversed-icon.png')} style={styles.headerBarLogo} resizeMode="contain" />
         <Text style={{ color: colors.primary, fontSize: 28, fontWeight: '700' }}>GREENER</Text>
-        <TouchableOpacity style={{ marginLeft: "auto" }} onPress={() => router.push('/menu_drawer')}>
+        
+        {/* Notification Button with Badge */}
+        <TouchableOpacity 
+          style={{ marginLeft: "auto", marginRight: 16, position: 'relative' }} 
+          onPress={() => router.push('/notifications')}
+        >
+          <Ionicons name="notifications-outline" size={26} color={colors.primary} />
+          {unreadCount > 0 && (
+            <View style={styles.notificationBadge}>
+              <Text style={styles.notificationBadgeText}>
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
+        
+        {/* Menu Button */}
+        <TouchableOpacity onPress={() => router.push('/menu_drawer')}>
           <Fontisto name="nav-icon-grid-a" size={24} style={{ paddingRight: "2%" }} color={colors.primary} />
         </TouchableOpacity>
       </View>
