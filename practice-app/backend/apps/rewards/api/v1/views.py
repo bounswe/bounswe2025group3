@@ -6,6 +6,7 @@ from apps.rewards.api.v1.serializers import BadgeGallerySerializer
 from django.db import models
 from django.db.models.functions import TruncDate
 from apps.waste.models import WasteLog
+from apps.events.models import Event
 
 class BadgesView(APIView):
     permission_classes = [IsAuthenticated]
@@ -20,7 +21,7 @@ class BadgesView(APIView):
 
         calculated = {
             b["id"]: b["earned"]
-            for b in self.calculate_badges(logs, daily_stats, score)
+            for b in self.calculate_badges(logs, daily_stats, score, self.get_event_participation(user))
         }
 
         badges = Badge.objects.all().order_by("id")
@@ -38,6 +39,10 @@ class BadgesView(APIView):
             badge["earned"] = calculated.get(badge["code"], False)
 
         return Response(data)
+
+    def get_event_participation(self, user):
+        """Checks if the user has participated in any event."""
+        return Event.objects.filter(participants=user).exists()
 
     def get_logs(self, user):
         return list(
@@ -64,7 +69,7 @@ class BadgesView(APIView):
     def get_score(self, user):
         return float(user.total_score)
 
-    def calculate_badges(self, logs, daily_stats, score):
+    def calculate_badges(self, logs, daily_stats, score, has_participated):
 
         def get_logs_by_disposal_method(disposal_method):
             filtered_list = []
@@ -118,6 +123,10 @@ class BadgesView(APIView):
             {
                 "id": "first_step",
                 "earned": len(logs) > 0
+            },
+            {
+                "id": "event_joiner",
+                "earned": has_participated
             },
             {
                 "id": "plastic_buster",

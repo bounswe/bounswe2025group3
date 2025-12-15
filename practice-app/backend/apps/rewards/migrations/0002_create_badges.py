@@ -32,6 +32,7 @@ def create_badges(apps, schema_editor):
         {"code": "landfill_zero", "name": "Zero Landfill", "icon": "✨", "description": "Send 0 items to landfill"},
         {"code": "streak_7", "name": "Week Warrior", "icon": "📅", "description": "Log waste 7 days in a row"},
         {"code": "streak_21", "name": "Monthly Hero", "icon": "🎖️", "description": "Log waste 21 days in a row"},
+        {"code": "event_joiner", "name": "Event Joiner", "icon": "🎖", "description": "Join your first event"},
     ]
 
     for badge in badges:

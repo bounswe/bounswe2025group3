@@ -662,6 +662,7 @@
   },
   "badges_data": {
     "first_step": { "name": "First Step", "desc": "Log first waste" },
+    "event_joiner":  { "name":  "First Event", "desc": "Join first event"},
     "plastic_buster": { "name": "Plastic Buster", "desc": "Reduce 10kg plastic" },
     "sustainability_streak": { "name": "Sustainability Streak", "desc": "7 Days Streak" },
     "zero_waste_legend": { "name": "Zero Waste Legend", "desc": "5000+ Score" },
