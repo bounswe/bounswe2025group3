@@ -44,6 +44,9 @@ const buildError = (data: any, fallback: string) => {
 
 export const getMyBadges = async (): Promise<Badge[]> => {
   try {
+    const fullUrl = `${require('@/constants/api').API_BASE_URL}${API_ENDPOINTS.REWARDS.BADGES_ME}`;
+    console.log(`[Badges] Fetching from: ${fullUrl}`);
+    
     const response = await tokenManager.authenticatedFetch(
       API_ENDPOINTS.REWARDS.BADGES_ME
     );
@@ -52,6 +55,8 @@ export const getMyBadges = async (): Promise<Badge[]> => {
 
     // Handle empty 200/204 responses gracefully
     const rawText = await response.text();
+    console.log(`[Badges] Raw response text length: ${rawText.length}`);
+    
     if (!rawText) {
       if (!response.ok) {
         console.warn(`[Badges] Empty response with status ${response.status}. Badges may not be available on this backend.`);
@@ -64,7 +69,14 @@ export const getMyBadges = async (): Promise<Badge[]> => {
     let parsed: any;
     try {
       parsed = JSON.parse(rawText);
-      console.log(`[Badges] Parsed response:`, JSON.stringify(parsed).substring(0, 200));
+      console.log(`[Badges] Parsed response:`, JSON.stringify(parsed).substring(0, 300));
+      if (Array.isArray(parsed)) {
+        console.log(`[Badges] Response is array with ${parsed.length} items`);
+        if (parsed.length === 0) {
+          console.warn(`[Badges] ⚠️ API returned empty array - Badge migration likely not run on live backend yet!`);
+          console.warn(`[Badges] Backend team needs to run: python manage.py migrate rewards`);
+        }
+      }
     } catch {
       if (!response.ok) {
         console.warn(`[Badges] Invalid JSON with status ${response.status}. Badges may not be available on this backend.`);
