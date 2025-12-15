@@ -145,6 +145,7 @@ const EventCreate = () => {
       
       // Handle DRF validation errors - they can be in different formats
       let errorMessage = err.message;
+      
       if (err.response?.data) {
         if (err.response.data.detail) {
           errorMessage = err.response.data.detail;
@@ -152,18 +153,24 @@ const EventCreate = () => {
           // DRF validation errors are usually an object with field names
           const errorFields = Object.keys(err.response.data);
           const errorMessages = errorFields.map(field => {
-            const fieldErrors = Array.isArray(err.response.data[field]) 
-              ? err.response.data[field].join(', ')
+            const fieldError = Array.isArray(err.response.data[field]) 
+              ? err.response.data[field][0]
               : err.response.data[field];
-            return `${field}: ${fieldErrors}`;
+            
+            // Check if it's a banned word error and format it nicely
+            if (typeof fieldError === 'string' && fieldError.includes('banned word')) {
+              const match = fieldError.match(/banned word: '([^']+)'/);
+              const bannedWord = match ? match[1] : 'that word';
+              return `❌ ${field.charAt(0).toUpperCase() + field.slice(1)} contains a prohibited word`;
+            }
+            return `${field}: ${fieldError}`;
           });
-          errorMessage = errorMessages.join('; ') || JSON.stringify(err.response.data);
+          errorMessage = errorMessages.join(' | ') || JSON.stringify(err.response.data);
         } else {
           errorMessage = err.response.data;
         }
       }
-      showMessage(t('eventsPage.createError') + `: ${errorMessage}`, 'error');
-    } finally {
+      showMessage(errorMessage, 'error');   } finally {
       setIsSubmitting(false);
     }
   };

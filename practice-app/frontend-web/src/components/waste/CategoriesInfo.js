@@ -27,10 +27,11 @@ const CategoriesInfo = () => {
                 defaultValue: 'Never throw batteries in regular trash. Take them to designated collection points at supermarkets, electronics stores, or recycling centers.' 
             }),
             subcategories: [
-                { name: 'AA/AAA Batteries', score: 15, decomposition: '100 years' },
-                { name: 'Lithium-ion Batteries', score: 25, decomposition: '500+ years' },
-                { name: 'Button Cell Batteries', score: 20, decomposition: '100 years' },
-                { name: 'Car Batteries', score: 25, decomposition: '100 years' }
+                { name: 'AA Batteries', score: 5.00, decomposition: '100 years' },
+                { name: 'Lithium-ion Batteries', score: 10.00, decomposition: '500+ years' },
+                { name: 'Button Cell Batteries', score: 3.00, decomposition: '100 years' },
+                { name: 'Car Batteries', score: 20.00, decomposition: '100 years' },
+                { name: 'NiMH Batteries', score: 7.00, decomposition: '100 years' }
             ]
         },
         {
@@ -49,15 +50,13 @@ const CategoriesInfo = () => {
                 defaultValue: 'Donate working electronics or take broken ones to certified e-waste recyclers. Many manufacturers offer take-back programs.' 
             }),
             subcategories: [
-                { name: 'Mobile Phones', score: 30, decomposition: '1000+ years' },
-                { name: 'Small Appliances', score: 25, decomposition: '500+ years' },
-                { name: 'Computers/Laptops', score: 50, decomposition: '1000+ years' },
-                { name: 'Cables & Chargers', score: 20, decomposition: '500 years' }
+                { name: 'Small Appliances', score: 10.00, decomposition: '500+ years' },
+                { name: 'Mobile Phones', score: 15.00, decomposition: '1000+ years' }
             ]
         },
         {
             id: 'plastic',
-            name: t('categories_info.plastic.name', { defaultValue: 'Plastic' }),
+            name: t('categories_info.plastic.name', { defaultValue: 'Recyclable' }),
             icon: '🥤',
             scoreRange: '5-15',
             unit: 'kg',
@@ -71,10 +70,10 @@ const CategoriesInfo = () => {
                 defaultValue: 'Rinse containers before recycling. Check the recycling number (1-7) - not all plastics are recyclable locally. Avoid single-use plastics when possible.' 
             }),
             subcategories: [
-                { name: 'PET Bottles (#1)', score: 10, decomposition: '450 years' },
-                { name: 'HDPE Containers (#2)', score: 8, decomposition: '500 years' },
-                { name: 'Plastic Bags', score: 5, decomposition: '20 years' },
-                { name: 'Styrofoam', score: 15, decomposition: '500+ years' }
+                { name: 'Plastic Bottles', score: 2.00, decomposition: '450 years' },
+                { name: 'Paper', score: 1.50, decomposition: '2-6 weeks' },
+                { name: 'Cardboard', score: 1.80, decomposition: '2 months' },
+                { name: 'Metal Cans', score: 3.00, decomposition: '50 years' }
             ]
         },
         {
@@ -93,9 +92,8 @@ const CategoriesInfo = () => {
                 defaultValue: 'Separate glass by color (clear, green, brown) if required locally. Remove metal caps. Broken glass should be wrapped safely before disposal.' 
             }),
             subcategories: [
-                { name: 'Glass Bottles', score: 10, decomposition: '1 million years' },
-                { name: 'Glass Jars', score: 8, decomposition: '1 million years' },
-                { name: 'Broken Glass', score: 12, decomposition: '1 million years' }
+                { name: 'Glass Bottles', score: 2.50, decomposition: '1 million years' },
+                { name: 'Broken Glass', score: 1.00, decomposition: '1 million years' }
             ]
         },
         {
@@ -114,10 +112,9 @@ const CategoriesInfo = () => {
                 defaultValue: 'Keep paper dry and clean. Remove plastic windows from envelopes. Shredded paper may need special handling - check local guidelines.' 
             }),
             subcategories: [
-                { name: 'Office Paper', score: 5, decomposition: '2-6 weeks' },
-                { name: 'Cardboard', score: 6, decomposition: '2 months' },
-                { name: 'Newspapers', score: 3, decomposition: '6 weeks' },
-                { name: 'Magazines', score: 8, decomposition: '6 months (coated)' }
+                { name: 'Food Scraps', score: 1.00, decomposition: '1-6 months' },
+                { name: 'Garden Waste', score: 0.80, decomposition: '1-3 months' },
+                { name: 'Coffee Grounds', score: 2.00, decomposition: '2-3 months' }
             ]
         },
         {
@@ -136,10 +133,8 @@ const CategoriesInfo = () => {
                 defaultValue: 'Rinse food containers. Crush cans to save space. Keep aluminum and steel separate if required. Scrap metal can often be sold to recyclers.' 
             }),
             subcategories: [
-                { name: 'Aluminum Cans', score: 15, decomposition: '200-500 years' },
-                { name: 'Steel Cans', score: 12, decomposition: '50 years' },
-                { name: 'Aluminum Foil', score: 10, decomposition: '400 years' },
-                { name: 'Scrap Metal', score: 20, decomposition: '50-500 years' }
+                { name: 'Aluminum Cans', score: 3.00, decomposition: '200-500 years' },
+                { name: 'Steel Cans', score: 3.00, decomposition: '50 years' }
             ]
         },
         {
@@ -180,10 +175,8 @@ const CategoriesInfo = () => {
                 defaultValue: 'Donate wearable items. Use textile recycling bins for damaged clothes. Some brands offer take-back programs. Repurpose old clothes as cleaning rags.' 
             }),
             subcategories: [
-                { name: 'Cotton Clothing', score: 10, decomposition: '1-5 months' },
-                { name: 'Synthetic Clothing', score: 15, decomposition: '200+ years' },
-                { name: 'Shoes', score: 12, decomposition: '25-40 years' },
-                { name: 'Leather Items', score: 8, decomposition: '25-40 years' }
+                { name: 'Used Clothing', score: 3.00, decomposition: '1-5 months' },
+                { name: 'Shoes', score: 5.00, decomposition: '25-40 years' }
             ]
         },
         {
@@ -202,8 +195,7 @@ const CategoriesInfo = () => {
                 defaultValue: 'Never pour oil down the drain! Collect in a sealed container and take to designated collection points at recycling centers or some supermarkets.' 
             }),
             subcategories: [
-                { name: 'Used Cooking Oil', score: 20, decomposition: 'Never (pollutes)' },
-                { name: 'Vegetable Oil', score: 15, decomposition: 'Never (pollutes)' }
+                { name: 'Used Cooking Oil', score: 4.00, decomposition: 'Never (pollutes)' }
             ]
         }
     ];

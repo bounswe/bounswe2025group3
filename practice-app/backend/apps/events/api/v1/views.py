@@ -24,7 +24,7 @@ from rest_framework.decorators import action
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.select_related('creator').prefetch_related('participants', 'likes').all()
     serializer_class = EventSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsCreatorOrAdmin, IsAdminForDelete]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsCreatorOrAdmin, IsCreatorOrAdminForDelete]
     parser_classes = [MultiPartParser, JSONParser]  # Support both multipart and JSON
 
     def perform_create(self, serializer):
