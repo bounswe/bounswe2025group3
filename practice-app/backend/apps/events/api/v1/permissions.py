@@ -10,12 +10,12 @@ class IsCreatorOrAdmin(permissions.BasePermission):
             return True
         return request.user and (request.user.is_staff or obj.creator_id == request.user.id)
 
-class IsAdminForDelete(permissions.BasePermission):
+class IsCreatorOrAdminForDelete(permissions.BasePermission):
     """
-    Only admins (staff/superuser) can delete events.
+    Allow event deletion only if user is the creator or admin.
     """
 
     def has_object_permission(self, request, view, obj):
         if request.method == 'DELETE':
-            return request.user and request.user.is_staff
+            return request.user and (request.user.is_staff or obj.creator_id == request.user.id)
         return True

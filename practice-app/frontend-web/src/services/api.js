@@ -123,6 +123,11 @@ export const toggleLike = async (eventId) => {
     return response.data;
 };
 
+export const deleteEvent = async (eventId) => {
+    const response = await api.delete(`v1/events/events/${eventId}/`);
+    return response.data;
+};
+
 export const getUnreadNotifications = async () => {
     const response = await api.get('v1/notifications/?is_read=false');
     return response.data.results || [];
