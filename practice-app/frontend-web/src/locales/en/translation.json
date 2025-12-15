@@ -9,7 +9,9 @@
     },
     "footer": {
       "rights": "All rights reserved."
-    }
+    },
+    "cancel": "Cancel",
+    "delete": "Delete"
   },
   "home": {
     "hero": {
@@ -508,6 +510,11 @@
     "likeSuccess": "Event liked!",
     "unlikeSuccess": "Event unliked.",
     "likeError": "Failed to toggle like",
+    "deleteSuccess": "Event deleted successfully",
+    "deleteError": "Error deleting event",
+    "deleteButton": "Delete Event",
+    "confirmDelete": "Delete Event",
+    "deleteConfirmMessage": "Are you sure you want to delete this event? This action cannot be undone.",
     "backToEvents": "Back to Events",
     "hours": "hours",
     "unitHoursShort": "h",

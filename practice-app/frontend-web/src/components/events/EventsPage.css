@@ -31,10 +31,23 @@
     box-shadow: 0 8px 24px rgba(40, 167, 69, 0.25);
 }
 
+.feedback-toast.success.dark-theme {
+    background: linear-gradient(135deg, #1e5e3f 0%, #0f3820 100%);
+    color: #00ff00;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(74, 222, 128, 0.15);
+}
+
 .feedback-toast.error {
     background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
     color: #721c24;
     box-shadow: 0 8px 24px rgba(220, 53, 69, 0.25);
+}
+.feedback-toast.error.dark-theme {
+    background: linear-gradient(135deg, #5f1f1f 0%, #3a1515 100%);
+    color: #ff6b6b;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(252, 165, 165, 0.15);
 }
 
 .feedback-toast .toast-content {
@@ -70,7 +83,7 @@
 }
 
 .delete-modal {
-    background: white;
+    background: #f9f9f9;
     border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     max-width: 400px;
@@ -79,9 +92,13 @@
     animation: popUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.delete-modal.dark-theme {
+    background: #1a1a1a;
+}
+
 .delete-modal-header {
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-    color: #721c24;
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+    color: #ad1457;
     padding: 1.5rem;
     font-weight: 700;
     font-size: 1.1rem;
@@ -90,19 +107,36 @@
     gap: 0.75rem;
 }
 
+.delete-modal-header.dark-theme {
+    background: linear-gradient(135deg, #3d0e12 0%, #4a0e1a 100%);
+    color: #ff6b9d;
+}
+
 .delete-modal-body {
     padding: 2rem 1.5rem;
-    color: var(--dashboard-text-dark);
+    color: #2a2a2a;
     line-height: 1.6;
     text-align: center;
+    background: #ffffff;
+}
+
+.delete-modal-body.dark-theme {
+    color: #e8e8e8;
+    background: #1a1a1a;
 }
 
 .delete-modal-footer {
     display: flex;
     gap: 1rem;
     padding: 1.5rem;
-    border-top: 1px solid var(--border-color-light);
+    border-top: 1px solid #f0f0f0;
     justify-content: flex-end;
+    background: #ffffff;
+}
+
+.delete-modal-footer.dark-theme {
+    border-top-color: #333;
+    background: #1a1a1a;
 }
 
 .btn-cancel,
@@ -117,13 +151,24 @@
 }
 
 .btn-cancel {
-    background-color: var(--background-secondary);
-    color: var(--dashboard-text-dark);
-    border: 1px solid var(--border-color-light);
+    background-color: #e8e8e8;
+    color: #333333;
+    border: 1px solid #ccc;
+}
+
+.btn-cancel.dark-theme {
+    background-color: #333333;
+    color: #e8e8e8;
+    border-color: #444;
 }
 
 .btn-cancel:hover {
-    background-color: var(--border-color-light);
+    background-color: #d9d9d9;
+    transform: translateY(-2px);
+}
+
+.btn-cancel.dark-theme:hover {
+    background-color: #444;
     transform: translateY(-2px);
 }
 
