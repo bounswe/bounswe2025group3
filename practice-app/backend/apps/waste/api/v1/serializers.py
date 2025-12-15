@@ -2,6 +2,8 @@ from rest_framework import serializers
 from apps.waste.models import (
     WasteLog, WasteCategory, SubCategory, CustomCategoryRequest, WasteSuggestion, SustainableAction
 )
+from apps.user.models import CustomUser
+
 from drf_spectacular.utils import extend_schema_field
 from drf_spectacular.types import OpenApiTypes
 
@@ -88,10 +90,17 @@ class UserScoreSerializer(serializers.Serializer):
     total_score = serializers.FloatField()
 
 
-class UserRankingSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    username = serializers.CharField()
-    total_score = serializers.IntegerField(read_only=True)
+class UserRankingSerializer(serializers.ModelSerializer):
+    display_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'display_name', 'total_score']
+
+    def get_display_name(self, obj):
+        if obj.is_anonymous:
+            return "anonymous_user"
+        return obj.username
 
 
 class WasteStatsItemSerializer(serializers.Serializer):
@@ -99,3 +108,14 @@ class WasteStatsItemSerializer(serializers.Serializer):
     end_date = serializers.DateField()
     total_score = serializers.FloatField()
     total_log = serializers.IntegerField()
+
+    def to_representation(self, instance):
+        # Start with the default fields
+        rep = super().to_representation(instance)
+
+        # Add any dynamic fields (subcategory_* keys)
+        for key, value in instance.items():
+            if key not in rep:
+                rep[key] = value
+
+        return rep

@@ -72,12 +72,76 @@ docker-compose logs -f backend
 docker-compose up --build
 ```
 
+## Mobile Application
+
+### Prerequisites
+- [Docker Desktop](https://www.docker.com/get-started) with 8GB+ RAM allocated
+- Android Studio with emulator (for testing)
+
+### Build APK
+
+```bash
+cd mobile
+
+# Build Docker image
+docker build --platform=linux/amd64 -t mobile-app-builder .
+
+# Run build (generates APK)
+docker run --name mobile-build --memory=8g mobile-app-builder
+
+# Extract APK
+docker cp mobile-build:/app/android/app/build/outputs/apk/release/app-release.apk .
+
+# Cleanup
+docker rm mobile-build
+```
+
+### Connect to Local Backend
+
+1. **Start backend** (from practice-app root):
+   ```bash
+   docker-compose up backend
+   ```
+
+2. **Run database migrations** (if needed):
+   ```bash
+   docker-compose exec backend python manage.py migrate
+   ```
+
+3. **Set up ADB port forwarding** (for emulator):
+   ```bash
+   adb reverse tcp:8000 tcp:8000
+   ```
+
+4. **Install APK**: Drag `app-release.apk` onto Android Studio emulator
+
+### Environment Variables
+
+See `mobile/.env.example` for all configuration options. Key variable:
+- `API_BASE_URL` - Backend server URL (default: `http://10.0.2.2:8000` for emulator)
+
+### Development Mode (No Docker)
+
+```bash
+cd mobile
+npm install
+npm start
+# Press 'a' for Android
+```
+
+For detailed instructions, see `mobile/BUILD_INSTRUCTIONS.md`.
+
+---
+
 ## Project Structure
 
 ```
 practice-app/
 ├── backend/           # Django backend
 ├── frontend-web/      # React frontend
+├── mobile/            # React Native mobile app
+│   ├── Dockerfile     # APK build configuration
+│   └── .env.example   # Environment variables template
 ├── docker-compose.yml # Docker orchestration
 └── .env              # Environment variables (create from .env.sample)
 ```
