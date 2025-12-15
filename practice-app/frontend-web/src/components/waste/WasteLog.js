@@ -333,6 +333,12 @@ const WasteLog = () => {
                 <div className="wastelog-header-section">
                     <h1><Icon name="waste" /> {t('waste_log_page.title')}</h1>
                     <p>{t('waste_log_page.subtitle')}</p>
+                    <button 
+                        className="info-guide-btn"
+                        onClick={() => navigate('/categories')}
+                    >
+                        📚 {t('waste_log_page.learn_scoring', { defaultValue: 'Learn About Scoring & Environmental Impact' })}
+                    </button>
                 </div>
 
                 {error && (

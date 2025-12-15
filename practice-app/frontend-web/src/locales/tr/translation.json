@@ -687,5 +687,73 @@
     "title": "Bildirimler",
     "mark_all_read": "Tümünü okundu işaretle",
     "dismiss": "Kapat"
+  },
+  "categories_info": {
+    "title": "Eylemleriniz Neden Önemli",
+    "subtitle": "Farklı atık türlerinin çevresel etkisini ve doğru bertarafın neden puan kazandırdığını anlayın.",
+    "back_to_waste": "Atık Kaydına Dön",
+    "how_scoring_works": "Puanlama Nasıl Çalışır",
+    "decomposition_time": "Ayrışma Süresi",
+    "decomposition_desc": "Daha uzun sürede ayrışan maddeler, uzun vadeli çevresel riskler oluşturduğu için daha fazla puan kazanır.",
+    "toxicity": "Toksisite Seviyesi",
+    "toxicity_desc": "Piller ve elektronik cihazlar gibi tehlikeli maddeler, toprak ve suyu kirletme potansiyelleri nedeniyle en yüksek puanı alır.",
+    "recyclability": "Geri Dönüştürülebilirlik Değeri",
+    "recyclability_desc": "Yüksek geri dönüşüm değerine sahip malzemeler (metaller, cam) iyi puan alır çünkü geri dönüştürülmeleri önemli kaynak tasarrufu sağlar.",
+    "resource_savings": "Kaynak Tasarrufu",
+    "resource_desc": "Puanlar, doğru bertaraf ve geri dönüşümle tasarruf edilen enerji, su ve hammaddeleri yansıtır.",
+    "category_details": "Kategori Detayları",
+    "loading": "Kategoriler yükleniyor...",
+    "no_categories": "Kategori bulunamadı.",
+    "items": "öğe",
+    "environmental_impact": "Çevresel Etki",
+    "why_this_score": "Neden Bu Puan?",
+    "disposal_tip": "Bertaraf İpucu",
+    "items_in_category": "Bu Kategorideki Öğeler",
+    "item": "Öğe",
+    "points_per_unit": "Puan/Birim",
+    "unit": "Birim",
+    "did_you_know": "Biliyor muydunuz?",
+    "fact1": "Tek bir AA pil, 400 litre suyu ağır metallerle kirletebilir.",
+    "fact2": "Şimdiye kadar üretilen her plastik parçası hala Dünya'nın bir yerinde var.",
+    "fact3": "1 milyon telefonun geri dönüşümü 15.875 kg bakır, 350 kg altın ve 15 kg paladyum geri kazanır.",
+    "fact4": "Bir ton kağıdın geri dönüşümü 17 ağacı ve 26.500 litre suyu kurtarır.",
+    "ready_to_help": "Fark Yaratmaya Hazır mısınız?",
+    "cta_text": "Doğru şekilde kaydettiğiniz her öğe gezegenimizi korumaya yardımcı olur. Şimdi kayıt yapmaya başlayın ve etkinizi izleyin!",
+    "start_logging": "Atık Kaydetmeye Başla",
+    "recyclable": {
+      "impact": "Plastik, kağıt ve metal gibi geri dönüştürülebilir malzemeler onlarca yıldan yüzyıllara kadar ayrışır. Doğru geri dönüşüm enerji tasarrufu sağlar, çöp miktarını azaltır ve doğal kaynakları korur.",
+      "why_score": "Bu malzemeleri geri dönüştürmek kirliliği önler, üretim enerjisinden tasarruf sağlar (alüminyum için %95'e kadar) ve hammadde çıkarma ihtiyacını azaltır.",
+      "tip": "Geri dönüştürülebilir malzemeleri türüne göre temizleyin ve ayırın. Yerel yönergeleri kontrol edin çünkü tüm plastikler her yerde geri dönüştürülebilir değil. Gerektiğinde kapakları ve etiketleri çıkarın."
+    },
+    "electronic": {
+      "impact": "E-atıklar kurşun, cıva ve alev geciktiriciler dahil tehlikeli maddeler içerir. Küresel e-atıkların sadece %17'si düzgün şekilde geri dönüştürülür. Yanlış bertaraf, kansere, böbrek hasarına ve nörolojik bozukluklara neden olabilecek toksinler salar.",
+      "why_score": "Elektronikler, toksik maddelerin karmaşık bileşimi ve altın, gümüş ve nadir toprak metalleri gibi değerli geri kazanılabilir kaynaklar nedeniyle yüksek çevresel etkiye sahiptir.",
+      "tip": "Çalışan elektronikleri bağışlayın veya bozukları sertifikalı e-atık geri dönüştürücülerine götürün. Birçok üretici geri alma programları sunuyor."
+    },
+    "organic": {
+      "impact": "Çöp sahalarındaki gıda atıkları metan üretir - sera gazı olarak CO2'den 25 kat daha güçlü. Üretilen tüm gıdaların 1/3'ü dünya çapında israf ediliyor. Kompostlama atığı değerli toprak besinlerine dönüştürür.",
+      "why_score": "Doğal ayrışma nedeniyle daha düşük puanlar, ancak kompostlama metan emisyonlarını önler ve besin açısından zengin toprak yaratarak doğal döngüyü kapatır.",
+      "tip": "Evde kompost yapın veya belediye organik atık kutularını kullanın. Ev kompostuna et/süt ürünleri koymayın. Solucan kompostlaması (vermikompostlama) süreci hızlandırır."
+    },
+    "glass": {
+      "impact": "Cam 1 milyon yılda ayrışır ancak kalite kaybı olmadan sınırsız olarak %100 geri dönüştürülebilir. Cam geri dönüşümü, yeni cam üretimine kıyasla hava kirliliğini %20 ve su kirliliğini %50 azaltır.",
+      "why_score": "Cam geri dönüşümü son derece verimlidir - geri dönüştürülmüş cam daha düşük sıcaklıklarda erir ve %30 enerji tasarrufu sağlar. Geri dönüştürülen her ton 1,2 ton hammadde tasarrufu sağlar.",
+      "tip": "Yerel olarak gerekiyorsa camı renge göre ayırın (şeffaf, yeşil, kahverengi). Metal kapakları çıkarın. Kırık cam bertaraftan önce güvenli bir şekilde sarılmalıdır."
+    },
+    "cooking_oil": {
+      "impact": "1 litre yemeklik yağ 1 milyon litre suyu kirletebilir. Lavabolara dökülen yağ tıkanmalara neden olur, kanalizasyon sistemlerine zarar verir ve su ekosistemlerine zarar verir. Biyodizele dönüştürülebilir.",
+      "why_score": "Yüksek puanlar ciddi su kirliliği potansiyelini yansıtır. Doğru geri dönüşüm, atık yağı biyodizel, sabun ve diğer ürünlere dönüştürerek kirliliği önler.",
+      "tip": "Yağı asla lavaboya dökmeyin! Kapalı bir kapta toplayın ve geri dönüşüm merkezlerindeki veya bazı süpermarketlerdeki belirlenen toplama noktalarına götürün."
+    },
+    "clothing": {
+      "impact": "Moda endüstrisi küresel karbon emisyonlarının %10'unu üretir. Sentetik kumaşların ayrışması 200+ yıl sürer ve mikroplastik salar. Giysilerin sadece %15'i geri dönüştürülür - geri kalanı çöp sahalarında bitiyor.",
+      "why_score": "Tekstil geri dönüşümü su tasarrufu sağlar (tişört başına 2700 litre), çöp yükünü azaltır ve ağır çevresel ayak izine sahip yeni üretim talebini düşürür.",
+      "tip": "Giyilebilir eşyaları bağışlayın. Hasarlı giysiler için tekstil geri dönüşüm kutularını kullanın. Bazı markalar geri alma programları sunuyor. Eski giysileri temizlik bezi olarak yeniden kullanın."
+    },
+    "other": {
+      "impact": "Karışık atık öğeleri çevresel etki açısından farklılık gösterir. Doğru ayırma ve bertaraf, her malzemenin uygun şekilde işlenmesini sağlayarak çöp yükünü en aza indirir.",
+      "why_score": "Çeşitli öğelerin puanları, bireysel ayrışma sürelerini ve geri dönüşüm veya özel işleme gereksinimlerini yansıtır.",
+      "tip": "Emin olmadığınızda yerel atık yönetimi yönergelerini kontrol edin. Çöp gibi görünen birçok öğe doğru işlemeyle geri dönüştürülebilir veya bağışlanabilir."
+    }
   }
 }
