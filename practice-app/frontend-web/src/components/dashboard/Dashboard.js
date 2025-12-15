@@ -77,13 +77,14 @@ const Dashboard = () => {
     const getNextMilestoneInfo = (currentScore) => {
         if (!currentScore) currentScore = 0;
         
+        // Removed the 'message' property; only 'label' and 'score' are sufficient
         const milestones = [
-            { score: 500, label: 'rising_star', message: 'Log waste to reach 500 points and earn Rising Star badge!' },
-            { score: 1000, label: 'tree_hugger', message: 'Log waste to reach 1000 points and plant your first tree!' },
-            { score: 1500, label: 'green_achiever', message: 'Log waste to reach 1500 points and earn Green Achiever badge!' },
-            { score: 2000, label: 'eco_champion', message: 'Log waste to reach 2000 points and become an Eco Champion!' },
-            { score: 3000, label: 'eco_master', message: 'Log waste to reach 3000 points and become an Eco Master!' },
-            { score: 5000, label: 'zero_waste_legend', message: 'Log waste to reach 5000 points and become a Zero Waste Legend!' }
+            { score: 500, label: 'rising_star' },
+            { score: 1000, label: 'tree_hugger' },
+            { score: 1500, label: 'green_achiever' },
+            { score: 2000, label: 'eco_champion' },
+            { score: 3000, label: 'eco_master' },
+            { score: 5000, label: 'zero_waste_legend' }
         ];
 
         const nextMilestone = milestones.find(m => m.score > currentScore);
@@ -91,10 +92,9 @@ const Dashboard = () => {
         if (!nextMilestone) {
             return {
                 nextScore: 5000,
-                itemsNeeded: 0,
                 pointsNeeded: 0,
-                milestone: 'Complete',
-                message: 'You\'ve reached all major milestones! Keep going to maintain your achievements!'
+                itemsNeeded: 0,
+                milestoneLabel: 'complete' // Returning as a label
             };
         }
 
@@ -105,8 +105,7 @@ const Dashboard = () => {
             nextScore: nextMilestone.score,
             pointsNeeded,
             itemsNeeded,
-            milestone: nextMilestone.label,
-            message: nextMilestone.message
+            milestoneLabel: nextMilestone.label // Returning as a label
         };
     };
 
@@ -124,7 +123,7 @@ const Dashboard = () => {
                         <h3>{firstName}</h3>
                         <p className="user-email-display">{email}</p>
                         <p className="user-role-display">
-                           {t('dashboard.profile_card.role_prefix')}: {role || t('dashboard.profile_card.member')}
+                            {t('dashboard.profile_card.role_prefix')}: {role ? t(`dashboard.roles.${role.toLowerCase()}`) : t('dashboard.profile_card.member')}
                         </p>
                         <Link to="/profile" className="profile-action-button view-profile-btn">
                             <Icon name="edit" /> {t('dashboard.profile_card.view_profile_button')}
@@ -180,12 +179,16 @@ const Dashboard = () => {
                                             const milestone = getNextMilestoneInfo(score);
                                             return (
                                                 <>
-                                                    <p className="next-step-message">{milestone.message}</p>
+                                                    {/* 1. Milestone Message Translation */}
+                                                    <p className="next-step-message">
+                                                        {t(`dashboard.milestones.${milestone.milestoneLabel}`)}
+                                                    </p>
+                                
                                                     {milestone.pointsNeeded > 0 && (
                                                         <div className="milestone-progress">
                                                             <div className="progress-info">
                                                                 <span className="progress-label">
-                                                                    {t('dashboard.next_step_widget.current_score', { defaultValue: 'Current Score' })}: <strong>{score}</strong>
+                                                                    {t('dashboard.next_step_widget.current_score')}: <strong>{score}</strong>
                                                                 </span>
                                                                 <span className="progress-points">
                                                                     / {milestone.nextScore} {t('dashboard.score_widget.unit')}
@@ -200,12 +203,20 @@ const Dashboard = () => {
                                                                         }}
                                                                     ></div>
                                                                 </div>
-                                                                <span className="progress-text">{Math.round((score / milestone.nextScore) * 100)}% - Need {milestone.pointsNeeded} more {t('dashboard.score_widget.unit')}</span>
+                                                                {/* 2. Progress Text Translation (Interpolation) */}
+                                                                <span className="progress-text">
+                                                                    {t('dashboard.next_step_widget.progress_text', {
+                                                                        percent: Math.round((score / milestone.nextScore) * 100),
+                                                                        needed: milestone.pointsNeeded,
+                                                                        unit: t('dashboard.score_widget.unit')
+                                                                    })}
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     )}
+                                                    {/* ... Button section remains the same ... */}
                                                     <Link to="/waste" className="next-step-button">
-                                                        <Icon name="waste" /> {t('dashboard.next_step_widget.log_now', { defaultValue: 'Log Waste Now' })}
+                                                        <Icon name="waste" /> {t('dashboard.next_step_widget.log_now')}
                                                     </Link>
                                                 </>
                                             );

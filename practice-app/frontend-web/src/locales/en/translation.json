@@ -275,11 +275,26 @@
       "content": "\"Reduce your carbon footprint by choosing locally sourced and seasonal foods. It supports local farmers and reduces transportation emissions!\"",
       "discover_more": "Discover more tips"
     },
+    "roles": {
+      "user": "User",
+      "admin": "Admin",
+      "moderator": "Moderator"
+    },
+    "milestones": {
+      "rising_star": "Log waste to reach 500 points and earn Rising Star badge!",
+      "tree_hugger": "Log waste to reach 1000 points and plant your first tree!",
+      "green_achiever": "Log waste to reach 1500 points and earn Green Achiever badge!",
+      "eco_champion": "Log waste to reach 2000 points and become an Eco Champion!",
+      "eco_master": "Log waste to reach 3000 points and become an Eco Master!",
+      "zero_waste_legend": "Log waste to reach 5000 points and become a Zero Waste Legend!",
+      "complete": "You've reached all major milestones! Keep going to maintain your achievements!"
+    },
     "next_step_widget": {
       "title": "Your Next Step",
       "current_score": "Current Score",
       "items_needed": "Items needed",
-      "log_now": "Log Waste Now"
+      "log_now": "Log Waste Now",
+      "progress_text": "{{percent}}% - Need {{needed}} more {{unit}}"
     },
     "forest_widget": {
       "title": "Your Eco Forest",
@@ -575,6 +590,12 @@
       "eco_advocate": "Eco Advocate",
       "green_starter": "Green Starter",
       "eco_explorer": "Eco Explorer"
+    },
+    "tooltips": {
+      "total": "Total",
+      "impact": "Impact",
+      "frequency": "Frequency",
+      "share": "Share"
     }
   },
   "waste_categories": {

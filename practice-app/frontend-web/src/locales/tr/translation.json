@@ -270,6 +270,20 @@
       "view_leaderboard": "Lider Tablosunu Görüntüle",
       "view_leaderboard_sub": "En iyi performans gösterenleri görün"
     },
+    "roles": {
+      "user": "Kullanıcı",
+      "admin": "Yönetici",
+      "moderator": "Moderatör"
+    },
+    "milestones": {
+      "rising_star": "500 puana ulaşıp Yükselen Yıldız rozetini kazanmak için atık gir!",
+      "tree_hugger": "1000 puana ulaşıp ilk ağacını dikmek için atık gir!",
+      "green_achiever": "1500 puana ulaşıp Yeşil Başaran rozetini kazanmak için atık gir!",
+      "eco_champion": "2000 puana ulaşıp Eko Şampiyon olmak için atık gir!",
+      "eco_master": "3000 puana ulaşıp Eko Usta olmak için atık gir!",
+      "zero_waste_legend": "5000 puana ulaşıp Sıfır Atık Efsanesi olmak için atık gir!",
+      "complete": "Tüm ana hedeflere ulaştın! Başarılarını korumak için devam et!"
+    },
     "eco_tip_widget": {
       "title": "Günün Eko İpucu",
       "content": "\"Yerel kaynaklı ve mevsimlik yiyecekleri seçerek karbon ayak izinizi azaltın. Bu, yerel çiftçileri destekler ve ulaşım emisyonlarını azaltır!\"",
@@ -279,7 +293,8 @@
       "title": "Sonraki Adımınız",
       "current_score": "Mevcut Puanınız",
       "items_needed": "Gerekli öğeler",
-      "log_now": "Şimdi Atık Kaydet"
+      "log_now": "Şimdi Atık Kaydet",
+      "progress_text": "%{{percent}} - {{needed}} {{unit}} daha gerekli"
     },
     "forest_widget": {
       "title": "Sizin Eko Ormanınız",
@@ -534,7 +549,7 @@
       "eco_score": "Eko Puan",
       "global_rank": "Küresel Sıralama",
       "event_rate": "Etkinlik Oranı",
-      "trees_planted": "Dikilen Ağaçlar",
+      "trees_planted": "Dİkİlen Ağaçlar",
       "joined_subtext": "katılım"
     },
     "charts": {
@@ -575,6 +590,12 @@
       "eco_advocate": "Eko Savunucu",
       "green_starter": "Yeşil Başlangıç",
       "eco_explorer": "Eko Kaşif"
+    },
+    "tooltips": {
+      "total": "Toplam",
+      "impact": "Etki",
+      "frequency": "Sıklık",
+      "share": "Pay"
     }
   },
   "waste_categories": {
