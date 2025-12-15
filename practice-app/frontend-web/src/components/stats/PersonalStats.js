@@ -165,15 +165,11 @@ const PersonalStats = () => {
   
   const [earnedBadgeIds, setEarnedBadgeIds] = useState([]);
   const [leaderboardRank, setLeaderboardRank] = useState('N/A');
-  const [eventStats, setEventStats] = useState({ participating: 0, total: 0, rate: 0 });
   
   const [subCategoriesMap, setSubCategoriesMap] = useState({});
   const [rawLogsState, setRawLogsState] = useState([]);
   
   const [rawStatsData, setRawStatsData] = useState([]);
-
-  // eslint-disable-next-line no-unused-vars
-  const [rawStreakState, setRawStreakState] = useState([]); 
 
   const TIERS = [
     { key: 'eco_explorer', min: 0, color: '#95a5a6', icon: '🌱' },
@@ -221,33 +217,6 @@ const PersonalStats = () => {
       if (!apiName) return t('waste_categories.other');
       const key = apiName.toLowerCase().trim().replace(/[\s-]+/g, "_");
       return t(`waste_categories.${key}`, { defaultValue: apiName });
-  };
-
-  const calculateRealStreak = (logs) => {
-    if (!logs || logs.length === 0) return 0;
-    const uniqueDates = [...new Set(logs.map(log => {
-        const d = new Date(log.date_logged);
-        return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-    }))];
-    uniqueDates.sort((a, b) => b - a);
-    if (uniqueDates.length === 0) return 0;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayTime = today.getTime();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayTime = yesterday.getTime();
-    const lastLogDate = uniqueDates[0];
-    if (lastLogDate !== todayTime && lastLogDate !== yesterdayTime) { return 0; }
-    let streak = 1;
-    let currentCheck = lastLogDate;
-    for (let i = 1; i < uniqueDates.length; i++) {
-        const prevDate = uniqueDates[i];
-        const diffTime = Math.abs(currentCheck - prevDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-        if (diffDays === 1) { streak++; currentCheck = prevDate; } else { break; }
-    }
-    return streak;
   };
 
   // --- HELPER: Recursively Fetch All Pages ---
@@ -407,7 +376,6 @@ const PersonalStats = () => {
       processStatsData(statsData, timeframe, catMap, allLogs);
       calculateBadges(allLogs, scoreRes.data.total_score);
       calculateRank(leaderboardRes.data || [], userId);
-      calculateEventStats(eventsRes.data.results || eventsRes.data || []); // Handle both paginated/non-paginated for events too
 
       setLoading(false);
     } catch (err) {
@@ -449,50 +417,11 @@ const PersonalStats = () => {
     return { current, next, currentIndex };
   };
 
-  const calculateBadges = (logs, score) => {
-    const safeLogs = Array.isArray(logs) ? logs : [];
-    const currentStreak = calculateRealStreak(safeLogs);
-
-    const badgeChecks = {
-        'first_step': safeLogs.length > 0,
-        'plastic_buster': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 10,
-        'sustainability_streak': currentStreak >= 14, 
-        'zero_waste_legend': score >= 5000,
-        'eco_warrior': safeLogs.length >= 50,
-        'tree_hugger': score >= 1000,
-        'recycling_master': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('recycled') || l.disposal_location?.toLowerCase().includes('recycling')).length >= 30,
-        'compost_champion': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('compost')).length >= 20,
-        'milestone_100': safeLogs.length >= 100,
-        'score_1500': score >= 1500,
-        'consistency_king': currentStreak >= 30, 
-        'metal_maven': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('metal')).length >= 15,
-        'paper_pride': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('paper')).length >= 25,
-        'glass_guru': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('glass')).length >= 10,
-        'eco_score_500': score >= 500,
-        'score_2000': score >= 2000,
-        'score_3000': score >= 3000,
-        'logs_200': safeLogs.length >= 200,
-        'logs_500': safeLogs.length >= 500,
-        'streak_60': currentStreak >= 60,
-        'plastic_50': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('plastic')).reduce((acc, curr) => acc + parseFloat(curr.quantity), 0) >= 50,
-        'organic_50': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('organic') || l.sub_category_name?.toLowerCase().includes('food')).length >= 50,
-        'electronic_20': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('electronic') || l.sub_category_name?.toLowerCase().includes('e-waste')).length >= 20,
-        'textile_30': safeLogs.filter(l => l.sub_category_name?.toLowerCase().includes('textile') || l.sub_category_name?.toLowerCase().includes('cloth')).length >= 30,
-        'donate_50': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('donated') || l.disposal_location?.toLowerCase().includes('reused')).length >= 50,
-        'landfill_zero': safeLogs.filter(l => l.disposal_location?.toLowerCase().includes('landfill')).length === 0 && safeLogs.length > 0,
-        'streak_7': currentStreak >= 7,
-        'streak_21': currentStreak >= 21
-    };
-
-    const earnedIds = Object.keys(badgeChecks).filter(id => badgeChecks[id]);
-    setEarnedBadgeIds(earnedIds);
-  };
-
-  const calculateEventStats = (eventsList) => {
-    const participating = eventsList.filter(e => e.i_am_participating).length;
-    const total = eventsList.length;
-    const rate = total > 0 ? Math.round((participating / total) * 100) : 0;
-    setEventStats({ participating, total, rate });
+  const calculateBadges = async () => {
+      const headers = { Authorization: `Bearer ${token}` };
+      const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me`, { headers });
+      const earnedBadges = badges.data.filter(badge => badge.earned === true).map(badge => badge.code);
+      setEarnedBadgeIds(earnedBadges);
   };
 
   const calculateRank = (leaderboard, myId) => {
