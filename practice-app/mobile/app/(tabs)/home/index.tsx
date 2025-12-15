@@ -194,15 +194,14 @@ export default function HomeScreen() {
     postLikeText: { color: colors.primary, fontWeight: '600', fontSize: 14 },
     
     smallActionButtonCard: { 
-      width: width * 0.25, 
-      height: width * 0.25, 
-      marginHorizontal: "2%", 
-      marginTop: "4%", 
-      padding: 12, 
+      height: width * 0.28, 
+      padding: 16, 
       backgroundColor: colors.cb1, 
       borderRadius: 16,
       justifyContent: 'center', 
       alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.borders,
     },
   });
 
@@ -242,14 +241,23 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', paddingHorizontal: "2%", marginTop: "2%" }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: "2%", marginTop: "2%", gap: 12 }}>
             <TouchableOpacity 
-                style={styles.smallActionButtonCard} 
+                style={[styles.smallActionButtonCard, { flex: 1 }]} 
                 onPress={() => router.push("/events")}
                 activeOpacity={0.7}
             >
                 <Ionicons name="calendar-outline" size={30} color={colors.primary} />
                 <Text style={styles.actionTitle}>Events</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+                style={[styles.smallActionButtonCard, { flex: 1 }]} 
+                onPress={() => router.push("/badges")}
+                activeOpacity={0.7}
+            >
+                <Ionicons name="trophy" size={30} color={colors.primary} />
+                <Text style={styles.actionTitle}>Badges</Text>
             </TouchableOpacity>
         </View>
 
