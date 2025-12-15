@@ -5,6 +5,8 @@ import { Stack, usePathname } from 'expo-router';
 import React, { useEffect } from 'react';
 import * as NavigationBar from 'expo-navigation-bar';
 import { AlertProvider } from '@/hooks/alertContext';
+import { BadgeProvider } from '@/hooks/badgeContext';
+import { NotificationProvider } from '@/hooks/notificationContext';
 import "@/i18n";
 
 export default function Root() {
@@ -13,7 +15,11 @@ export default function Root() {
       <SplashScreenController />
       <ThemeProvider>
         <AlertProvider>
-          <RootLayout/>
+          <BadgeProvider>
+            <NotificationProvider>
+              <RootLayout/>
+            </NotificationProvider>
+          </BadgeProvider>
         </AlertProvider>
       </ThemeProvider>
     </SessionProvider>
@@ -44,6 +50,9 @@ function RootLayout() {
       <Stack.Protected guard={!!session}>
         <Stack.Screen name="(tabs)" options={{ animation: 'none', statusBarStyle: "dark"}} />
         <Stack.Screen name="events" options={{ animation: 'none', statusBarStyle: "dark"}} />
+        <Stack.Screen name="badges" options={{ animation: 'none', statusBarStyle: "dark"}} />
+        <Stack.Screen name="stats" options={{ animation: 'none', statusBarStyle: "dark"}} />
+        <Stack.Screen name="notifications" options={{ animation: 'none', statusBarStyle: "dark"}} />
         <Stack.Screen
           name="menu_drawer"
           options={{

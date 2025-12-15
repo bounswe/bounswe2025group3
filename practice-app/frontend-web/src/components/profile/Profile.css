@@ -113,7 +113,7 @@
 .profile-page-scoped .form-field input[type="text"],
 .profile-page-scoped .form-field input[type="email"],
 .profile-page-scoped .form-field textarea {
-  box-sizing: border-box; /* FIX: Include padding and border in the element's total width */
+  box-sizing: border-box; 
   width: 100%;
   padding: 0.85rem 1rem;
   border: 1px solid var(--wastelog-input-border);
@@ -135,11 +135,30 @@
   min-height: 100px;
 }
 
+/* Divider & Sections */
+.profile-page-scoped .form-divider {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 1rem 0;
+}
+
+.profile-page-scoped .section-title {
+    font-size: 1.1rem;
+    color: var(--dashboard-text-dark);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 /* Checkbox Styling (Scoped) */
 .profile-page-scoped .form-field-checkbox {
   display: flex;
   align-items: center;
   margin-top: 0.5rem;
+  background-color: var(--background-secondary);
+  padding: 10px;
+  border-radius: 8px;
 }
 .profile-page-scoped .form-field-checkbox input[type="checkbox"] {
   width: 1.25em;
@@ -155,8 +174,14 @@
   font-weight: 500;
   cursor: pointer;
   margin-bottom: 0;
+  display: flex;
+  align-items: center;
 }
-.profile-page-scoped .form-field-checkbox .checkbox-label .icon { color: var(--nav-dashboard-bottom-border); font-size: 1.1em; }
+.profile-page-scoped .form-field-checkbox .checkbox-label .icon { 
+    color: var(--nav-dashboard-bottom-border); 
+    font-size: 1.2em; 
+    margin-right: 8px;
+}
 
 
 /* Form Actions (Scoped) */
@@ -189,10 +214,6 @@
 }
 
 /* Loader and Spinner (Scoped) */
-.profile-page-scoped .loader-container-main,
-.profile-page-scoped .button-spinner {
-  /* Reusing styles defined in other scoped files */
-}
 .profile-page-scoped .loader-container-main {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 3rem; text-align: center; color: var(--dashboard-text-medium); font-size: 1rem;

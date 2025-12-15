@@ -11,7 +11,7 @@ const Icon = ({ name, className = "" }) => {
         logo: '🌿', waste: '🗑️', leaderboard: '📊', challenges: '🏆',
         profile: '👤', score: '🌟', actions: '🚀', tip: '💡',
         logout: '🚪', dashboard: '🏠', settings: '⚙️', edit: '✏️',
-        goal: '🎯', arrowRight: '→', alerts: '⚠️'
+        goal: '🎯', arrowRight: '→', alerts: '⚠️', forest: '🌳 ', seed: '🌱' 
     };
     return <span className={`icon ${className}`}>{icons[name] || ''}</span>;
 };
@@ -66,6 +66,49 @@ const Dashboard = () => {
         return 'low';
     };
 
+    const getForestData = (score) => {
+        if (!score || score === null) return { forests: 0, trees: 0 };
+        const forests = Math.floor(score / 1000);
+        const remainingScore = score % 1000;
+        const trees = Math.floor(remainingScore / 500);
+        return { forests, trees };
+    };
+
+    const getNextMilestoneInfo = (currentScore) => {
+        if (!currentScore) currentScore = 0;
+        
+        // Removed the 'message' property; only 'label' and 'score' are sufficient
+        const milestones = [
+            { score: 500, label: 'rising_star' },
+            { score: 1000, label: 'tree_hugger' },
+            { score: 1500, label: 'green_achiever' },
+            { score: 2000, label: 'eco_champion' },
+            { score: 3000, label: 'eco_master' },
+            { score: 5000, label: 'zero_waste_legend' }
+        ];
+
+        const nextMilestone = milestones.find(m => m.score > currentScore);
+        
+        if (!nextMilestone) {
+            return {
+                nextScore: 5000,
+                pointsNeeded: 0,
+                itemsNeeded: 0,
+                milestoneLabel: 'complete' // Returning as a label
+            };
+        }
+
+        const pointsNeeded = nextMilestone.score - currentScore;
+        const itemsNeeded = Math.ceil(pointsNeeded / 7);
+
+        return {
+            nextScore: nextMilestone.score,
+            pointsNeeded,
+            itemsNeeded,
+            milestoneLabel: nextMilestone.label // Returning as a label
+        };
+    };
+
     return (
         <div className="dashboard-scoped dashboard-layout">
             {/* The old <header> is replaced with the shared Navbar */}
@@ -80,7 +123,7 @@ const Dashboard = () => {
                         <h3>{firstName}</h3>
                         <p className="user-email-display">{email}</p>
                         <p className="user-role-display">
-                           {t('dashboard.profile_card.role_prefix')}: {role || t('dashboard.profile_card.member')}
+                            {t('dashboard.profile_card.role_prefix')}: {role ? t(`dashboard.roles.${role.toLowerCase()}`) : t('dashboard.profile_card.member')}
                         </p>
                         <Link to="/profile" className="profile-action-button view-profile-btn">
                             <Icon name="edit" /> {t('dashboard.profile_card.view_profile_button')}
@@ -126,6 +169,62 @@ const Dashboard = () => {
                                 {score === null && <p className="widget-subtext">{t('dashboard.score_widget.prompt')}</p>}
                             </section>
 
+                            {score !== null && (
+                                <section className="dashboard-widget next-step-widget">
+                                    <div className="widget-header">
+                                        <h4><Icon name="arrowRight" /> {t('dashboard.next_step_widget.title')}</h4>
+                                    </div>
+                                    <div className="next-step-content">
+                                        {(() => {
+                                            const milestone = getNextMilestoneInfo(score);
+                                            return (
+                                                <>
+                                                    {/* 1. Milestone Message Translation */}
+                                                    <p className="next-step-message">
+                                                        {t(`dashboard.milestones.${milestone.milestoneLabel}`)}
+                                                    </p>
+                                
+                                                    {milestone.pointsNeeded > 0 && (
+                                                        <div className="milestone-progress">
+                                                            <div className="progress-info">
+                                                                <span className="progress-label">
+                                                                    {t('dashboard.next_step_widget.current_score')}: <strong>{score}</strong>
+                                                                </span>
+                                                                <span className="progress-points">
+                                                                    / {milestone.nextScore} {t('dashboard.score_widget.unit')}
+                                                                </span>
+                                                            </div>
+                                                            <div className="progress-bar-container">
+                                                                <div className="progress-bar">
+                                                                    <div 
+                                                                        className="progress-fill" 
+                                                                        style={{
+                                                                            width: `${Math.min((score / milestone.nextScore) * 100, 100)}%`
+                                                                        }}
+                                                                    ></div>
+                                                                </div>
+                                                                {/* 2. Progress Text Translation (Interpolation) */}
+                                                                <span className="progress-text">
+                                                                    {t('dashboard.next_step_widget.progress_text', {
+                                                                        percent: Math.round((score / milestone.nextScore) * 100),
+                                                                        needed: milestone.pointsNeeded,
+                                                                        unit: t('dashboard.score_widget.unit')
+                                                                    })}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    {/* ... Button section remains the same ... */}
+                                                    <Link to="/waste" className="next-step-button">
+                                                        <Icon name="waste" /> {t('dashboard.next_step_widget.log_now')}
+                                                    </Link>
+                                                </>
+                                            );
+                                        })()}
+                                    </div>
+                                </section>
+                            )}
+
                             <section className="dashboard-widget quick-links-widget">
                                  <div className="widget-header">
                                     <h4><Icon name="actions" /> {t('dashboard.quick_links_widget.title')}</h4>
@@ -158,6 +257,48 @@ const Dashboard = () => {
                                     <Link to="/blog" className="learn-more-inline">
                                         {t('dashboard.eco_tip_widget.discover_more')} <Icon name="arrowRight" />
                                     </Link>
+                                </div>
+                            </section>
+
+                            <section className="dashboard-widget forest-widget">
+                                <div className="widget-header">
+                                    <h4><Icon name="forest" /> {t('dashboard.forest_widget.title')}</h4>
+                                    <span className="forest-info">{t('dashboard.forest_widget.info')}</span>
+                                </div>
+                                <div className="forest-visual">
+                                    {(() => {
+                                        const { forests, trees } = getForestData(score);
+                                        
+                                        if (forests === 0 && trees === 0) {
+                                            return (
+                                                <div className="empty-forest">
+                                                    <Icon name="seed" className="seed-icon"/>
+                                                    <p>{t('dashboard.forest_widget.empty')}</p>
+                                                </div>
+                                            );
+                                        }
+
+                                        return (
+                                            <>
+                                                {/* Display Forests */}
+                                                {forests > 0 && (
+                                                    <div className="forest-group">
+                                                        {Array.from({ length: forests }).map((_, i) => (
+                                                            <span key={`forest-${i}`} className="forest-icon" title={`Forest ${i + 1}`}>🌳</span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                                {/* Display Individual Trees */}
+                                                {trees > 0 && (
+                                                    <div className="trees-group">
+                                                        {Array.from({ length: trees }).map((_, i) => (
+                                                            <span key={`tree-${i}`} className="tree-icon" title={`Tree ${i + 1}`}>🌲</span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </>
+                                        );
+                                    })()}
                                 </div>
                             </section>
                         </>

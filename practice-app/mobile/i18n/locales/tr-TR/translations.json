@@ -253,6 +253,8 @@
         "bio_placeholder": "Bize kendinizden bahsedin",
         "city": "Şehir (İsteğe Bağlı)",
         "city_placeholder": "Şehriniz",
+        "state": "Eyalet/İl (İsteğe Bağlı)",
+        "state_placeholder": "Eyalet seçin",
         "country": "Ülke (İsteğe Bağlı)",
         "country_placeholder": "Ülkeniz"
     },
@@ -260,7 +262,9 @@
         "loading": "Yükleniyor...",
         "user": "Kullanıcı",
         "account_age": "Hesap yaşı: {{age}}",
-        "achievements": "Başarımlar",
+        "badges": "Rozetler",
+        "stats": "İstatistikler",
+        "notifications": "Bildirimler",
         "profile": "Profil",
         "settings": "Ayarlar",
         "admin_page": "Yönetici Sayfası",
@@ -268,6 +272,65 @@
         "logout_title": "Çıkış Yap",
         "logout_message": "Çıkış yapmak istediğinizden emin misiniz?",
         "logout_confirm": "Çıkış Yap"
+    },
+    "stats": {
+        "title": "İstatistiklerin",
+        "total_score": "Toplam puan",
+        "total_logs": "Toplam kayıt",
+        "average_score": "Ort. puan / periyot",
+        "period_daily": "Günlük (son 7 gün)",
+        "period_weekly": "Haftalık (son 4 hafta)",
+        "subcategory_all": "Tüm kategoriler",
+        "activity": "Aktivite",
+        "activity_trend": "Aktivite trendi",
+        "points_label": "Puan",
+        "logs_label": "Kayıt",
+        "latest_periods": "{{count}} periyot",
+        "range": "{{start}} - {{end}}",
+        "daily_label": "Günlük",
+        "weekly_label": "Haftalık",
+        "empty_title": "Henüz istatistik yok",
+        "empty_message": "İlerlemeni görmek için atık kaydı ekle.",
+        "best_period": "En iyi periyot",
+        "breakdown_title": "Kategori dağılımı",
+        "breakdown_empty": "Henüz kategori verisi yok.",
+        "forest_title": "Eko orman",
+        "forest_empty": "Puanını artırarak daha fazla ağaç kazan.",
+        "unknown_category": "Diğer"
+    },
+    "badges": {
+        "title": "Rozetlerin",
+        "unnamed": "Rozet",
+        "earned_on": "Kazanılma tarihi",
+        "earned": "Kazanıldı",
+        "in_progress": "Devam ediyor",
+        "achievement_unlocked": "Başarım açıldı",
+        "empty_title": "Henüz rozet yok",
+        "empty_message": "İlk rozetini kazanmak için hedeflerini tamamlamaya devam et.",
+        "refresh": "Yenile",
+        "descriptions": {
+            "first_step": "İlk atık kaydını yap",
+            "plastic_buster": "10kg plastik geri dönüştür",
+            "sustainability_streak": "14 günlük seri yakala",
+            "zero_waste_legend": "5000 eko puanına ulaş"
+        }
+    },
+    "notifications": {
+        "title": "Bildirimler",
+        "mark_all_read": "Tümünü Okundu İşaretle ({{count}})",
+        "show_all": "Tümü",
+        "unread_only": "Okunmamış",
+        "tap_to_view": "Görüntülemek için dokunun",
+        "empty_title": "Henüz bildirim yok",
+        "empty_message": "Bildirimleriniz burada görünecek."
+    },
+    "tiers": {
+        "planet_guardian": "Gezegen Koruyucusu",
+        "zero_waste_champion": "Sıfır Atık Şampiyonu",
+        "sustainability_hero": "Sürdürülebilirlik Kahramanı",
+        "eco_advocate": "Eko Savunucusu",
+        "green_starter": "Yeşil Başlangıç",
+        "eco_explorer": "Eko Kaşif"
     },
     "settings": {
         "title": "Ayarlar",
@@ -291,5 +354,36 @@
     },
     "common": {
         "cancel": "İptal Et"
+    },
+    "waste_categories": {
+        "paper": "Kağıt",
+        "plastic_bottles": "Plastik Şişe",
+        "cardboard": "Karton",
+        "metal_cans": "Metal Kutu",
+        "food_scraps": "Yemek Artığı",
+        "garden_waste": "Bahçe Atığı",
+        "coffee_grounds": "Kahve Telvesi",
+        "batteries": "Pil",
+        "small_appliances": "Küçük Ev Aletleri",
+        "mobile_phones": "Cep Telefonu",
+        "glass": "Cam",
+        "plastic": "Plastik",
+        "electronic": "Elektronik",
+        "organic": "Organik",
+        "other": "Diğer",
+        "glass_bottles": "Cam Şişe",
+        "broken_glass": "Kırık Cam",
+        "used_cooking_oil": "Kullanılmış Yemek Yağı",
+        "used_clothing": "Kullanılmış Giysi",
+        "shoes": "Ayakkabı",
+        "hazardous_waste": "Tehlikeli Atık",
+        "bulky_items": "Büyük Eşyalar"
+    },
+    "units": {
+        "kg": "kg",
+        "pcs": "adet",
+        "l": "litre",
+        "pieces": "adet",
+        "liters": "litre"
     }
 }

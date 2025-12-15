@@ -94,3 +94,51 @@ class TestEventActions:
         assert response.data["i_liked"] is False
         assert response.data["likes_count"] == 0
         assert not event.likes.filter(id=user.id).exists()
+
+    # -------------------------------
+    # DELETE TESTS
+    # -------------------------------
+
+    def test_creator_can_delete_event(self, other_user):
+        """Creator should be able to delete their event."""
+        client = APIClient()
+        client.force_authenticate(user=other_user)
+        
+        event = Event.objects.create(
+            title="Test Event",
+            description="Sample",
+            creator=other_user,
+            date=datetime.now() + timedelta(days=1)
+        )
+        
+        url = reverse("event-detail", args=[event.id])
+        response = client.delete(url)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not Event.objects.filter(id=event.id).exists()
+
+    def test_non_creator_cannot_delete_event(self, client, event):
+        """Non-creator user should not be able to delete another user's event."""
+        url = reverse("event-detail", args=[event.id])
+        response = client.delete(url)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert Event.objects.filter(id=event.id).exists()
+
+    def test_admin_can_delete_any_event(self, event):
+        """Admin should be able to delete any event."""
+        admin_user = User.objects.create_user(
+            email="admin@example.com",
+            username="admin",
+            password="123456",
+            is_staff=True
+        )
+        
+        client = APIClient()
+        client.force_authenticate(user=admin_user)
+        
+        url = reverse("event-detail", args=[event.id])
+        response = client.delete(url)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not Event.objects.filter(id=event.id).exists()

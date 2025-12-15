@@ -2,6 +2,20 @@ import tokenManager from "@/services/tokenManager";
 import { API_ENDPOINTS } from "@/constants/api";
 import { fetchAllPages, parseJson } from "./utils";
 import { Subcategory } from "./waste";
+import i18n from "@/i18n";
+
+// Helper function to translate category names
+const translateCategoryName = (apiName: string | undefined): string => {
+    if (!apiName) return "";
+    const key = apiName.toLowerCase().replace(/ /g, "_");
+    return i18n.t(`waste_categories.${key}`, { defaultValue: apiName });
+};
+
+// Helper function to translate units
+const translateUnit = (unit: string | undefined): string => {
+    if (!unit) return "";
+    return i18n.t(`units.${unit.toLowerCase()}`, { defaultValue: unit });
+};
 
 export interface Goal {
     id: number;
@@ -44,7 +58,15 @@ export interface UpdateGoalData {
 export const getGoals = async (): Promise<Goal[]> => {
     try {
         const goals = await fetchAllPages<Goal>(API_ENDPOINTS.GOALS.LIST);
-        return goals;
+        // Translate category names and units
+        return goals.map(goal => ({
+            ...goal,
+            category: {
+                ...goal.category,
+                name: translateCategoryName(goal.category.name),
+                unit: translateUnit(goal.category.unit),
+            },
+        }));
     } catch (error) {
         console.error("Failed to get goals", error);
         throw error;
@@ -53,13 +75,26 @@ export const getGoals = async (): Promise<Goal[]> => {
 
 export const getGoalById = async (id: number): Promise<Goal> => {
     const response = await tokenManager.authenticatedFetch(API_ENDPOINTS.GOALS.BY_ID(id.toString()));
-    return parseJson<Goal>(response, "Failed to load goal details.");
+    const goal = await parseJson<Goal>(response, "Failed to load goal details.");
+    // Translate category name and unit
+    return {
+        ...goal,
+        category: {
+            ...goal.category,
+            name: translateCategoryName(goal.category.name),
+            unit: translateUnit(goal.category.unit),
+        },
+    };
 };
 
 export const getGoalTemplates = async (): Promise<GoalTemplate[]> => {
     try {
         const goalTemplates = await fetchAllPages<GoalTemplate>(API_ENDPOINTS.GOALS.TEMPLATES);
-        return goalTemplates;
+        // Translate category names
+        return goalTemplates.map(template => ({
+            ...template,
+            category_name: translateCategoryName(template.category_name),
+        }));
     } catch (error) {
         console.error("Failed to get goal templates:", error);
         throw error;
