@@ -32,27 +32,31 @@ const EventsPage = () => {
         return;
     }
     
-    // Theme detection
+    // Theme detection - check for blue-high-contrast class on body
     const checkTheme = () => {
-      const darkTheme = document.documentElement.getAttribute('data-theme') === 'dark' || 
-                       localStorage.getItem('theme') === 'dark' ||
-                       window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDarkTheme(darkTheme);
+      const isDark = document.body.classList.contains('blue-high-contrast');
+      setIsDarkTheme(isDark);
     };
     
+    // Initial check
     checkTheme();
     
-    // Listen for theme changes
+    // Listen for theme changes via MutationObserver on body
     const observer = new MutationObserver(checkTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    observer.observe(document.body, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    });
     
-    window.addEventListener('storage', checkTheme);
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', checkTheme);
+    // Listen to custom themeChanged event
+    const handleThemeChange = () => {
+      checkTheme();
+    };
+    document.addEventListener('themeChanged', handleThemeChange);
     
     return () => {
       observer.disconnect();
-      window.removeEventListener('storage', checkTheme);
-      window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', checkTheme);
+      document.removeEventListener('themeChanged', handleThemeChange);
     };
     // eslint-disable-next-line
   }, [token]);
