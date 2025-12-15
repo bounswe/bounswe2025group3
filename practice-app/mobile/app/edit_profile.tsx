@@ -6,6 +6,8 @@ import { ActivityIndicator, Alert, ImageBackground, ScrollView, StyleSheet, Text
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getUserProfile, updateUserProfile } from '@/api/user';
 import { useTranslation } from 'react-i18next';
+import { Picker } from '@react-native-picker/picker';
+import { Country, State } from 'country-state-city';
 
 const FormInput = ({ label, value, onChangeText, ...props }: any) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -40,6 +42,49 @@ const FormInput = ({ label, value, onChangeText, ...props }: any) => {
   );
 };
 
+const FormSelect = ({ label, value, onValueChange, items, enabled = true, placeholder }: any) => {
+  const colors = useColors();
+  
+  const styles = StyleSheet.create({
+    inputGroup: { marginBottom: 16 },
+    label: { fontSize: 16, color: colors.textSecondary, marginBottom: 8 },
+    pickerContainer: { 
+      backgroundColor: colors.cb4, 
+      borderRadius: 12, 
+      borderWidth: 1, 
+      borderColor: colors.borders,
+      overflow: 'hidden',
+    },
+    picker: { 
+      height: 50,
+      color: colors.text,
+    },
+    pickerDisabled: {
+      opacity: 0.5,
+    },
+  });
+
+  return (
+    <View style={styles.inputGroup}>
+      <Text style={styles.label}>{label}</Text>
+      <View style={[styles.pickerContainer, !enabled && styles.pickerDisabled]}>
+        <Picker
+          selectedValue={value}
+          onValueChange={onValueChange}
+          enabled={enabled}
+          style={styles.picker}
+          dropdownIconColor={colors.text}
+        >
+          <Picker.Item label={placeholder || 'Select...'} value="" />
+          {items.map((item: any) => (
+            <Picker.Item key={item.value} label={item.label} value={item.value} />
+          ))}
+        </Picker>
+      </View>
+    </View>
+  );
+};
+
 
 export default function EditProfileScreen() {
   const [isLoading, setIsLoading] = useState(true);
@@ -53,6 +98,8 @@ export default function EditProfileScreen() {
   const [bio, setBio] = useState('');
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
+  const [selectedCountryCode, setSelectedCountryCode] = useState('');
+  const [selectedStateCode, setSelectedStateCode] = useState('');
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -75,6 +122,25 @@ export default function EditProfileScreen() {
           setBio(data.bio || '');
           setCity(data.city || '');
           setCountry(data.country || '');
+          
+          // Try to find country code from country name
+          if (data.country) {
+            const foundCountry = Country.getAllCountries().find(
+              c => c.name === data.country
+            );
+            if (foundCountry) {
+              setSelectedCountryCode(foundCountry.isoCode);
+              
+              // Try to find state code from city name (city is actually state name in our system)
+              if (data.city) {
+                const states = State.getStatesOfCountry(foundCountry.isoCode);
+                const foundState = states.find(s => s.name === data.city);
+                if (foundState) {
+                  setSelectedStateCode(foundState.isoCode);
+                }
+              }
+            }
+          }
         }
       } catch (error) {
         console.error("Failed to fetch profile data", error);
@@ -85,6 +151,21 @@ export default function EditProfileScreen() {
     };
     fetchProfileData();
   }, [t]);
+
+  const handleCountryChange = (countryCode: string) => {
+    setSelectedCountryCode(countryCode);
+    const country = Country.getCountryByCode(countryCode);
+    setCountry(country ? country.name : '');
+    setSelectedStateCode('');
+    setCity('');
+  };
+
+  const handleStateChange = (stateCode: string) => {
+    setSelectedStateCode(stateCode);
+    const state = State.getStateByCodeAndCountry(stateCode, selectedCountryCode);
+    // State name is stored as city (web site compatibility)
+    setCity(state ? state.name : '');
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -133,8 +214,29 @@ export default function EditProfileScreen() {
           <FormInput label={t("edit_profile.first_name")} value={firstName} onChangeText={setFirstName} placeholder={t("edit_profile.first_name_placeholder")} />
           <FormInput label={t("edit_profile.last_name")} value={lastName} onChangeText={setLastName} placeholder={t("edit_profile.last_name_placeholder")} />
           <FormInput label={t("edit_profile.bio")} value={bio} onChangeText={setBio} placeholder={t("edit_profile.bio_placeholder")} multiline />
-          <FormInput label={t("edit_profile.city")} value={city} onChangeText={setCity} placeholder={t("edit_profile.city_placeholder")} />
-          <FormInput label={t("edit_profile.country")} value={country} onChangeText={setCountry} placeholder={t("edit_profile.country_placeholder")} marginBottom={"40%"} />
+          
+          <FormSelect
+            label={t("edit_profile.country")}
+            value={selectedCountryCode}
+            onValueChange={handleCountryChange}
+            items={Country.getAllCountries().map(country => ({
+              label: country.name,
+              value: country.isoCode,
+            }))}
+            placeholder={t("edit_profile.country_placeholder")}
+          />
+          
+          <FormSelect
+            label={t("edit_profile.state")}
+            value={selectedStateCode}
+            onValueChange={handleStateChange}
+            items={selectedCountryCode ? State.getStatesOfCountry(selectedCountryCode).map(state => ({
+              label: state.name,
+              value: state.isoCode,
+            })) : []}
+            enabled={!!selectedCountryCode}
+            placeholder={t("edit_profile.state_placeholder")}
+          />
         </ScrollView>
       </View>
     </SafeAreaView>

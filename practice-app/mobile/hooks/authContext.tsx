@@ -1,8 +1,9 @@
-// This page is directly copied from expo documentations.
+// This page is directly copied from expo documentations. and improved for our own use.
 
 import { createContext, use, type PropsWithChildren, useEffect, useState } from 'react';
 import { useStorageState } from './useStorageState';
 import tokenManager from '@/services/tokenManager';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type UserRole = 'USER' | 'ADMIN' | 'MODERATOR';
 
@@ -20,7 +21,6 @@ const AuthContext = createContext<{
   isLoading: false,
 });
 
-// Use this hook to access the user info.
 export function useSession() {
   const value = use(AuthContext);
   if (!value) {
@@ -67,10 +67,25 @@ export function SessionProvider({ children }: PropsWithChildren) {
           setSession('authenticated');
           setUserRole(role);
         },
-        signOut: () => {
+        signOut: async () => {
           tokenManager.clearTokens().catch((error) => {
             console.error('Failed to clear tokens on sign out:', error);
           });
+          // Clear all user-specific badge shown IDs and initialization flags on logout
+          try {
+            const keys = await AsyncStorage.getAllKeys();
+            const badgeKeys = keys.filter(key => 
+              key.startsWith('@shown_badge_ids_') || 
+              key === '@shown_badge_ids' ||
+              key.startsWith('@badge_system_initialized_') ||
+              key === '@badge_system_initialized'
+            );
+            if (badgeKeys.length > 0) {
+              await AsyncStorage.multiRemove(badgeKeys);
+            }
+          } catch (error) {
+            console.error('Error clearing badge IDs on logout:', error);
+          }
           setSession(null);
           setUserRole(null);
         },
