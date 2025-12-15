@@ -137,6 +137,10 @@ RUN echo "Configuring API_BASE_URL to ${BACKEND_URL}" && \
 # This significantly reduces build time and memory requirements
 ENV REACT_NATIVE_ARCHITECTURES=arm64-v8a
 
+# Disable New Architecture and Hermes to simplify build
+ENV ORG_GRADLE_PROJECT_newArchEnabled=false
+ENV ORG_GRADLE_PROJECT_hermesEnabled=false
+
 # Set the default command to build the APK
 CMD ["/bin/bash", "-c", "\
     set -e && \
@@ -146,10 +150,15 @@ CMD ["/bin/bash", "-c", "\
     echo 'Step 1/3: Running Expo prebuild...' && \
     npx expo prebuild --platform android --clean && \
     echo '' && \
-    echo 'Step 2/3: Building release APK (arm64-v8a only)...' && \
+    echo 'Step 2/3: Configuring Gradle for compatibility...' && \
     cd android && \
+    echo 'newArchEnabled=false' >> gradle.properties && \
+    echo 'hermesEnabled=false' >> gradle.properties && \
+    echo 'FLIPPER_VERSION=0.182.0' >> gradle.properties && \
+    echo '' && \
+    echo 'Step 3/3: Building release APK (arm64-v8a only)...' && \
     chmod +x ./gradlew && \
-    ./gradlew assembleRelease --no-daemon --max-workers=1 -PreactNativeArchitectures=arm64-v8a && \
+    ./gradlew assembleRelease --no-daemon --max-workers=1 -PreactNativeArchitectures=arm64-v8a --stacktrace && \
     echo '' && \
     echo '========================================' && \
     echo 'Build Complete!' && \
