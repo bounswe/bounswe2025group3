@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.conf import settings
 
 
@@ -51,8 +53,7 @@ class WasteLog(models.Model):
 
     # optional 
     disposal_location = models.CharField(max_length=100, blank=True, null=True) 
-    disposal_photo = models.ImageField(upload_to='disposal_photos/', blank=True, null=True)
-    disposal_method = models.CharField(max_length=50, blank=True, null=True)
+    disposal_photo_url = models.URLField(blank=True, null=True, max_length=500)  # Supabase Storage URL 
 
     def get_score(self):
         if not self.quantity or not self.sub_category or not self.sub_category.score_per_unit:
@@ -89,3 +90,13 @@ class SustainableAction(models.Model):
     description = models.TextField(blank=True, null=True)
     date = models.DateField()
     score = models.DecimalField(max_digits=6, decimal_places=2)
+
+
+@receiver(pre_delete, sender=WasteLog)
+def delete_wastelog_image(sender, instance, **kwargs):
+    """Delete associated image from Supabase storage when waste log is deleted"""
+    if instance.disposal_photo_url:
+        from common.supabase_storage import delete_image, extract_path_from_url
+        path = extract_path_from_url(instance.disposal_photo_url)
+        if path:
+            delete_image(path)

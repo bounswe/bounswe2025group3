@@ -266,7 +266,12 @@ const EventsPage = () => {
           <div className="events-grid">
             {events.map(event => (
               <div key={event.id} className="event-card">
-                <img src={event.image || 'https://placehold.co/600x400/CCCCCC/000000?text=No+Image'} alt={event.title} className="event-card-image" />
+                {/* Use 'event.image_url' property (can be null) */}
+                <img 
+                  src={event.image_url || 'https://placehold.co/600x400/CCCCCC/000000?text=No+Image'} 
+                  alt={event.title} 
+                  className="event-card-image" 
+                />
                 <div className="event-card-content">
                   
                   <h2>{event.title}</h2>

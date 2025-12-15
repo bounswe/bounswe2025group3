@@ -128,7 +128,7 @@ const EventCreate = () => {
       }
 
       if (formData.image) {
-        dataToSend.append('image', formData.image, formData.image.name); 
+        dataToSend.append('image_file', formData.image, formData.image.name); 
       }
       
       await createEvent(dataToSend);
@@ -141,55 +141,28 @@ const EventCreate = () => {
 
     } catch (err) {
       console.error('Failed to create event:', err);
+      console.error('Error response:', err.response?.data);
       
-      const data = err.response?.data;
-      if (err.response?.status === 400 && data) {
-          const newErrors = {};
-          
-          Object.keys(data).forEach(key => {
-             let errorContent = data[key];
-             let errorMessage = "";
-
-             // Hata içeriğini string'e dönüştürme (Nested object koruması)
-             if (Array.isArray(errorContent)) {
-                 errorMessage = errorContent[0];
-             } else if (typeof errorContent === 'object' && errorContent !== null) {
-                 // Eğer { title: { title: "Error" } } gibi gelirse
-                 if (errorContent[key]) {
-                     const nested = errorContent[key];
-                     errorMessage = Array.isArray(nested) ? nested[0] : nested;
-                 } else {
-                     const firstVal = Object.values(errorContent)[0];
-                     errorMessage = Array.isArray(firstVal) ? firstVal[0] : firstVal;
-                 }
-             } else {
-                 errorMessage = errorContent;
-             }
-
-             // React child hatası almamak için string'e çevir
-             if (typeof errorMessage === 'object') {
-                 errorMessage = JSON.stringify(errorMessage);
-             }
-
-             // --- TRANSLATION LOGIC (BLACKLIST) ---
-             // Backend'den "banned word" içeren bir mesaj gelirse çeviriyle değiştir
-             if (typeof errorMessage === 'string' && errorMessage.toLowerCase().includes("banned word")) {
-                 errorMessage = t('eventsPage.error_banned_word');
-             }
-             // -------------------------------------
-
-             newErrors[key] = errorMessage;
+      // Handle DRF validation errors - they can be in different formats
+      let errorMessage = err.message;
+      if (err.response?.data) {
+        if (err.response.data.detail) {
+          errorMessage = err.response.data.detail;
+        } else if (typeof err.response.data === 'object') {
+          // DRF validation errors are usually an object with field names
+          const errorFields = Object.keys(err.response.data);
+          const errorMessages = errorFields.map(field => {
+            const fieldErrors = Array.isArray(err.response.data[field]) 
+              ? err.response.data[field].join(', ')
+              : err.response.data[field];
+            return `${field}: ${fieldErrors}`;
           });
-          
-          setFieldErrors(newErrors);
-          
-          if (Object.keys(newErrors).length === 0) {
-             showMessage(t('eventsPage.createError'), 'error');
-          }
-      } else {
-         showMessage(`${t('eventsPage.createError')}: ${err.message}`, 'error');
+          errorMessage = errorMessages.join('; ') || JSON.stringify(err.response.data);
+        } else {
+          errorMessage = err.response.data;
+        }
       }
-
+      showMessage(t('eventsPage.createError') + `: ${errorMessage}`, 'error');
     } finally {
       setIsSubmitting(false);
     }

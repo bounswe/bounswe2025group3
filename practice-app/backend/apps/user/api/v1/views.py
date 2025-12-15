@@ -2,6 +2,7 @@
 
 from rest_framework import generics, viewsets, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
@@ -14,9 +15,11 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     """
     Retrieve or update the profile of the currently authenticated user.
     Allows GET, PUT, PATCH requests.
+    Supports multipart form data for profile picture uploads.
     """
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, JSONParser]
 
     def get_object(self):
         # Returns the user associated with the current request

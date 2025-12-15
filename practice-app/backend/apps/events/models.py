@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.conf import settings
 from django.utils import timezone
 
@@ -10,9 +12,7 @@ class Event(models.Model):
     location = models.CharField(max_length=255, blank=True)
     exact_location = models.CharField(max_length=255, null=True, blank=True)
     date = models.DateTimeField()  # when the event happens
-    duration = models.IntegerField(help_text="Duration in minutes", null=True, blank=True) 
-    image = models.ImageField(upload_to='events/images/', blank=True, null=True)
-    equipment_needed = models.TextField(null=True, blank=True)
+    image_url = models.URLField(blank=True, null=True, max_length=500)  # Supabase Storage URL
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_events')
     participants = models.ManyToManyField(
         User, related_name='participated_events', blank=True
@@ -37,3 +37,13 @@ class Event(models.Model):
     @property
     def likes_count(self):
         return self.likes.count()
+
+
+@receiver(pre_delete, sender=Event)
+def delete_event_image(sender, instance, **kwargs):
+    """Delete associated image from Supabase storage when event is deleted"""
+    if instance.image_url:
+        from common.supabase_storage import delete_image, extract_path_from_url
+        path = extract_path_from_url(instance.image_url)
+        if path:
+            delete_image(path)
