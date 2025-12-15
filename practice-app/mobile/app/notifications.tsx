@@ -12,6 +12,7 @@ import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   RefreshControl,
   StyleSheet,
@@ -300,6 +301,30 @@ export default function NotificationsScreen() {
     }
   };
 
+  const handleClearAll = () => {
+    if (notifications.length === 0) {
+      return;
+    }
+    
+    Alert.alert(
+      t("notifications.clear_all_title", { defaultValue: "Clear All Notifications" }),
+      t("notifications.clear_all_message", { defaultValue: "Are you sure you want to clear all notifications? This will mark them all as read." }),
+      [
+        {
+          text: t("common.cancel", { defaultValue: "Cancel" }),
+          style: "cancel",
+        },
+        {
+          text: t("common.clear", { defaultValue: "Clear" }),
+          style: "destructive",
+          onPress: async () => {
+            await handleMarkAllRead();
+          },
+        },
+      ]
+    );
+  };
+
   const renderNotificationItem = ({ item }: { item: Notification }) => {
     const handlePress = () => {
       if (!item.is_read) {
@@ -351,6 +376,9 @@ export default function NotificationsScreen() {
           <Text style={styles.headerTitle}>{t("notifications.title")}</Text>
         </View>
         <View style={styles.headerActions}>
+          <TouchableOpacity style={styles.iconButton} onPress={handleClearAll}>
+            <Ionicons name="trash-outline" size={20} color={colors.primary} />
+          </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton} onPress={handleRefresh}>
             <Ionicons name="refresh" size={20} color={colors.primary} />
           </TouchableOpacity>
