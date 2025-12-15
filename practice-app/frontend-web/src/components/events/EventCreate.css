@@ -203,12 +203,26 @@
 
 /* Feedback Messages */
 .event-create-scoped .feedback-message {
-  padding: 1rem;
+  padding: 1.2rem 1.5rem;
   margin-bottom: 2rem;
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: 500;
   text-align: center;
   border-left: 5px solid transparent;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  animation: slideInDown 0.4s ease-out;
+  line-height: 1.5;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .event-create-scoped .feedback-message.success {
