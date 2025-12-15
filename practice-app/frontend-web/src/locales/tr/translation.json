@@ -655,6 +655,7 @@
   },
   "badges_data": {
     "first_step": { "name": "İlk Adım", "desc": "İlk atığını kaydet" },
+    "event_joiner":  { "name":  "İlk Etkinlik", "desc": "İlk etkinliğine katıl"},
     "plastic_buster": { "name": "Plastik Avcısı", "desc": "10 birim plastik azalt" },
     "sustainability_streak": { "name": "İstikrar Serisi", "desc": "14 gün üst üste kayıt" },
     "zero_waste_legend": { "name": "Sıfır Atık Efsanesi", "desc": "5000+ Puan kazan" },
