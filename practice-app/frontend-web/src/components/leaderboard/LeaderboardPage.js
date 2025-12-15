@@ -21,9 +21,9 @@ const LeaderboardPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     
-    // YENİ: Zaman dilimi state'i (Varsayılan: 'all')
-    // Seçenekler: 'all', 'yearly', 'monthly', 'weekly', 'daily'
-    const [timeframe, setTimeframe] = useState('all');
+    // DISABLED.
+    // Defaulting to showing all-time data only.
+    // const [timeframe, setTimeframe] = useState('all');
 
     const navigate = useNavigate();
     const currentUserId = localStorage.getItem('user_id'); 
@@ -41,8 +41,8 @@ const LeaderboardPage = () => {
         const fetchLeaderboard = async () => {
             setLoading(true);
             try {
-                // YENİ: timeframe parametresini gönderiyoruz
-                const rawData = await getLeaderboard(timeframe); 
+                // CHANGE: Removed timeframe parameter, backend returns default (all time) data.
+                const rawData = await getLeaderboard(); 
                 
                 let transformedData = rawData.map((user, index) => ({
                     id: user.id,
@@ -70,8 +70,8 @@ const LeaderboardPage = () => {
         };
 
         fetchLeaderboard();
-        // YENİ: timeframe değiştiğinde useEffect tekrar çalışsın
-    }, [navigate, currentUserId, timeframe]);
+        // CHANGE: Removed timeframe from dependency array since it's disabled
+    }, [navigate, currentUserId]); 
 
     const getRankIcon = (rank) => {
         if (rank === 1) return <Icon name="medalGold" className="rank-icon gold" />;
@@ -107,7 +107,8 @@ const LeaderboardPage = () => {
                     <h1><Icon name="trophy" /> {t('leaderboard_page.title')}</h1>
                     <p>{t('leaderboard_page.subtitle')}</p>
                     
-                    {/* YENİ: Filtre Butonları */}
+                    {/*  DISABLED: Filter buttons hidden */}
+                    {/*
                     <div className="leaderboard-filters">
                         {['all', 'yearly', 'monthly', 'weekly', 'daily'].map((period) => (
                             <button
@@ -119,6 +120,7 @@ const LeaderboardPage = () => {
                             </button>
                         ))}
                     </div>
+                    */}
                 </div>
 
                 {loading && (

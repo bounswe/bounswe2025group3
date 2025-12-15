@@ -13,9 +13,11 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getEventById, Event } from '@/api/events';
+import { getEventById, Event, likeEvent, participateEvent } from '@/api/events';
 import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '@/constants/api';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useBadge } from '@/hooks/badgeContext';
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -25,6 +27,7 @@ export default function EventDetailsScreen() {
   const router = useRouter();
   const colors = useColors();
   const { t } = useTranslation();
+  const { checkForNewBadges } = useBadge();
 
   const customBlue = (colors as any).blue || colors.primary; 
 
@@ -86,6 +89,41 @@ export default function EventDetailsScreen() {
       Alert.alert("Error", "Failed to load event details.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleLike = async () => {
+    if (!event) return;
+    try {
+      const response = await likeEvent(event.id);
+      setEvent({
+        ...event,
+        i_liked: response.i_liked,
+        likes_count: response.likes_count,
+      });
+    } catch (error) {
+      console.error('Error liking event:', error);
+      Alert.alert("Error", "Failed to like/unlike event.");
+    }
+  };
+
+  const handleParticipate = async () => {
+    if (!event) return;
+    try {
+      const response = await participateEvent(event.id);
+      setEvent({
+        ...event,
+        i_am_participating: response.i_am_participating,
+        participants_count: response.participants_count,
+      });
+      
+      // Check for new badges after participating
+      setTimeout(() => {
+        checkForNewBadges();
+      }, 1000);
+    } catch (error) {
+      console.error('Error participating in event:', error);
+      Alert.alert("Error", "Failed to participate/unparticipate in event.");
     }
   };
 
@@ -195,6 +233,46 @@ export default function EventDetailsScreen() {
               <Text style={styles.statLabel}>Likes</Text>
             </View>
           </View>
+        </View>
+
+        <View style={styles.actionsContainer}>
+          <TouchableOpacity
+            style={[styles.actionButton, event.i_liked ? styles.likeButtonActive : styles.likeButton]}
+            onPress={handleLike}
+          >
+            <Ionicons
+              name={event.i_liked ? "heart" : "heart-outline"}
+              size={20}
+              color={event.i_liked ? "white" : colors.primary}
+            />
+            <Text style={event.i_liked ? styles.likeButtonTextActive : styles.likeButtonText}>
+              {event.i_liked ? "Liked" : "Like"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.actionButton, event.i_am_participating && styles.participateButtonActiveGradient]}
+            onPress={handleParticipate}
+          >
+            {event.i_am_participating ? (
+              <LinearGradient
+                colors={['#24C6DC', '#514A9D']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={[styles.actionButton, { flex: 1, margin: 0 }]}
+              >
+                <Ionicons name="checkmark-circle" size={20} color="white" />
+                <Text style={[styles.participateButtonText, { color: 'white' }]}>
+                  Participating
+                </Text>
+              </LinearGradient>
+            ) : (
+              <>
+                <Ionicons name="person-add-outline" size={20} color={customBlue} />
+                <Text style={styles.participateButtonText}>Participate</Text>
+              </>
+            )}
+          </TouchableOpacity>
         </View>
 
       </ScrollView>

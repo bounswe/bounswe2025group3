@@ -63,35 +63,52 @@ const formatNumber = (num) => {
 
 // --- Custom Bar/Area Tooltip ---
 const CustomTooltip = ({ active, payload, label, type, t }) => {
+  // Helper to translate units
+  const getUnitTrans = (u) => {
+      if(!u) return '';
+      const key = u.toLowerCase().trim();
+      return t(`units.${key}`, { defaultValue: u });
+  };
+
   if (active && payload && payload.length) {
     const total = payload.reduce((sum, entry) => sum + (entry.value || 0), 0);
     const unitText = type === 'score' ? t('units.pts') : t('units.logs');
 
     return (
-      <div className="custom-tooltip">
-        <p className="label"><strong>{label}</strong></p>
+      <div className="custom-tooltip" style={{
+          backgroundColor: '#fff', 
+          padding: '10px', 
+          border: '1px solid #ccc', 
+          borderRadius: '5px',
+          boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+          zIndex: 1000,
+          pointerEvents: 'none' 
+      }}>
+        <p className="label" style={{marginBottom: '5px', borderBottom:'1px solid #eee', paddingBottom:'3px'}}>
+            <strong>{label}</strong>
+        </p>
         <div className="tooltip-items">
             {payload.map((entry, index) => {
                 const dataPoint = entry.payload; 
-                // Extract key prefix (e.g., subcategory_15)
                 const rawKeyPrefix = entry.dataKey.split('_').slice(0, 2).join('_'); 
                 
                 const rawQty = dataPoint[`${rawKeyPrefix}_rawQty`];
                 const unit = dataPoint[`${rawKeyPrefix}_unit`] || '';
+                const translatedUnit = getUnitTrans(unit);
 
                 return (
-                    <p key={index} style={{ color: entry.color, margin: '4px 0', fontSize: '0.9rem' }}>
+                    <p key={index} style={{ color: entry.color, margin: '2px 0', fontSize: '0.85rem' }}>
                         <span style={{fontWeight: '600'}}>{entry.name}:</span>{' '}
                         {type === 'score' 
                             ? `${formatNumber(entry.value)} ${t('units.pts')}` 
-                            : `${formatNumber(rawQty)} ${unit} (${entry.value} ${t('units.logs')})`
+                            : `${formatNumber(rawQty)} ${translatedUnit} (${entry.value} ${t('units.logs')})`
                         }
                     </p>
                 );
             })}
         </div>
         <div className="tooltip-total" style={{ borderTop: '1px solid #eee', marginTop: '8px', paddingTop: '5px' }}>
-            <p><strong>Total: {formatNumber(total)} {unitText}</strong></p>
+            <p><strong>{t('stats_page.tooltips.total', 'Total')}: {formatNumber(total)} {unitText}</strong></p>
         </div>
       </div>
     );
@@ -107,13 +124,20 @@ const CustomPieTooltip = ({ active, payload, totalValue, t }) => {
       const percent = totalValue > 0 ? (value / totalValue) * 100 : 0;
 
       return (
-        <div className="custom-tooltip">
+        <div className="custom-tooltip" style={{
+            backgroundColor: '#fff', 
+            padding: '10px', 
+            border: '1px solid #ccc', 
+            borderRadius: '5px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+            zIndex: 1000
+        }}>
           <p className="label" style={{color: payload[0].fill, marginBottom: '5px'}}><strong>{data.name}</strong></p>
           <div className="tooltip-items">
-              <p>Impact: <strong>{formatNumber(Math.round(data.score))} {t('units.pts')}</strong></p>
-              <p>Frequency: <strong>{data.count} {t('units.logs')}</strong></p>
+              <p>{t('stats_page.tooltips.impact', 'Impact')}: <strong>{formatNumber(Math.round(data.score))} {t('units.pts')}</strong></p>
+              <p>{t('stats_page.tooltips.frequency', 'Frequency')}: <strong>{data.count} {t('units.logs')}</strong></p>
               <p className="highlight-info" style={{marginTop: '5px', borderTop: '1px dashed #ddd', paddingTop: '3px'}}>
-                  Share: <strong>{percent.toFixed(1)}%</strong>
+                  {t('stats_page.tooltips.share', 'Share')}: <strong>{percent.toFixed(1)}%</strong>
               </p>
           </div>
         </div>
@@ -127,16 +151,12 @@ const PersonalStats = () => {
   const navigate = useNavigate();
   
   const [loading, setLoading] = useState(true);
-  // eslint-disable-next-line no-unused-vars
   const [chartLoading, setChartLoading] = useState(false);
   const [error, setError] = useState('');
   const [profile, setProfile] = useState(null);
   const [scoreData, setScoreData] = useState({ total_score: 0 });
   
   const [timeframe, setTimeframe] = useState('daily');
-  const DEFAULTS = { daily: 10, weekly: 10, monthly: 12, yearly: 10 };
-  const [rangeValue, setRangeValue] = useState(DEFAULTS['daily']); 
-
   const [pieMetric, setPieMetric] = useState('score'); 
 
   const [chartData, setChartData] = useState([]); 
@@ -144,14 +164,14 @@ const PersonalStats = () => {
   const [categoryStats, setCategoryStats] = useState([]); 
   
   const [earnedBadgeIds, setEarnedBadgeIds] = useState([]);
-
   const [leaderboardRank, setLeaderboardRank] = useState('N/A');
-  // eslint-disable-next-line no-unused-vars
   const [eventStats, setEventStats] = useState({ participating: 0, total: 0, rate: 0 });
+  
   const [subCategoriesMap, setSubCategoriesMap] = useState({});
   const [rawLogsState, setRawLogsState] = useState([]);
+  
+  const [rawStatsData, setRawStatsData] = useState([]);
 
-  // rawStreakState might be used for the graph, but we will use logs for badge calculation
   // eslint-disable-next-line no-unused-vars
   const [rawStreakState, setRawStreakState] = useState([]); 
 
@@ -177,8 +197,6 @@ const PersonalStats = () => {
   }, [token]);
 
   useEffect(() => {
-    setRangeValue(DEFAULTS[timeframe]);
-    // Fetch new stats from backend when timeframe changes
     if (token && !loading) {
       fetchStatsForTimeframe(timeframe);
     }
@@ -187,224 +205,209 @@ const PersonalStats = () => {
 
   useEffect(() => {
     if (!loading && rawLogsState.length > 0) {
-        // Re-process Pie Chart and Badges when language changes or logs update
-        processCategoryPie(rawLogsState);
         calculateBadges(rawLogsState, scoreData.total_score);
     }
     // eslint-disable-next-line
-  }, [rawLogsState, i18n.language]);
+  }, [rawLogsState]);
+
+  useEffect(() => {
+    if (!loading && rawStatsData.length > 0) {
+        processStatsData(rawStatsData, timeframe, subCategoriesMap, rawLogsState);
+    }
+    // eslint-disable-next-line
+  }, [i18n.language]);
 
   const getCategoryTrans = (apiName) => {
       if (!apiName) return t('waste_categories.other');
-      const key = apiName.toLowerCase().trim().replace(/\s+/g, "_");
+      const key = apiName.toLowerCase().trim().replace(/[\s-]+/g, "_");
       return t(`waste_categories.${key}`, { defaultValue: apiName });
   };
 
-  // --- Helper: Real Streak Calculation (based on Logs) ---
   const calculateRealStreak = (logs) => {
     if (!logs || logs.length === 0) return 0;
-
-    // 1. Get unique dates with reset hours
     const uniqueDates = [...new Set(logs.map(log => {
         const d = new Date(log.date_logged);
         return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
     }))];
-
-    // 2. Sort descending
     uniqueDates.sort((a, b) => b - a);
-
     if (uniqueDates.length === 0) return 0;
-
-    // 3. Check streak
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const todayTime = today.getTime();
-
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayTime = yesterday.getTime();
-
     const lastLogDate = uniqueDates[0];
-    // If last log is not today or yesterday, streak is broken
-    if (lastLogDate !== todayTime && lastLogDate !== yesterdayTime) {
-        return 0; 
-    }
-
+    if (lastLogDate !== todayTime && lastLogDate !== yesterdayTime) { return 0; }
     let streak = 1;
     let currentCheck = lastLogDate;
-
     for (let i = 1; i < uniqueDates.length; i++) {
         const prevDate = uniqueDates[i];
         const diffTime = Math.abs(currentCheck - prevDate);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-
-        if (diffDays === 1) {
-            streak++;
-            currentCheck = prevDate;
-        } else {
-            break; 
-        }
+        if (diffDays === 1) { streak++; currentCheck = prevDate; } else { break; }
     }
     return streak;
   };
 
-  // --- GRAPH DATA PROCESSING (USING BACKEND STATS API) ---
-  // This method avoids heavy frontend processing and aligns dates correctly based on backend data.
-  const processStatsToChartData = (statsData, period, subCatMap = subCategoriesMap) => {
-    const locale = i18n.language;
+  // --- HELPER: Recursively Fetch All Pages ---
+  // This ensures we get ALL data regardless of pagination limits (e.g. 10 items)
+  const fetchAllPages = async (endpoint, headers) => {
+    let allResults = [];
+    let nextUrl = `${apiUrl}${endpoint}`;
+    
+    // Add page_size param safely
+    if (nextUrl.includes('?')) nextUrl += '&page_size=1000';
+    else nextUrl += '?page_size=1000';
+
+    try {
+        while (nextUrl) {
+            const res = await axios.get(nextUrl, { headers });
+            const data = res.data;
+
+            if (Array.isArray(data)) {
+                // If backend does not paginate and returns list
+                allResults = data;
+                nextUrl = null;
+            } else if (data.results) {
+                // If backend paginates
+                allResults = [...allResults, ...data.results];
+                nextUrl = data.next; // Go to next page
+            } else {
+                // Unknown format or single object (shouldn't happen for lists)
+                nextUrl = null;
+            }
+        }
+    } catch (error) {
+        console.warn("Error fetching pages:", error);
+    }
+    return allResults;
+  };
+
+  // --- GRAPH DATA PROCESSING ---
+  const processStatsData = (statsData, period, subCatMap = subCategoriesMap, logs = rawLogsState) => {
+    const locale = i18n.language; 
     const categoriesSet = new Set();
     const chartDataArray = [];
-    const limit = rangeValue || DEFAULTS[period];
-    
-    // Create date range to show empty days as well
-    const now = new Date();
-    const timePoints = [];
-    const loopLimit = limit - 1;
+    const pieAggregates = {};
 
-    if (period === 'daily') {
-        for (let i = loopLimit; i >= 0; i--) {
-            const d = new Date(); d.setDate(now.getDate() - i);
-            timePoints.push(d);
-        }
-    } else if (period === 'weekly') {
-        for (let i = loopLimit; i >= 0; i--) {
-            const d = new Date(); d.setDate(now.getDate() - (i * 7));
-            timePoints.push(d);
-        }
-    } else if (period === 'monthly') {
-        for (let i = loopLimit; i >= 0; i--) {
-            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-            timePoints.push(d);
-        }
-    } else if (period === 'yearly') {
-        for (let i = loopLimit; i >= 0; i--) {
-            const d = new Date(now.getFullYear() - i, 0, 1);
-            timePoints.push(d);
-        }
-    }
-
-    // Map backend data by date key
-    const statsMap = {};
     statsData.forEach(stat => {
-        let key = '';
+        const startDate = new Date(stat.start_date);
+        let displayKey = '';
+
         if (period === 'daily') {
-             const date = new Date(stat.start_date);
-             key = date.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
+             displayKey = startDate.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
         } else if (period === 'weekly') {
-             const startDate = new Date(stat.start_date);
              const day = startDate.getDay();
              const diff = startDate.getDate() - day + (day === 0 ? -6 : 1);
              const monday = new Date(startDate); monday.setDate(diff);
-             key = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
+             displayKey = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
         } else if (period === 'monthly') {
-             const date = new Date(stat.start_date);
-             key = date.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
+             displayKey = startDate.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
         } else if (period === 'yearly') {
-             const date = new Date(stat.start_date);
-             key = date.getFullYear().toString();
+             displayKey = startDate.getFullYear().toString();
         }
-        statsMap[key] = stat;
-    });
 
-    // Populate Chart Data Array
-    timePoints.forEach(d => {
-        let key = '';
-        let displayKey = '';
-        
-        if (period === 'daily') {
-            displayKey = d.toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' });
-        } else if (period === 'weekly') {
-            const day = d.getDay();
-            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-            const monday = new Date(d); monday.setDate(diff);
-            displayKey = `${monday.toLocaleDateString(locale, { month: 'short', day: 'numeric' })} ${t('stats_page.charts.week_suffix')}`;
-        } else if (period === 'monthly') {
-            displayKey = d.toLocaleDateString(locale, { month: 'short', year: 'numeric' });
-        } else if (period === 'yearly') {
-            displayKey = d.getFullYear().toString();
-        }
-        
-        const stat = statsMap[displayKey];
         const entry = { name: displayKey };
+        entry.totalScore = stat.total_score;
+        entry.totalLog = stat.total_log;
 
-        if (stat) {
-             entry.totalScore = stat.total_score;
-             entry.totalLog = stat.total_log;
+        Object.keys(stat).forEach(k => {
+             if (k.match(/^subcategory_\d+_score$/)) {
+                 const subcatId = k.match(/subcategory_(\d+)_score/)[1];
+                 const safeKey = `subcategory_${subcatId}`;
+                 const scoreValue = stat[k];
+                 const logValue = stat[`subcategory_${subcatId}_log`] || 0;
 
-             Object.keys(stat).forEach(k => {
-                // Find keys like subcategory_15_score
-                if (k.match(/^subcategory_\d+_score$/)) {
-                    const subcatId = k.match(/subcategory_(\d+)_score/)[1];
-                    const safeKey = `subcategory_${subcatId}`;
-                    const scoreValue = stat[k];
-                    const logValue = stat[`subcategory_${subcatId}_log`] || 0;
-                    const rawQty = stat[`subcategory_${subcatId}_quantity`] || 0;
+                 const rawQty = logs
+                    .filter(l => {
+                        if (l.sub_category !== parseInt(subcatId)) return false;
+                        const logDate = new Date(l.date_logged).toISOString().split('T')[0];
+                        return logDate >= stat.start_date && logDate <= stat.end_date;
+                    })
+                    .reduce((sum, l) => sum + (parseFloat(l.quantity) || 0), 0);
 
-                    if (scoreValue > 0 || logValue > 0) {
-                        categoriesSet.add(safeKey);
-                        entry[`${safeKey}_score`] = scoreValue;
-                        entry[`${safeKey}_count`] = logValue;
-                        entry[`${safeKey}_rawQty`] = rawQty;
+                 if (scoreValue > 0 || logValue > 0) {
+                     categoriesSet.add(safeKey);
+                     entry[`${safeKey}_score`] = scoreValue;
+                     entry[`${safeKey}_count`] = logValue;
+                     entry[`${safeKey}_rawQty`] = parseFloat(rawQty.toFixed(2)); 
 
-                        const subCatData = subCatMap[subcatId];
-                        const displayName = subCatData ? subCatData.name : `Subcategory ${subcatId}`;
-                        const unit = subCatData ? subCatData.unit : '';
-                        
-                        entry[`${safeKey}_originalName`] = displayName;
-                        entry[`${safeKey}_unit`] = unit;
-                    }
-                }
-             });
-        }
+                     let displayName = `Subcategory ${subcatId}`;
+                     let unit = '';
+
+                     // Map lookup - now guaranteed to be populated for all active categories
+                     const subCatData = subCatMap[subcatId];
+                     if (subCatData) {
+                       displayName = subCatData.name;
+                       unit = subCatData.unit; 
+                     } else {
+                       // Fallback only if really missing (e.g. inactive category)
+                       const fallbackLog = logs.find(l => l.sub_category === parseInt(subcatId));
+                       if (fallbackLog && fallbackLog.sub_category_name) {
+                           displayName = fallbackLog.sub_category_name;
+                       }
+                     }
+                     
+                     entry[`${safeKey}_originalName`] = displayName;
+                     entry[`${safeKey}_unit`] = unit;
+
+                     const transName = getCategoryTrans(displayName);
+                     if (!pieAggregates[transName]) {
+                         pieAggregates[transName] = { name: transName, score: 0, count: 0 };
+                     }
+                     pieAggregates[transName].score += scoreValue;
+                     pieAggregates[transName].count += logValue;
+                 }
+             }
+        });
+
         chartDataArray.push(entry);
     });
 
     setUniqueCategories(Array.from(categoriesSet));
     setChartData(chartDataArray);
+    setCategoryStats(Object.values(pieAggregates));
   };
 
   const fetchInitialData = async () => {
     try {
       const headers = { Authorization: `Bearer ${token}` };
       
-      const [profileRes, scoreRes, logsRes, eventsRes, leaderboardRes, subCatsRes, statsRes] = await Promise.all([
+      // We fetch independent endpoints in parallel, but handle SubCategories & Logs with the fetchAllPages helper
+      // to ensure we get ALL data despite pagination.
+      const [profileRes, scoreRes, leaderboardRes, eventsRes] = await Promise.all([
         axios.get(`${apiUrl}/user/me/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/scores/me/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/logs/`, { headers }), 
-        axios.get(`${apiUrl}/v1/events/events/`, { headers }),
         axios.get(`${apiUrl}/v1/waste/leaderboard/`, { headers }),
-        axios.get(`${apiUrl}/v1/waste/subcategories/`, { headers }),
-        // Stats data fetched specifically for charts
-        axios.get(`${apiUrl}/v1/waste/user/stats/?period=${timeframe}`, { headers }) 
+        axios.get(`${apiUrl}/v1/events/events/`, { headers })
       ]);
+
+      // Fetch ALL Subcategories (Recursively)
+      const allSubCats = await fetchAllPages('/v1/waste/subcategories/', headers);
+      
+      // Fetch ALL Logs (Recursively) - just in case logs also paginate heavily
+      const allLogs = await fetchAllPages('/v1/waste/logs/', headers);
+
+      // Fetch Stats (Standard fetch, usually returns fixed list)
+      const statsRes = await axios.get(`${apiUrl}/v1/waste/user/stats/?period=${timeframe}`, { headers });
 
       setProfile(profileRes.data);
       setScoreData(scoreRes.data);
       
       const catMap = {};
-      const subCats = subCatsRes.data.results || subCatsRes.data || [];
-      
-      // Pagination handling (To fetch all if there are many subcategories)
-      // Optional: Logic to fetch next pages if necessary can be added here
-      let allSubCats = [...(Array.isArray(subCats) ? subCats : [])];
-      
       allSubCats.forEach(sc => { catMap[sc.id] = sc; });
       setSubCategoriesMap(catMap);
 
-      const allLogs = logsRes.data.results || [];
       const statsData = statsRes.data.data || [];
 
       setRawLogsState(allLogs);
-      
-      // Use Backend Stats data for charts
-      processStatsToChartData(statsData, timeframe, catMap);
-      
-      // Use Raw Logs for Pie Chart and Badges
-      processCategoryPie(allLogs);
+      setRawStatsData(statsData);
+
+      processStatsData(statsData, timeframe, catMap, allLogs);
       calculateBadges(allLogs, scoreRes.data.total_score);
-      
       calculateRank(leaderboardRes.data || [], userId);
-      calculateEventStats(eventsRes.data.results || []);
+      calculateEventStats(eventsRes.data.results || eventsRes.data || []); // Handle both paginated/non-paginated for events too
 
       setLoading(false);
     } catch (err) {
@@ -420,7 +423,9 @@ const PersonalStats = () => {
       const headers = { Authorization: `Bearer ${token}` };
       const statsRes = await axios.get(`${apiUrl}/v1/waste/user/stats/?period=${period}`, { headers });
       const statsData = statsRes.data.data || [];
-      processStatsToChartData(statsData, period, subCategoriesMap);
+      
+      setRawStatsData(statsData);
+      processStatsData(statsData, period, subCategoriesMap, rawLogsState);
       setChartLoading(false);
     } catch (err) {
       console.error(err);
@@ -442,25 +447,6 @@ const PersonalStats = () => {
       }
     }
     return { current, next, currentIndex };
-  };
-
-  const processCategoryPie = (logs) => {
-    const categoryMap = {};
-    logs.forEach(log => {
-      const catName = log.sub_category_name || 'Other';
-      const transName = getCategoryTrans(catName);
-
-      if (!categoryMap[transName]) {
-          categoryMap[transName] = { 
-              name: transName, 
-              score: 0, 
-              count: 0 
-          };
-      }
-      categoryMap[transName].score += parseFloat(log.score) || 0;
-      categoryMap[transName].count += 1;
-    });
-    setCategoryStats(Object.values(categoryMap));
   };
 
   const calculateBadges = (logs, score) => {
@@ -597,17 +583,6 @@ const PersonalStats = () => {
                 <div className="chart-header">
                     <h2>{t('stats_page.charts.points_history')}</h2>
                     <div className="stats-filter-group">
-                        <div className="range-selector">
-                            <span style={{fontSize:'0.85rem', color:'var(--dashboard-text-medium)', marginRight:'5px'}}>{t('stats_page.charts.last')}</span>
-                            <input 
-                                type="number" 
-                                min="1" 
-                                max="365" 
-                                value={rangeValue} 
-                                onChange={(e) => setRangeValue(Number(e.target.value))}
-                                className="range-input"
-                            />
-                        </div>
                         {['daily', 'weekly', 'monthly', 'yearly'].map((p) => (
                             <button 
                                 key={p}
@@ -632,7 +607,11 @@ const PersonalStats = () => {
                                     tick={{ fontSize: 10, dy: 10 }}
                                 />
                                 <YAxis tick={{ fontSize: 11 }} />
-                                <Tooltip content={<CustomTooltip type="score" t={t} />} cursor={{fill: 'transparent'}}/>
+                                <Tooltip 
+                                    content={<CustomTooltip type="score" t={t} />} 
+                                    cursor={{fill: 'transparent'}}
+                                    wrapperStyle={{ zIndex: 1000 }}
+                                />
                                 <Legend wrapperStyle={{paddingTop: '40px'}} />
                                 {uniqueCategories.map((safeKey, index) => {
                                     const originalName = chartData.find(d => d[`${safeKey}_originalName`])?.[`${safeKey}_originalName`] || safeKey;
@@ -672,7 +651,11 @@ const PersonalStats = () => {
                                 tick={{ fontSize: 10, dy: 10 }}
                             />
                             <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
-                            <Tooltip content={<CustomTooltip type="items" t={t} />} cursor={{fill: 'transparent'}}/>
+                            <Tooltip 
+                                content={<CustomTooltip type="items" t={t} />} 
+                                cursor={{fill: 'transparent'}}
+                                wrapperStyle={{ zIndex: 1000 }}
+                            />
                             <Legend wrapperStyle={{paddingTop: '40px'}} />
                             {uniqueCategories.map((safeKey, index) => {
                                 const originalName = chartData.find(d => d[`${safeKey}_originalName`])?.[`${safeKey}_originalName`] || safeKey;
@@ -720,7 +703,10 @@ const PersonalStats = () => {
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
                         </Pie>
-                        <Tooltip content={<CustomPieTooltip totalValue={pieTotal} t={t} />} />
+                        <Tooltip 
+                            content={<CustomPieTooltip totalValue={pieTotal} t={t} />} 
+                            wrapperStyle={{ zIndex: 1000 }}
+                        />
                         <Legend verticalAlign="bottom" height={36} wrapperStyle={{fontSize: '12px'}} />
                       </PieChart>
                     </ResponsiveContainer>

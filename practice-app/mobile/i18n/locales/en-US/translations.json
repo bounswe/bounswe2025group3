@@ -253,6 +253,8 @@
         "bio_placeholder": "Tell us about yourself",
         "city": "City (Optional)",
         "city_placeholder": "Your city",
+        "state": "State/Province (Optional)",
+        "state_placeholder": "Select state",
         "country": "Country (Optional)",
         "country_placeholder": "Your country"
     },
@@ -260,7 +262,9 @@
         "loading": "Loading...",
         "user": "User",
         "account_age": "Account age: {{age}}",
-        "achievements": "Achievements",
+        "badges": "Badges",
+        "stats": "Stats",
+        "notifications": "Notifications",
         "profile": "Profile",
         "settings": "Settings",
         "admin_page": "Admin Page",
@@ -268,6 +272,65 @@
         "logout_title": "Logout",
         "logout_message": "Are you sure you want to logout?",
         "logout_confirm": "Logout"
+    },
+    "stats": {
+        "title": "Your Stats",
+        "total_score": "Total score",
+        "total_logs": "Total logs",
+        "average_score": "Avg. score / period",
+        "period_daily": "Daily (last 7 days)",
+        "period_weekly": "Weekly (last 4 weeks)",
+        "subcategory_all": "All categories",
+        "activity": "Activity",
+        "activity_trend": "Activity trend",
+        "points_label": "Points",
+        "logs_label": "Logs",
+        "latest_periods": "{{count}} periods",
+        "range": "{{start}} - {{end}}",
+        "daily_label": "Daily",
+        "weekly_label": "Weekly",
+        "empty_title": "No stats yet",
+        "empty_message": "Log waste to see your progress here.",
+        "best_period": "Best period",
+        "breakdown_title": "Category breakdown",
+        "breakdown_empty": "No category data yet.",
+        "forest_title": "Eco forest",
+        "forest_empty": "Earn more trees by increasing your score.",
+        "unknown_category": "Other"
+    },
+    "badges": {
+        "title": "Your Badges",
+        "unnamed": "Badge",
+        "earned_on": "Earned on",
+        "earned": "Earned",
+        "in_progress": "In progress",
+        "achievement_unlocked": "Achievement unlocked",
+        "empty_title": "No badges yet",
+        "empty_message": "Keep completing goals to earn your first badge.",
+        "refresh": "Refresh",
+        "descriptions": {
+            "first_step": "Log first waste",
+            "plastic_buster": "Recycle 10kg of plastic",
+            "sustainability_streak": "Maintain a 14-day streak",
+            "zero_waste_legend": "Reach 5000 eco points"
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "mark_all_read": "Mark All Read ({{count}})",
+        "show_all": "All",
+        "unread_only": "Unread",
+        "tap_to_view": "Tap to view",
+        "empty_title": "No notifications yet",
+        "empty_message": "You'll see your notifications here when you receive them."
+    },
+    "tiers": {
+        "planet_guardian": "Planet Guardian",
+        "zero_waste_champion": "Zero Waste Champion",
+        "sustainability_hero": "Sustainability Hero",
+        "eco_advocate": "Eco Advocate",
+        "green_starter": "Green Starter",
+        "eco_explorer": "Eco Explorer"
     },
     "settings": {
         "title": "Settings",
@@ -291,5 +354,36 @@
     },
     "common": {
         "cancel": "Cancel"
+    },
+    "waste_categories": {
+        "paper": "Paper",
+        "plastic_bottles": "Plastic Bottles",
+        "cardboard": "Cardboard",
+        "metal_cans": "Metal Cans",
+        "food_scraps": "Food Scraps",
+        "garden_waste": "Garden Waste",
+        "coffee_grounds": "Coffee Grounds",
+        "batteries": "Batteries",
+        "small_appliances": "Small Appliances",
+        "mobile_phones": "Mobile Phones",
+        "glass": "Glass",
+        "plastic": "Plastic",
+        "electronic": "Electronic",
+        "organic": "Organic",
+        "other": "Other",
+        "glass_bottles": "Glass Bottles",
+        "broken_glass": "Broken Glass",
+        "used_cooking_oil": "Used Cooking Oil",
+        "used_clothing": "Used Clothing",
+        "shoes": "Shoes",
+        "hazardous_waste": "Hazardous Waste",
+        "bulky_items": "Bulky Items"
+    },
+    "units": {
+        "kg": "kg",
+        "pcs": "pcs",
+        "l": "L",
+        "pieces": "pieces",
+        "liters": "liters"
     }
 }
