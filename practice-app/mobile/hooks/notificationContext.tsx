@@ -142,7 +142,9 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     } catch (error) {
       // Silently fail for authentication errors (user not logged in)
       const errorMessage = error instanceof Error ? error.message : String(error);
-      if (!errorMessage.includes('Session expired') && !errorMessage.includes('Authentication')) {
+      if (!errorMessage.includes('Session expired') && 
+          !errorMessage.includes('Authentication') && 
+          !errorMessage.includes('No access token found')) {
         console.error('Error checking for new notifications:', error);
       }
     } finally {
