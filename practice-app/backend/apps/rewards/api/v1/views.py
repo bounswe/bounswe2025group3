@@ -52,7 +52,6 @@ class BadgesView(APIView):
             .values(
                 "quantity",
                 "disposal_location",
-                "disposal_method",
                 sub_category_name=models.F("sub_category__name"),
             )
         )
@@ -70,14 +69,6 @@ class BadgesView(APIView):
         return float(user.total_score)
 
     def calculate_badges(self, logs, daily_stats, score, has_participated):
-
-        def get_logs_by_disposal_method(disposal_method):
-            filtered_list = []
-            for i in logs:
-                if i["disposal_method"] == disposal_method:
-                    filtered_list += [i]
-            print(disposal_method, filtered_list)
-            return filtered_list
 
         def count_items(keyword, field="sub_category_name", logs=logs):
             total = 0
@@ -97,13 +88,6 @@ class BadgesView(APIView):
             total = 0
             for log in logs:
                 total += log["quantity"]
-            return total
-
-        def count_items_donated():
-            total = 0
-            for log in logs:
-                if log["disposal_method"] is not None and log["disposal_method"] == "donated":
-                    total += log["quantity"]
             return total
 
         # Count recyclable items - check category name
@@ -130,7 +114,7 @@ class BadgesView(APIView):
             },
             {
                 "id": "plastic_buster",
-                "earned": count_items("plastic bottles") >= 10
+                "earned": count_items("plastic") >= 10
             },
             {
                 "id": "sustainability_streak",
@@ -150,11 +134,11 @@ class BadgesView(APIView):
             },
             {
                 "id": "recycling_master",
-                "earned": count_items("recycled", "disposal_method") >= 30
+                "earned": recyclable_count >= 30
             },
             {
                 "id": "compost_champion",
-                "earned": count_items_multi(["food scraps", "garden waste", "coffee grounds"], logs=get_logs_by_disposal_method("composted")) >= 20
+                "earned": compost_count >= 20
             },
             {
                 "id": "milestone_100",
@@ -170,15 +154,15 @@ class BadgesView(APIView):
             },
             {
                 "id": "metal_maven",
-                "earned": count_items("metal cans", logs=get_logs_by_disposal_method("recycled")) >= 15
+                "earned": count_items("metal") >= 15
             },
             {
                 "id": "paper_pride",
-                "earned": count_items("paper", logs=get_logs_by_disposal_method("recycled")) >= 25
+                "earned": count_items("paper") >= 25
             },
             {
                 "id": "glass_guru",
-                "earned": count_items_multi(["glass bottles", "broken glass"], logs=get_logs_by_disposal_method("recycled")) >= 10
+                "earned": count_items("glass") >= 10
             },
             {
                 "id": "eco_score_500",
@@ -206,23 +190,23 @@ class BadgesView(APIView):
             },
             {
                 "id": "plastic_50",
-                "earned": count_items("plastic bottles") >= 50
+                "earned": count_items("plastic") >= 50
             },
             {
                 "id": "organic_50",
-                "earned": count_items_multi(["food scraps", "garden waste", "coffee grounds"]) >= 50
+                "earned": compost_count >= 50
             },
             {
                 "id": "electronic_20",
-                "earned": count_items_multi(["small appliances", "mobile phones"], logs=get_logs_by_disposal_method("recycled")) >= 20
+                "earned": count_items_multi(["electronic", "appliance", "phone"]) >= 20
             },
             {
                 "id": "textile_30",
-                "earned": count_items_multi(["used clothing", "shoes"]) >= 30
+                "earned": count_items_multi(["clothing", "shoe"]) >= 30
             },
             {
                 "id": "donate_50",
-                "earned": count_items_donated() >= 50  # Log 50 items (any category counts as eco-friendly action)
+                "earned": count_items_all() >= 50  # Log 50 items total
             },
             {
                 "id": "landfill_zero",
