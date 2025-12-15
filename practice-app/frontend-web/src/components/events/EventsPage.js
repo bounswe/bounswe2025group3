@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, NavLink } from 'react-router-dom'; 
 import Navbar from '../common/Navbar';
 import './EventsPage.css'; 
-import { getEvents, toggleParticipation, toggleLike, deleteEvent } from '../../services/api'; 
+import { getEvents, toggleParticipation, toggleLike, deleteEvent } from '../../services/api';
+import axios from "axios";
+
+const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
 const Icon = ({ name, className = '' }) => {
   const icons = {
@@ -24,43 +27,44 @@ const EventsPage = () => {
   const [message, setMessage] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const currentUserId = Number(localStorage.getItem('user_id')); 
+  const [notifications, setNotifications] = useState([]);
+  const currentUserId = Number(localStorage.getItem('user_id'));
 
   useEffect(() => {
     if (!token) {
         navigate('/login');
         return;
     }
-    
+
     // Theme detection - check for blue-high-contrast class on body
     const checkTheme = () => {
       const isDark = document.body.classList.contains('blue-high-contrast');
       setIsDarkTheme(isDark);
     };
-    
+
     // Initial check
     checkTheme();
-    
+
     // Listen for theme changes via MutationObserver on body
     const observer = new MutationObserver(checkTheme);
-    observer.observe(document.body, { 
-      attributes: true, 
-      attributeFilter: ['class'] 
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
     });
-    
+
     // Listen to custom themeChanged event
     const handleThemeChange = () => {
       checkTheme();
     };
     document.addEventListener('themeChanged', handleThemeChange);
-    
+
     return () => {
       observer.disconnect();
       document.removeEventListener('themeChanged', handleThemeChange);
     };
     // eslint-disable-next-line
   }, [token]);
-  
+
   const showMessage = (text, type = 'success') => {
     setMessage({ text, type });
     setTimeout(() => setMessage(null), 3000); 
@@ -107,12 +111,42 @@ const EventsPage = () => {
     updatedEvents[eventIndex] = { ...event, i_am_participating: newStatus, participants_count: event.participants_count + (newStatus ? 1 : -1) };
     setEvents(updatedEvents);
     try {
+      const oldEarnedBadges = await getEarnedBadges();
       await toggleParticipation(eventId);
+      const newEarnedBadges = await getEarnedBadges();
+      showFirstEventPopup(oldEarnedBadges, newEarnedBadges);
       showMessage(newStatus ? t('eventsPage.participateSuccess') : t('eventsPage.unparticipateSuccess'), 'success');
     } catch (err) {
       setEvents(originalEvents);
       showMessage(t('eventsPage.participateError'), 'error');
     }
+  };
+
+    const getEarnedBadges = async () => {
+        const headers = { Authorization: `Bearer ${token}` };
+        const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me`, { headers });
+        return badges.data.filter(badge => badge.earned === true).map(badge => badge.code);
+    }
+
+  const showFirstEventPopup = (oldBadges, newBadges) => {
+      const badgeKey = "event_joiner";
+      if (newBadges.includes(badgeKey) && !oldBadges.includes(badgeKey)) {
+        const badgeName = t(`badges_data.${badgeKey}.name`);
+        const badgeDesc = t(`badges_data.${badgeKey}.desc`);
+
+        addNotification(
+            `🏅 ${t('badges_page.badge_unlocked')}: ${badgeName} - ${badgeDesc}`,
+            'success'
+        );
+      }
+  }
+
+  const addNotification = (message, type = 'success') => {
+    const id = Date.now();
+    setNotifications(prev => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setNotifications(prev => prev.filter(n => n.id !== id));
+    }, 5000);
   };
 
   const handleLike = async (eventId) => {
@@ -160,9 +194,37 @@ const EventsPage = () => {
   return (
     <div className="events-page-scoped events-page-layout">
       <Navbar isAuthenticated={true} />
+      {/* Notification Container */}
+      <div className="notification-container" style={{
+        position: 'fixed',
+        top: '80px',
+        right: '20px',
+        zIndex: 1000,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px'
+      }}>
+        {notifications.map(notif => (
+            <div
+                key={notif.id}
+                className={`notification notification-${notif.type}`}
+                style={{
+                  padding: '12px 20px',
+                  borderRadius: '8px',
+                  backgroundColor: notif.type === 'error' ? '#fee2e2' : notif.type === 'info' ? '#dbeafe' : '#dcfce7',
+                  color: notif.type === 'error' ? '#991b1b' : notif.type === 'info' ? '#1e40af' : '#166534',
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                  maxWidth: '350px',
+                  animation: 'slideIn 0.3s ease'
+                }}
+            >
+              {notif.message}
+            </div>
+        ))}
+      </div>
 
       {message && (
-        <div className={`feedback-toast ${message.type} ${isDarkTheme ? 'dark-theme' : ''}`}>
+        <div className={`feedback-toast ${message.type}`}>
           <div className="toast-content">{message.type === 'success' ? '✅' : '⚠️'} {message.text}</div>
         </div>
       )}
