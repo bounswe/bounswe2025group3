@@ -33,7 +33,7 @@ class WasteLogSerializer(serializers.ModelSerializer):
         model = WasteLog
         fields = [
             'id', 'sub_category', 'sub_category_name', 'user', 'quantity', 'date_logged', 'disposal_date',
-            'disposal_location', 'disposal_photo', 'score'
+            'disposal_location', 'disposal_photo', 'score', 'disposal_method'
         ]
         read_only_fields = ['date_logged', 'score', 'sub_category_name']
 
