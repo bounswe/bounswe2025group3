@@ -31,10 +31,23 @@
     box-shadow: 0 8px 24px rgba(40, 167, 69, 0.25);
 }
 
+.feedback-toast.success.dark-theme {
+    background: linear-gradient(135deg, #1e5e3f 0%, #0f3820 100%);
+    color: #00ff00;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(74, 222, 128, 0.15);
+}
+
 .feedback-toast.error {
     background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
     color: #721c24;
     box-shadow: 0 8px 24px rgba(220, 53, 69, 0.25);
+}
+.feedback-toast.error.dark-theme {
+    background: linear-gradient(135deg, #5f1f1f 0%, #3a1515 100%);
+    color: #ff6b6b;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(252, 165, 165, 0.15);
 }
 
 .feedback-toast .toast-content {
@@ -79,15 +92,24 @@
     animation: popUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.delete-modal.dark-theme {
+    background: #2a2a2a;
+}
+
 .delete-modal-header {
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-    color: #721c24;
+    background: linear-gradient(135deg, #7d686a 0%, #5f4245 100%);
+    color: #702028;
     padding: 1.5rem;
     font-weight: 700;
     font-size: 1.1rem;
     display: flex;
     align-items: center;
     gap: 0.75rem;
+}
+
+.delete-modal-header.dark-theme {
+    background: linear-gradient(135deg, #c92a2a 0%, #a61e4d 100%);
+    color: #ffffff;
 }
 
 .delete-modal-body {
@@ -97,12 +119,22 @@
     text-align: center;
 }
 
+.delete-modal-body.dark-theme {
+    color: #e0e0e0;
+    background: #2a2a2a;
+}
+
 .delete-modal-footer {
     display: flex;
     gap: 1rem;
     padding: 1.5rem;
     border-top: 1px solid var(--border-color-light);
     justify-content: flex-end;
+}
+
+.delete-modal-footer.dark-theme {
+    border-top-color: #444;
+    background: #2a2a2a;
 }
 
 .btn-cancel,
@@ -122,8 +154,19 @@
     border: 1px solid var(--border-color-light);
 }
 
+.btn-cancel.dark-theme {
+    background-color: #444;
+    color: #e0e0e0;
+    border-color: #555;
+}
+
 .btn-cancel:hover {
     background-color: var(--border-color-light);
+    transform: translateY(-2px);
+}
+
+.btn-cancel.dark-theme:hover {
+    background-color: #555;
     transform: translateY(-2px);
 }
 

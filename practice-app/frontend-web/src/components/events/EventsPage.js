@@ -18,20 +18,44 @@ const EventsPage = () => {
   const navigate = useNavigate(); 
   const token = localStorage.getItem('access_token');
 
-  useEffect(() => {
-    if (!token) {
-        navigate('/login');
-        return;
-    }
-    // eslint-disable-next-line
-  }, [token]);
-  
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [message, setMessage] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const currentUserId = Number(localStorage.getItem('user_id')); 
+
+  useEffect(() => {
+    if (!token) {
+        navigate('/login');
+        return;
+    }
+    
+    // Theme detection
+    const checkTheme = () => {
+      const darkTheme = document.documentElement.getAttribute('data-theme') === 'dark' || 
+                       localStorage.getItem('theme') === 'dark' ||
+                       window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setIsDarkTheme(darkTheme);
+    };
+    
+    checkTheme();
+    
+    // Listen for theme changes
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    
+    window.addEventListener('storage', checkTheme);
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', checkTheme);
+    
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('storage', checkTheme);
+      window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', checkTheme);
+    };
+    // eslint-disable-next-line
+  }, [token]);
   
   const showMessage = (text, type = 'success') => {
     setMessage({ text, type });
@@ -117,10 +141,10 @@ const EventsPage = () => {
 
     try {
       await deleteEvent(eventId);
-      showMessage(t('eventsPage.deleteSuccess', '✨ Etkinlik başarıyla silindi'), 'success');
+      showMessage(t('eventsPage.deleteSuccess'), 'success');
     } catch (err) {
       setEvents(originalEvents);
-      const errorMessage = err.response?.data?.detail || t('eventsPage.deleteError', 'Etkinlik silinirken hata oluştu');
+      const errorMessage = err.response?.data?.detail || t('eventsPage.deleteError');
       showMessage(errorMessage, 'error');
     }
   };
@@ -134,26 +158,26 @@ const EventsPage = () => {
       <Navbar isAuthenticated={true} />
 
       {message && (
-        <div className={`feedback-toast ${message.type}`}>
+        <div className={`feedback-toast ${message.type} ${isDarkTheme ? 'dark-theme' : ''}`}>
           <div className="toast-content">{message.type === 'success' ? '✅' : '⚠️'} {message.text}</div>
         </div>
       )}
 
       {deleteConfirm && (
         <div className="delete-modal-overlay">
-          <div className="delete-modal">
-            <div className="delete-modal-header">
-              <Icon name="delete" /> Etkinliği Sil
+          <div className={`delete-modal ${isDarkTheme ? 'dark-theme' : ''}`}>
+            <div className={`delete-modal-header ${isDarkTheme ? 'dark-theme' : ''}`}>
+              <Icon name="delete" /> {t('eventsPage.confirmDelete')}
             </div>
-            <div className="delete-modal-body">
-              <p>Bu etkinliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+            <div className={`delete-modal-body ${isDarkTheme ? 'dark-theme' : ''}`}>
+              <p>{t('eventsPage.deleteConfirmMessage', 'Bu etkinliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.')}</p>
             </div>
-            <div className="delete-modal-footer">
-              <button className="btn-cancel" onClick={cancelDelete}>
-                İptal Et
+            <div className={`delete-modal-footer ${isDarkTheme ? 'dark-theme' : ''}`}>
+              <button className={`btn-cancel ${isDarkTheme ? 'dark-theme' : ''}`} onClick={cancelDelete}>
+                {t('common.cancel', 'İptal Et')}
               </button>
               <button className="btn-delete" onClick={() => confirmDelete(deleteConfirm)}>
-                Evet, Sil
+                {t('common.delete', 'Evet, Sil')}
               </button>
             </div>
           </div>
