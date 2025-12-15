@@ -15,6 +15,7 @@ export interface Badge {
   earned_at?: string;
   achieved_at?: string;
   is_earned?: boolean;
+  earned?: boolean;  // Backend sends 'earned', not 'is_earned'
   progress?: number;
   target?: number;
   // For backward compatibility with flat structure

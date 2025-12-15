@@ -17,10 +17,43 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { formatDateShort } from "@/i18n/utils";
 
+// Informative sentences dictionary for presentation purposes
+const BADGE_INFO_SENTENCES: Record<string, string> = {
+  first_step: "Every journey begins with a single step. Starting to track your waste is the first step towards a sustainable lifestyle.",
+  plastic_buster: "Plastic takes up to 500 years to decompose in nature. Every piece of plastic you recycle makes a difference!",
+  sustainability_streak: "Consistency is key to building sustainable habits. Keep up the momentum!",
+  zero_waste_legend: "Only 9% of all plastic ever produced has been recycled. You're making a real impact!",
+  eco_warrior: "The average person generates about 4.5 pounds of waste per day. You're actively fighting against this!",
+  tree_hugger: "Trees absorb CO2 and produce oxygen. Your eco-friendly actions help protect our forests!",
+  recycling_master: "Recycling one aluminum can saves enough energy to power a TV for 3 hours!",
+  compost_champion: "Composting reduces methane emissions from landfills and creates nutrient-rich soil.",
+  milestone_100: "The journey of a thousand miles begins with a single step. You've taken 100!",
+  score_1500: "Your dedication to sustainability is inspiring. Keep pushing forward!",
+  consistency_king: "Building habits takes 21 days. You've gone beyond and are a true champion!",
+  metal_maven: "Recycling steel and tin cans saves 74% of the energy used to produce them.",
+  paper_pride: "Recycling one ton of paper saves 17 trees and 7,000 gallons of water!",
+  glass_guru: "Glass can be recycled endlessly without loss in quality or purity.",
+  eco_score_500: "You're on your way to becoming an eco champion. Every point counts!",
+  score_2000: "Less than 2% of users reach this milestone. You're in elite company!",
+  score_3000: "Your environmental impact is extraordinary. You're a role model for others!",
+  logs_200: "Tracking is the first step to improvement. Your dedication shows!",
+  logs_500: "Your commitment to logging waste items is exceptional. Keep it up!",
+  streak_60: "Two months of consistent action! You're building a lasting sustainable lifestyle.",
+  plastic_50: "You've prevented significant plastic pollution. The oceans thank you!",
+  organic_50: "Organic waste in landfills produces harmful methane. Composting is the solution!",
+  electronic_20: "E-waste contains toxic materials but also valuable resources. Recycling is crucial!",
+  textile_30: "The fashion industry is the 2nd largest polluter. You're making a difference!",
+  donate_50: "One person's trash is another's treasure. Reusing extends product lifecycles!",
+  landfill_zero: "Zero waste is the ultimate goal. You're living it!",
+  streak_7: "Seven days of sustainable action! You're building a great habit.",
+  streak_21: "Three weeks of consistency! Sustainable living is becoming your lifestyle.",
+};
+
 export default function BadgesScreen() {
   const [badges, setBadges] = useState<Badge[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [expandedBadgeId, setExpandedBadgeId] = useState<string | number | null>(null);
 
   const colors = useColors();
   const router = useRouter();
@@ -169,6 +202,24 @@ export default function BadgesScreen() {
           borderRadius: 18,
         },
         emptyButtonText: { color: "white", fontWeight: "700", fontSize: 15 },
+        infoSentenceContainer: {
+          marginTop: 12,
+          paddingTop: 12,
+          borderTopWidth: 1,
+          borderTopColor: colors.borders,
+        },
+        infoSentenceText: {
+          fontSize: 14,
+          color: colors.textSecondary,
+          lineHeight: 20,
+          fontStyle: "italic",
+        },
+        expandIndicator: {
+          fontSize: 12,
+          color: colors.primary,
+          textAlign: "center",
+          marginTop: 8,
+        },
       }),
     [colors]
   );
@@ -209,6 +260,7 @@ export default function BadgesScreen() {
     // Handle nested badge structure from API
     const badgeInfo = item.badge || item;
     const badgeId = badgeInfo.id || item.id;
+    const badgeCode = badgeInfo.code || (item as any).code;
     
     // Check for emoji icon first (single character emoji or short string)
     const emojiIcon = 
@@ -225,7 +277,10 @@ export default function BadgesScreen() {
     
     const achievedAt = item.earned_at || item.achieved_at;
     const isEarned =
-      typeof item.is_earned === "boolean"
+      // Check both 'earned' (from backend) and 'is_earned' (alternative format)
+      typeof item.earned === "boolean"
+        ? item.earned
+        : typeof item.is_earned === "boolean"
         ? item.is_earned
         : !!achievedAt ||
           (typeof item.progress === "number" &&
@@ -268,19 +323,40 @@ export default function BadgesScreen() {
       badgeDescription = codeDescriptions[badgeInfo.code] || null;
     }
 
+    // Check if this badge is expanded
+    const isExpanded = expandedBadgeId === badgeId;
+    
+    // Get informative sentence from dictionary (if exists)
+    const infoSentence = badgeCode ? BADGE_INFO_SENTENCES[badgeCode] : null;
+    
+    // Toggle expand/collapse on badge click
+    const handleBadgePress = () => {
+      if (infoSentence) {
+        setExpandedBadgeId(isExpanded ? null : badgeId);
+      }
+    };
+
     return (
-      <View style={styles.badgeCard}>
+      <TouchableOpacity 
+        style={styles.badgeCard}
+        onPress={handleBadgePress}
+        activeOpacity={infoSentence ? 0.7 : 1}
+      >
         <View style={styles.badgeTopRow}>
           <View style={styles.badgeIconWrapper}>
             {emojiIcon ? (
-              <Text style={{ fontSize: 32 }}>{emojiIcon}</Text>
+              <Text style={{ fontSize: 32, opacity: isEarned ? 1 : 0.3 }}>{emojiIcon}</Text>
             ) : imageUri ? (
-              <Image source={{ uri: imageUri }} style={styles.badgeIcon} />
+              <Image 
+                source={{ uri: imageUri }} 
+                style={[styles.badgeIcon, { opacity: isEarned ? 1 : 0.3 }]} 
+              />
             ) : (
               <Ionicons
                 name={isEarned ? "trophy" : "trophy-outline"}
                 size={28}
                 color={colors.primary}
+                style={{ opacity: isEarned ? 1 : 0.3 }}
               />
             )}
           </View>
@@ -331,7 +407,23 @@ export default function BadgesScreen() {
             </Text>
           </View>
         ) : null}
-      </View>
+
+        {/* Informative sentence section (expandable) */}
+        {isExpanded && infoSentence ? (
+          <View style={styles.infoSentenceContainer}>
+            <Text style={styles.infoSentenceText}>
+              💡 {infoSentence}
+            </Text>
+          </View>
+        ) : null}
+
+        {/* Show tap hint if there's an info sentence available */}
+        {infoSentence && !isExpanded ? (
+          <Text style={styles.expandIndicator}>
+            Tap to learn more
+          </Text>
+        ) : null}
+      </TouchableOpacity>
     );
   };
 

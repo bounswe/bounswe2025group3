@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import * as ExpoImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { Country, State } from 'country-state-city';
+import { useBadge } from '@/hooks/badgeContext';
 
 const formatDateTimeToISO = (date: Date): string => {
   return date.toISOString();
@@ -70,6 +71,7 @@ export default function AddEventScreen() {
   const router = useRouter();
   const colors = useColors();
   const { t } = useTranslation();
+  const { checkForNewBadges } = useBadge();
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
@@ -211,6 +213,12 @@ export default function AddEventScreen() {
         date: formatDateTimeToISO(date),
         image: imageUri || undefined,
       });
+      
+      // Check for new badges after creating event
+      setTimeout(() => {
+        checkForNewBadges();
+      }, 1000);
+      
       Alert.alert("Success", "Event created successfully!");
       router.back();
     } catch (error) {

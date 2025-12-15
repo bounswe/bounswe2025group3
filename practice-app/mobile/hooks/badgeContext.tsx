@@ -111,14 +111,15 @@ export const BadgeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const isInitialized = await AsyncStorage.getItem(initializedKey);
       
       // If this is the first time checking badges (e.g., first app launch or new user),
-      // mark all existing badges as "shown" to prevent showing old badges as pop-ups
+      // mark all currently earned badges as "shown" to prevent showing old badges as pop-ups
       if (!isInitialized) {
         const existingBadgeIds: string[] = [];
         badges.forEach((badge) => {
           const badgeInfo = badge.badge || badge;
           const badgeId = String(badgeInfo.id || badge.id);
-          const earnedAt = badge.earned_at || badge.achieved_at;
-          if (earnedAt) {
+          // Check if badge is earned (works without timestamps)
+          const isEarned = badge.is_earned || badge.earned || (badge.badge && badge.badge.earned);
+          if (isEarned) {
             existingBadgeIds.push(badgeId);
           }
         });
@@ -126,29 +127,25 @@ export const BadgeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (existingBadgeIds.length > 0) {
           const key = getShownBadgesKey(userId);
           await AsyncStorage.setItem(key, JSON.stringify(existingBadgeIds));
-          await AsyncStorage.setItem(initializedKey, 'true');
         }
+        await AsyncStorage.setItem(initializedKey, 'true');
         setIsChecking(false);
         return; // Don't show any pop-ups on first initialization
       }
       
-      // Find newly earned badges (have earned_at and not shown before)
+      // Find newly earned badges (earned now but not shown before)
       const newBadges = badges.filter((badge) => {
         const badgeInfo = badge.badge || badge;
         const badgeId = String(badgeInfo.id || badge.id);
-        const earnedAt = badge.earned_at || badge.achieved_at;
+        
+        // Check if badge is earned (supports multiple response formats)
+        const isEarned = badge.is_earned || badge.earned || (badge.badge && badge.badge.earned);
         
         // Only show badges that are earned and haven't been shown
-        return earnedAt && !shownIds.has(badgeId);
+        return isEarned && !shownIds.has(badgeId);
       });
 
-      // Sort by earned_at date (most recent first)
-      newBadges.sort((a, b) => {
-        const dateA = new Date(a.earned_at || a.achieved_at || '').getTime();
-        const dateB = new Date(b.earned_at || b.achieved_at || '').getTime();
-        return dateB - dateA;
-      });
-
+      // Show one badge at a time (can be expanded to show multiple sequentially)
       if (newBadges.length > 0) {
         const newestBadge = newBadges[0];
         const badgeInfo = newestBadge.badge || newestBadge;
@@ -191,10 +188,10 @@ export const BadgeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Initial check
     checkForNewBadges();
 
-    // Poll every 5 seconds
+    // Poll every 30 seconds (as a fallback - main checks happen after specific actions)
     pollingIntervalRef.current = setInterval(() => {
       checkForNewBadges();
-    }, 5000);
+    }, 30000);
 
     return () => {
       if (pollingIntervalRef.current) {
