@@ -18,10 +18,8 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            'id', 'title', 'description', 'location', 'date', 'image',
-            # 👇 NEW FIELDS ADDED HERE 👇
-            'duration', 'equipment_needed', 'exact_location',
             'id', 'title', 'description', 'location', 'date', 'image_url',
+            'exact_location',
             'image_file', 'image_base64',  # Upload fields
             'creator', 'creator_username',
             'participants_count', 'likes_count',
@@ -35,8 +33,7 @@ class EventSerializer(serializers.ModelSerializer):
         # Get all text fields
         title = data.get("title", "")
         description = data.get("description", "")
-        equipment = data.get("equipment_needed", "") # Check this too
-        location_detail = data.get("exact_location", "") # Check this too
+        location_detail = data.get("exact_location", "")
 
         banned = getattr(settings, "BLACKLISTED_WORDS", [])
 
@@ -45,7 +42,6 @@ class EventSerializer(serializers.ModelSerializer):
         fields_to_check = {
             "title": title,
             "description": description,
-            "equipment_needed": equipment,
             "exact_location": location_detail
         }
 
@@ -60,6 +56,15 @@ class EventSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError({
                         field_name: f"{field_name.replace('_', ' ').capitalize()} contains banned word: '{word}'"
                     })
+
+        # Validate that only one image upload method is used
+        image_file = data.get('image_file')
+        image_base64 = data.get('image_base64')
+        
+        if image_file and image_base64:
+            raise serializers.ValidationError(
+                "Cannot provide both image_file and image_base64. Use only one."
+            )
 
         return data
 
@@ -78,17 +83,6 @@ class EventSerializer(serializers.ModelSerializer):
             return False
 
         return request.user in obj.likes.all()
-
-    def validate(self, data):
-        """Validate that only one image upload method is used"""
-        image_file = data.get('image_file')
-        image_base64 = data.get('image_base64')
-        
-        if image_file and image_base64:
-            raise serializers.ValidationError(
-                "Cannot provide both image_file and image_base64. Use only one."
-            )
-        return data
 
     def create(self, validated_data):
         # Handle image uploads

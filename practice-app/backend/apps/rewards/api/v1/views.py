@@ -76,7 +76,6 @@ class BadgesView(APIView):
             for i in logs:
                 if i["disposal_method"] == disposal_method:
                     filtered_list += [i]
-            print(disposal_method, filtered_list)
             return filtered_list
 
         def count_items(keyword, field="sub_category_name", logs=logs):
@@ -222,7 +221,7 @@ class BadgesView(APIView):
             },
             {
                 "id": "donate_50",
-                "earned": count_items_donated() >= 50  # Log 50 items (any category counts as eco-friendly action)
+                "earned": count_items_donated() >= 50  # Log 50 items total
             },
             {
                 "id": "landfill_zero",

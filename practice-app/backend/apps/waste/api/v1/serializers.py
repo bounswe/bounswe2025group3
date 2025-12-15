@@ -40,7 +40,7 @@ class WasteLogSerializer(serializers.ModelSerializer):
             'id', 'sub_category', 'sub_category_name', 'user', 'quantity', 'date_logged', 'disposal_date',
             'disposal_location', 'disposal_photo_url',
             'disposal_photo_file', 'disposal_photo_base64',  # Upload fields
-            'score'
+            'score', 'disposal_method'
         ]
         read_only_fields = ['date_logged', 'score', 'sub_category_name', 'disposal_photo_url']
 
