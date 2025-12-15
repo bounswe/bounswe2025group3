@@ -52,6 +52,7 @@ class BadgesView(APIView):
             .values(
                 "quantity",
                 "disposal_location",
+                "disposal_method",
                 sub_category_name=models.F("sub_category__name"),
             )
         )
