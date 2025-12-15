@@ -210,7 +210,13 @@ export default function BadgesScreen() {
     const badgeInfo = item.badge || item;
     const badgeId = badgeInfo.id || item.id;
     
-    const imageUri =
+    // Check for emoji icon first (single character emoji or short string)
+    const emojiIcon = 
+      (typeof badgeInfo.icon === "string" && badgeInfo.icon.length <= 2 && badgeInfo.icon) ||
+      (typeof item.icon === "string" && item.icon.length <= 2 && item.icon);
+    
+    // Then check for image URLs
+    const imageUri = emojiIcon ? null :
       (typeof badgeInfo.icon === "string" && badgeInfo.icon.startsWith("http") && badgeInfo.icon) ||
       (typeof item.icon === "string" && item.icon.startsWith("http") && item.icon) ||
       (typeof item.icon_url === "string" && item.icon_url) ||
@@ -266,7 +272,9 @@ export default function BadgesScreen() {
       <View style={styles.badgeCard}>
         <View style={styles.badgeTopRow}>
           <View style={styles.badgeIconWrapper}>
-            {imageUri ? (
+            {emojiIcon ? (
+              <Text style={{ fontSize: 32 }}>{emojiIcon}</Text>
+            ) : imageUri ? (
               <Image source={{ uri: imageUri }} style={styles.badgeIcon} />
             ) : (
               <Ionicons
