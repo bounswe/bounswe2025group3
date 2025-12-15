@@ -666,5 +666,73 @@
     "title": "Notifications",
     "mark_all_read": "Mark all read",
     "dismiss": "Dismiss"
+  },
+  "categories_info": {
+    "title": "Why Your Actions Matter",
+    "subtitle": "Understanding the environmental impact of different waste types and why proper disposal earns you points.",
+    "back_to_waste": "Back to Waste Log",
+    "how_scoring_works": "How Scoring Works",
+    "decomposition_time": "Decomposition Time",
+    "decomposition_desc": "Items that take longer to decompose earn more points because they pose greater long-term environmental risks.",
+    "toxicity": "Toxicity Level",
+    "toxicity_desc": "Hazardous materials like batteries and electronics score highest due to their potential to contaminate soil and water.",
+    "recyclability": "Recyclability Value",
+    "recyclability_desc": "Materials with high recycling value (metals, glass) score well because recycling them saves significant resources.",
+    "resource_savings": "Resource Savings",
+    "resource_desc": "Points reflect energy, water, and raw materials saved through proper disposal and recycling.",
+    "category_details": "Category Details",
+    "loading": "Loading categories...",
+    "no_categories": "No categories available.",
+    "items": "items",
+    "environmental_impact": "Environmental Impact",
+    "why_this_score": "Why This Score?",
+    "disposal_tip": "Disposal Tip",
+    "items_in_category": "Items in This Category",
+    "item": "Item",
+    "points_per_unit": "Points/Unit",
+    "unit": "Unit",
+    "did_you_know": "Did You Know?",
+    "fact1": "A single AA battery can pollute 400 liters of water with heavy metals.",
+    "fact2": "Every piece of plastic ever made still exists somewhere on Earth.",
+    "fact3": "Recycling 1 million phones recovers 35,000 lbs of copper, 772 lbs of gold, and 33 lbs of palladium.",
+    "fact4": "Recycling one ton of paper saves 17 trees and 7,000 gallons of water.",
+    "ready_to_help": "Ready to Make a Difference?",
+    "cta_text": "Every item you log properly helps protect our planet. Start logging now and watch your impact grow!",
+    "start_logging": "Start Logging Waste",
+    "recyclable": {
+      "impact": "Recyclable materials like plastic, paper, and metal take decades to centuries to decompose. Proper recycling saves energy, reduces landfill waste, and conserves natural resources.",
+      "why_score": "Recycling these materials prevents pollution, saves manufacturing energy (up to 95% for aluminum), and reduces the need for raw material extraction.",
+      "tip": "Clean and sort recyclables by type. Check local guidelines as not all plastics are recyclable everywhere. Remove caps and labels when required."
+    },
+    "electronic": {
+      "impact": "E-waste contains hazardous materials including lead, mercury, and flame retardants. Only 17% of global e-waste is properly recycled. Improper disposal releases toxins that can cause cancer, kidney damage, and neurological disorders.",
+      "why_score": "Electronics have high environmental impact due to their complex composition of toxic materials and valuable recoverable resources like gold, silver, and rare earth metals.",
+      "tip": "Donate working electronics or take broken ones to certified e-waste recyclers. Many manufacturers offer take-back programs."
+    },
+    "organic": {
+      "impact": "Food waste in landfills produces methane - 25x more potent than CO2 as a greenhouse gas. 1/3 of all food produced is wasted globally. Composting converts waste to valuable soil nutrients.",
+      "why_score": "Lower scores due to natural decomposition, but composting prevents methane emissions and creates nutrient-rich soil, closing the natural cycle.",
+      "tip": "Compost at home or use municipal organic waste bins. Avoid putting meat/dairy in home compost. Vermicomposting (with worms) speeds up the process."
+    },
+    "glass": {
+      "impact": "Glass takes 1 million years to decompose but is 100% recyclable indefinitely without quality loss. Recycling glass reduces air pollution by 20% and water pollution by 50% compared to making new glass.",
+      "why_score": "Glass recycling is highly efficient - recycled glass melts at lower temperatures, saving 30% energy. Each ton recycled saves 1.2 tons of raw materials.",
+      "tip": "Separate glass by color (clear, green, brown) if required locally. Remove metal caps. Broken glass should be wrapped safely before disposal."
+    },
+    "cooking_oil": {
+      "impact": "1 liter of cooking oil can contaminate 1 million liters of water. Oil poured down drains causes blockages, damages sewage systems, and harms aquatic ecosystems. It can be converted to biodiesel.",
+      "why_score": "High scores reflect the severe water contamination potential. Proper recycling converts waste oil into biodiesel, soaps, and other products, preventing pollution.",
+      "tip": "Never pour oil down the drain! Collect in a sealed container and take to designated collection points at recycling centers or some supermarkets."
+    },
+    "clothing": {
+      "impact": "Fashion industry produces 10% of global carbon emissions. Synthetic fabrics take 200+ years to decompose and release microplastics. Only 15% of clothing is recycled - rest ends in landfills.",
+      "why_score": "Textile recycling saves water (2700 liters per t-shirt), reduces landfill burden, and decreases demand for new production with its heavy environmental footprint.",
+      "tip": "Donate wearable items. Use textile recycling bins for damaged clothes. Some brands offer take-back programs. Repurpose old clothes as cleaning rags."
+    },
+    "other": {
+      "impact": "Mixed waste items vary in their environmental impact. Proper sorting and disposal help ensure each material is handled appropriately, minimizing landfill burden.",
+      "why_score": "Scores for miscellaneous items reflect their individual decomposition times and potential for recycling or special handling requirements.",
+      "tip": "When unsure, check local waste management guidelines. Many items that seem like trash can be recycled or donated with proper handling."
+    }
   }
 }

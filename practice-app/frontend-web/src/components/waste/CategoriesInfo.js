@@ -9,13 +9,12 @@ const CategoriesInfo = () => {
     const navigate = useNavigate();
     const [expandedCategory, setExpandedCategory] = useState(null);
 
-    // Detaylı kategori bilgileri - çevresel etki açıklamalarıyla
+    // Hardcoded kategori bilgileri - çevrilebilir
     const categoryData = [
         {
             id: 'batteries',
             name: t('categories_info.batteries.name', { defaultValue: 'Batteries' }),
             icon: '🔋',
-            color: '#e74c3c',
             scoreRange: '15-25',
             unit: 'pcs',
             environmentalImpact: t('categories_info.batteries.impact', { 
@@ -38,7 +37,6 @@ const CategoriesInfo = () => {
             id: 'electronic',
             name: t('categories_info.electronic.name', { defaultValue: 'Electronic Waste' }),
             icon: '🔌',
-            color: '#9b59b6',
             scoreRange: '20-50',
             unit: 'pcs',
             environmentalImpact: t('categories_info.electronic.impact', { 
@@ -61,7 +59,6 @@ const CategoriesInfo = () => {
             id: 'plastic',
             name: t('categories_info.plastic.name', { defaultValue: 'Plastic' }),
             icon: '🥤',
-            color: '#3498db',
             scoreRange: '5-15',
             unit: 'kg',
             environmentalImpact: t('categories_info.plastic.impact', { 
@@ -84,7 +81,6 @@ const CategoriesInfo = () => {
             id: 'glass',
             name: t('categories_info.glass.name', { defaultValue: 'Glass' }),
             icon: '🥃',
-            color: '#1abc9c',
             scoreRange: '8-12',
             unit: 'kg',
             environmentalImpact: t('categories_info.glass.impact', { 
@@ -106,7 +102,6 @@ const CategoriesInfo = () => {
             id: 'paper',
             name: t('categories_info.paper.name', { defaultValue: 'Paper & Cardboard' }),
             icon: '📄',
-            color: '#f39c12',
             scoreRange: '3-8',
             unit: 'kg',
             environmentalImpact: t('categories_info.paper.impact', { 
@@ -129,7 +124,6 @@ const CategoriesInfo = () => {
             id: 'metal',
             name: t('categories_info.metal.name', { defaultValue: 'Metal' }),
             icon: '🥫',
-            color: '#7f8c8d',
             scoreRange: '10-20',
             unit: 'kg',
             environmentalImpact: t('categories_info.metal.impact', { 
@@ -152,7 +146,6 @@ const CategoriesInfo = () => {
             id: 'organic',
             name: t('categories_info.organic.name', { defaultValue: 'Organic Waste' }),
             icon: '🍎',
-            color: '#27ae60',
             scoreRange: '2-5',
             unit: 'kg',
             environmentalImpact: t('categories_info.organic.impact', { 
@@ -175,7 +168,6 @@ const CategoriesInfo = () => {
             id: 'clothing',
             name: t('categories_info.clothing.name', { defaultValue: 'Textiles & Clothing' }),
             icon: '👕',
-            color: '#e91e63',
             scoreRange: '8-15',
             unit: 'kg',
             environmentalImpact: t('categories_info.clothing.impact', { 
@@ -198,7 +190,6 @@ const CategoriesInfo = () => {
             id: 'cooking_oil',
             name: t('categories_info.cooking_oil.name', { defaultValue: 'Cooking Oil' }),
             icon: '🛢️',
-            color: '#ff9800',
             scoreRange: '15-20',
             unit: 'l',
             environmentalImpact: t('categories_info.cooking_oil.impact', { 
@@ -276,7 +267,6 @@ const CategoriesInfo = () => {
                             <div 
                                 key={category.id} 
                                 className={`category-card ${expandedCategory === category.id ? 'expanded' : ''}`}
-                                style={{ '--category-color': category.color }}
                             >
                                 <button 
                                     className="category-header-btn"
