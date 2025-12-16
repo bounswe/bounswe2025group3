@@ -42,20 +42,40 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configure middleware to include whitenoise for static files
-MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+# Ensure CORS middleware is before WhiteNoise and other response-generating middleware
+if 'corsheaders.middleware.CorsMiddleware' in MIDDLEWARE:
+    MIDDLEWARE.remove('corsheaders.middleware.CorsMiddleware')
+
+# Insert CORS middleware after SecurityMiddleware but before WhiteNoise
+try:
+    # Try to insert after SecurityMiddleware
+    sec_index = MIDDLEWARE.index('django.middleware.security.SecurityMiddleware')
+    MIDDLEWARE.insert(sec_index + 1, 'corsheaders.middleware.CorsMiddleware')
+    cors_index = sec_index + 1
+except ValueError:
+    # If SecurityMiddleware not found, insert at top
+    MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
+    cors_index = 0
+
+# Insert WhiteNoise after CORS middleware
+MIDDLEWARE.insert(cors_index + 1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 # Security settings for production
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://ecochallenge.onrender.com',
+    'https://ecochallenge-backend.onrender.com',
+]
 
 # Cross-Origin-Opener-Policy settings for OAuth compatibility
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 # CORS Configuration - explicitly set for production
 # IMPORTANT: When CORS_ALLOW_CREDENTIALS is True, we cannot use wildcards
-CORS_ALLOW_ALL_ORIGINS = True  # Explicitly disable wildcard to use specific origins
+CORS_ALLOW_ALL_ORIGINS = False  # Explicitly disable wildcard to use specific origins
 CORS_ALLOWED_ORIGINS = [
     'https://ecochallenge.onrender.com',  # Production frontend
     'https://ecochallenge-backend.onrender.com',   # Production backend
