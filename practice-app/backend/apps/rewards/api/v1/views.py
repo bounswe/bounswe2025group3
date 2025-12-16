@@ -67,7 +67,10 @@ class BadgesView(APIView):
         )
 
     def get_score(self, user):
-        return float(user.total_score)
+        try:
+            return float(user.total_score) if user.total_score is not None else 0.0
+        except (TypeError, ValueError):
+            return 0.0
 
     def calculate_badges(self, logs, daily_stats, score, has_participated):
 
