@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'https://ecochallenge-backend.onrender.com';
+export const API_BASE_URL = 'https://ecochallenge-backend-377411205810.us-central1.run.app';
 
 export const API_ENDPOINTS = {
   AUTH: {

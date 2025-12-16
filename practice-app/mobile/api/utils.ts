@@ -18,8 +18,15 @@ export const fetchAllPages = async <T>(initialUrl: string): Promise<T[]> => {
   
         const data = await response.json();
   
+        // Handle both array (non-paginated) and object (paginated) responses
+        if (Array.isArray(data)) {
+          // Backend returned plain array (no pagination)
+          return data;
+        }
+        
         if (!data.results) {
-          throw new Error("Response missing 'results' array — unexpected format.");
+          // If not an array and no results field, return empty or the data as-is
+          return [];
         }
         results = results.concat(data.results);
   
