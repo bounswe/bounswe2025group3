@@ -26,6 +26,7 @@ class WasteCategoryListView(generics.ListAPIView):
     queryset = WasteCategory.objects.filter(is_active=True)
     serializer_class = WasteCategorySerializer
     permission_classes = [permissions.AllowAny]
+    pagination_class = None  # Disable pagination for categories (static reference data)
     
     @extend_schema(
         tags=['Waste Categories'],
@@ -56,6 +57,7 @@ class SubCategoryListView(generics.ListAPIView):
     queryset = SubCategory.objects.filter(is_active=True)
     serializer_class = SubCategorySerializer
     permission_classes = [permissions.AllowAny]
+    pagination_class = None  # Disable pagination for subcategories (static reference data)
 
 @extend_schema(
     tags=['Waste Sub-Categories'],

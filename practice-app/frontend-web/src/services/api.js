@@ -68,14 +68,16 @@ export const addWasteLog = async (data) => {
     return response.data;
 };
 
-// GÜNCELLENDİ: Tüm kategorileri (sayfalarca olsa bile) çeker
+// Categories and subcategories are now returned without pagination (all at once)
 export const getWasteCategories = async () => {
-    return await fetchAllPages('v1/waste/categories/');
+    const response = await api.get('v1/waste/categories/');
+    return Array.isArray(response.data) ? response.data : response.data.results || [];
 };
 
-// GÜNCELLENDİ: Tüm alt kategorileri (sayfalarca olsa bile) çeker
+// Subcategories are now returned without pagination (all at once)
 export const getSubCategories = async () => {
-    return await fetchAllPages('v1/waste/subcategories/');
+    const response = await api.get('v1/waste/subcategories/');
+    return Array.isArray(response.data) ? response.data : response.data.results || [];
 };
 
 export const getUserScore = async () => {
