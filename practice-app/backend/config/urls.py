@@ -36,8 +36,12 @@ from django.conf.urls.static import static
 # Set custom 404 handler
 handler404 = 'apps.general_views.not_found_view'
 
+# Health check view for Render
+def health_check(request):
+    return JsonResponse({'status': 'ok'})
+
 urlpatterns = [
-    path('', RedirectView.as_view(url='/login/', permanent=True)), # Redirect root to login
+    path('', health_check, name='health_check'),  # Health check endpoint for Render
     path('admin/', admin.site.urls),
     path('api/auth/', include(('apps.authentication.api.v1.urls', 'authentication'), namespace='authentication')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
