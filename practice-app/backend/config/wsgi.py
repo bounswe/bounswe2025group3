@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 
 import os
 
-# Use production settings if on Render, otherwise use default settings
-if os.environ.get('RENDER'):
+# Use production settings if on Render or Cloud Run, otherwise use default settings
+if os.environ.get('RENDER') or os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings_production':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings_production')
 else:
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')

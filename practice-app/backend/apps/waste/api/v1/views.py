@@ -304,8 +304,11 @@ class UserWasteScoreView(APIView):
         }
     )
     def get(self, request):
-        total_score = request.user.total_score
-        return Response({'user_id': request.user.id, 'total_score': total_score})
+        try:
+            total_score = getattr(request.user, 'total_score', 0)
+            return Response({'user_id': request.user.id, 'total_score': total_score})
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class UserRankingView(APIView):

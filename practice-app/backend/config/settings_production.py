@@ -8,7 +8,14 @@ DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY', SECRET_KEY)
 
 # Add Render.com and Cloud Run domains to allowed hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', '.run.app']
+# Cloud Run uses dynamic hostnames - middleware will handle .run.app domains dynamically
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1', 
+    '.onrender.com',
+    'ecochallenge-backend-377411205810.us-central1.run.app',  # Cloud Run domain
+]
+# Note: Other .run.app domains will be handled by CloudRunHostMiddleware
 
 # Database configuration - uses PostgreSQL (Supabase) on Render
 import dj_database_url
@@ -59,6 +66,9 @@ except ValueError:
 
 # Insert WhiteNoise after CORS middleware
 MIDDLEWARE.insert(cors_index + 1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+
+# Insert Cloud Run host middleware at the beginning to handle dynamic hostnames
+MIDDLEWARE.insert(0, 'common.middleware.CloudRunHostMiddleware')
 
 # Security settings for production
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -129,6 +139,17 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': 'WARNING',
+        'level': 'INFO',  # Increased for debugging
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
     },
 }
