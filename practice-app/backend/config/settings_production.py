@@ -7,8 +7,8 @@ DEBUG = False
 # Load environment variable for SECRET_KEY
 SECRET_KEY = os.environ.get('SECRET_KEY', SECRET_KEY)
 
-# Add Render.com domain to allowed hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
+# Add Render.com and Cloud Run domains to allowed hosts
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', '.run.app']
 
 # Database configuration - uses PostgreSQL (Supabase) on Render
 import dj_database_url
@@ -68,6 +68,7 @@ CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [
     'https://ecochallenge.onrender.com',
     'https://ecochallenge-backend.onrender.com',
+    'https://ecochallenge-backend-377411205810.us-central1.run.app',
 ]
 
 # Cross-Origin-Opener-Policy settings for OAuth compatibility
@@ -79,6 +80,7 @@ CORS_ALLOW_ALL_ORIGINS = False  # Explicitly disable wildcard to use specific or
 CORS_ALLOWED_ORIGINS = [
     'https://ecochallenge.onrender.com',  # Production frontend
     'https://ecochallenge-backend.onrender.com',   # Production backend
+    'https://ecochallenge-backend-377411205810.us-central1.run.app',  # GCP Cloud Run backend
     'http://localhost:3000',   # Local development frontend
     'http://127.0.0.1:3000',   # Local development frontend alternative
     'http://localhost:8000',   # Local development backend
