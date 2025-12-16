@@ -41,7 +41,7 @@ const BadgesGallery = () => {
         try {
             const headers = { Authorization: `Bearer ${token}` };
 
-            const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me`, { headers });
+            const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me/`, { headers });
             setEarnedBadges(badges.data)
             setLoading(false);
         } catch (err) {

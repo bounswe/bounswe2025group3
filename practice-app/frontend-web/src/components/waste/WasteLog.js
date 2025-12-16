@@ -205,7 +205,7 @@ const WasteLog = () => {
     const getEarnedBadges = async () => {
         try {
             const headers = { Authorization: `Bearer ${token}` };
-            const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me`, { headers });
+            const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me/`, { headers });
             return badges.data.filter(badge => badge.earned === true).map(badge => badge.code);
         } catch (error) {
             console.error("Error fetching badges:", error);

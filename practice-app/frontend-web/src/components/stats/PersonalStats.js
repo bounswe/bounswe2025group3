@@ -419,7 +419,7 @@ const PersonalStats = () => {
 
   const calculateBadges = async () => {
       const headers = { Authorization: `Bearer ${token}` };
-      const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me`, { headers });
+      const badges = await axios.get(`${apiUrl}/v1/rewards/badges/me/`, { headers });
       const earnedBadges = badges.data.filter(badge => badge.earned === true).map(badge => badge.code);
       setEarnedBadgeIds(earnedBadges);
   };
