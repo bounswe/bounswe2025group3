@@ -55,7 +55,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 # CORS Configuration - explicitly set for production
 # IMPORTANT: When CORS_ALLOW_CREDENTIALS is True, we cannot use wildcards
-CORS_ALLOW_ALL_ORIGINS = False  # Explicitly disable wildcard to use specific origins
+CORS_ALLOW_ALL_ORIGINS = True  # Explicitly disable wildcard to use specific origins
 CORS_ALLOWED_ORIGINS = [
     'https://ecochallenge.onrender.com',  # Production frontend
     'https://ecochallenge-backend.onrender.com',   # Production backend
