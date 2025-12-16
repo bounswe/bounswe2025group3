@@ -123,7 +123,13 @@ class WasteLogListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         # Only show logs of the current authenticated user
-        queryset = WasteLog.objects.filter(user=self.request.user).order_by('-date_logged')
+        # select_related avoids N+1 queries for sub_category fields used by the serializer
+        queryset = (
+            WasteLog.objects
+            .filter(user=self.request.user)
+            .select_related('sub_category')
+            .order_by('-date_logged')
+        )
         
         # Apply date range filters if provided
         from_date = self.request.query_params.get('from_date')
@@ -406,15 +412,19 @@ class UserWasteStatsView(APIView):
             start_date = today.replace(month=1, day=1) - relativedelta(years=2)
             delta = relativedelta(years=1)
 
-        logs = WasteLog.objects.filter(
+        # Build queryset once; we'll materialize it to a list to avoid re-running the same
+        # database query repeatedly in the aggregation loop below.
+        logs_qs = WasteLog.objects.filter(
             user=user,
             date_logged__date__gte=start_date
         )
 
         if subcat_id:
-            logs = logs.filter(sub_category_id=subcat_id)
+            logs_qs = logs_qs.filter(sub_category_id=subcat_id)
 
-        logs = logs.order_by("date_logged")
+        # select_related avoids N+1 when get_score touches sub_category.score_per_unit
+        logs_qs = logs_qs.select_related("sub_category").order_by("date_logged")
+        logs = list(logs_qs)
 
         # ----------- aggregation logic -----------
         stats = []
@@ -433,10 +443,11 @@ class UserWasteStatsView(APIView):
             else:  # yearly
                 current_end = current_start.replace(month=12, day=31)
 
-            period_logs = [
-                log for log in logs
-                if current_start <= log.date_logged.date() <= current_end
-            ]
+            period_logs = []
+            for log in logs:
+                log_day = log.date_logged.date()
+                if current_start <= log_day <= current_end:
+                    period_logs.append(log)
 
             total_score = sum(log.get_score() for log in period_logs)
             total_log = len(period_logs)
