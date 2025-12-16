@@ -13,18 +13,26 @@ export const getLocaleCode = (): string => {
 };
 
 /**
- * Format a date according to the current locale
+ * Format a date according to the current locale.
+ * Safely handles null/undefined or invalid dates by returning an empty string.
  * @param date - Date object or date string
  * @param options - Intl.DateTimeFormatOptions
  * @returns Formatted date string
  */
 export const formatDate = (
-  date: Date | string,
+  date?: Date | string | null,
   options?: Intl.DateTimeFormatOptions
 ): string => {
+  if (!date) return '';
+
   const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+  // Guard against invalid Date objects
+  if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
+    return '';
+  }
+
   const locale = getLocaleCode();
-  
   return dateObj.toLocaleDateString(locale, options);
 };
 
@@ -32,7 +40,7 @@ export const formatDate = (
  * Format a date with a standard format (short date)
  * Example: "15 Jan 2024" (en-US) or "15 Oca 2024" (tr-TR)
  */
-export const formatDateShort = (date: Date | string): string => {
+export const formatDateShort = (date?: Date | string | null): string => {
   return formatDate(date, {
     day: '2-digit',
     month: 'short',
@@ -44,7 +52,7 @@ export const formatDateShort = (date: Date | string): string => {
  * Format a date with full date format
  * Example: "15 January 2024" (en-US) or "15 Ocak 2024" (tr-TR)
  */
-export const formatDateLong = (date: Date | string): string => {
+export const formatDateLong = (date?: Date | string | null): string => {
   return formatDate(date, {
     day: '2-digit',
     month: 'long',
@@ -56,7 +64,7 @@ export const formatDateLong = (date: Date | string): string => {
  * Format a date for display (default date format)
  * Example: "15/01/2024" (en-GB) or "15.01.2024" (tr-TR)
  */
-export const formatDateDisplay = (date: Date | string): string => {
+export const formatDateDisplay = (date?: Date | string | null): string => {
   const locale = getLocaleCode();
   // Use appropriate locale format (en-GB uses DD/MM/YYYY, tr-TR uses DD.MM.YYYY)
   const options: Intl.DateTimeFormatOptions = locale === 'tr-TR' 
@@ -73,13 +81,19 @@ export const formatDateDisplay = (date: Date | string): string => {
 
 /**
  * Format a date for input fields (YYYY-MM-DD)
- * This format is locale-independent
+ * This format is locale-independent. Returns empty string for invalid dates.
  */
-export const formatDateInput = (date: Date | string): string => {
+export const formatDateInput = (date?: Date | string | null): string => {
+  if (!date) return '';
+
   const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+  if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
+    return '';
+  }
+
   const year = dateObj.getFullYear();
   const month = String(dateObj.getMonth() + 1).padStart(2, '0');
   const day = String(dateObj.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
-
