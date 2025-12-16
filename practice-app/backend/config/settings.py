@@ -378,13 +378,13 @@ SIMPLE_JWT = {
 LOGIN_URL = '/login/'
 
 # CORS Configuration
+CORS_ALLOW_ALL_ORIGINS = False  # Use specific origins for security
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',  # Backend itself
     'http://localhost:8000',   # Backend alternative
     'http://localhost:3000',   # Frontend origin
     'https://ecochallenge.onrender.com',  # Production frontend
     'https://ecochallenge-backend.onrender.com',   # Production backend
-    'null',                    # For local testing
     'http://10.0.2.2:8000',    # Android Emulator
 ]
 

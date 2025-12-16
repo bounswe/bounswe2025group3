@@ -53,6 +53,44 @@ CSRF_COOKIE_SECURE = True
 # Cross-Origin-Opener-Policy settings for OAuth compatibility
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
+# CORS Configuration - explicitly set for production
+# IMPORTANT: When CORS_ALLOW_CREDENTIALS is True, we cannot use wildcards
+CORS_ALLOW_ALL_ORIGINS = False  # Explicitly disable wildcard to use specific origins
+CORS_ALLOWED_ORIGINS = [
+    'https://ecochallenge.onrender.com',  # Production frontend
+    'https://ecochallenge-backend.onrender.com',   # Production backend
+    'http://localhost:3000',   # Local development frontend
+    'http://127.0.0.1:3000',   # Local development frontend alternative
+    'http://localhost:8000',   # Local development backend
+    'http://127.0.0.1:8000',   # Local development backend alternative
+    'http://10.0.2.2:8000',    # Android Emulator
+]
+
+# Allow credentials (cookies, authorization headers) to be sent with requests
+CORS_ALLOW_CREDENTIALS = True
+
+# CORS headers and methods
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
 # Additional security headers
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
