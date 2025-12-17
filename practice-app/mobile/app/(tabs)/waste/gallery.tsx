@@ -35,8 +35,8 @@ export default function GalleryScreen() {
         const fetchLogs = async () => {
             try {
                 const data = await getWasteLogs();
-                // Filter logs that have a photo
-                const logsWithPhotos = data.filter(log => log.disposal_photo);
+                // Filter logs that have a photo (check both new and legacy field names)
+                const logsWithPhotos = data.filter(log => log.disposal_photo_url || log.disposal_photo);
                 setLogs(logsWithPhotos);
             } catch (error) {
                 console.error('Failed to fetch logs for gallery:', error);
@@ -47,20 +47,24 @@ export default function GalleryScreen() {
         fetchLogs();
     }, []);
 
-    const renderItem = ({ item }: { item: WasteLog }) => (
-        <TouchableOpacity
-            style={styles.imageContainer}
-            onPress={() => router.push(`/waste/${item.id}`)}
-            activeOpacity={0.7}
-        >
-            <Image
-                source={{ uri: item.disposal_photo }}
-                style={styles.image}
-                contentFit="cover"
-                transition={200}
-            />
-        </TouchableOpacity>
-    );
+    const renderItem = ({ item }: { item: WasteLog }) => {
+        // Use disposal_photo_url (new) or fall back to disposal_photo (legacy)
+        const photoUri = item.disposal_photo_url || item.disposal_photo;
+        return (
+            <TouchableOpacity
+                style={styles.imageContainer}
+                onPress={() => router.push(`/waste/${item.id}`)}
+                activeOpacity={0.7}
+            >
+                <Image
+                    source={{ uri: photoUri }}
+                    style={styles.image}
+                    contentFit="cover"
+                    transition={200}
+                />
+            </TouchableOpacity>
+        );
+    };
 
     if (isLoading) {
         return <View style={styles.loadingContainer}><ActivityIndicator size="large" color={colors.primary} /></View>;
