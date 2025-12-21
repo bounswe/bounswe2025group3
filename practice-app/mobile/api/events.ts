@@ -8,7 +8,8 @@ export interface Event {
   description: string;
   location: string;
   date: string;
-  image: string | null;
+  image?: string | null;      // Legacy field (may not be present)
+  image_url?: string | null;  // New field from backend
   creator: number;
   creator_username: string;
   participants_count: number;

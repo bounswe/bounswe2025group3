@@ -200,9 +200,11 @@ export default function EventsScreen() {
     const isLiked = item.i_liked === true;
     const isParticipating = item.i_am_participating === true;
     
-    const hasImage = item.image && item.image.trim() !== '';
+    // Use image_url (new backend field) or fall back to image (legacy)
+    const imageSource = item.image_url || item.image;
+    const hasImage = imageSource && imageSource.trim() !== '';
     const imageUri = hasImage
-      ? (item.image!.startsWith('http') ? item.image! : `${API_BASE_URL}${item.image}`)
+      ? (imageSource!.startsWith('http') ? imageSource! : `${API_BASE_URL}${imageSource}`)
       : null;
     
     return (

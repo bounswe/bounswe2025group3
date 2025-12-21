@@ -231,9 +231,9 @@ export default function WasteLogDetailsScreen() {
                                 : (<Text style={styles.value}>{log.disposal_location || t("waste.not_specified")}</Text>)}
                         </View>
 
-                        {log.disposal_photo && (
+                        {(log.disposal_photo_url || log.disposal_photo) && (
                             <View style={styles.imageContainer}>
-                                <Image source={{ uri: log.disposal_photo }} style={styles.logImage} contentFit="cover" />
+                                <Image source={{ uri: log.disposal_photo_url || log.disposal_photo }} style={styles.logImage} contentFit="cover" />
                             </View>
                         )}
                     </View>

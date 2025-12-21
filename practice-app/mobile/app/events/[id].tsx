@@ -162,13 +162,18 @@ export default function EventDetailsScreen() {
         <View style={styles.imageContainer}>
           <Image 
             source={
-              event.image && event.image.trim() !== ''
-                ? { 
-                    uri: event.image.startsWith('http') 
-                      ? event.image 
-                      : `${API_BASE_URL}${event.image}` 
-                  }
-                : require('@/assets/images/default-event.jpeg')
+              (() => {
+                // Use image_url (new backend field) or fall back to image (legacy)
+                const imageSource = event.image_url || event.image;
+                if (imageSource && imageSource.trim() !== '') {
+                  return { 
+                    uri: imageSource.startsWith('http') 
+                      ? imageSource 
+                      : `${API_BASE_URL}${imageSource}` 
+                  };
+                }
+                return require('@/assets/images/default-event.jpeg');
+              })()
             }
             style={styles.eventImage}
             onError={(error) => {

@@ -21,7 +21,8 @@ export interface WasteLog {
     date_logged: string;
     disposal_date: string;
     disposal_location: string | null;
-    disposal_photo?: string;
+    disposal_photo?: string;      // Legacy field
+    disposal_photo_url?: string;  // New field from backend
     score: number;
     sub_category: number;
 }
@@ -129,7 +130,8 @@ export const createWasteLog = async (wasteLogData: CreateWasteLogData): Promise<
         const match = /\.(\w+)$/.exec(filename);
         const type = match ? `image/${match[1]}` : 'image/jpeg';
 
-        formData.append('disposal_photo', {
+        // Backend expects 'disposal_photo_file' for file uploads
+        formData.append('disposal_photo_file', {
             uri,
             name: filename,
             type,
