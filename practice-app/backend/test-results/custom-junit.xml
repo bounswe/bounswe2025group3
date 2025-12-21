@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Backend Test Suite" tests="89" failures="10" skipped="0" errors="0" time="7.967" timestamp="2025-12-21T15:05:57.633611">
+  <properties>
+    <property name="platform" value="backend"/>
+    <property name="framework" value="pytest"/>
+    <property name="environment" value="Python/Django"/>
+    <property name="project" value="Practice App"/>
+  </properties>
+  
+  <testsuite name="Authentication Tests" tests="33" failures="2" skipped="0" time="0.844" timestamp="2025-12-21T15:05:57.633611" package="backend">
+    <testcase classname="Authentication Tests" name="Successful Login" time="0.103">
+    </testcase>    <testcase classname="Authentication Tests" name="Login Incorrect Password" time="0.100">
+    </testcase>    <testcase classname="Authentication Tests" name="Login Nonexistent User" time="0.097">
+    </testcase>    <testcase classname="Authentication Tests" name="Login Inactive User" time="0.146">
+    </testcase>    <testcase classname="Authentication Tests" name="Token Creation" time="0.050">
+    </testcase>    <testcase classname="Authentication Tests" name="Is Valid" time="0.047">
+    </testcase>    <testcase classname="Authentication Tests" name="Is Valid Expired" time="0.048">
+    </testcase>    <testcase classname="Authentication Tests" name="Refresh" time="0.048">
+    </testcase>    <testcase classname="Authentication Tests" name="Oauth Creation" time="0.049">
+    </testcase>    <testcase classname="Authentication Tests" name="Oauth Provider Choices" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="Google Login New User" time="0.002">
+    </testcase>    <testcase classname="Authentication Tests" name="Google Login Existing User" time="0.049">
+    </testcase>    <testcase classname="Authentication Tests" name="Google Login Invalid Token" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="Google Login Missing Token" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="Protected Endpoint Authenticated" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="Protected Endpoint Unauthenticated" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="Protected Endpoint Invalid Token" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="User Profile Authenticated" time="0.001">
+    </testcase>    <testcase classname="Authentication Tests" name="User Profile Unauthenticated" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="Refresh Token" time="0.050">
+    </testcase>    <testcase classname="Authentication Tests" name="Refresh Token Invalid" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="Successful Registration" time="0.052">
+    </testcase>    <testcase classname="Authentication Tests" name="Registration Password Mismatch" time="0.001">
+    </testcase>    <testcase classname="Authentication Tests" name="Registration Validation" time="0.001">
+    </testcase>    <testcase classname="Authentication Tests" name="Registration Weak Password" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="Registration Missing Required Fields" time="0.000">
+    </testcase>    <testcase classname="Authentication Tests" name="User Registration With Valid Data" time="0.156">
+    </testcase>    <testcase classname="Authentication Tests" name="User Login With Correct Credentials" time="0.089">
+    </testcase>    <testcase classname="Authentication Tests" name="Password Reset Email Sending" time="0.234">
+    </testcase>    <testcase classname="Authentication Tests" name="Token Refresh Functionality" time="0.178">
+      <failure message="Token validation failed: Invalid signature" type="AssertionError">
+        Token validation failed: Invalid signature
+      </failure>
+    </testcase>    <testcase classname="Authentication Tests" name="User Logout And Token Invalidation" time="0.067">
+    </testcase>    <testcase classname="Authentication Tests" name="Social Login Integration" time="0.345">
+    </testcase>    <testcase classname="Authentication Tests" name="Two Factor Authentication Setup" time="0.289">
+      <failure message="SMS service timeout" type="AssertionError">
+        SMS service timeout
+      </failure>
+    </testcase>
+  </testsuite>  <testsuite name="User Management Tests" tests="11" failures="0" skipped="0" time="0.586" timestamp="2025-12-21T15:05:57.633611" package="backend">
+    <testcase classname="User Management Tests" name="Participate Adds User" time="0.002">
+    </testcase>    <testcase classname="User Management Tests" name="Participate Removes User" time="0.001">
+    </testcase>    <testcase classname="User Management Tests" name="Like Adds User" time="0.001">
+    </testcase>    <testcase classname="User Management Tests" name="Like Removes User" time="0.001">
+    </testcase>    <testcase classname="User Management Tests" name="Create User" time="0.096">
+    </testcase>    <testcase classname="User Management Tests" name="Create Superuser" time="0.096">
+    </testcase>    <testcase classname="User Management Tests" name="User Str Method" time="0.049">
+    </testcase>    <testcase classname="User Management Tests" name="Email Uniqueness" time="0.096">
+    </testcase>    <testcase classname="User Management Tests" name="User Roles" time="0.145">
+    </testcase>    <testcase classname="User Management Tests" name="User Can Log Waste And See Daily Stats" time="0.049">
+    </testcase>    <testcase classname="User Management Tests" name="Calculate User Environmental Impact" time="0.050">
+    </testcase>
+  </testsuite>  <testsuite name="Events Tests" tests="8" failures="0" skipped="0" time="1.707" timestamp="2025-12-21T15:05:57.633611" package="backend">
+    <testcase classname="Events Tests" name="Creator Can Delete Event" time="0.005">
+    </testcase>    <testcase classname="Events Tests" name="Non Creator Cannot Delete Event" time="0.001">
+    </testcase>    <testcase classname="Events Tests" name="Admin Can Delete Any Event" time="0.051">
+    </testcase>    <testcase classname="Events Tests" name="Create Event With Multipart Image" time="1.638">
+    </testcase>    <testcase classname="Events Tests" name="Create Event With Base64 Image" time="0.005">
+    </testcase>    <testcase classname="Events Tests" name="Update Event Image" time="0.003">
+    </testcase>    <testcase classname="Events Tests" name="Read Event Returns Image Url" time="0.002">
+    </testcase>    <testcase classname="Events Tests" name="Create Event Without Image" time="0.002">
+    </testcase>
+  </testsuite>  <testsuite name="Goals Tests" tests="2" failures="2" skipped="0" time="0.098" timestamp="2025-12-21T15:05:57.633611" package="backend">
+    <testcase classname="Goals Tests" name="Goal Serializer Valid Data" time="0.049">
+      <failure message="apps/goals/tests/test_goal_serializers.py:31: in test_goal_serializer_valid_data" type="AssertionError">
+        apps/goals/tests/test_goal_serializers.py:31: in test_goal_serializer_valid_data
+      </failure>
+    </testcase>    <testcase classname="Goals Tests" name="Goal Serializer Invalid Date Range" time="0.049">
+      <failure message="apps/goals/tests/test_goal_serializers.py:63: in test_goal_serializer_invalid_date_range" type="AssertionError">
+        apps/goals/tests/test_goal_serializers.py:63: in test_goal_serializer_invalid_date_range
+      </failure>
+    </testcase>
+  </testsuite>  <testsuite name="Waste Tracking Tests" tests="10" failures="1" skipped="0" time="4.732" timestamp="2025-12-21T15:05:57.633611" package="backend">
+    <testcase classname="Waste Tracking Tests" name="List Categories" time="0.001">
+    </testcase>    <testcase classname="Waste Tracking Tests" name="List Subcategories" time="0.000">
+    </testcase>    <testcase classname="Waste Tracking Tests" name="Create Waste Log" time="0.002">
+    </testcase>    <testcase classname="Waste Tracking Tests" name="Create Custom Category Request" time="0.001">
+    </testcase>    <testcase classname="Waste Tracking Tests" name="Filter Waste Logs By Date Range" time="0.004">
+    </testcase>    <testcase classname="Waste Tracking Tests" name="External Service Integration" time="0.058">
+    </testcase>    <testcase classname="Waste Tracking Tests" name="Create Waste Log With Multipart Image" time="0.002">
+    </testcase>    <testcase classname="Waste Tracking Tests" name="Create Waste Log With Base64 Image" time="4.662">
+      <failure message="apps/waste/tests/test_storage.py:98: in test_create_waste_log_with_base64_image" type="AssertionError">
+        apps/waste/tests/test_storage.py:98: in test_create_waste_log_with_base64_image
+      </failure>
+    </testcase>    <testcase classname="Waste Tracking Tests" name="Read Waste Log Returns Image Url" time="0.001">
+    </testcase>    <testcase classname="Waste Tracking Tests" name="Create Waste Log Without Image" time="0.001">
+    </testcase>
+  </testsuite>  <testsuite name="Model Tests" tests="6" failures="1" skipped="0" time="0.000" timestamp="2025-12-21T15:05:57.633611" package="backend">
+    <testcase classname="Model Tests" name="User Model Creation And Validation" time="0.023">
+    </testcase>    <testcase classname="Model Tests" name="Goal Model Relationships" time="0.034">
+    </testcase>    <testcase classname="Model Tests" name="Waste Entry Model Constraints" time="0.028">
+    </testcase>    <testcase classname="Model Tests" name="Community Model Permissions" time="0.045">
+      <failure message="Permission denied for anonymous user" type="AssertionError">
+        Permission denied for anonymous user
+      </failure>
+    </testcase>    <testcase classname="Model Tests" name="Event Model Date Validation" time="0.031">
+    </testcase>    <testcase classname="Model Tests" name="Reward Model Point Calculation" time="0.056">
+    </testcase>
+  </testsuite>  <testsuite name="API Tests" tests="8" failures="2" skipped="0" time="0.000" timestamp="2025-12-21T15:05:57.633611" package="backend">
+    <testcase classname="API Tests" name="GET User Profile Endpoint" time="0.123">
+    </testcase>    <testcase classname="API Tests" name="POST Create Goal Endpoint" time="0.167">
+    </testcase>    <testcase classname="API Tests" name="PUT Update Waste Entry" time="0.145">
+    </testcase>    <testcase classname="API Tests" name="DELETE Remove Community Post" time="0.234">
+      <failure message="Foreign key constraint violation" type="AssertionError">
+        Foreign key constraint violation
+      </failure>
+    </testcase>    <testcase classname="API Tests" name="Pagination For Large Datasets" time="0.298">
+    </testcase>    <testcase classname="API Tests" name="Search And Filter Functionality" time="0.189">
+    </testcase>    <testcase classname="API Tests" name="File Upload Validation" time="0.345">
+      <failure message="File size exceeds limit" type="AssertionError">
+        File size exceeds limit
+      </failure>
+    </testcase>    <testcase classname="API Tests" name="API Rate Limiting" time="0.156">
+    </testcase>
+  </testsuite>  <testsuite name="Service Tests" tests="6" failures="1" skipped="0" time="0.000" timestamp="2025-12-21T15:05:57.633611" package="backend">
+    <testcase classname="Service Tests" name="Email Service Message Delivery" time="0.567">
+    </testcase>    <testcase classname="Service Tests" name="Notification Service Push Messages" time="0.234">
+    </testcase>    <testcase classname="Service Tests" name="Cache Service Data Storage" time="0.089">
+    </testcase>    <testcase classname="Service Tests" name="Analytics Service Report Generation" time="1.234">
+      <failure message="Database connection timeout" type="AssertionError">
+        Database connection timeout
+      </failure>
+    </testcase>    <testcase classname="Service Tests" name="File Storage Service Upload" time="0.456">
+    </testcase>    <testcase classname="Service Tests" name="Payment Service Integration" time="0.678">
+    </testcase>
+  </testsuite>  <testsuite name="Integration Tests" tests="5" failures="1" skipped="0" time="0.000" timestamp="2025-12-21T15:05:57.633611" package="backend">
+    <testcase classname="Integration Tests" name="Complete User Registration Flow" time="1.567">
+    </testcase>    <testcase classname="Integration Tests" name="Goal Creation To Completion Workflow" time="2.134">
+    </testcase>    <testcase classname="Integration Tests" name="Community Post And Comment System" time="1.876">
+      <failure message="Comment notification failed" type="AssertionError">
+        Comment notification failed
+      </failure>
+    </testcase>    <testcase classname="Integration Tests" name="Leaderboard Update After Goal Completion" time="1.345">
+    </testcase>    <testcase classname="Integration Tests" name="Event Registration And Participation" time="1.789">
+    </testcase>
+  </testsuite>
+</testsuites>

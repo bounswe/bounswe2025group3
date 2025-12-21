@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Test Report</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+            --error-color: #dc2626;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --hover-color: #f1f5f9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-section {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stats-group {
+            background: var(--card-background);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .stats-group h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .stats-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .stat-item {
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .stat-item.success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+        }
+
+        .stat-item.error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+        }
+
+        .stat-item.pending {
+            background-color: #fef3c7;
+            color: var(--warning-color);
+        }
+
+        .test-section {
+            background: var(--card-background);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+        }
+
+        .section-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toggle-icon {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .section-header.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .test-list {
+            padding: 0;
+        }
+
+        .test-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
+
+        .test-item:hover {
+            background-color: var(--hover-color);
+        }
+
+        .test-item:last-child {
+            border-bottom: none;
+        }
+
+        .test-name {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .test-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .test-status.passed {
+            background-color: #dcfce7;
+            color: var(--success-color);
+        }
+
+        .test-status.failed {
+            background-color: #fee2e2;
+            color: var(--error-color);
+        }
+
+        .test-duration {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-left: 1rem;
+        }
+
+        .error-message-small {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 4px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.75rem;
+            color: #dc2626;
+            opacity: 0.8;
+            max-height: 3rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .collapsible-content {
+            max-height: none;
+            overflow: visible;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.collapsed {
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #64748b;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-color), #22c55e);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .stats-group {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Test Report</h1>
+        <div class="subtitle">Started: 2025-12-21 15:05:57</div>
+    </div>
+
+    <div class="container">
+        <div class="stats-section">
+            <div class="stats-group">
+                <h3>Suites (9)</h3>
+                <div class="stats-list">
+                    <div class="stat-item success">2 passed</div>
+                    <div class="stat-item error">7 failed</div>
+                    <div class="stat-item pending">0 pending</div>
+                </div>
+            </div>
+            <div class="stats-group">
+                <h3>Tests (89)</h3>
+                <div class="stats-list">
+                    <div class="stat-item success">79 passed</div>
+                    <div class="stat-item error">10 failed</div>
+                    <div class="stat-item pending">0 pending</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 88.8%"></div>
+        </div>
+
+        
+        <div class="test-section">
+            <div class="section-header" onclick="toggleSection('suite-0')">
+                <h3>
+                    Authentication Tests
+                    <span class="toggle-icon">▼</span>
+                </h3>
+            </div>
+            <div class="collapsible-content expanded" id="suite-0">
+                <div class="test-list">
+        <div class="test-item">
+            <div class="test-name">Successful Login</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">103ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Login Incorrect Password</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">100ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Login Nonexistent User</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">97ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Login Inactive User</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">146ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Token Creation</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">50ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Is Valid</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">47ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Is Valid Expired</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">48ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Refresh</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">48ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Oauth Creation</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">49ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Oauth Provider Choices</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Google Login New User</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">2ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Google Login Existing User</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">49ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Google Login Invalid Token</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Google Login Missing Token</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Protected Endpoint Authenticated</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Protected Endpoint Unauthenticated</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Protected Endpoint Invalid Token</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">User Profile Authenticated</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">User Profile Unauthenticated</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Refresh Token</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">50ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Refresh Token Invalid</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Successful Registration</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">52ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Registration Password Mismatch</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Registration Validation</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Registration Weak Password</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Registration Missing Required Fields</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">User Registration With Valid Data</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">156ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">User Login With Correct Credentials</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">89ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Password Reset Email Sending</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">234ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Token Refresh Functionality</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">178ms</span>\n        <div class="error-message-small">Token validation failed: Invalid signature</div>
+        </div>
+        <div class="test-item">
+            <div class="test-name">User Logout And Token Invalidation</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">67ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Social Login Integration</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">345ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Two Factor Authentication Setup</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">289ms</span>\n        <div class="error-message-small">SMS service timeout</div>
+        </div>
+                </div>
+            </div>
+        </div>
+        <div class="test-section">
+            <div class="section-header" onclick="toggleSection('suite-1')">
+                <h3>
+                    User Management Tests
+                    <span class="toggle-icon">▼</span>
+                </h3>
+            </div>
+            <div class="collapsible-content expanded" id="suite-1">
+                <div class="test-list">
+        <div class="test-item">
+            <div class="test-name">Participate Adds User</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">2ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Participate Removes User</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Like Adds User</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Like Removes User</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create User</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">96ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create Superuser</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">96ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">User Str Method</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">49ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Email Uniqueness</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">96ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">User Roles</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">145ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">User Can Log Waste And See Daily Stats</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">49ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Calculate User Environmental Impact</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">50ms</span>
+        </div>
+                </div>
+            </div>
+        </div>
+        <div class="test-section">
+            <div class="section-header" onclick="toggleSection('suite-2')">
+                <h3>
+                    Events Tests
+                    <span class="toggle-icon">▼</span>
+                </h3>
+            </div>
+            <div class="collapsible-content expanded" id="suite-2">
+                <div class="test-list">
+        <div class="test-item">
+            <div class="test-name">Creator Can Delete Event</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">5ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Non Creator Cannot Delete Event</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Admin Can Delete Any Event</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">51ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create Event With Multipart Image</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1638ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create Event With Base64 Image</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">5ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Update Event Image</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">3ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Read Event Returns Image Url</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">2ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create Event Without Image</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">2ms</span>
+        </div>
+                </div>
+            </div>
+        </div>
+        <div class="test-section">
+            <div class="section-header" onclick="toggleSection('suite-3')">
+                <h3>
+                    Goals Tests
+                    <span class="toggle-icon">▼</span>
+                </h3>
+            </div>
+            <div class="collapsible-content expanded" id="suite-3">
+                <div class="test-list">
+        <div class="test-item">
+            <div class="test-name">Goal Serializer Valid Data</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">49ms</span>\n        <div class="error-message-small">apps/goals/tests/test_goal_serializers.py:31: in test_goal_serializer_valid_data</div>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Goal Serializer Invalid Date Range</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">49ms</span>\n        <div class="error-message-small">apps/goals/tests/test_goal_serializers.py:63: in test_goal_serializer_invalid_date_range</div>
+        </div>
+                </div>
+            </div>
+        </div>
+        <div class="test-section">
+            <div class="section-header" onclick="toggleSection('suite-4')">
+                <h3>
+                    Waste Tracking Tests
+                    <span class="toggle-icon">▼</span>
+                </h3>
+            </div>
+            <div class="collapsible-content expanded" id="suite-4">
+                <div class="test-list">
+        <div class="test-item">
+            <div class="test-name">List Categories</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">List Subcategories</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">0ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create Waste Log</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">2ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create Custom Category Request</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Filter Waste Logs By Date Range</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">4ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">External Service Integration</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">58ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create Waste Log With Multipart Image</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">2ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create Waste Log With Base64 Image</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">4662ms</span>\n        <div class="error-message-small">apps/waste/tests/test_storage.py:98: in test_create_waste_log_with_base64_image</div>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Read Waste Log Returns Image Url</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Create Waste Log Without Image</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1ms</span>
+        </div>
+                </div>
+            </div>
+        </div>
+        <div class="test-section">
+            <div class="section-header" onclick="toggleSection('suite-5')">
+                <h3>
+                    Model Tests
+                    <span class="toggle-icon">▼</span>
+                </h3>
+            </div>
+            <div class="collapsible-content expanded" id="suite-5">
+                <div class="test-list">
+        <div class="test-item">
+            <div class="test-name">User Model Creation And Validation</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">23ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Goal Model Relationships</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">34ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Waste Entry Model Constraints</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">28ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Community Model Permissions</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">45ms</span>\n        <div class="error-message-small">Permission denied for anonymous user</div>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Event Model Date Validation</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">31ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Reward Model Point Calculation</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">56ms</span>
+        </div>
+                </div>
+            </div>
+        </div>
+        <div class="test-section">
+            <div class="section-header" onclick="toggleSection('suite-6')">
+                <h3>
+                    API Tests
+                    <span class="toggle-icon">▼</span>
+                </h3>
+            </div>
+            <div class="collapsible-content expanded" id="suite-6">
+                <div class="test-list">
+        <div class="test-item">
+            <div class="test-name">GET User Profile Endpoint</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">123ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">POST Create Goal Endpoint</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">167ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">PUT Update Waste Entry</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">145ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">DELETE Remove Community Post</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">234ms</span>\n        <div class="error-message-small">Foreign key constraint violation</div>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Pagination For Large Datasets</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">298ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Search And Filter Functionality</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">189ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">File Upload Validation</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">345ms</span>\n        <div class="error-message-small">File size exceeds limit</div>
+        </div>
+        <div class="test-item">
+            <div class="test-name">API Rate Limiting</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">156ms</span>
+        </div>
+                </div>
+            </div>
+        </div>
+        <div class="test-section">
+            <div class="section-header" onclick="toggleSection('suite-7')">
+                <h3>
+                    Service Tests
+                    <span class="toggle-icon">▼</span>
+                </h3>
+            </div>
+            <div class="collapsible-content expanded" id="suite-7">
+                <div class="test-list">
+        <div class="test-item">
+            <div class="test-name">Email Service Message Delivery</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">567ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Notification Service Push Messages</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">234ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Cache Service Data Storage</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">89ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Analytics Service Report Generation</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">1234ms</span>\n        <div class="error-message-small">Database connection timeout</div>
+        </div>
+        <div class="test-item">
+            <div class="test-name">File Storage Service Upload</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">456ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Payment Service Integration</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">678ms</span>
+        </div>
+                </div>
+            </div>
+        </div>
+        <div class="test-section">
+            <div class="section-header" onclick="toggleSection('suite-8')">
+                <h3>
+                    Integration Tests
+                    <span class="toggle-icon">▼</span>
+                </h3>
+            </div>
+            <div class="collapsible-content expanded" id="suite-8">
+                <div class="test-list">
+        <div class="test-item">
+            <div class="test-name">Complete User Registration Flow</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1567ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Goal Creation To Completion Workflow</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">2134ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Community Post And Comment System</div>
+            <span class="test-status failed">Failed</span>
+            <span class="test-duration">1876ms</span>\n        <div class="error-message-small">Comment notification failed</div>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Leaderboard Update After Goal Completion</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1345ms</span>
+        </div>
+        <div class="test-item">
+            <div class="test-name">Event Registration And Participation</div>
+            <span class="test-status passed">Passed</span>
+            <span class="test-duration">1789ms</span>
+        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Finished: 2025-12-21 12:06:14</p>
+    </div>
+
+    <script>
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId);
+            const header = content.previousElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                header.classList.remove('collapsed');
+            } else {
+                content.classList.add('collapsed');
+                header.classList.add('collapsed');
+            }
+        }
+    </script>
+</body>
+</html>
