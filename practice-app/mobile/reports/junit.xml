@@ -1,0 +1,1855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="323" failures="38" errors="0" time="13.84">
+  <testsuite name="login" errors="0" failures="5" skipped="0" timestamp="2025-12-20T10:47:11" time="1.828" tests="6">
+    <testcase classname="login should successfully login with valid credentials" name="login should successfully login with valid credentials" time="0.016">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\auth.ts:20:31
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="login should save tokens after successful login" name="login should save tokens after successful login" time="0.001">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\auth.ts:20:31
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="login should throw error on failed login with invalid credentials" name="login should throw error on failed login with invalid credentials" time="0.032">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;Invalid credentials&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:20:31
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\login.test.ts:100:57)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="login should handle network failures" name="login should handle network failures" time="0.003">
+    </testcase>
+    <testcase classname="login should handle API error responses" name="login should handle API error responses" time="0.006">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;User account is disabled&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:20:31
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\login.test.ts:133:50)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="login should handle malformed JSON responses" name="login should handle malformed JSON responses" time="0.005">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;Invalid JSON&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:20:31
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\login.test.ts:146:50)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="reset_password" errors="0" failures="5" skipped="0" timestamp="2025-12-20T10:47:11" time="1.854" tests="6">
+    <testcase classname="reset_password should successfully request password reset with valid email" name="reset_password should successfully request password reset with valid email" time="0.016">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\auth.ts:41:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="reset_password should throw error on invalid email" name="reset_password should throw error on invalid email" time="0.032">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;Enter a valid email address.&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:41:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\reset_password.test.ts:48:59)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="reset_password should throw error when email does not exist" name="reset_password should throw error when email does not exist" time="0.008">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;No account found with this email address.&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:41:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\reset_password.test.ts:62:69)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="reset_password should handle network failures" name="reset_password should handle network failures" time="0.002">
+    </testcase>
+    <testcase classname="reset_password should handle server errors" name="reset_password should handle server errors" time="0.007">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;Internal server error&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:41:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\reset_password.test.ts:85:49)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="reset_password should handle empty email" name="reset_password should handle empty email" time="0.007">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;This field is required.&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:41:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\reset_password.test.ts:99:46)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="register" errors="0" failures="7" skipped="0" timestamp="2025-12-20T10:47:11" time="1.882" tests="8">
+    <testcase classname="register should successfully register with valid data" name="register should successfully register with valid data" time="0.014">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\auth.ts:32:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="register should throw error on invalid email" name="register should throw error on invalid email" time="0.029">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;Enter a valid email address.&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:32:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\register.test.ts:68:15)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="register should throw error on short password" name="register should throw error on short password" time="0.007">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;This password is too short. It must contain at least 8 characters.&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:32:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\register.test.ts:84:15)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="register should throw error on duplicate email" name="register should throw error on duplicate email" time="0.006">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;A user with this email already exists.&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:32:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\register.test.ts:98:74)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="register should throw error on duplicate username" name="register should throw error on duplicate username" time="0.006">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;A user with this username already exists.&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:32:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\register.test.ts:112:74)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="register should throw error on password mismatch" name="register should throw error on password mismatch" time="0.005">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;Password fields did not match.&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:32:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\register.test.ts:126:85)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="register should handle network failures during registration" name="register should handle network failures during registration" time="0.002">
+    </testcase>
+    <testcase classname="register should handle server errors" name="register should handle server errors" time="0.005">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;Internal server error&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/auth.ts:32:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\register.test.ts:151:74)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Authentication Flow Integration" errors="0" failures="3" skipped="0" timestamp="2025-12-20T10:47:11" time="1.923" tests="5">
+    <testcase classname="Authentication Flow Integration Login → Token Storage → Authenticated API Call should complete full authentication flow: login, save tokens, and use them for API calls" name="Authentication Flow Integration Login → Token Storage → Authenticated API Call should complete full authentication flow: login, save tokens, and use them for API calls" time="0.017">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\auth.ts:20:31
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="Authentication Flow Integration Login → Token Storage → Authenticated API Call should handle token persistence across multiple API calls" name="Authentication Flow Integration Login → Token Storage → Authenticated API Call should handle token persistence across multiple API calls" time="0.001">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\auth.ts:20:31
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="Authentication Flow Integration Token Refresh Integration should automatically refresh token on 401 and retry the request" name="Authentication Flow Integration Token Refresh Integration should automatically refresh token on 401 and retry the request" time="0.003">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\user.ts:29:21
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="Authentication Flow Integration Token Refresh Integration should handle refresh failure and clear tokens" name="Authentication Flow Integration Token Refresh Integration should handle refresh failure and clear tokens" time="0.013">
+    </testcase>
+    <testcase classname="Authentication Flow Integration Challenge Join Flow Integration should join challenge using authenticated token" name="Authentication Flow Integration Challenge Join Flow Integration should join challenge using authenticated token" time="0.014">
+    </testcase>
+  </testsuite>
+  <testsuite name="getEvents" errors="0" failures="11" skipped="0" timestamp="2025-12-20T10:47:11" time="1.97" tests="31">
+    <testcase classname="getEvents should successfully fetch events" name="getEvents should successfully fetch events" time="0.017">
+    </testcase>
+    <testcase classname="getEvents should handle empty results" name="getEvents should handle empty results" time="0.001">
+    </testcase>
+    <testcase classname="getEvents should handle errors and throw" name="getEvents should handle errors and throw" time="0.038">
+    </testcase>
+    <testcase classname="getEvents should handle API errors" name="getEvents should handle API errors" time="0.002">
+    </testcase>
+    <testcase classname="getEventById should successfully fetch event by id" name="getEventById should successfully fetch event by id" time="0.002">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:60:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="getEventById should handle event not found" name="getEventById should handle event not found" time="0.002">
+    </testcase>
+    <testcase classname="getEventById should handle authentication errors" name="getEventById should handle authentication errors" time="0.003">
+    </testcase>
+    <testcase classname="getEventById should handle network errors" name="getEventById should handle network errors" time="0.002">
+    </testcase>
+    <testcase classname="getEventById should handle malformed response" name="getEventById should handle malformed response" time="0.036">
+      <failure>Error: expect(received).rejects.toThrow(expected)
+
+Expected substring: &quot;Invalid JSON&quot;
+Received message:   &quot;response.text is not a function&quot;
+
+      106 |   
+      107 |   let data: ErrorPayload | null = null;
+    &gt; 108 |   const responseText = await response.text();
+          |                                       ^
+      109 |
+      110 |   try {
+      111 |     if (!responseText) {
+
+      at text (api/utils.ts:108:39)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:22:7
+      at node_modules/@babel/runtime/helpers/asyncToGenerator.js:14:12
+      at apply (api/utils.ts:102:23)
+      at api/events.ts:60:19
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:218:22)
+    at Object.toThrow (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\events.test.ts:198:43)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="createEvent should successfully create event without image" name="createEvent should successfully create event without image" time="0.002">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:93:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="createEvent should successfully create event with image URL" name="createEvent should successfully create event with image URL" time="0.001">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:93:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="createEvent should successfully create event with local file URI" name="createEvent should successfully create event with local file URI" time="0.002">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:93:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="createEvent should handle validation errors" name="createEvent should handle validation errors" time="0.002">
+    </testcase>
+    <testcase classname="createEvent should handle missing required fields" name="createEvent should handle missing required fields" time="0.002">
+    </testcase>
+    <testcase classname="createEvent should handle network errors" name="createEvent should handle network errors" time="0.002">
+    </testcase>
+    <testcase classname="createEvent should handle server errors" name="createEvent should handle server errors" time="0.002">
+    </testcase>
+    <testcase classname="createEvent should handle null image" name="createEvent should handle null image" time="0.001">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:93:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="createEvent should handle content:// URI scheme" name="createEvent should handle content:// URI scheme" time="0.001">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:93:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="likeEvent should successfully like an event" name="likeEvent should successfully like an event" time="0.001">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:101:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="likeEvent should successfully unlike an event" name="likeEvent should successfully unlike an event" time="0.001">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:101:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="likeEvent should handle event not found" name="likeEvent should handle event not found" time="0.001">
+    </testcase>
+    <testcase classname="likeEvent should handle authentication errors" name="likeEvent should handle authentication errors" time="0.002">
+    </testcase>
+    <testcase classname="likeEvent should handle network errors" name="likeEvent should handle network errors" time="0.001">
+    </testcase>
+    <testcase classname="likeEvent should handle server errors" name="likeEvent should handle server errors" time="0.001">
+    </testcase>
+    <testcase classname="participateEvent should successfully participate in an event" name="participateEvent should successfully participate in an event" time="0.001">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:109:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="participateEvent should successfully unparticipate from an event" name="participateEvent should successfully unparticipate from an event" time="0">
+      <failure>TypeError: response.text is not a function
+    at text (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:108:39)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12
+    at apply (C:\T2\bounswe2025group3\practice-app\mobile\api\utils.ts:102:23)
+    at C:\T2\bounswe2025group3\practice-app\mobile\api\events.ts:109:19
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="participateEvent should handle event not found" name="participateEvent should handle event not found" time="0.001">
+    </testcase>
+    <testcase classname="participateEvent should handle authentication errors" name="participateEvent should handle authentication errors" time="0.002">
+    </testcase>
+    <testcase classname="participateEvent should handle network errors" name="participateEvent should handle network errors" time="0.001">
+    </testcase>
+    <testcase classname="participateEvent should handle server errors" name="participateEvent should handle server errors" time="0.002">
+    </testcase>
+    <testcase classname="participateEvent should handle participation limit reached" name="participateEvent should handle participation limit reached" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="fetchAllPages" errors="0" failures="1" skipped="0" timestamp="2025-12-20T10:47:11" time="1.964" tests="10">
+    <testcase classname="fetchAllPages should handle single page response" name="fetchAllPages should handle single page response" time="0.018">
+    </testcase>
+    <testcase classname="fetchAllPages should handle multi-page pagination" name="fetchAllPages should handle multi-page pagination" time="0.1">
+    </testcase>
+    <testcase classname="fetchAllPages should extract URL path from full URL in next field" name="fetchAllPages should extract URL path from full URL in next field" time="0.003">
+    </testcase>
+    <testcase classname="fetchAllPages should handle relative URL in next field" name="fetchAllPages should handle relative URL in next field" time="0.002">
+    </testcase>
+    <testcase classname="fetchAllPages should handle invalid URL in next field gracefully" name="fetchAllPages should handle invalid URL in next field gracefully" time="0.002">
+    </testcase>
+    <testcase classname="fetchAllPages should handle error during pagination" name="fetchAllPages should handle error during pagination" time="0.026">
+    </testcase>
+    <testcase classname="fetchAllPages should handle missing results array in response" name="fetchAllPages should handle missing results array in response" time="0.004">
+      <failure>Error: expect(received).rejects.toThrow()
+
+Received promise resolved instead of rejected
+Resolved to value: []
+    at expect (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\expect\build\index.js:113:15)
+    at Object.expect (C:\T2\bounswe2025group3\practice-app\mobile\api\__test__\fetchAllPages.test.ts:204:11)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="fetchAllPages should handle empty results" name="fetchAllPages should handle empty results" time="0.001">
+    </testcase>
+    <testcase classname="fetchAllPages should handle network errors" name="fetchAllPages should handle network errors" time="0.002">
+    </testcase>
+    <testcase classname="fetchAllPages should handle error in middle of pagination" name="fetchAllPages should handle error in middle of pagination" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="AuthContext" errors="0" failures="2" skipped="0" timestamp="2025-12-20T10:47:11" time="4.183" tests="16">
+    <testcase classname="AuthContext SessionProvider should provide session context" name="AuthContext SessionProvider should provide session context" time="1.891">
+    </testcase>
+    <testcase classname="AuthContext SessionProvider should manage loading state" name="AuthContext SessionProvider should manage loading state" time="0.006">
+    </testcase>
+    <testcase classname="AuthContext SessionProvider should set isLoading to true when either session or role is loading" name="AuthContext SessionProvider should set isLoading to true when either session or role is loading" time="0.005">
+    </testcase>
+    <testcase classname="AuthContext SessionProvider should set isLoading to false when both are loaded" name="AuthContext SessionProvider should set isLoading to false when both are loaded" time="0.005">
+    </testcase>
+    <testcase classname="AuthContext signIn should set session" name="AuthContext signIn should set session" time="0.019">
+    </testcase>
+    <testcase classname="AuthContext signIn should set user role to USER" name="AuthContext signIn should set user role to USER" time="0.004">
+    </testcase>
+    <testcase classname="AuthContext signIn should set user role to ADMIN" name="AuthContext signIn should set user role to ADMIN" time="0.004">
+    </testcase>
+    <testcase classname="AuthContext signIn should set user role to MODERATOR" name="AuthContext signIn should set user role to MODERATOR" time="0.003">
+    </testcase>
+    <testcase classname="AuthContext signIn should set both session and role when signing in" name="AuthContext signIn should set both session and role when signing in" time="0.005">
+    </testcase>
+    <testcase classname="AuthContext signOut should clear session" name="AuthContext signOut should clear session" time="0.003">
+    </testcase>
+    <testcase classname="AuthContext signOut should clear user role" name="AuthContext signOut should clear user role" time="0.005">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+Expected: null
+
+Number of calls: 0
+    at Object.toHaveBeenCalledWith (C:\T2\bounswe2025group3\practice-app\mobile\hooks\__test__\authContext.test.tsx:248:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    </testcase>
+    <testcase classname="AuthContext signOut should clear both session and role when signing out" name="AuthContext signOut should clear both session and role when signing out" time="0.004">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+Expected: null
+
+Number of calls: 0
+    at Object.toHaveBeenCalledWith (C:\T2\bounswe2025group3\practice-app\mobile\hooks\__test__\authContext.test.tsx:264:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    </testcase>
+    <testcase classname="AuthContext useSession should return session values" name="AuthContext useSession should return session values" time="0.007">
+    </testcase>
+    <testcase classname="AuthContext useSession should return null values when no session exists" name="AuthContext useSession should return null values when no session exists" time="0.003">
+    </testcase>
+    <testcase classname="AuthContext useSession should throw error when used outside provider" name="AuthContext useSession should throw error when used outside provider" time="0.002">
+    </testcase>
+    <testcase classname="AuthContext useSession should update session and userRole when storage state changes" name="AuthContext useSession should update session and userRole when storage state changes" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="AlertContext" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:11" time="4.153" tests="15">
+    <testcase classname="AlertContext AlertProvider should provide showAlert function in context" name="AlertContext AlertProvider should provide showAlert function in context" time="1.505">
+    </testcase>
+    <testcase classname="AlertContext AlertProvider should provide hideAlert function in context" name="AlertContext AlertProvider should provide hideAlert function in context" time="0.006">
+    </testcase>
+    <testcase classname="AlertContext AlertProvider should have initial visibility as false" name="AlertContext AlertProvider should have initial visibility as false" time="0.005">
+    </testcase>
+    <testcase classname="AlertContext showAlert should set alert visibility to true" name="AlertContext showAlert should set alert visibility to true" time="0.013">
+    </testcase>
+    <testcase classname="AlertContext showAlert should apply default title when title is missing" name="AlertContext showAlert should apply default title when title is missing" time="0.015">
+    </testcase>
+    <testcase classname="AlertContext showAlert should apply default values for missing options" name="AlertContext showAlert should apply default values for missing options" time="0.007">
+    </testcase>
+    <testcase classname="AlertContext showAlert should set custom title, message, and confirmText" name="AlertContext showAlert should set custom title, message, and confirmText" time="0.006">
+    </testcase>
+    <testcase classname="AlertContext showAlert should execute onConfirm callback when confirm button is pressed" name="AlertContext showAlert should execute onConfirm callback when confirm button is pressed" time="0.006">
+    </testcase>
+    <testcase classname="AlertContext showAlert should call hideAlert after onConfirm is executed" name="AlertContext showAlert should call hideAlert after onConfirm is executed" time="0.007">
+    </testcase>
+    <testcase classname="AlertContext showAlert should work without onConfirm callback" name="AlertContext showAlert should work without onConfirm callback" time="0.007">
+    </testcase>
+    <testcase classname="AlertContext hideAlert should set visibility to false" name="AlertContext hideAlert should set visibility to false" time="0.006">
+    </testcase>
+    <testcase classname="AlertContext hideAlert should hide alert when close button is pressed" name="AlertContext hideAlert should hide alert when close button is pressed" time="0.005">
+    </testcase>
+    <testcase classname="AlertContext useAlert should return context values" name="AlertContext useAlert should return context values" time="0.005">
+    </testcase>
+    <testcase classname="AlertContext useAlert should throw error when used outside provider" name="AlertContext useAlert should throw error when used outside provider" time="0.003">
+    </testcase>
+    <testcase classname="AlertContext useAlert should update isVisible when alert is shown and hidden" name="AlertContext useAlert should update isVisible when alert is shown and hidden" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="ChallengeCard" errors="0" failures="3" skipped="0" timestamp="2025-12-20T10:47:11" time="4.519" tests="23">
+    <testcase classname="ChallengeCard renders challenge name correctly" name="ChallengeCard renders challenge name correctly" time="1.956">
+    </testcase>
+    <testcase classname="ChallengeCard displays correct status badge for active challenge" name="ChallengeCard displays correct status badge for active challenge" time="0.02">
+    </testcase>
+    <testcase classname="ChallengeCard displays correct status badge for upcoming challenge" name="ChallengeCard displays correct status badge for upcoming challenge" time="0.012">
+    </testcase>
+    <testcase classname="ChallengeCard displays correct status badge for past challenge" name="ChallengeCard displays correct status badge for past challenge" time="0.028">
+    </testcase>
+    <testcase classname="ChallengeCard shows category name when provided" name="ChallengeCard shows category name when provided" time="0.013">
+    </testcase>
+    <testcase classname="ChallengeCard does not show category when not provided" name="ChallengeCard does not show category when not provided" time="0.014">
+    </testcase>
+    <testcase classname="ChallengeCard formats dates correctly" name="ChallengeCard formats dates correctly" time="0.014">
+    </testcase>
+    <testcase classname="ChallengeCard formats goal quantity with proper locale" name="ChallengeCard formats goal quantity with proper locale" time="0.019">
+      <failure>Error: Unable to find an element with text: /1,234,567.89/
+
+&lt;View&gt;
+  &lt;View&gt;
+    &lt;Text&gt;
+      Test Challenge
+    &lt;/Text&gt;
+    &lt;View&gt;
+      &lt;Text&gt;
+        Active
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;View&gt;
+    &lt;View&gt;
+      &lt;Ionicons /&gt;
+      &lt;Text&gt;
+        Individual
+         entry
+      &lt;/Text&gt;
+    &lt;/View&gt;
+    &lt;View&gt;
+      &lt;Ionicons /&gt;
+      &lt;Text&gt;
+        01 Jan 2025
+         - 
+        31 Dec 2025
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;Text&gt;
+    This is a test challenge description
+  &lt;/Text&gt;
+  &lt;View&gt;
+    &lt;View&gt;
+      &lt;Text&gt;
+        Goal
+      &lt;/Text&gt;
+      &lt;Text&gt;
+        1.234.567,89
+         
+        kg
+      &lt;/Text&gt;
+    &lt;/View&gt;
+    &lt;View&gt;
+      &lt;Text&gt;
+        Participants
+      &lt;/Text&gt;
+      &lt;Text&gt;
+        42
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;View
+    accessibilityState={
+      {
+        &quot;disabled&quot;: false,
+      }
+    }
+    accessible={true}
+  &gt;
+    &lt;Text&gt;
+      View details
+    &lt;/Text&gt;
+  &lt;/View&gt;
+&lt;/View&gt;
+    at Object.getByText (C:\T2\bounswe2025group3\practice-app\mobile\components\challenges\__tests__\ChallengeCard.test.tsx:105:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="ChallengeCard displays participation notice when isParticipating is true" name="ChallengeCard displays participation notice when isParticipating is true" time="0.026">
+    </testcase>
+    <testcase classname="ChallengeCard does not display participation notice when isParticipating is false" name="ChallengeCard does not display participation notice when isParticipating is false" time="0.017">
+    </testcase>
+    <testcase classname="ChallengeCard action button is disabled when isActionDisabled is true" name="ChallengeCard action button is disabled when isActionDisabled is true" time="0.021">
+    </testcase>
+    <testcase classname="ChallengeCard calls onActionPress when action button is pressed" name="ChallengeCard calls onActionPress when action button is pressed" time="0.012">
+    </testcase>
+    <testcase classname="ChallengeCard calls onPress when card is pressed and both onPress and onActionPress are provided" name="ChallengeCard calls onPress when card is pressed and both onPress and onActionPress are provided" time="0.015">
+    </testcase>
+    <testcase classname="ChallengeCard truncates description at 160 characters" name="ChallengeCard truncates description at 160 characters" time="0.012">
+    </testcase>
+    <testcase classname="ChallengeCard displays full description when less than 160 characters" name="ChallengeCard displays full description when less than 160 characters" time="0.009">
+    </testcase>
+    <testcase classname="ChallengeCard displays custom action label" name="ChallengeCard displays custom action label" time="0.015">
+    </testcase>
+    <testcase classname="ChallengeCard displays default action label when not provided" name="ChallengeCard displays default action label when not provided" time="0.011">
+    </testcase>
+    <testcase classname="ChallengeCard displays participants count" name="ChallengeCard displays participants count" time="0.01">
+    </testcase>
+    <testcase classname="ChallengeCard displays goal with unit" name="ChallengeCard displays goal with unit" time="0.01">
+      <failure>Error: Unable to find an element with text: /1,000 kg/
+
+&lt;View&gt;
+  &lt;View&gt;
+    &lt;Text&gt;
+      Test Challenge
+    &lt;/Text&gt;
+    &lt;View&gt;
+      &lt;Text&gt;
+        Active
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;View&gt;
+    &lt;View&gt;
+      &lt;Ionicons /&gt;
+      &lt;Text&gt;
+        Individual
+         entry
+      &lt;/Text&gt;
+    &lt;/View&gt;
+    &lt;View&gt;
+      &lt;Ionicons /&gt;
+      &lt;Text&gt;
+        01 Jan 2025
+         - 
+        31 Dec 2025
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;Text&gt;
+    This is a test challenge description
+  &lt;/Text&gt;
+  &lt;View&gt;
+    &lt;View&gt;
+      &lt;Text&gt;
+        Goal
+      &lt;/Text&gt;
+      &lt;Text&gt;
+        1.000
+         
+        kg
+      &lt;/Text&gt;
+    &lt;/View&gt;
+    &lt;View&gt;
+      &lt;Text&gt;
+        Participants
+      &lt;/Text&gt;
+      &lt;Text&gt;
+        42
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;View
+    accessibilityState={
+      {
+        &quot;disabled&quot;: false,
+      }
+    }
+    accessible={true}
+  &gt;
+    &lt;Text&gt;
+      View details
+    &lt;/Text&gt;
+  &lt;/View&gt;
+&lt;/View&gt;
+    at Object.getByText (C:\T2\bounswe2025group3\practice-app\mobile\components\challenges\__tests__\ChallengeCard.test.tsx:223:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="ChallengeCard handles null unit gracefully" name="ChallengeCard handles null unit gracefully" time="0.011">
+      <failure>Error: Unable to find an element with text: /1,000/
+
+&lt;View&gt;
+  &lt;View&gt;
+    &lt;Text&gt;
+      Test Challenge
+    &lt;/Text&gt;
+    &lt;View&gt;
+      &lt;Text&gt;
+        Active
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;View&gt;
+    &lt;View&gt;
+      &lt;Ionicons /&gt;
+      &lt;Text&gt;
+        Individual
+         entry
+      &lt;/Text&gt;
+    &lt;/View&gt;
+    &lt;View&gt;
+      &lt;Ionicons /&gt;
+      &lt;Text&gt;
+        01 Jan 2025
+         - 
+        31 Dec 2025
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;Text&gt;
+    This is a test challenge description
+  &lt;/Text&gt;
+  &lt;View&gt;
+    &lt;View&gt;
+      &lt;Text&gt;
+        Goal
+      &lt;/Text&gt;
+      &lt;Text&gt;
+        1.000
+         
+      &lt;/Text&gt;
+    &lt;/View&gt;
+    &lt;View&gt;
+      &lt;Text&gt;
+        Participants
+      &lt;/Text&gt;
+      &lt;Text&gt;
+        42
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  &lt;/View&gt;
+  &lt;View
+    accessibilityState={
+      {
+        &quot;disabled&quot;: false,
+      }
+    }
+    accessible={true}
+  &gt;
+    &lt;Text&gt;
+      View details
+    &lt;/Text&gt;
+  &lt;/View&gt;
+&lt;/View&gt;
+    at Object.getByText (C:\T2\bounswe2025group3\practice-app\mobile\components\challenges\__tests__\ChallengeCard.test.tsx:235:12)
+    at Promise.then.completed (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="ChallengeCard displays entry type correctly" name="ChallengeCard displays entry type correctly" time="0.014">
+    </testcase>
+    <testcase classname="ChallengeCard capitalizes entry type" name="ChallengeCard capitalizes entry type" time="0.012">
+    </testcase>
+    <testcase classname="ChallengeCard handles zero participants count" name="ChallengeCard handles zero participants count" time="0.011">
+    </testcase>
+  </testsuite>
+  <testsuite name="Login Flow E2E" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:11" time="4.564" tests="5">
+    <testcase classname="Login Flow E2E should complete full login workflow: UI input → API call → token storage → session → navigation" name="Login Flow E2E should complete full login workflow: UI input → API call → token storage → session → navigation" time="2.075">
+    </testcase>
+    <testcase classname="Login Flow E2E should handle login failure and display error message" name="Login Flow E2E should handle login failure and display error message" time="0.19">
+    </testcase>
+    <testcase classname="Login Flow E2E should disable login button when email is invalid" name="Login Flow E2E should disable login button when email is invalid" time="0.036">
+    </testcase>
+    <testcase classname="Login Flow E2E should navigate to register screen when sign up is pressed" name="Login Flow E2E should navigate to register screen when sign up is pressed" time="0.02">
+    </testcase>
+    <testcase classname="Login Flow E2E should navigate to forgot password screen" name="Login Flow E2E should navigate to forgot password screen" time="0.023">
+    </testcase>
+  </testsuite>
+  <testsuite name="MultipleChoiceModal" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:11" time="4.537" tests="10">
+    <testcase classname="MultipleChoiceModal renders options correctly" name="MultipleChoiceModal renders options correctly" time="2.071">
+    </testcase>
+    <testcase classname="MultipleChoiceModal does not render when visible is false" name="MultipleChoiceModal does not render when visible is false" time="0.032">
+    </testcase>
+    <testcase classname="MultipleChoiceModal calls onSelect with selected option when option is pressed" name="MultipleChoiceModal calls onSelect with selected option when option is pressed" time="0.076">
+    </testcase>
+    <testcase classname="MultipleChoiceModal calls onClose when option is selected" name="MultipleChoiceModal calls onClose when option is selected" time="0.032">
+    </testcase>
+    <testcase classname="MultipleChoiceModal displays title correctly" name="MultipleChoiceModal displays title correctly" time="0.02">
+    </testcase>
+    <testcase classname="MultipleChoiceModal pre-selects the selectedOption" name="MultipleChoiceModal pre-selects the selectedOption" time="0.025">
+    </testcase>
+    <testcase classname="MultipleChoiceModal renders all provided options" name="MultipleChoiceModal renders all provided options" time="0.028">
+    </testcase>
+    <testcase classname="MultipleChoiceModal calls onSelect and onClose in sequence when option is selected" name="MultipleChoiceModal calls onSelect and onClose in sequence when option is selected" time="0.029">
+    </testcase>
+    <testcase classname="MultipleChoiceModal handles single option correctly" name="MultipleChoiceModal handles single option correctly" time="0.019">
+    </testcase>
+    <testcase classname="MultipleChoiceModal renders with empty selectedOption" name="MultipleChoiceModal renders with empty selectedOption" time="0.026">
+    </testcase>
+  </testsuite>
+  <testsuite name="SafeTouchableOpacity" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:13" time="2.725" tests="6">
+    <testcase classname="SafeTouchableOpacity calls onPress on first press" name="SafeTouchableOpacity calls onPress on first press" time="1.962">
+    </testcase>
+    <testcase classname="SafeTouchableOpacity prevents rapid double-clicks within delay period" name="SafeTouchableOpacity prevents rapid double-clicks within delay period" time="0.009">
+    </testcase>
+    <testcase classname="SafeTouchableOpacity allows click after delay period" name="SafeTouchableOpacity allows click after delay period" time="0.009">
+    </testcase>
+    <testcase classname="SafeTouchableOpacity respects custom delay parameter" name="SafeTouchableOpacity respects custom delay parameter" time="0.009">
+    </testcase>
+    <testcase classname="SafeTouchableOpacity renders children correctly" name="SafeTouchableOpacity renders children correctly" time="0.017">
+    </testcase>
+    <testcase classname="SafeTouchableOpacity passes other TouchableOpacity props correctly" name="SafeTouchableOpacity passes other TouchableOpacity props correctly" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="ThemedText" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:13" time="2.682" tests="12">
+    <testcase classname="ThemedText renders text correctly" name="ThemedText renders text correctly" time="1.657">
+    </testcase>
+    <testcase classname="ThemedText applies default type styles" name="ThemedText applies default type styles" time="0.01">
+    </testcase>
+    <testcase classname="ThemedText applies title type styles" name="ThemedText applies title type styles" time="0.004">
+    </testcase>
+    <testcase classname="ThemedText applies defaultSemiBold type styles" name="ThemedText applies defaultSemiBold type styles" time="0.004">
+    </testcase>
+    <testcase classname="ThemedText applies subtitle type styles" name="ThemedText applies subtitle type styles" time="0.003">
+    </testcase>
+    <testcase classname="ThemedText applies link type styles" name="ThemedText applies link type styles" time="0.003">
+    </testcase>
+    <testcase classname="ThemedText applies light color prop override" name="ThemedText applies light color prop override" time="0.002">
+    </testcase>
+    <testcase classname="ThemedText applies dark color prop override" name="ThemedText applies dark color prop override" time="0.011">
+    </testcase>
+    <testcase classname="ThemedText applies custom style prop" name="ThemedText applies custom style prop" time="0.013">
+    </testcase>
+    <testcase classname="ThemedText passes other Text props correctly" name="ThemedText passes other Text props correctly" time="0.005">
+    </testcase>
+    <testcase classname="ThemedText combines type style with custom style" name="ThemedText combines type style with custom style" time="0.003">
+    </testcase>
+    <testcase classname="ThemedText defaults to default type when type is not specified" name="ThemedText defaults to default type when type is not specified" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="useThemeColor" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.451" tests="16">
+    <testcase classname="useThemeColor Returns prop color when provided should return light prop color when light theme and light color is provided" name="useThemeColor Returns prop color when provided should return light prop color when light theme and light color is provided" time="0.004">
+    </testcase>
+    <testcase classname="useThemeColor Returns prop color when provided should return dark prop color when dark theme and dark color is provided" name="useThemeColor Returns prop color when provided should return dark prop color when dark theme and dark color is provided" time="0.009">
+    </testcase>
+    <testcase classname="useThemeColor Returns prop color when provided should return light prop color when only light color is provided and theme is light" name="useThemeColor Returns prop color when provided should return light prop color when only light color is provided and theme is light" time="0.002">
+    </testcase>
+    <testcase classname="useThemeColor Returns prop color when provided should return dark prop color when only dark color is provided and theme is dark" name="useThemeColor Returns prop color when provided should return dark prop color when only dark color is provided and theme is dark" time="0.002">
+    </testcase>
+    <testcase classname="useThemeColor Returns theme color when no prop should return theme color when no light prop is provided and theme is light" name="useThemeColor Returns theme color when no prop should return theme color when no light prop is provided and theme is light" time="0.002">
+    </testcase>
+    <testcase classname="useThemeColor Returns theme color when no prop should return theme color when no dark prop is provided and theme is dark" name="useThemeColor Returns theme color when no prop should return theme color when no dark prop is provided and theme is dark" time="0.001">
+    </testcase>
+    <testcase classname="useThemeColor Returns theme color when no prop should return theme color when light prop is undefined and theme is light" name="useThemeColor Returns theme color when no prop should return theme color when light prop is undefined and theme is light" time="0.002">
+    </testcase>
+    <testcase classname="useThemeColor Returns theme color when no prop should return theme color when dark prop is undefined and theme is dark" name="useThemeColor Returns theme color when no prop should return theme color when dark prop is undefined and theme is dark" time="0.002">
+    </testcase>
+    <testcase classname="useThemeColor Handles light theme should use light theme colors when theme is light" name="useThemeColor Handles light theme should use light theme colors when theme is light" time="0.002">
+    </testcase>
+    <testcase classname="useThemeColor Handles light theme should prioritize light prop over theme color when both available" name="useThemeColor Handles light theme should prioritize light prop over theme color when both available" time="0.002">
+    </testcase>
+    <testcase classname="useThemeColor Handles light theme should work with different color names in light theme" name="useThemeColor Handles light theme should work with different color names in light theme" time="0.003">
+    </testcase>
+    <testcase classname="useThemeColor Handles dark theme should use dark theme colors when theme is dark" name="useThemeColor Handles dark theme should use dark theme colors when theme is dark" time="0.001">
+    </testcase>
+    <testcase classname="useThemeColor Handles dark theme should prioritize dark prop over theme color when both available" name="useThemeColor Handles dark theme should prioritize dark prop over theme color when both available" time="0.001">
+    </testcase>
+    <testcase classname="useThemeColor Handles dark theme should work with different color names in dark theme" name="useThemeColor Handles dark theme should work with different color names in dark theme" time="0.006">
+    </testcase>
+    <testcase classname="useThemeColor Handles null color scheme should default to light theme when useColorScheme returns null" name="useThemeColor Handles null color scheme should default to light theme when useColorScheme returns null" time="0.007">
+    </testcase>
+    <testcase classname="useThemeColor Handles null color scheme should use light prop when useColorScheme returns null" name="useThemeColor Handles null color scheme should use light prop when useColorScheme returns null" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="Registration Flow E2E" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:11" time="4.668" tests="4">
+    <testcase classname="Registration Flow E2E should complete full registration workflow: form fill → API call → success → navigation to login" name="Registration Flow E2E should complete full registration workflow: form fill → API call → success → navigation to login" time="1.846">
+    </testcase>
+    <testcase classname="Registration Flow E2E should handle registration validation errors" name="Registration Flow E2E should handle registration validation errors" time="0.158">
+    </testcase>
+    <testcase classname="Registration Flow E2E should disable sign up button when form is invalid" name="Registration Flow E2E should disable sign up button when form is invalid" time="0.149">
+    </testcase>
+    <testcase classname="Registration Flow E2E should navigate to login screen when login link is pressed" name="Registration Flow E2E should navigate to login screen when login link is pressed" time="0.021">
+    </testcase>
+  </testsuite>
+  <testsuite name="CustomAlert" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:13" time="2.839" tests="9">
+    <testcase classname="CustomAlert renders when visible is true" name="CustomAlert renders when visible is true" time="1.731">
+    </testcase>
+    <testcase classname="CustomAlert does not render when visible is false" name="CustomAlert does not render when visible is false" time="0.005">
+    </testcase>
+    <testcase classname="CustomAlert displays title and message correctly" name="CustomAlert displays title and message correctly" time="0.012">
+    </testcase>
+    <testcase classname="CustomAlert calls onClose when cancel button is pressed" name="CustomAlert calls onClose when cancel button is pressed" time="0.031">
+    </testcase>
+    <testcase classname="CustomAlert calls onConfirm when confirm button is pressed" name="CustomAlert calls onConfirm when confirm button is pressed" time="0.01">
+    </testcase>
+    <testcase classname="CustomAlert displays custom confirm button text" name="CustomAlert displays custom confirm button text" time="0.029">
+    </testcase>
+    <testcase classname="CustomAlert renders both action buttons" name="CustomAlert renders both action buttons" time="0.017">
+    </testcase>
+    <testcase classname="CustomAlert cancel button does not call onConfirm" name="CustomAlert cancel button does not call onConfirm" time="0.017">
+    </testcase>
+    <testcase classname="CustomAlert confirm button does not call onClose" name="CustomAlert confirm button does not call onClose" time="0.013">
+    </testcase>
+  </testsuite>
+  <testsuite name="CustomInfoAlert" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:13" time="2.751" tests="7">
+    <testcase classname="CustomInfoAlert renders when visible is true" name="CustomInfoAlert renders when visible is true" time="2.031">
+    </testcase>
+    <testcase classname="CustomInfoAlert does not render when visible is false" name="CustomInfoAlert does not render when visible is false" time="0.006">
+    </testcase>
+    <testcase classname="CustomInfoAlert displays title correctly" name="CustomInfoAlert displays title correctly" time="0.006">
+    </testcase>
+    <testcase classname="CustomInfoAlert displays message correctly" name="CustomInfoAlert displays message correctly" time="0.007">
+    </testcase>
+    <testcase classname="CustomInfoAlert renders both title and message together" name="CustomInfoAlert renders both title and message together" time="0.006">
+    </testcase>
+    <testcase classname="CustomInfoAlert does not render action buttons" name="CustomInfoAlert does not render action buttons" time="0.005">
+    </testcase>
+    <testcase classname="CustomInfoAlert handles empty strings gracefully" name="CustomInfoAlert handles empty strings gracefully" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="PillButton" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:13" time="2.734" tests="7">
+    <testcase classname="PillButton renders text correctly" name="PillButton renders text correctly" time="1.719">
+    </testcase>
+    <testcase classname="PillButton applies custom backgroundColor" name="PillButton applies custom backgroundColor" time="0.015">
+    </testcase>
+    <testcase classname="PillButton applies custom borderColor" name="PillButton applies custom borderColor" time="0.007">
+    </testcase>
+    <testcase classname="PillButton applies custom textColor" name="PillButton applies custom textColor" time="0.01">
+    </testcase>
+    <testcase classname="PillButton calls onPress callback when pressed" name="PillButton calls onPress callback when pressed" time="0.007">
+    </testcase>
+    <testcase classname="PillButton prevents onPress when disabled" name="PillButton prevents onPress when disabled" time="0.006">
+    </testcase>
+    <testcase classname="PillButton applies default props correctly" name="PillButton applies default props correctly" time="0.007">
+    </testcase>
+  </testsuite>
+  <testsuite name="Challenge Join Flow E2E" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:11" time="4.927" tests="5">
+    <testcase classname="Challenge Join Flow E2E should load and display challenges list" name="Challenge Join Flow E2E should load and display challenges list" time="2.284">
+    </testcase>
+    <testcase classname="Challenge Join Flow E2E should navigate to challenge details when challenge is pressed" name="Challenge Join Flow E2E should navigate to challenge details when challenge is pressed" time="0.165">
+    </testcase>
+    <testcase classname="Challenge Join Flow E2E should handle challenge join workflow" name="Challenge Join Flow E2E should handle challenge join workflow" time="0.007">
+    </testcase>
+    <testcase classname="Challenge Join Flow E2E should handle error when joining challenge fails" name="Challenge Join Flow E2E should handle error when joining challenge fails" time="0.034">
+    </testcase>
+    <testcase classname="Challenge Join Flow E2E should filter challenges by status" name="Challenge Join Flow E2E should filter challenges by status" time="0.155">
+    </testcase>
+  </testsuite>
+  <testsuite name="getChallenges" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.326" tests="6">
+    <testcase classname="getChallenges should successfully fetch challenges" name="getChallenges should successfully fetch challenges" time="0.004">
+    </testcase>
+    <testcase classname="getChallenges should handle authentication errors" name="getChallenges should handle authentication errors" time="0.008">
+    </testcase>
+    <testcase classname="getChallenges should handle network errors" name="getChallenges should handle network errors" time="0.012">
+    </testcase>
+    <testcase classname="getChallenges should handle malformed JSON responses with ok status" name="getChallenges should handle malformed JSON responses with ok status" time="0.001">
+    </testcase>
+    <testcase classname="getChallenges should handle malformed JSON responses with error status" name="getChallenges should handle malformed JSON responses with error status" time="0.002">
+    </testcase>
+    <testcase classname="getChallenges should use authentication token via authenticatedFetch" name="getChallenges should use authentication token via authenticatedFetch" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="getChallengeById" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.326" tests="5">
+    <testcase classname="getChallengeById should successfully fetch challenge by ID" name="getChallengeById should successfully fetch challenge by ID" time="0.003">
+    </testcase>
+    <testcase classname="getChallengeById should handle invalid ID (404 error)" name="getChallengeById should handle invalid ID (404 error)" time="0.015">
+    </testcase>
+    <testcase classname="getChallengeById should handle authentication errors" name="getChallengeById should handle authentication errors" time="0.002">
+    </testcase>
+    <testcase classname="getChallengeById should handle malformed JSON responses with ok status" name="getChallengeById should handle malformed JSON responses with ok status" time="0.001">
+    </testcase>
+    <testcase classname="getChallengeById should handle malformed JSON responses with error status" name="getChallengeById should handle malformed JSON responses with error status" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="TokenManager" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.444" tests="29">
+    <testcase classname="TokenManager saveTokens should save tokens to SecureStore" name="TokenManager saveTokens should save tokens to SecureStore" time="0.003">
+    </testcase>
+    <testcase classname="TokenManager getAccessToken should retrieve access token from SecureStore" name="TokenManager getAccessToken should retrieve access token from SecureStore" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager getAccessToken should return null when no token exists" name="TokenManager getAccessToken should return null when no token exists" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager getRefreshToken should retrieve refresh token from SecureStore" name="TokenManager getRefreshToken should retrieve refresh token from SecureStore" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager getRefreshToken should return null when no token exists" name="TokenManager getRefreshToken should return null when no token exists" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager clearTokens should delete both tokens from SecureStore" name="TokenManager clearTokens should delete both tokens from SecureStore" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager hasValidTokens should return true when both tokens exist" name="TokenManager hasValidTokens should return true when both tokens exist" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager hasValidTokens should return false when access token is missing" name="TokenManager hasValidTokens should return false when access token is missing" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager hasValidTokens should return false when refresh token is missing" name="TokenManager hasValidTokens should return false when refresh token is missing" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager hasValidTokens should return false when both tokens are missing" name="TokenManager hasValidTokens should return false when both tokens are missing" time="0">
+    </testcase>
+    <testcase classname="TokenManager autoLogin should return false when no tokens exist" name="TokenManager autoLogin should return false when no tokens exist" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager autoLogin should return false when access token is missing" name="TokenManager autoLogin should return false when access token is missing" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager autoLogin should return false when refresh token is missing" name="TokenManager autoLogin should return false when refresh token is missing" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager autoLogin should return true on successful auto-login" name="TokenManager autoLogin should return true on successful auto-login" time="0.004">
+    </testcase>
+    <testcase classname="TokenManager autoLogin should return false on failed auto-login with invalid tokens" name="TokenManager autoLogin should return false on failed auto-login with invalid tokens" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager autoLogin should return false when API call throws error" name="TokenManager autoLogin should return false when API call throws error" time="0">
+    </testcase>
+    <testcase classname="TokenManager authenticatedFetch should make successful authenticated request" name="TokenManager authenticatedFetch should make successful authenticated request" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager authenticatedFetch should include custom headers in request" name="TokenManager authenticatedFetch should include custom headers in request" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager authenticatedFetch should throw error when no access token found" name="TokenManager authenticatedFetch should throw error when no access token found" time="0.02">
+    </testcase>
+    <testcase classname="TokenManager authenticatedFetch should refresh token on 401 error and retry request" name="TokenManager authenticatedFetch should refresh token on 401 error and retry request" time="0.003">
+    </testcase>
+    <testcase classname="TokenManager authenticatedFetch should handle concurrent requests during token refresh" name="TokenManager authenticatedFetch should handle concurrent requests during token refresh" time="0.002">
+    </testcase>
+    <testcase classname="TokenManager authenticatedFetch should throw error when refresh fails" name="TokenManager authenticatedFetch should throw error when refresh fails" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager authenticatedFetch should throw error when refresh returns no new token" name="TokenManager authenticatedFetch should throw error when refresh returns no new token" time="0.003">
+    </testcase>
+    <testcase classname="TokenManager refreshAccessToken should successfully refresh token" name="TokenManager refreshAccessToken should successfully refresh token" time="0.003">
+    </testcase>
+    <testcase classname="TokenManager refreshAccessToken should throw error when no refresh token exists" name="TokenManager refreshAccessToken should throw error when no refresh token exists" time="0.002">
+    </testcase>
+    <testcase classname="TokenManager refreshAccessToken should throw error when refresh request fails" name="TokenManager refreshAccessToken should throw error when refresh request fails" time="0.001">
+    </testcase>
+    <testcase classname="TokenManager refreshAccessToken should clear tokens on refresh failure" name="TokenManager refreshAccessToken should clear tokens on refresh failure" time="0.026">
+    </testcase>
+    <testcase classname="TokenManager refreshAccessToken should clear tokens when refresh returns error response" name="TokenManager refreshAccessToken should clear tokens when refresh returns error response" time="0.002">
+    </testcase>
+    <testcase classname="TokenManager refreshAccessToken should handle network errors during refresh" name="TokenManager refreshAccessToken should handle network errors during refresh" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="joinChallenge" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.338" tests="5">
+    <testcase classname="joinChallenge should successfully join a challenge" name="joinChallenge should successfully join a challenge" time="0.006">
+    </testcase>
+    <testcase classname="joinChallenge should handle already joined scenario" name="joinChallenge should handle already joined scenario" time="0.015">
+    </testcase>
+    <testcase classname="joinChallenge should handle permission errors" name="joinChallenge should handle permission errors" time="0.002">
+    </testcase>
+    <testcase classname="joinChallenge should handle challenge not found" name="joinChallenge should handle challenge not found" time="0.002">
+    </testcase>
+    <testcase classname="joinChallenge should handle network errors" name="joinChallenge should handle network errors" time="0.01">
+    </testcase>
+  </testsuite>
+  <testsuite name="getChallengeStatus" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.336" tests="8">
+    <testcase classname="getChallengeStatus should return &quot;upcoming&quot; for future challenges" name="getChallengeStatus should return &quot;upcoming&quot; for future challenges" time="0.003">
+    </testcase>
+    <testcase classname="getChallengeStatus should return &quot;active&quot; for ongoing challenges" name="getChallengeStatus should return &quot;active&quot; for ongoing challenges" time="0.001">
+    </testcase>
+    <testcase classname="getChallengeStatus should return &quot;past&quot; for ended challenges" name="getChallengeStatus should return &quot;past&quot; for ended challenges" time="0.001">
+    </testcase>
+    <testcase classname="getChallengeStatus should return &quot;active&quot; when reference date is same as start date" name="getChallengeStatus should return &quot;active&quot; when reference date is same as start date" time="0.001">
+    </testcase>
+    <testcase classname="getChallengeStatus should return &quot;active&quot; when reference date is same as end date" name="getChallengeStatus should return &quot;active&quot; when reference date is same as end date" time="0.01">
+    </testcase>
+    <testcase classname="getChallengeStatus should return &quot;past&quot; when reference date is after end date" name="getChallengeStatus should return &quot;past&quot; when reference date is after end date" time="0.001">
+    </testcase>
+    <testcase classname="getChallengeStatus should use current date when no reference date is provided" name="getChallengeStatus should use current date when no reference date is provided" time="0.001">
+    </testcase>
+    <testcase classname="getChallengeStatus should handle single day challenges correctly" name="getChallengeStatus should handle single day challenges correctly" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="useColors" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.412" tests="8">
+    <testcase classname="useColors returns light colors by default" name="useColors returns light colors by default" time="0.007">
+    </testcase>
+    <testcase classname="useColors returns dark colors when isDark is true" name="useColors returns dark colors when isDark is true" time="0.01">
+    </testcase>
+    <testcase classname="useColors returns colorBlind colors when isColorBlind is true" name="useColors returns colorBlind colors when isColorBlind is true" time="0.002">
+    </testcase>
+    <testcase classname="useColors returns colorBlind colors when theme is colorBlind" name="useColors returns colorBlind colors when theme is colorBlind" time="0.006">
+    </testcase>
+    <testcase classname="useColors prioritizes isColorBlind over isDark" name="useColors prioritizes isColorBlind over isDark" time="0.002">
+    </testcase>
+    <testcase classname="useColors returns all expected color properties" name="useColors returns all expected color properties" time="0.006">
+    </testcase>
+    <testcase classname="useColors returns different text colors for light and dark themes" name="useColors returns different text colors for light and dark themes" time="0.002">
+    </testcase>
+    <testcase classname="useColors returns consistent colors for the same theme" name="useColors returns consistent colors for the same theme" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="leaveChallenge" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.322" tests="6">
+    <testcase classname="leaveChallenge should successfully leave a challenge" name="leaveChallenge should successfully leave a challenge" time="0.003">
+    </testcase>
+    <testcase classname="leaveChallenge should handle not participating scenario" name="leaveChallenge should handle not participating scenario" time="0.007">
+    </testcase>
+    <testcase classname="leaveChallenge should handle challenge not found" name="leaveChallenge should handle challenge not found" time="0.002">
+    </testcase>
+    <testcase classname="leaveChallenge should handle authentication errors" name="leaveChallenge should handle authentication errors" time="0.001">
+    </testcase>
+    <testcase classname="leaveChallenge should handle network errors" name="leaveChallenge should handle network errors" time="0.007">
+    </testcase>
+    <testcase classname="leaveChallenge should handle empty response body (204 No Content)" name="leaveChallenge should handle empty response body (204 No Content)" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="SplashScreenController" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.578" tests="2">
+    <testcase classname="SplashScreenController should hide splash when not loading" name="SplashScreenController should hide splash when not loading" time="0.184">
+    </testcase>
+    <testcase classname="SplashScreenController should not hide splash when loading" name="SplashScreenController should not hide splash when loading" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="IconSymbol" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:13" time="3.286" tests="10">
+    <testcase classname="IconSymbol renders with house.fill mapping" name="IconSymbol renders with house.fill mapping" time="1.553">
+    </testcase>
+    <testcase classname="IconSymbol renders with paperplane.fill mapping" name="IconSymbol renders with paperplane.fill mapping" time="0.004">
+    </testcase>
+    <testcase classname="IconSymbol renders with chevron.left.forwardslash.chevron.right mapping" name="IconSymbol renders with chevron.left.forwardslash.chevron.right mapping" time="0.002">
+    </testcase>
+    <testcase classname="IconSymbol renders with chevron.right mapping" name="IconSymbol renders with chevron.right mapping" time="0.002">
+    </testcase>
+    <testcase classname="IconSymbol applies size prop correctly" name="IconSymbol applies size prop correctly" time="0.002">
+    </testcase>
+    <testcase classname="IconSymbol applies color prop correctly" name="IconSymbol applies color prop correctly" time="0.001">
+    </testcase>
+    <testcase classname="IconSymbol uses default size when not specified" name="IconSymbol uses default size when not specified" time="0.002">
+    </testcase>
+    <testcase classname="IconSymbol applies style prop when provided" name="IconSymbol applies style prop when provided" time="0.002">
+    </testcase>
+    <testcase classname="IconSymbol handles different color formats" name="IconSymbol handles different color formats" time="0.003">
+    </testcase>
+    <testcase classname="IconSymbol renders multiple icons with different sizes" name="IconSymbol renders multiple icons with different sizes" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="useStorageState" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:15" time="0.973" tests="16">
+    <testcase classname="useStorageState setStorageItemAsync Native Platform should set item in SecureStore when value is provided" name="useStorageState setStorageItemAsync Native Platform should set item in SecureStore when value is provided" time="0.003">
+    </testcase>
+    <testcase classname="useStorageState setStorageItemAsync Native Platform should delete item from SecureStore when value is null" name="useStorageState setStorageItemAsync Native Platform should delete item from SecureStore when value is null" time="0.003">
+    </testcase>
+    <testcase classname="useStorageState setStorageItemAsync Native Platform should handle SecureStore errors" name="useStorageState setStorageItemAsync Native Platform should handle SecureStore errors" time="0.024">
+    </testcase>
+    <testcase classname="useStorageState setStorageItemAsync Web Platform should set item in localStorage when value is provided" name="useStorageState setStorageItemAsync Web Platform should set item in localStorage when value is provided" time="0.003">
+    </testcase>
+    <testcase classname="useStorageState setStorageItemAsync Web Platform should remove item from localStorage when value is null" name="useStorageState setStorageItemAsync Web Platform should remove item from localStorage when value is null" time="0.002">
+    </testcase>
+    <testcase classname="useStorageState setStorageItemAsync Web Platform should handle localStorage errors" name="useStorageState setStorageItemAsync Web Platform should handle localStorage errors" time="0.001">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Native Platform should load value from SecureStore on mount" name="useStorageState useStorageState Native Platform should load value from SecureStore on mount" time="0.066">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Native Platform should return null when no value exists in SecureStore" name="useStorageState useStorageState Native Platform should return null when no value exists in SecureStore" time="0.062">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Native Platform should update state and storage when setValue is called" name="useStorageState useStorageState Native Platform should update state and storage when setValue is called" time="0.066">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Native Platform should delete from storage when setValue is called with null" name="useStorageState useStorageState Native Platform should delete from storage when setValue is called with null" time="0.06">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Native Platform should reload when key changes" name="useStorageState useStorageState Native Platform should reload when key changes" time="0.125">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Web Platform should load value from localStorage on mount" name="useStorageState useStorageState Web Platform should load value from localStorage on mount" time="0.005">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Web Platform should return null when no value exists in localStorage" name="useStorageState useStorageState Web Platform should return null when no value exists in localStorage" time="0.009">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Web Platform should update state and storage when setValue is called" name="useStorageState useStorageState Web Platform should update state and storage when setValue is called" time="0.004">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Web Platform should handle localStorage errors" name="useStorageState useStorageState Web Platform should handle localStorage errors" time="0.056">
+    </testcase>
+    <testcase classname="useStorageState useStorageState Web Platform should handle undefined localStorage" name="useStorageState useStorageState Web Platform should handle undefined localStorage" time="0.063">
+    </testcase>
+  </testsuite>
+  <testsuite name="Waste Log Flow E2E" errors="0" failures="1" skipped="0" timestamp="2025-12-20T10:47:11" time="5.332" tests="4">
+    <testcase classname="Waste Log Flow E2E should load subcategories on screen mount" name="Waste Log Flow E2E should load subcategories on screen mount" time="0.843">
+      <failure>Error: You are passing an undefined module! Please check the object you are passing to i18next.use()
+    at I18n.use (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\i18next\dist\cjs\i18next.js:1909:24)
+    at use (C:\T2\bounswe2025group3\practice-app\mobile\i18n\index.ts:61:18)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\T2\bounswe2025group3\practice-app\mobile\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="Waste Log Flow E2E should complete full waste log creation workflow" name="Waste Log Flow E2E should complete full waste log creation workflow" time="0.139">
+    </testcase>
+    <testcase classname="Waste Log Flow E2E should handle validation errors when creating waste log" name="Waste Log Flow E2E should handle validation errors when creating waste log" time="0.009">
+    </testcase>
+    <testcase classname="Waste Log Flow E2E should navigate back when back button is pressed" name="Waste Log Flow E2E should navigate back when back button is pressed" time="0.008">
+    </testcase>
+  </testsuite>
+  <testsuite name="ThemeContext" errors="0" failures="0" skipped="0" timestamp="2025-12-20T10:47:11" time="5.492" tests="23">
+    <testcase classname="ThemeContext ThemeProvider should load saved theme on mount" name="ThemeContext ThemeProvider should load saved theme on mount" time="0.116">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should load color blind preference on mount" name="ThemeContext ThemeProvider should load color blind preference on mount" time="0.06">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should load both theme and color blind preference" name="ThemeContext ThemeProvider should load both theme and color blind preference" time="0.058">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should use default values when no saved preferences exist" name="ThemeContext ThemeProvider should use default values when no saved preferences exist" time="0.064">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should calculate isDark correctly for system theme when system is dark" name="ThemeContext ThemeProvider should calculate isDark correctly for system theme when system is dark" time="0.066">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should calculate isDark correctly for system theme when system is light" name="ThemeContext ThemeProvider should calculate isDark correctly for system theme when system is light" time="0.059">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should calculate isDark correctly for dark theme" name="ThemeContext ThemeProvider should calculate isDark correctly for dark theme" time="0.064">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should calculate isDark correctly for light theme" name="ThemeContext ThemeProvider should calculate isDark correctly for light theme" time="0.061">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should calculate isDark correctly for colorBlind theme" name="ThemeContext ThemeProvider should calculate isDark correctly for colorBlind theme" time="0.061">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should handle error when loading theme" name="ThemeContext ThemeProvider should handle error when loading theme" time="0.064">
+    </testcase>
+    <testcase classname="ThemeContext ThemeProvider should return null while loading" name="ThemeContext ThemeProvider should return null while loading" time="1.951">
+    </testcase>
+    <testcase classname="ThemeContext setTheme should save theme to AsyncStorage" name="ThemeContext setTheme should save theme to AsyncStorage" time="0.07">
+    </testcase>
+    <testcase classname="ThemeContext setTheme should update theme state" name="ThemeContext setTheme should update theme state" time="0.069">
+    </testcase>
+    <testcase classname="ThemeContext setTheme should handle all theme modes" name="ThemeContext setTheme should handle all theme modes" time="0.073">
+    </testcase>
+    <testcase classname="ThemeContext setTheme should handle error when saving theme" name="ThemeContext setTheme should handle error when saving theme" time="0.063">
+    </testcase>
+    <testcase classname="ThemeContext setIsColorBlind should save preference to AsyncStorage when enabled" name="ThemeContext setIsColorBlind should save preference to AsyncStorage when enabled" time="0.063">
+    </testcase>
+    <testcase classname="ThemeContext setIsColorBlind should save preference to AsyncStorage when disabled" name="ThemeContext setIsColorBlind should save preference to AsyncStorage when disabled" time="0.06">
+    </testcase>
+    <testcase classname="ThemeContext setIsColorBlind should update state when enabled" name="ThemeContext setIsColorBlind should update state when enabled" time="0.063">
+    </testcase>
+    <testcase classname="ThemeContext setIsColorBlind should update state when disabled" name="ThemeContext setIsColorBlind should update state when disabled" time="0.062">
+    </testcase>
+    <testcase classname="ThemeContext setIsColorBlind should handle error when saving color blind preference" name="ThemeContext setIsColorBlind should handle error when saving color blind preference" time="0.063">
+    </testcase>
+    <testcase classname="ThemeContext useTheme should return theme context" name="ThemeContext useTheme should return theme context" time="0.065">
+    </testcase>
+    <testcase classname="ThemeContext useTheme should throw error when used outside provider" name="ThemeContext useTheme should throw error when used outside provider" time="0.049">
+    </testcase>
+    <testcase classname="ThemeContext useTheme should return correct initial values" name="ThemeContext useTheme should return correct initial values" time="0.061">
+    </testcase>
+  </testsuite>
+</testsuites>
