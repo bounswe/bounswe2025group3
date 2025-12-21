@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="59" failures="7" errors="0" time="3.887">
+  <testsuite name="TermsPage Component" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:31" time="1.022" tests="1">
+    <testcase classname="TermsPage Component renders terms and conditions content" name="TermsPage Component renders terms and conditions content" time="0.216">
+    </testcase>
+  </testsuite>
+  <testsuite name="LoginPage" errors="0" failures="2" skipped="0" timestamp="2025-12-21T10:12:31" time="1.09" tests="2">
+    <testcase classname="LoginPage renders login form and submits credentials" name="LoginPage renders login form and submits credentials" time="0.059">
+      <failure>Error: Google OAuth components must be used within GoogleOAuthProvider
+    at useGoogleOAuth (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@react-oauth/google/dist/index.js:59:15)
+    at GoogleLogin (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@react-oauth/google/dist/index.js:73:52)
+    at Object.react_stack_bottom_frame (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:25904:20)
+    at renderWithHooks (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:7662:22)
+    at updateFunctionComponent (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:10166:19)
+    at beginWork (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:11778:18)
+    at runWithFiberInDEV (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+    at performUnitOfWork (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:17641:22)
+    at workLoopSync (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:17469:41)
+    at renderRootSync (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:17450:11)
+    at performWorkOnRoot (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:16583:35)
+    at performWorkOnRootViaSchedulerTask (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:18957:7)
+    at flushActQueue (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react/cjs/react.development.js:590:34)
+    at Object.&lt;anonymous&gt;.process.env.NODE_ENV.exports.act (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react/cjs/react.development.js:884:10)
+    at /Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at renderRoot (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+    at render (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+    at renderWithRouter (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/src/components/auth/LoginPage.test.js:19:42)
+    at Object.&lt;anonymous&gt; (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/src/components/auth/LoginPage.test.js:38:5)
+    at Promise.then.completed (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at _runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+    at jestAdapter (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+    <testcase classname="LoginPage displays error on failed login" name="LoginPage displays error on failed login" time="0.016">
+      <failure>Error: Google OAuth components must be used within GoogleOAuthProvider
+    at useGoogleOAuth (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@react-oauth/google/dist/index.js:59:15)
+    at GoogleLogin (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@react-oauth/google/dist/index.js:73:52)
+    at Object.react_stack_bottom_frame (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:25904:20)
+    at renderWithHooks (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:7662:22)
+    at updateFunctionComponent (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:10166:19)
+    at beginWork (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:11778:18)
+    at runWithFiberInDEV (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+    at performUnitOfWork (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:17641:22)
+    at workLoopSync (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:17469:41)
+    at renderRootSync (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:17450:11)
+    at performWorkOnRoot (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:16583:35)
+    at performWorkOnRootViaSchedulerTask (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react-dom/cjs/react-dom-client.development.js:18957:7)
+    at flushActQueue (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react/cjs/react.development.js:590:34)
+    at Object.&lt;anonymous&gt;.process.env.NODE_ENV.exports.act (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/react/cjs/react.development.js:884:10)
+    at /Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/react/dist/act-compat.js:47:25
+    at renderRoot (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/react/dist/pure.js:190:26)
+    at render (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/react/dist/pure.js:292:10)
+    at renderWithRouter (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/src/components/auth/LoginPage.test.js:19:42)
+    at Object.&lt;anonymous&gt; (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/src/components/auth/LoginPage.test.js:78:5)
+    at Promise.then.completed (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at _runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+    at jestAdapter (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="AboutUsPage Component" errors="0" failures="1" skipped="0" timestamp="2025-12-21T10:12:31" time="1.115" tests="3">
+    <testcase classname="AboutUsPage Component renders all static sections and headings correctly" name="AboutUsPage Component renders all static sections and headings correctly" time="0.174">
+    </testcase>
+    <testcase classname="AboutUsPage Component renders the core values from the i18next mock" name="AboutUsPage Component renders the core values from the i18next mock" time="0.005">
+    </testcase>
+    <testcase classname="AboutUsPage Component renders all hardcoded team members" name="AboutUsPage Component renders all hardcoded team members" time="0.005">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 11
+Received: 10
+    at Object.&lt;anonymous&gt; (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/src/tests/AboutUs.test.js:123:32)
+    at Promise.then.completed (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at _runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+    at jestAdapter (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="PersonalStats E2E Tests" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:32" time="0.04" tests="6">
+    <testcase classname="PersonalStats E2E Tests PersonalStats component exists" name="PersonalStats E2E Tests PersonalStats component exists" time="0.001">
+    </testcase>
+    <testcase classname="PersonalStats E2E Tests Stats dashboard requires authentication" name="PersonalStats E2E Tests Stats dashboard requires authentication" time="0">
+    </testcase>
+    <testcase classname="PersonalStats E2E Tests Timeframe filters are available" name="PersonalStats E2E Tests Timeframe filters are available" time="0">
+    </testcase>
+    <testcase classname="PersonalStats E2E Tests Stats data can be aggregated" name="PersonalStats E2E Tests Stats data can be aggregated" time="0">
+    </testcase>
+    <testcase classname="PersonalStats E2E Tests Category mapping works correctly" name="PersonalStats E2E Tests Category mapping works correctly" time="0.001">
+    </testcase>
+    <testcase classname="PersonalStats E2E Tests Error handling displays user feedback" name="PersonalStats E2E Tests Error handling displays user feedback" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="ResetPasswordPage Component" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:31" time="1.176" tests="4">
+    <testcase classname="ResetPasswordPage Component renders form fields" name="ResetPasswordPage Component renders form fields" time="0.06">
+    </testcase>
+    <testcase classname="ResetPasswordPage Component validates password mismatch" name="ResetPasswordPage Component validates password mismatch" time="0.039">
+    </testcase>
+    <testcase classname="ResetPasswordPage Component validates short password" name="ResetPasswordPage Component validates short password" time="0.027">
+    </testcase>
+    <testcase classname="ResetPasswordPage Component submits new password successfully" name="ResetPasswordPage Component submits new password successfully" time="0.053">
+    </testcase>
+  </testsuite>
+  <testsuite name="WasteLog Component - Minimal Render Test" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:31" time="1.193" tests="1">
+    <testcase classname="WasteLog Component - Minimal Render Test renders without crashing" name="WasteLog Component - Minimal Render Test renders without crashing" time="0.113">
+    </testcase>
+  </testsuite>
+  <testsuite name="UI/UX Tests" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:32" time="0.145" tests="7">
+    <testcase classname="UI/UX Tests Navigation should be accessible and functional" name="UI/UX Tests Navigation should be accessible and functional" time="0.012">
+    </testcase>
+    <testcase classname="UI/UX Tests Form inputs should have proper labels and validation" name="UI/UX Tests Form inputs should have proper labels and validation" time="0.012">
+    </testcase>
+    <testcase classname="UI/UX Tests Responsive design should adapt to different screen sizes" name="UI/UX Tests Responsive design should adapt to different screen sizes" time="0.004">
+    </testcase>
+    <testcase classname="UI/UX Tests Charts should render with proper dimensions and data" name="UI/UX Tests Charts should render with proper dimensions and data" time="0.001">
+    </testcase>
+    <testcase classname="UI/UX Tests Loading states should provide user feedback" name="UI/UX Tests Loading states should provide user feedback" time="0.001">
+    </testcase>
+    <testcase classname="UI/UX Tests Error messages should be clear and actionable" name="UI/UX Tests Error messages should be clear and actionable" time="0.003">
+    </testcase>
+    <testcase classname="UI/UX Tests Color contrast should meet accessibility standards" name="UI/UX Tests Color contrast should meet accessibility standards" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="Home Component" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:32" time="0.219" tests="4">
+    <testcase classname="Home Component renders home page sections correctly" name="Home Component renders home page sections correctly" time="0.058">
+    </testcase>
+    <testcase classname="Home Component rotates through eco-tips with useEffect interval" name="Home Component rotates through eco-tips with useEffect interval" time="0.017">
+    </testcase>
+    <testcase classname="Home Component hero buttons are clickable and navigate correctly" name="Home Component hero buttons are clickable and navigate correctly" time="0.053">
+    </testcase>
+    <testcase classname="Home Component renders InfoBox component" name="Home Component renders InfoBox component" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="BlogPage Component" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:32" time="0.149" tests="2">
+    <testcase classname="BlogPage Component renders page header" name="BlogPage Component renders page header" time="0.03">
+    </testcase>
+    <testcase classname="BlogPage Component renders blog post list correctly" name="BlogPage Component renders blog post list correctly" time="0.007">
+    </testcase>
+  </testsuite>
+  <testsuite name="ForgotPasswordPage Component" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:32" time="0.192" tests="2">
+    <testcase classname="ForgotPasswordPage Component validates empty email" name="ForgotPasswordPage Component validates empty email" time="0.05">
+    </testcase>
+    <testcase classname="ForgotPasswordPage Component sends reset link successfully" name="ForgotPasswordPage Component sends reset link successfully" time="0.021">
+    </testcase>
+  </testsuite>
+  <testsuite name="GithubCallback Component" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:32" time="0.102" tests="3">
+    <testcase classname="GithubCallback Component displays error if no code provided in URL" name="GithubCallback Component displays error if no code provided in URL" time="0.003">
+    </testcase>
+    <testcase classname="GithubCallback Component exchanges code for token successfully" name="GithubCallback Component exchanges code for token successfully" time="0.005">
+    </testcase>
+    <testcase classname="GithubCallback Component handles API failure during exchange" name="GithubCallback Component handles API failure during exchange" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="Integration Tests" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:32" time="0.217" tests="6">
+    <testcase classname="Integration Tests User authentication flow should work end-to-end" name="Integration Tests User authentication flow should work end-to-end" time="0.044">
+    </testcase>
+    <testcase classname="Integration Tests Data fetching and display should work correctly" name="Integration Tests Data fetching and display should work correctly" time="0.001">
+    </testcase>
+    <testcase classname="Integration Tests API error handling should display error messages" name="Integration Tests API error handling should display error messages" time="0.002">
+    </testcase>
+    <testcase classname="Integration Tests Multiple component interactions should work together" name="Integration Tests Multiple component interactions should work together" time="0.012">
+    </testcase>
+    <testcase classname="Integration Tests Pagination should work correctly" name="Integration Tests Pagination should work correctly" time="0.021">
+    </testcase>
+    <testcase classname="Integration Tests State management across components" name="Integration Tests State management across components" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="Header Component" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:32" time="0.099" tests="4">
+    <testcase classname="Header Component renders logo and app name" name="Header Component renders logo and app name" time="0.029">
+    </testcase>
+    <testcase classname="Header Component renders navigation links" name="Header Component renders navigation links" time="0.013">
+    </testcase>
+    <testcase classname="Header Component toggles language on click" name="Header Component toggles language on click" time="0.011">
+    </testcase>
+    <testcase classname="Header Component renders theme switcher" name="Header Component renders theme switcher" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="Profile Page Component" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:31" time="1.466" tests="3">
+    <testcase classname="Profile Page Component renders loading state, then populates form on successful fetch" name="Profile Page Component renders loading state, then populates form on successful fetch" time="0.132">
+    </testcase>
+    <testcase classname="Profile Page Component handles form input changes" name="Profile Page Component handles form input changes" time="0.032">
+    </testcase>
+    <testcase classname="Profile Page Component displays error message on failed initial fetch" name="Profile Page Component displays error message on failed initial fetch" time="0.02">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2025-12-21T10:12:31" time="1.819" tests="2">
+    <testcase classname=" renders app without crashing" name=" renders app without crashing" time="0.049">
+    </testcase>
+    <testcase classname=" app contains main content" name=" app contains main content" time="0.008">
+    </testcase>
+  </testsuite>
+  <testsuite name="InfoBox Component" errors="0" failures="2" skipped="0" timestamp="2025-12-21T10:12:31" time="1.976" tests="3">
+    <testcase classname="InfoBox Component renders loading state initially" name="InfoBox Component renders loading state initially" time="0.057">
+      <failure>TestingLibraryElementError: Unable to find an element with the text: Loading recycling.... This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;div
+      class=&quot;info-box&quot;
+    &gt;
+      &lt;h3&gt;
+        ♻️ 
+        home.info_box.recycling_title
+      &lt;/h3&gt;
+      &lt;p&gt;
+        home.info_box.loading
+      &lt;/p&gt;
+      &lt;h3&gt;
+        🧭 
+        home.info_box.sustainable_title
+      &lt;/h3&gt;
+      &lt;p&gt;
+        home.info_box.loading
+      &lt;/p&gt;
+      &lt;h3&gt;
+        🔄 
+        home.info_box.circular_title
+      &lt;/h3&gt;
+      &lt;p&gt;
+        home.info_box.loading
+      &lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+    at Object.getElementError (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/config.js:37:19)
+    at /Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+    at /Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+    at getByText (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+    at Object.&lt;anonymous&gt; (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/src/tests/InfoBox.test.js:24:19)
+    at Promise.then.completed (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at _runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+    at jestAdapter (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+    <testcase classname="InfoBox Component renders fetched descriptions successfully" name="InfoBox Component renders fetched descriptions successfully" time="0.011">
+    </testcase>
+    <testcase classname="InfoBox Component renders error messages on fetch failure" name="InfoBox Component renders error messages on fetch failure" time="1.004">
+      <failure>Error: Unable to find an element with the text: Failed to load recycling description.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;div
+      class=&quot;info-box&quot;
+    &gt;
+      &lt;h3&gt;
+        ♻️ 
+        home.info_box.recycling_title
+      &lt;/h3&gt;
+      &lt;p&gt;
+        home.info_box.error
+      &lt;/p&gt;
+      &lt;h3&gt;
+        🧭 
+        home.info_box.sustainable_title
+      &lt;/h3&gt;
+      &lt;p&gt;
+        home.info_box.error
+      &lt;/p&gt;
+      &lt;h3&gt;
+        🔄 
+        home.info_box.circular_title
+      &lt;/h3&gt;
+      &lt;p&gt;
+        home.info_box.error
+      &lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+    at waitForWrapper (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+    at Object.&lt;anonymous&gt; (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/src/tests/InfoBox.test.js:52:18)
+    at Promise.then.completed (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:218:40)
+    at _runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/run.js:25:3)
+    at runAndTransformResultsToJestFormat (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:170:21)
+    at jestAdapter (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:82:19)
+    at runTestInternal (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:389:16)
+    at runTest (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/runTest.js:475:34)
+    at Object.worker (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jest-runner/build/testWorker.js:133:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="LoginPage Component" errors="0" failures="2" skipped="0" timestamp="2025-12-21T10:12:31" time="3.247" tests="6">
+    <testcase classname="LoginPage Component renders login form elements correctly" name="LoginPage Component renders login form elements correctly" time="0.123">
+    </testcase>
+    <testcase classname="LoginPage Component handles successful login on form submit" name="LoginPage Component handles successful login on form submit" time="1.042">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+- &quot;http://localhost:8000/api/token/&quot;,
++ &quot;http://127.0.0.1:8000/api/token/&quot;,
+  {&quot;email&quot;: &quot;test@example.com&quot;, &quot;password&quot;: &quot;password123&quot;},
+
+Number of calls: 1
+
+Ignored nodes: comments, script, style
+&lt;html&gt;
+  &lt;head /&gt;
+  &lt;body&gt;
+    &lt;div&gt;
+      &lt;div
+        class=&quot;login-page-scoped login-page&quot;
+      &gt;
+        &lt;div
+          data-testid=&quot;mock-header&quot;
+        &gt;
+          Mocked Header
+        &lt;/div&gt;
+        &lt;div
+          class=&quot;login-container&quot;
+        &gt;
+          &lt;div
+            class=&quot;main-content&quot;
+          &gt;
+            &lt;div
+              class=&quot;form-section&quot;
+            &gt;
+              &lt;h1
+                class=&quot;main-heading&quot;
+              &gt;
+                login.title_line1
+                &lt;br /&gt;
+                login.title_line2
+              &lt;/h1&gt;
+              &lt;p
+                class=&quot;welcome-text&quot;
+              &gt;
+                login.welcome
+              &lt;/p&gt;
+              &lt;form&gt;
+                &lt;div
+                  class=&quot;email-section&quot;
+                &gt;
+                  &lt;div
+                    class=&quot;section-indicator&quot;
+                  &gt;
+                    &lt;div
+                      class=&quot;indicator-dot&quot;
+                    /&gt;
+                    &lt;span&gt;
+                      login.email_section_title
+                    &lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div
+                    class=&quot;input-box&quot;
+                  &gt;
+                    &lt;label
+                      for=&quot;email&quot;
+                    &gt;
+                      login.email_label
+                    &lt;/label&gt;
+                    &lt;input
+                      id=&quot;email&quot;
+                      placeholder=&quot;test@example.com&quot;
+                      required=&quot;&quot;
+                      type=&quot;email&quot;
+                      value=&quot;test@example.com&quot;
+                    /&gt;
+                  &lt;/div&gt;
+                  &lt;div
+                    class=&quot;input-box&quot;
+                  &gt;
+                    &lt;label
+                      for=&quot;password&quot;
+                    &gt;
+                      login.password_label
+                    &lt;/label&gt;
+                    &lt;input
+                      id=&quot;password&quot;
+                      placeholder=&quot;***************&quot;
+                      required=&quot;&quot;
+                      type=&quot;password&quot;
+                      value=&quot;password123&quot;
+                    /&gt;
+                  &lt;/div&gt;
+                  &lt;div
+                    class=&quot;options&quot;
+                  &gt;
+                    &lt;label
+                      class=&quot;remember-me&quot;
+                    &gt;
+                      &lt;input
+                        type=&quot;checkbox&quot;
+                      /&gt;
+                      &lt;span&gt;
+                        login.remember_me
+                      &lt;/span&gt;
+                    &lt;/label&gt;
+                    &lt;a
+                      href=&quot;/forgot-password&quot;
+                    &gt;
+                      login.forgot_password
+                    &lt;/a&gt;
+                  &lt;/div&gt;
+                  &lt;div
+                    class=&quot;action-buttons&quot;
+                  &gt;
+                    &lt;button
+                      class=&quot;login-btn&quot;
+                      type=&quot;submit&quot;
+                    &gt;
+                      login.login_button
+                    &lt;/button&gt;
+                    &lt;button
+                      class=&quot;signup-btn&quot;
+                      type=&quot;button&quot;
+                    &gt;
+                      login.signup_button
+                    &lt;/button&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div
+                  class=&quot;social-section&quot;
+                &gt;
+                  &lt;p
+                    class=&quot;or-login&quot;
+                  &gt;
+                    login.social_login_prompt
+                  &lt;/p&gt;
+                  &lt;div
+                    class=&quot;social-options&quot;
+                  &gt;
+                    &lt;button
+                      class=&quot;social-button github&quot;
+                      type=&quot;button&quot;
+                    &gt;
+                      &lt;i
+                        class=&quot;social-icon github-icon&quot;
+                      /&gt;
+                      &lt;span&gt;
+                        login.github_button
+                      &lt;/span&gt;
+                    &lt;/button&gt;
+                    &lt;button
+                      class=&quot;social-button linkedin&quot;
+                      type=&quot;button&quot;
+                    &gt;
+                      &lt;i
+                        class=&quot;social-icon linkedin-icon&quot;
+                      /&gt;
+                      &lt;span&gt;
+                        login.linkedin_button
+                      &lt;/span&gt;
+                    &lt;/button&gt;
+                    &lt;div
+                      class=&quot;social-button google&quot;
+                    &gt;
+                      &lt;button
+                        data-testid=&quot;mock-google-login&quot;
+                      &gt;
+                        Mock Google Login
+                      &lt;/button&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/form&gt;
+            &lt;/div&gt;
+            &lt;div
+              class=&quot;image-section&quot;
+            &gt;
+              &lt;img
+                alt=&quot;Recycling bin character&quot;
+                src=&quot;/wasteimage.png&quot;
+              /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+    at /Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/src/tests/LoginPage.test.js:156:26
+    at runWithExpensiveErrorDiagnosticsDisabled (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/config.js:47:12)
+    at checkCallback (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/wait-for.js:124:77)
+    at checkRealTimersCallback (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/wait-for.js:118:16)
+    at Timeout.task [as _onTimeout] (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jsdom/lib/jsdom/browser/Window.js:516:19)
+    at listOnTimeout (node:internal/timers:605:17)
+    at processTimers (node:internal/timers:541:7)</failure>
+    </testcase>
+    <testcase classname="LoginPage Component displays error message on failed login" name="LoginPage Component displays error message on failed login" time="0.026">
+    </testcase>
+    <testcase classname="LoginPage Component shows client-side validation error if fields are empty" name="LoginPage Component shows client-side validation error if fields are empty" time="0.013">
+    </testcase>
+    <testcase classname="LoginPage Component changes image source when themeChanged event is dispatched" name="LoginPage Component changes image source when themeChanged event is dispatched" time="0.008">
+    </testcase>
+    <testcase classname="LoginPage Component handles successful Google login" name="LoginPage Component handles successful Google login" time="1.01">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+- &quot;http://localhost:8000/api/auth/google/&quot;,
++ &quot;http://127.0.0.1:8000/api/auth/google/&quot;,
+  {&quot;id_token&quot;: &quot;mocked_google_credential&quot;},
+
+Number of calls: 1
+
+Ignored nodes: comments, script, style
+&lt;html&gt;
+  &lt;head /&gt;
+  &lt;body&gt;
+    &lt;div&gt;
+      &lt;div
+        class=&quot;login-page-scoped login-page&quot;
+      &gt;
+        &lt;div
+          data-testid=&quot;mock-header&quot;
+        &gt;
+          Mocked Header
+        &lt;/div&gt;
+        &lt;div
+          class=&quot;login-container&quot;
+        &gt;
+          &lt;div
+            class=&quot;main-content&quot;
+          &gt;
+            &lt;div
+              class=&quot;form-section&quot;
+            &gt;
+              &lt;h1
+                class=&quot;main-heading&quot;
+              &gt;
+                login.title_line1
+                &lt;br /&gt;
+                login.title_line2
+              &lt;/h1&gt;
+              &lt;p
+                class=&quot;welcome-text&quot;
+              &gt;
+                login.welcome
+              &lt;/p&gt;
+              &lt;form&gt;
+                &lt;div
+                  class=&quot;email-section&quot;
+                &gt;
+                  &lt;div
+                    class=&quot;section-indicator&quot;
+                  &gt;
+                    &lt;div
+                      class=&quot;indicator-dot&quot;
+                    /&gt;
+                    &lt;span&gt;
+                      login.email_section_title
+                    &lt;/span&gt;
+                  &lt;/div&gt;
+                  &lt;div
+                    class=&quot;input-box&quot;
+                  &gt;
+                    &lt;label
+                      for=&quot;email&quot;
+                    &gt;
+                      login.email_label
+                    &lt;/label&gt;
+                    &lt;input
+                      id=&quot;email&quot;
+                      placeholder=&quot;test@example.com&quot;
+                      required=&quot;&quot;
+                      type=&quot;email&quot;
+                      value=&quot;&quot;
+                    /&gt;
+                  &lt;/div&gt;
+                  &lt;div
+                    class=&quot;input-box&quot;
+                  &gt;
+                    &lt;label
+                      for=&quot;password&quot;
+                    &gt;
+                      login.password_label
+                    &lt;/label&gt;
+                    &lt;input
+                      id=&quot;password&quot;
+                      placeholder=&quot;***************&quot;
+                      required=&quot;&quot;
+                      type=&quot;password&quot;
+                      value=&quot;&quot;
+                    /&gt;
+                  &lt;/div&gt;
+                  &lt;p
+                    class=&quot;error-message&quot;
+                  &gt;
+                    Please enter both Email and Password.
+                  &lt;/p&gt;
+                  &lt;div
+                    class=&quot;options&quot;
+                  &gt;
+                    &lt;label
+                      class=&quot;remember-me&quot;
+                    &gt;
+                      &lt;input
+                        type=&quot;checkbox&quot;
+                      /&gt;
+                      &lt;span&gt;
+                        login.remember_me
+                      &lt;/span&gt;
+                    &lt;/label&gt;
+                    &lt;a
+                      href=&quot;/forgot-password&quot;
+                    &gt;
+                      login.forgot_password
+                    &lt;/a&gt;
+                  &lt;/div&gt;
+                  &lt;div
+                    class=&quot;action-buttons&quot;
+                  &gt;
+                    &lt;button
+                      class=&quot;login-btn&quot;
+                      type=&quot;submit&quot;
+                    &gt;
+                      login.login_button
+                    &lt;/button&gt;
+                    &lt;button
+                      class=&quot;signup-btn&quot;
+                      type=&quot;button&quot;
+                    &gt;
+                      login.signup_button
+                    &lt;/button&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div
+                  class=&quot;social-section&quot;
+                &gt;
+                  &lt;p
+                    class=&quot;or-login&quot;
+                  &gt;
+                    login.social_login_prompt
+                  &lt;/p&gt;
+                  &lt;div
+                    class=&quot;social-options&quot;
+                  &gt;
+                    &lt;button
+                      class=&quot;social-button github&quot;
+                      type=&quot;button&quot;
+                    &gt;
+                      &lt;i
+                        class=&quot;social-icon github-icon&quot;
+                      /&gt;
+                      &lt;span&gt;
+                        login.github_button
+                      &lt;/span&gt;
+                    &lt;/button&gt;
+                    &lt;button
+                      class=&quot;social-button linkedin&quot;
+                      type=&quot;button&quot;
+                    &gt;
+                      &lt;i
+                        class=&quot;social-icon linkedin-icon&quot;
+                      /&gt;
+                      &lt;span&gt;
+                        login.linkedin_button
+                      &lt;/span&gt;
+                    &lt;/button&gt;
+                    &lt;div
+                      class=&quot;social-button google&quot;
+                    &gt;
+                      &lt;button
+                        data-testid=&quot;mock-google-login&quot;
+                      &gt;
+                        Mock Google Login
+                      &lt;/button&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/form&gt;
+            &lt;/div&gt;
+            &lt;div
+              class=&quot;image-section&quot;
+            &gt;
+              &lt;img
+                alt=&quot;Recycling bin character&quot;
+                src=&quot;/wasteimage.png&quot;
+              /&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+    at /Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/src/tests/LoginPage.test.js:282:26
+    at runWithExpensiveErrorDiagnosticsDisabled (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/config.js:47:12)
+    at checkCallback (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/wait-for.js:124:77)
+    at checkRealTimersCallback (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/@testing-library/dom/dist/wait-for.js:118:16)
+    at Timeout.task [as _onTimeout] (/Users/caglarkurt/Documents/GitHub/bounswe2025group3/practice-app/frontend-web/node_modules/jsdom/lib/jsdom/browser/Window.js:516:19)
+    at listOnTimeout (node:internal/timers:605:17)
+    at processTimers (node:internal/timers:541:7)</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
